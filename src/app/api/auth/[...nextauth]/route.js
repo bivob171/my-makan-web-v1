@@ -18,6 +18,7 @@ const handeler = NextAuth({
       clientSecret: process.env.NEXT_PUBLIC_APPLE_CLIENT_SE,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handeler as GET, handeler as POST };
