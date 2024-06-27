@@ -1,0 +1,34 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: [
+      "source.unsplash.com",
+      "images.unsplash.com",
+      "img.icons8.com",
+      "flagcdn.com",
+      "tecdn.b-cdn.net",
+      "i.ibb.co",
+      "getfit-image-file.s3.amazonaws.com",
+      "getfit-image-file.s3.ap-southeast-1.amazonaws.com",
+      "spruko.com",
+      "youtube.com",
+      "drive.google.com",
+      "lh3.googleusercontent.com",
+      "platform-lookaside.fbsbx.com",
+    ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/main",
+        permanent: true,
+      },
+    ];
+  },
+ 
+};
+
+export default nextConfig;
