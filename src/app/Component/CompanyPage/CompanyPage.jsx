@@ -15,42 +15,6 @@ export const CompanyPage = () => {
                   class="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
                   id="username"
                   type="text"
-                  placeholder="Search country..."
-                />
-                <div class="absolute right-0 inset-y-0 flex items-center">
-                  <Image
-                    width={100}
-                    height={100}
-                    src="/countryicon1.png"
-                    className="-ml-1 mr-3 h-5 w-5 text-gray-400 hover:text-gray-500"
-                  ></Image>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="relative">
-                <input
-                  class="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  placeholder="Search State..."
-                />
-                <div class="absolute right-0 inset-y-0 flex items-center">
-                  <Image
-                    width={100}
-                    height={100}
-                    src="/stateicon.png"
-                    className="-ml-1 mr-3 h-5 w-5 text-gray-400 hover:text-gray-500"
-                  ></Image>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="relative">
-                <input
-                  class="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
-                  id="username"
-                  type="text"
                   placeholder="Search Company..."
                 />
                 <div class="absolute right-0 inset-y-0 flex items-center">
@@ -63,24 +27,7 @@ export const CompanyPage = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <div class="relative">
-                <input
-                  class="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  placeholder="Search Agent Name..."
-                />
-                <div class="absolute right-0 inset-y-0 flex items-center">
-                  <Image
-                    width={100}
-                    height={100}
-                    src="/nameicon.png"
-                    className="-ml-1 mr-3 h-5 w-5 text-gray-400 hover:text-gray-500"
-                  ></Image>
-                </div>
-              </div>
-            </div>
+
             <div>
               <button
                 type="button"
@@ -106,7 +53,7 @@ export const CompanyPage = () => {
                   <div className="px-[12px]">
                     <div class="text-start mt-[9px]">
                       <div className="flex items-center justify-between">
-                        <h2 class="font-semibold leading-[14px]  text-[16px] text-[#191919] -mb-0">
+                        <h2 class="font-semibold leading-[14px]  text-[15px] text-[#191919] -mb-0">
                           My-Makan LTD
                         </h2>
                         <p className="font-semibold leading-[15px]  text-[18px] text-[#191919] mb-[2px] cursor-pointer">
