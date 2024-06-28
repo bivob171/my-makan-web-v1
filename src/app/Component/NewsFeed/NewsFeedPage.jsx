@@ -414,26 +414,26 @@ export const NewsFeedPage = () => {
                         <div className="px-[20px] flex items-center justify-between">
                           <div className="flex flex-wrap gap-x-[5px]">
                             <button className="bg-[#F3F6F8] h-[17px] px-[7px] rounded flex items-center">
-                              <p className="text-[10px]  font-medium font-inter pt-[16px]  text-[#F5B849]">
+                              <p className="text-[10px]  font-medium font-inter pt-[9px]  text-[#F5B849]">
                                 {" "}
                                 Ajman
                               </p>
                             </button>
 
                             <button className="bg-[#FCEDEB] h-[17px] px-[7px] rounded flex items-center">
-                              <p className="text-[10px] font-medium font-inter pt-[16px]  text-[#E6533C]">
+                              <p className="text-[10px] font-medium font-inter pt-[9px]  text-[#E6533C]">
                                 {" "}
                                 Ganden City
                               </p>
                             </button>
                             <button className="bg-[#EEEBF8] h-[17px] px-[7px] rounded flex items-center">
-                              <p className="text-[10px] font-medium font-inter pt-[16px]  text-[#23B7E5]">
+                              <p className="text-[10px] font-medium font-inter pt-[9px]  text-[#23B7E5]">
                                 {" "}
                                 Urgent
                               </p>
                             </button>
                             <button className="bg-[#F2EEFC] h-[17px] px-[7px] rounded flex items-center">
-                              <p className="text-[10px] font-medium font-inter pt-[16px]  text-[#26BF94]">
+                              <p className="text-[10px] font-medium font-inter pt-[9px]  text-[#26BF94]">
                                 {" "}
                                 Flat
                               </p>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FaComments, FaMinus } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import Icofont from "react-icofont";
+import { useRouter } from "next/navigation";
 
 export const HeaderTop = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -50,6 +51,8 @@ export const HeaderTop = () => {
     setMessageOpen(false);
     setMatchOpen(false);
   };
+
+  const router = useRouter();
   return (
     <div ref={dropdownRef}>
       <header className="fixed-header ">
@@ -72,6 +75,7 @@ export const HeaderTop = () => {
                       Agents
                     </a>
                   </li>
+
                   <li className="header-nav-item">
                     <a href="#" className="menu-link">
                       Properties
@@ -157,7 +161,7 @@ export const HeaderTop = () => {
                     data-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <Icofont icon="speech-comments"/>
+                    <Icofont icon="speech-comments" />
                   </button>
                 </div>
                 <div className="dropdown dropdown-notification">
@@ -189,8 +193,11 @@ export const HeaderTop = () => {
                     aria-expanded="false"
                   >
                     <span className="media flex justify-between items-center">
-                      <span onClick={toggleMenu} className="item-img !mr-0 relative">
-                      {isAuthenticated === true ? (
+                      <span
+                        onClick={toggleMenu}
+                        className="item-img !mr-0 relative"
+                      >
+                        {isAuthenticated === true ? (
                           <Link href="">
                             {user?.image === null ? (
                               <Image
@@ -245,8 +252,8 @@ export const HeaderTop = () => {
                 }`}
               >
                 <div>
-                  <div className="flex gap-x-[30px] mt-[15px]  items-center">
-                    <div className="bg-[#71728C] w-[6px] h-[6px] rounded-full ml-[25px]"></div>
+                  <div className="flex gap-x-[30px] mt-[15px] mb-[10px] items-center">
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
                     <Link
                       href="/user/profile/about"
                       className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
@@ -256,8 +263,8 @@ export const HeaderTop = () => {
                     </Link>
                   </div>
                   <hr />
-                  <div className="flex gap-x-[30px] mt-[10px] items-center">
-                    <div className="bg-[#71728C] w-[6px] h-[6px] rounded-full ml-[25px]"></div>
+                  <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
                     <a
                       href="#"
                       className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
@@ -267,8 +274,8 @@ export const HeaderTop = () => {
                     </a>
                   </div>
                   <hr />
-                  <div className="flex gap-x-[30px] mt-[10px] items-center">
-                    <div className="bg-[#71728C] w-[6px] h-[6px] rounded-full ml-[25px]"></div>
+                  <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
                     <a
                       href="#"
                       className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
@@ -278,9 +285,31 @@ export const HeaderTop = () => {
                     </a>
                   </div>
                   <hr />
+                  <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
+                    <Link
+                      href="/user/agent"
+                      className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
+                      role="menuitem"
+                    >
+                      Agents
+                    </Link>
+                  </div>
+                  <hr />
+                  <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
+                    <Link
+                      href="/user/company"
+                      className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
+                      role="menuitem"
+                    >
+                      Companys
+                    </Link>
+                  </div>
+                  <hr />
 
                   <div className="flex gap-x-[30px] mt-[10px] items-center coursor-pointer">
-                    <div className="bg-[#71728C] w-[6px] h-[6px] rounded-full ml-[25px]"></div>
+                    <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
                     <a
                       onClick={() => {
                         logOut();
