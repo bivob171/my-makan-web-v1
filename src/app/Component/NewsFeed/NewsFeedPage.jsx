@@ -281,12 +281,12 @@ export const NewsFeedPage = () => {
                   </li>
                 </ul>
               </div>
-              <div className="grid xl:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 custom:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-4">
                 {data.map((item, i) => {
                   return (
                     <div
                       key={i}
-                      className="mb-[10px] w-[350px] h-auto bg-white  border-[0.1px] border-[#F5B849]  rounded-[15px] py-[25px] "
+                      className="w-full h-auto bg-white rounded-[15px] py-[25px] "
                     >
                       <div>
                         <div className="flex justify-between px-[15px]">

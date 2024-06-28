@@ -19,7 +19,7 @@ export default function Layout({ children }) {
     );
   } else if (isAuthenticated === true) {
     return (
-      <div className="bg-[#EFF4FB]">
+      <div className="bg-[#EFF4FB] pt-[140px]">
         <div>
           <UserHearder />
         </div>

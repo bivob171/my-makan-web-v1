@@ -12,7 +12,7 @@ export const UserHeaderPage = () => {
 
   return (
     <div>
-      <div className="page-conten mt-[140px]">
+      <div className="">
         <div className="container">
           <div className="banner-user">
             <div className="banner-content">
