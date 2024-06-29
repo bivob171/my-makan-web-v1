@@ -245,7 +245,7 @@ export const HeaderTop = () => {
 
               {/* notify dropdown  */}
               <div
-                className={`transition-all duration-300 ease-in-out transform w-[230px] h-[260px] rounded-md shadow-lg bg-white z-50 pt-[10px] absolute ml-[350px] top-[72px] ${
+                className={`transition-all duration-300 ease-in-out transform w-[230px] h-[260px] rounded-md shadow-lg bg-white z-50 pt-[10px] absolute 2xl:ml-[350px] xl:ml-[350px] lg:ml-[350px] md:ml-[270px] sm:ml-[10px] ml-[10px] 2xl:top-[72px] xl:top-[74px] lg:top-[78px] md:top-[62px] sm:top-[57px] top-[57px]  ${
                   isVisible
                     ? "translate-y-0 opacity-100 visible"
                     : "translate-y-4 opacity-0 invisible"
@@ -322,7 +322,7 @@ export const HeaderTop = () => {
                 </div>
               </div>
               <div
-                className={`absolute  -ml-[5px] top-[67px] transition-all duration-300 ease-in-out transform ${
+                className={`absolute  -ml-[5px]  2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] transition-all duration-300 ease-in-out transform ${
                   matchOpen
                     ? "translate-y-0 opacity-100 visible"
                     : "translate-y-4 opacity-0 invisible"
@@ -469,7 +469,7 @@ export const HeaderTop = () => {
                 </div>
               </div>
               <div
-                className={`absolute  ml-[33px] top-[67px] transition-all duration-300 ease-in-out transform ${
+                className={`absolute  2xl:ml-[33px] xl:ml-[33px] lg:ml-[33px] md:ml-[33px] ml-[0px] 2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
                   messageOpen
                     ? "translate-y-0 opacity-100 visible"
                     : "translate-y-4 opacity-0 invisible"
@@ -582,7 +582,7 @@ export const HeaderTop = () => {
               </div>
               <div></div>
               <div
-                className={`absolute ml-[65px] top-[67px] transition-all duration-300 ease-in-out transform ${
+                className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
                   notificationOpen === true
                     ? "translate-y-0 opacity-100 visible"
                     : "translate-y-4 opacity-0 invisible"
