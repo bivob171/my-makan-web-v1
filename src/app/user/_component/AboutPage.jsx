@@ -205,7 +205,7 @@ export const AboutPage = () => {
     }
   };
   return (
-    <div className="col-lg-8 ">
+    <div className="col-lg-8">
       <div className="forum-topic-add">
         <div className="block-box">
           <form>

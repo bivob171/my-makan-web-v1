@@ -70,20 +70,15 @@ export const Navbar = () => {
             </button>
           </div>
           <div className="flex items-center gap-28">
-            <a
-              href="/"
-              aria-label="Company"
-              title="Company"
-              className="inline-flex items-center mr-8"
-            >
+            <Link href="/">
               <Image
                 width={1000}
                 height={100}
                 className="w-auto h-auto"
                 src="/media/logo.png"
-                alt="Cirkle"
+                alt="Mymakan"
               />
-            </a>
+            </Link>
             <div className="flex items-center hidden space-x-8 lg:flex">
               <nav id="dropdown" className="template-main-menu">
                 <ul className="menu-content">

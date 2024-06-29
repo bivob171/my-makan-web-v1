@@ -3,7 +3,7 @@
 import { Footer } from "../Component/Footer/Footer";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { redirect } from "next/navigation";
-import { HearderTop } from "./_component/HearderTop";
+import { HeaderTop } from "./_component/HeaderTop";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 
@@ -24,8 +24,8 @@ export default function Layout({ children }) {
     return (
       <div className="bg-[#EFF4FB]">
         <div>
-          <HearderTop></HearderTop>
-          <div className="flex justify-center">
+          <HeaderTop></HeaderTop>
+          <div className="">
             <div>
               <HeaderLeft />{" "}
             </div>

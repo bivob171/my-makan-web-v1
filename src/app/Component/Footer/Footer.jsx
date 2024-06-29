@@ -1,6 +1,7 @@
-import Head from "next/head";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+
 export const Footer = () => {
   return (
     <>
@@ -16,15 +17,15 @@ export const Footer = () => {
                 <div className="col">
                   <div className="footer-box">
                     <div className="footer-logo">
-                      <a href="index-2.html">
+                      <Link href="/">
                         <Image
                           width={1000}
                           height={100}
                           className="w-auto h-auto"
-                          src="/media/logo_dark.png"
-                          alt="Logo"
+                          src="/media/logo2.png"
+                          alt="Mymakan"
                         />
-                      </a>
+                      </Link>
                     </div>
                     <p>
                       Dorem ipsum dolor sit amet consec adipisicing elit sed do
