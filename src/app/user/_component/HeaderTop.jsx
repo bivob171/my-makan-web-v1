@@ -71,9 +71,14 @@ export const HeaderTop = () => {
               <nav id="dropdown" className="template-main-menu">
                 <ul className="menu-content">
                   <li className="header-nav-item">
-                    <a href="index-2.html" className="menu-link active">
+                    <Link href="/user/agent" className="menu-link active">
                       Agents
-                    </a>
+                    </Link>
+                  </li>
+                  <li className="header-nav-item">
+                    <Link href="/user/company" className="menu-link active">
+                      Company
+                    </Link>
                   </li>
 
                   <li className="header-nav-item">
@@ -88,7 +93,7 @@ export const HeaderTop = () => {
                   </li>
                   <li className="header-nav-item">
                     <a href="#" className="menu-link have-sub">
-                      by location
+                      By location
                     </a>
                     <ul className="sub-menu">
                       <li>

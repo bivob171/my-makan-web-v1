@@ -1563,12 +1563,12 @@ nav.template-main-menu > ul > li {
 }
 
 nav.template-main-menu > ul > li > a {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1;
   display: block;
   color: #ffffff;
-  padding: 40px 15px;
+  padding: 40px 16px;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -13240,12 +13240,12 @@ nav.template-main-menu > ul > li {
 }
 
 nav.template-main-menu > ul > li > a {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1;
   display: block;
   color: #ffffff;
-  padding: 40px 15px;
+  padding: 40px 16px;
 }
 
 @media only screen and (max-width: 1199px) {
