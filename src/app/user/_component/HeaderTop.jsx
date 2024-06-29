@@ -313,7 +313,7 @@ export const HeaderTop = () => {
               >
                 <div className="mt-1 text-base text-left list-none bg-white border border-solid border-gray-300 rounded-b-[9px] shadow-lg  opacity-100 transform translate-y-0 w-[330px] right-0">
                   <div className="flex items-center justify-between px-[15px] pt-[13px] text-sm">
-                    <p className="-mt-[5px] font-bold text-black whitespace-nowrap">
+                    <p className="mt-[10px] font-bold text-black whitespace-nowrap">
                       Matched Properties
                     </p>
                     <div className="text-right whitespace-nowrap">
@@ -332,8 +332,8 @@ export const HeaderTop = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-                      <div className="mr-3 mt-1">
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                      <div className="mr-3 mt-[8px]">
                         <Image
                           width={1000}
                           height={100}
@@ -344,10 +344,10 @@ export const HeaderTop = () => {
                         <span className="chat-status offline" />
                       </div>
                       <div className="relative flex-1 items-center mt-[4px]">
-                        <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                        <h6 className=" mt-[4px] font-bold text-[14px] text-black">
                           <a href="#">Lily Zaman</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[10px]  text-[11px] font-semibold text-gray-500 leading-4">
                           1 Posts matched to you
                         </p>
 
@@ -369,8 +369,8 @@ export const HeaderTop = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-                      <div className="mr-3 mt-1">
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                      <div className="mr-3 mt-[8px]">
                         <Image
                           width={100}
                           height={100}
@@ -384,7 +384,7 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Lily Zaman</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[10px]  text-[11px] font-semibold text-gray-500 leading-4">
                           1 Posts matched to you
                         </p>
 
@@ -406,8 +406,8 @@ export const HeaderTop = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-                      <div className="mr-3 mt-1">
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                      <div className="mr-3 mt-[8px]">
                         <Image
                           width={1000}
                           height={100}
@@ -421,7 +421,7 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Lily Zaman</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[10px]  text-[11px] font-semibold text-gray-500 leading-4">
                           1 Posts matched to you
                         </p>
 
@@ -459,8 +459,10 @@ export const HeaderTop = () => {
                 }`}
               >
                 <div className="mt-1 text-base text-left list-none bg-white border border-solid border-gray-300 rounded-b-[9px] shadow-lg  opacity-100 transform translate-y-0 w-[330px] right-0">
-                  <div className="flex items-center justify-between px-[15px] pt-[13px] text-sm">
-                    <h6 className="-mt-[5px] font-bold text-black">Message</h6>
+                  <div className="flex items-center justify-between px-[15px] pt-[15px] text-sm">
+                    <h6 className="pt-[10px] font-bold text-black leading-[15px]">
+                      Message
+                    </h6>
                     <div className="text-right">
                       <a
                         href="#"
@@ -477,7 +479,7 @@ export const HeaderTop = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
                       <div className="mr-3 mt-[9px]">
                         <Image
                           width={1000}
@@ -492,7 +494,7 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Diana Jameson</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                           when are nknowen printer took galley of types ...
                         </p>
 
@@ -503,34 +505,9 @@ export const HeaderTop = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
                       <div className="mr-3 mt-[9px]">
-                        <Image
-                          width={1000}
-                          height={100}
-                          className="w-auto rounded-full h-auto"
-                          src="/media/figure/notifiy_2.png"
-                          alt="Notify"
-                        />
-                        <span className="chat-status offline" />
-                      </div>
-                      <div className="relative flex-1 mt-[4px]">
-                        <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                          <a href="#">Lily Zaman</a>
-                        </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
-                          when are nknowen printer took galley of types ...
-                        </p>
-
-                        <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                          <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                            15 Minite
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-                      <div className="mr-3 mt-1">
                         <Image
                           width={1000}
                           height={100}
@@ -544,7 +521,33 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Bayzid Islam</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                          when are nknowen printer took galley of types ...
+                        </p>
+
+                        <div className="absolute top-[5px] right-0 flex gap-x-2.5">
+                          <p className="text-[11px] font-semibold text-gray-500 leading-4">
+                            15 Minite
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                      <div className="mr-3 mt-[9px]">
+                        <Image
+                          width={1000}
+                          height={100}
+                          className="w-auto h-auto rounded-full"
+                          src="/media/figure/notifiy_3.png"
+                          alt="Notify"
+                        />
+                        <span className="chat-status offline" />
+                      </div>
+                      <div className="relative flex-1 mt-[4px]">
+                        <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                          <a href="#">Bayzid Islam</a>
+                        </h6>
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                           when are nknowen printer took galley of types ...
                         </p>
 
@@ -572,8 +575,10 @@ export const HeaderTop = () => {
                 }`}
               >
                 <div className="mt-1 text-base text-left list-none bg-white border border-solid border-gray-300 rounded-b-[9px] shadow-lg  opacity-100 transform translate-y-0 w-[330px] right-0">
-                  <div className="flex items-center justify-between px-[15px] pt-[13px] text-sm">
-                    <h6 className="m-0 font-bold text-black">Notification</h6>
+                  <div className="flex items-center justify-between px-[15px] pt-[15px] text-sm">
+                    <h6 className="pt-[10px] font-bold text-black leading-[15px]">
+                      Notification
+                    </h6>
                     <div className="text-right">
                       <a
                         href="#"
@@ -590,7 +595,7 @@ export const HeaderTop = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
                       <div className="mr-3 mt-[9px]">
                         <Image
                           width={1000}
@@ -605,7 +610,7 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Diana Jameson</a>
                         </h6>
-                        <p className="m-0  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                           when are nknowen printer took galley of types ...
                         </p>
 
@@ -616,34 +621,9 @@ export const HeaderTop = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
                       <div className="mr-3 mt-[9px]">
-                        <Image
-                          width={1000}
-                          height={100}
-                          className="w-auto rounded-full h-auto"
-                          src="/media/figure/notifiy_2.png"
-                          alt="Notify"
-                        />
-                        <span className="chat-status offline" />
-                      </div>
-                      <div className="relative flex-1 mt-[4px]">
-                        <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                          <a href="#">Lily Zaman</a>
-                        </h6>
-                        <p className="m-0  text-[11px] font-semibold text-gray-500 leading-4">
-                          when are nknowen printer took galley of types ...
-                        </p>
-
-                        <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                          <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                            15 Minite
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-start px-[15px] py-[15px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-                      <div className="mr-3 mt-1">
                         <Image
                           width={1000}
                           height={100}
@@ -657,7 +637,33 @@ export const HeaderTop = () => {
                         <h6 className=" mt-[5px] font-bold text-[14px] text-black">
                           <a href="#">Bayzid Islam</a>
                         </h6>
-                        <p className="-mt-[5px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                          when are nknowen printer took galley of types ...
+                        </p>
+
+                        <div className="absolute top-[5px] right-0 flex gap-x-2.5">
+                          <p className="text-[11px] font-semibold text-gray-500 leading-4">
+                            15 Minite
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
+                      <div className="mr-3 mt-[9px]">
+                        <Image
+                          width={1000}
+                          height={100}
+                          className="w-auto h-auto rounded-full"
+                          src="/media/figure/notifiy_3.png"
+                          alt="Notify"
+                        />
+                        <span className="chat-status offline" />
+                      </div>
+                      <div className="relative flex-1 mt-[4px]">
+                        <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                          <a href="#">Bayzid Islam</a>
+                        </h6>
+                        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                           when are nknowen printer took galley of types ...
                         </p>
 
@@ -670,7 +676,7 @@ export const HeaderTop = () => {
                     </div>
                   </div>
                   <div className=" mt-[15px]">
-                    <button className="focus:outline-none w-full h-[50px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter">
+                    <button className="focus:outline-none w-full h-[60px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter">
                       View All Notification
                     </button>
                   </div>
