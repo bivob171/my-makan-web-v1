@@ -411,8 +411,8 @@ export const AboutPage = () => {
                 />
               </div>
             </div>
-            <div className=" w-[500px]"></div>
-            <div className="form-group -ml-5">
+            <div className="w-[500px]"></div>
+            <div className="form-group">
               <div className="form-check">
                 <input
                   type="checkbox"
@@ -420,7 +420,7 @@ export const AboutPage = () => {
                   id="exampleCheck1"
                 />
                 <label
-                  className="pt-1 form-check-label"
+                  className="form-check-label"
                   htmlFor="exampleCheck1"
                 >
                   Notify me of follow-up replies via email
