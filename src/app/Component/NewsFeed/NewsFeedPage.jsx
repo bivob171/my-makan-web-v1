@@ -8,6 +8,8 @@ import NewsFeedRightSection from "./NewsFeedRightSection";
 import AddPost from "./AddPost";
 import Blogs from "@/app/user/profile/blogs/page";
 import ChatModal from "./ChatModal";
+import PostSection from "./PostSection";
+import AvailablePosts from "./AvailablePost";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -68,61 +70,7 @@ export const NewsFeedPage = () => {
               </li>
             </ul>
           </div>
-          <div className="newsfeed-search">
-            <ul className="member-list">
-              <li className="active-member">
-                <a href="#">
-                  <span className="member-icon">
-                    <i className="icofont-users" />
-                  </span>
-                  <span className="member-text">Total Members:</span>
-                  <span className="member-count">12208</span>
-                </a>
-              </li>
-            </ul>
-            <ul className="search-list">
-              <li className="search-filter">
-                <button className="drop-btn" type="button">
-                  <i className="icofont-abacus-alt" />
-                </button>
-                <div className="drop-menu">
-                  <select className="select2">
-                    <option>--Everything--</option>
-                    <option>Status</option>
-                    <option>Quotes</option>
-                    <option>Photos</option>
-                    <option>Videos</option>
-                    <option>Audios</option>
-                    <option>slideshows</option>
-                    <option>files</option>
-                    <option>Updates</option>
-                    <option>New Members</option>
-                    <option>Posts</option>
-                    <option>New Groups</option>
-                  </select>
-                </div>
-              </li>
-              <li className="search-input">
-                <button className="drop-btn" type="button">
-                  <i className="icofont-search" />
-                </button>
-                <div className="drop-menu">
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search...."
-                    />
-                    <div className="input-group-append">
-                      <button className="search-btn" type="button">
-                        <i className="icofont-search-1" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <PostSection />
           {/* post nav section  */}
           <div className="row">
             <div className="col-lg-8">
@@ -163,7 +111,7 @@ export const NewsFeedPage = () => {
                       aria-selected={activeTab === "addPost"}
                     >
                       <i className="icofont-image" />
-                      Add Post
+                      Available Posts
                     </a>
                   </li>
                   <li
@@ -182,13 +130,13 @@ export const NewsFeedPage = () => {
                       aria-selected={activeTab === "blogs"}
                     >
                       <i className="icofont-list" />
-                      Blog
+                      Required Posts
                     </a>
                   </li>
                 </ul>
               </div>
               {activeTab === "allPosts" && <AllPost />}
-              {activeTab === "addPost" && <AddPost />}
+              {activeTab === "availablePosts" && <AvailablePosts />}
               {activeTab === "blogs" && <Blogs />}
             </div>
             <NewsFeedRightSection />

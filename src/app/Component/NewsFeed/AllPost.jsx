@@ -9,7 +9,6 @@ import houseData from "@/data/houseData";
 const AllPost = () => {
   return (
     <div className="">
-      {/* rest code here  */}
       <div className="grid grid-cols-1 gap-4 ">
         {houseData.map((item, i) => {
           return (

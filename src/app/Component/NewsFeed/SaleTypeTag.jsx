@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { CgClose } from "react-icons/cg";
 
-const TagSelect = () => {
+const SaleTypeTag = () => {
   const initialTags = [
     "Installment",
     "Full Cash",
@@ -87,18 +87,17 @@ const TagSelect = () => {
 
   return (
     <div ref={wrapperRef} className="mt-3">
-        <label htmlFor="" className="font-semibold">Tags (Multiple)</label>
+        <label htmlFor="" className="font-semibold">Sale type (Multiple)</label>
       <div className="relative">
         <Input
           className={clsx(
             "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
           )}
-          placeholder="Tags..."
+          placeholder="Sale type..."
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleTagAdd}
         />
-        {/* Button to show all tags */}
         <button
           className="absolute top-1/2 right-8 transform -translate-y-1/2 text-[#444]"
           onClick={showAllTags}
@@ -106,9 +105,8 @@ const TagSelect = () => {
           Show All
         </button>
         <ChevronDownIcon className="size-4 fill-[#333] absolute top-1/2 right-2 transform -translate-y-1/2" />
-        {/* Dropdown */}
         {dropdownVisible && (
-          <div className="absolute z-30 right-0 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
+          <div className="absolute z-30 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
             {filteredTags.length ? (
               filteredTags.map((tag) => (
                 <div
@@ -143,6 +141,4 @@ const TagSelect = () => {
   );
 };
 
-export default TagSelect;
-
-
+export default SaleTypeTag;
