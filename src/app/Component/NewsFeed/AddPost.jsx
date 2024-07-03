@@ -26,6 +26,7 @@ const AddPost = ({
   setAgent,
   tags,
   setTags,
+  nextPanel,
 }) => {
   return (
     <>
@@ -205,7 +206,10 @@ const AddPost = ({
             />
             {/* click on map button  */}
             <Tooltip title="Click me" arrow placement="top-start">
-              <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
+              <button
+                onClick={nextPanel}
+                className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2"
+              >
                 <FaMapLocationDot className="text-red-600 w-6 h-6" />
               </button>
             </Tooltip>
