@@ -5,7 +5,8 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import houseData from "@/data/houseData";
-const Blogs = () => {
+
+const AvailablePosts = () => {
   return (
     <div className="">
       <div className="grid grid-cols-1 gap-4 ">
@@ -271,4 +272,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default AvailablePosts;

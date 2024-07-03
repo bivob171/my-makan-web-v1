@@ -105,19 +105,18 @@ export const UserHeaderPage = () => {
                 <Link href="/user/profile/timeline">Timeline</Link>
               </li>
               <li
-                className={pathName === "/user/profile/about" ? "active" : ""}
+                className={
+                  pathName === "/user/profile/following" ? "active" : ""
+                }
               >
-                <Link href="/user/profile/about">About</Link>
+                <Link href="/user/profile/following">Following</Link>
               </li>
               <li
-                className={pathName === "/user/profile/friends" ? "active" : ""}
+                className={
+                  pathName === "/user/profile/followers" ? "active" : ""
+                }
               >
-                <Link href="/user/profile/friends">Friends</Link>
-              </li>
-              <li
-                className={pathName === "/user/profile/groups" ? "active" : ""}
-              >
-                <Link href="/user/profile/groups">Groups</Link>
+                <Link href="/user/profile/followers">Followers</Link>
               </li>
               <li
                 className={pathName === "/user/profile/photos" ? "active" : ""}
@@ -138,6 +137,11 @@ export const UserHeaderPage = () => {
                 className={pathName === "/user/profile/blogs" ? "active" : ""}
               >
                 <Link href="/user/profile/blogs">Blogs</Link>
+              </li>
+              <li
+                className={pathName === "/user/profile/about" ? "active" : ""}
+              >
+                <Link href="/user/profile/about">About</Link>
               </li>
               <li
                 className={

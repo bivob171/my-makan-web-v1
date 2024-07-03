@@ -109,7 +109,7 @@ export const AboutPage = () => {
           },
         }
       );
-      const links = response.data.map((item) => item.webViewLink);
+      const links = response.data.map((item) => item.Location);
       setSelectedImage(links[0]);
       setSelectedFiles([]);
     } catch (error) {
@@ -240,9 +240,9 @@ export const AboutPage = () => {
                     </>
                   )}
                 </div>
-                <p className="top-[12px] absolute bottom-0 left-[100px] text-[15px] font-semibold text-black text-opacity-70">
+                <p className="top-[12px] absolute bottom-0 left-[100px] text-[15px] leading-[22px] font-semibold text-black text-opacity-70">
                   Updated my profile picture! <br />
-                  <span className="text-[14px] font-medium text-black text-opacity-50">
+                  <span className="text-[14px] font-medium text-black text-opacity-50  ">
                     Make sure your pic is in PNG or JPG format for the best
                     quality!
                   </span>
@@ -419,10 +419,7 @@ export const AboutPage = () => {
                   className="form-check-input"
                   id="exampleCheck1"
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor="exampleCheck1"
-                >
+                <label className="form-check-label" htmlFor="exampleCheck1">
                   Notify me of follow-up replies via email
                 </label>
               </div>
