@@ -25,8 +25,6 @@ const PostSection = () => {
   const [agent, setAgent] = useState("Buyer");
   const [selectedType, setSelectedType] = useState("Post Type");
 
-  //   const myApiKeys = "AIzaSyCdoayMuPOqJs2tvADbA6FWRE4oP47AAJ0";
-
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
     if (storedImage) {
@@ -60,6 +58,8 @@ const PostSection = () => {
   function close() {
     setIsOpen(false);
   }
+
+  const apiKyess = "AIzaSyCBYD7YSzE2HRxfYUUMF_7yzDkfY3ZSOuM"
 
   return (
     <div className="newsfeed-search">
@@ -196,7 +196,7 @@ const PostSection = () => {
                   setCategory={setCategory}
                   setAgent={setAgent}
                 />
-                <div className="mt-4">
+                <div className="mt-2">
                   <Button
                     type="submit"
                     className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"

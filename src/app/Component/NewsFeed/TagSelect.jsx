@@ -86,12 +86,12 @@ const TagSelect = () => {
   };
 
   return (
-    <div ref={wrapperRef} className="mt-3">
+    <div ref={wrapperRef} className="mt-1">
         <label htmlFor="" className="font-semibold">Tags (Multiple)</label>
       <div className="relative">
         <Input
           className={clsx(
-            "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+            "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444] mb-2"
           )}
           placeholder="Tags..."
           value={inputValue}
@@ -129,7 +129,7 @@ const TagSelect = () => {
         {selectedTags.map((tag) => (
           <div
             key={tag}
-            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[12px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none mt-2"
+            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[12px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
           >
             <span>{tag}</span>
             <CgClose
