@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 export const AddCompanyPage = () => {
   const [companyName, setCompanyName] = useState("");
+  const [error, setError] = useState("");
   const [companyNameError, setCompanyNameError] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedCompanyDropdown, setSelectedCompanyDropdown] = useState(false);
@@ -34,7 +35,7 @@ export const AddCompanyPage = () => {
         }
       );
       const newCompanies = response.data;
-      console.log("Fetched companies:", newCompanies); 
+      console.log("Fetched companies:", newCompanies);
       setHasMore(newCompanies.length === limit);
       setCompanies((prevCompanies) => {
         return page === 1 ? newCompanies : [...prevCompanies, ...newCompanies];
@@ -51,7 +52,7 @@ export const AddCompanyPage = () => {
     const searchTerm = e.target.value;
     setSearch(searchTerm);
     setSelectedCompany(e.target.value);
-    setPage(1); 
+    setPage(1);
     setCompanies([]);
     setHasMore(true);
   };

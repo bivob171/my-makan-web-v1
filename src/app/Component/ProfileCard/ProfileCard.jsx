@@ -127,7 +127,7 @@ export const ProfileCard = () => {
           <div className="mt-[1px] mb-[12px]">
             <div className="h-[1px] w-full bg-[#5EDFFF] "></div>
             <div className="mt-[8px] px-[10px]">
-              <p className="-mb-0 text-start text-[13px] text-[#323232CC] text-opacity-80 font-semibold">
+              <p className="-mb-0 text-start text-[13px] text-[#323232CC] text-opacity-80 font-semibold leading-[20px]">
                 Verified By My-Makan in
               </p>
               <div className="flex gap-x-2 items-center mt-[5px] ">
@@ -137,7 +137,7 @@ export const ProfileCard = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="-mb-0 text-[11px] text-[#323232CC] text-opacity-80 font-medium">
+                  <p className="-mb-0 text-[11px] leading-[20px] text-[#323232CC] text-opacity-80 font-medium">
                     {user?.companyName}
                   </p>
                 </div>

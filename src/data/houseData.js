@@ -34,6 +34,21 @@ const houseData = [
     sell: "Rent",
     btn: "Urgent",
   },
+  {
+    rol: "Agent",
+    sell: "Sale",
+    btn: "Sponsored",
+  },
+  {
+    rol: "Agent",
+    sell: "Sale",
+    btn: "Urgent",
+  },
+  {
+    rol: "Agent",
+    sell: "Rent",
+    btn: "Urgent",
+  },
 ];
 
 export default houseData;

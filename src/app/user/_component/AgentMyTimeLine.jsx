@@ -2,15 +2,14 @@
 
 import React, { useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { SaveAllPostTimeline } from "./SaveAllPostTimeline";
+import { SaveAbailableAllPostTimeline } from "./SaveAbailableAllPostTimeline";
+import { SaveRequiredAllPostTimeline } from "./SaveRequiredAllPostTimeline";
+import ChatModal from "@/app/Component/NewsFeed/ChatModal";
+import { ProfileCard } from "@/app/Component/ProfileCard/ProfileCard";
 import Image from "next/image";
-import AllPost from "./AllPost";
-import NewsFeedRightSection from "./NewsFeedRightSection";
-import ChatModal from "./ChatModal";
-import PostSection from "./PostSection";
-import AvailablePosts from "@/app/user/profile/available-post/page";
-import RequiredPosts from "@/app/user/profile/required-post/page";
 
-export const NewsFeedPage = () => {
+export const AgentMyTimeLine = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
 
@@ -22,54 +21,10 @@ export const NewsFeedPage = () => {
 
   const options = { year: "numeric", month: "short" };
   const formattedDate = dateObj.toLocaleDateString("en-US", options);
-
   return (
     <>
-      <div className="page-content">
+      <div className="">
         <div className="container">
-          {/* Banner Area Start */}
-          <div className="newsfeed-banner">
-            <div className="media flex">
-              <div className="item-icon mb-2">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto py-4"
-                  src="/media/favicon.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="media-body">
-                <h3 className="item-title">My Makan News Feed</h3>
-                <p>All Realtors and Buyers Latest post</p>
-              </div>
-            </div>
-            <ul className="animation-img">
-              <li
-                data-sal="slide-down"
-                data-sal-duration={800}
-                data-sal-delay={400}
-              >
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto"
-                  src="/media/banner/shape_7.png"
-                  alt="shape"
-                />
-              </li>
-              <li>
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto"
-                  src="/media/banner/people_2.png"
-                  alt="shape"
-                />
-              </li>
-            </ul>
-          </div>
-          <PostSection />
           {/* post nav section  */}
           <div className="row">
             <div className="col-lg-8">
@@ -134,11 +89,46 @@ export const NewsFeedPage = () => {
                   </li>
                 </ul>
               </div>
-              {activeTab === "allPosts" && <AllPost />}
-              {activeTab === "availablePosts" && <AvailablePosts />}
-              {activeTab === "required" && <RequiredPosts />}
+              {activeTab === "allPosts" && <SaveAllPostTimeline />}
+              {activeTab === "availablePosts" && (
+                <SaveAbailableAllPostTimeline />
+              )}
+              {activeTab === "required" && <SaveRequiredAllPostTimeline />}
             </div>
-            <NewsFeedRightSection />
+            <div className="col-lg-4 widget-block widget-break-lg">
+              <div>
+                <ProfileCard />
+              </div>
+              <div className="widget widget-banner">
+                <h3 className="item-title">Most Popular</h3>
+                <div className="item-subtitle">MyMakan Application</div>
+                <a href="#" className="item-btn">
+                  <span className="btn-text">Download Now</span>
+                  <span className="btn-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                      width="21px"
+                      height="10px"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.671,9.998 L12.997,9.998 L16.462,6.000 L5.000,6.000 L5.000,4.000 L16.462,4.000 L12.997,0.002 L16.671,0.002 L21.003,5.000 L16.671,9.998 ZM17.000,5.379 L17.328,5.000 L17.000,4.621 L17.000,5.379 ZM-0.000,4.000 L3.000,4.000 L3.000,6.000 L-0.000,6.000 L-0.000,4.000 Z"
+                      />
+                    </svg>
+                  </span>
+                </a>
+                <div className="item-img">
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="w-auto h-auto"
+                    src="/media/figure/widget_banner_1.png"
+                    alt="banner"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

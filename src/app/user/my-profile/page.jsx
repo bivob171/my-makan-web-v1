@@ -1,22 +1,22 @@
 "use client";
-import React from "react";
-import { BuyerMyAllPost } from "../../_component/BuyerMyAllPost";
-import { AgentMyAllPost } from "../../_component/AgentMyAllPost";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import React from "react";
+import { BuyerProfile } from "../_component/BuyerProfile";
+import { AgentProfile } from "../_component/AgentProfile";
 
-export default function Posts() {
+export default function MyProfile() {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   if (user?.role === "buyer") {
     return (
       <div>
-        <BuyerMyAllPost />
+        <BuyerProfile />
       </div>
     );
   } else {
     return (
       <div>
-        <AgentMyAllPost />
+        <AgentProfile />
       </div>
     );
   }

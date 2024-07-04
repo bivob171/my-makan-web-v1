@@ -58,7 +58,7 @@ export const HeaderTop = () => {
       <header className="fixed-header ">
         <div className="header-menu relative">
           <div className="navbar">
-            <Link href="/">
+            <Link href="/user/newsfeed">
               <Image
                 width={1000}
                 height={100}

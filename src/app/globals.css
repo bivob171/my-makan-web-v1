@@ -3162,6 +3162,11 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
       width: 50px;
   }
 }
+@media only screen and (max-width: 767px) {
+  .fixed-sidebar.right .sidebar-toggle { 
+      height: 87px;
+  }
+}
 
 .fixed-sidebar.right .sidebar-toggle {
   background-color: #5edfff;
@@ -6411,7 +6416,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 /*------------------- 6.2 Banner -------------------*/
 .newsfeed-banner {
   background-image: -webkit-linear-gradient(right, #ffea00, #ff9800);
-  background-image: linear-gradient(to left, #615dfa, #ff9800);
+  background-image: linear-gradient(to left, #ffea00, #ff9800);
   border-radius: 10px;
   padding: 60px 50px;
   position: relative;
@@ -14613,13 +14618,13 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 @media only screen and (max-width: 991px) {
   .fixed-sidebar .sidebar-toggle {
-      height: 60px;
+      height: 87px !important;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .fixed-sidebar .sidebar-toggle {
-      height: 50px;
+    height: 87px !important;
   }
 }
 
@@ -14841,7 +14846,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .fixed-sidebar.right .sidebar-toggle {
-  background-color: #5edfff;
+  /* background-color: #5edfff; */
   cursor: pointer;
 }
 
@@ -17832,7 +17837,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 /*------------------- 6.2 Banner -------------------*/
 .newsfeed-banner {
   background-image: -webkit-linear-gradient(right, #ffea00, #ff9800);
-  background-image: linear-gradient(to left, #615dfa, #ff9800);
+  background-image: linear-gradient(to left, #ffea00, #ff9800);
   border-radius: 10px;
   padding: 60px 50px;
   position: relative;
