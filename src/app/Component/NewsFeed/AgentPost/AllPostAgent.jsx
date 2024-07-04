@@ -7,9 +7,9 @@ import Image from "next/image";
 import houseData from "@/data/houseData";
 import Link from "next/link";
 
-export default function RequiredPosts() {
+const AllPostAgent = () => {
   return (
-    <>
+    <div className="">
       <div className="">
         <div className="container">
           <div className="block-box user-search-bar justify-content-between">
@@ -107,7 +107,7 @@ export default function RequiredPosts() {
                                 </div>
                               </div>
                             </div>
-                            {item.role === "Buyer" ? (
+                            {item.rol === "Buyer" ? (
                               <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
                                 Buyer From{" "}
                                 <span className="text-[#E6533C]">India</span>
@@ -315,6 +315,8 @@ export default function RequiredPosts() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default AllPostAgent;
