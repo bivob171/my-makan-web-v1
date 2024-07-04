@@ -3,8 +3,7 @@ import { Input } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { CgClose } from "react-icons/cg";
-
-const TagSelect = () => {
+const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   const initialTags = [
     "Installment",
     "Full Cash",
@@ -20,7 +19,6 @@ const TagSelect = () => {
   ];
 
   const [tags, setTags] = useState(initialTags);
-  const [selectedTags, setSelectedTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -87,13 +85,17 @@ const TagSelect = () => {
 
   return (
     <div ref={wrapperRef} className="mt-1">
-        <label htmlFor="" className="font-semibold">Tags (Multiple)</label>
+      <label htmlFor="" className="font-semibold">
+        Tags (Multiple)
+      </label>
       <div className="relative">
         <Input
           className={clsx(
-            "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444] mb-2"
+            tagsError === ""
+              ? "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444] mb-2"
+              : "block w-full rounded-md border-[1px] border-rose-600 outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 placeholder:text-rose-600 mb-2"
           )}
-          placeholder="Tags..."
+          placeholder={tagsError === "" ? "Tags..." : tagsError}
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleTagAdd}
@@ -144,5 +146,3 @@ const TagSelect = () => {
 };
 
 export default TagSelect;
-
-

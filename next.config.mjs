@@ -17,6 +17,7 @@ const nextConfig = {
       "drive.google.com",
       "lh3.googleusercontent.com",
       "platform-lookaside.fbsbx.com",
+      "mymakan-image.s3.eu-north-1.amazonaws.com",
     ],
   },
   async redirects() {
@@ -28,7 +29,6 @@ const nextConfig = {
       },
     ];
   },
- 
 };
 
 export default nextConfig;
