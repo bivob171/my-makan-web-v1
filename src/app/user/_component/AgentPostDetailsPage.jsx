@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 export const AgentPostDetailsPage = () => {
@@ -5,9 +6,15 @@ export const AgentPostDetailsPage = () => {
     <div className="page-content">
       {" "}
       <div className="container">
-        <div className="block-box user-single-blog">
+        <div className="block-box user-single-blog mt-4">
           <div className="blog-thumbnail">
-            <img src="media/blog/blog_10.jpg" alt="Blog" />
+            <Image
+              src="/media/blog/blog_10.jpg"
+              width={1000}
+              height={1000}
+              alt="Blog"
+              className="w-full"
+            />
           </div>
           <div className="blog-content-wrap">
             <div className="blog-entry-header">
@@ -23,7 +30,13 @@ export const AgentPostDetailsPage = () => {
                 <div className="col-lg-8">
                   <ul className="entry-meta">
                     <li>
-                      <img src="media/figure/chat_7.jpg" alt="Chat" />
+                      <Image
+                        src="/media/figure/chat_7.jpg"
+                        alt="Chat"
+                        width={500}
+                        height={500}
+                        className="w-10 h-auto"
+                      />
                       By <a href="#">Fahim Rahman</a>
                     </li>
                     <li>
@@ -101,13 +114,23 @@ export const AgentPostDetailsPage = () => {
               </p>
               <div className="row">
                 <div className="col-md-6">
-                  <div className="content-img">
-                    <img src="media/blog/blog_11.jpg" alt="Blog" />
+                  <div className="content-Image">
+                    <Image
+                      src="/media/blog/blog_11.jpg"
+                      alt="Blog"
+                      width={500}
+                      height={500}
+                    />
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <div className="content-img">
-                    <img src="media/blog/blog_12.jpg" alt="Blog" />
+                  <div className="content-Image">
+                    <Image
+                      src="/media/blog/blog_12.jpg"
+                      alt="Blog"
+                      width={500}
+                      height={500}
+                    />
                   </div>
                 </div>
               </div>
@@ -129,22 +152,58 @@ export const AgentPostDetailsPage = () => {
               </div>
               <div className="reaction-icon">
                 <a href="#">
-                  <img src="media/figure/reaction_1.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_1.png"
+                    alt="Like"
+                  />
                 </a>
                 <a href="#">
-                  <img src="media/figure/reaction_6.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_6.png"
+                    alt="Like"
+                  />
                 </a>
                 <a href="#">
-                  <img src="media/figure/reaction_2.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_2.png"
+                    alt="Like"
+                  />
                 </a>
                 <a href="#">
-                  <img src="media/figure/reaction_7.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_7.png"
+                    alt="Like"
+                  />
                 </a>
                 <a href="#">
-                  <img src="media/figure/reaction_3.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_3.png"
+                    alt="Like"
+                  />
                 </a>
                 <a href="#">
-                  <img src="media/figure/reaction_5.png" alt="Like" />
+                  <Image
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto"
+                    src="/media/figure/reaction_5.png"
+                    alt="Like"
+                  />
                 </a>
               </div>
             </div>
@@ -214,10 +273,16 @@ export const AgentPostDetailsPage = () => {
           </div>
           <div className="row">
             <div className="col-lg-4">
-              <div className="block-box user-blog">
-                <div className="blog-img">
-                  <a href="#">
-                    <img src="media/blog/blog_4.jpg" alt="Blog" />
+              <div className="block-box user-blog ">
+                <div className="blog-Image">
+                  <a href="#" className="w-full">
+                    <Image
+                      width={1000}
+                      height={500}
+                      className="!w-full !h-full"
+                      src="/media/blog/blog_4.jpg"
+                      alt="Blog"
+                    />
                   </a>
                 </div>
                 <div className="blog-content">
@@ -241,10 +306,28 @@ export const AgentPostDetailsPage = () => {
                 <div className="blog-meta">
                   <ul>
                     <li className="blog-reaction">
-                      <div className="reaction-icon">
-                        <img src="media/figure/reaction_1.png" alt="icon" />
-                        <img src="media/figure/reaction_2.png" alt="icon" />
-                        <img src="media/figure/reaction_3.png" alt="icon" />
+                      <div className="reaction-icon !flex justify-start">
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_1.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_2.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_3.png"
+                          alt="icon"
+                        />
                       </div>
                       <div className="meta-text">+ 15 others</div>
                     </li>
@@ -257,9 +340,15 @@ export const AgentPostDetailsPage = () => {
             </div>
             <div className="col-lg-4">
               <div className="block-box user-blog">
-                <div className="blog-img">
-                  <a href="#">
-                    <img src="media/blog/blog_5.jpg" alt="Blog" />
+                <div className="blog-Image ">
+                  <a href="#" className="w-full">
+                    <Image
+                      width={500}
+                      height={500}
+                      className="w-full h-auto"
+                      src="/media/blog/blog_5.jpg"
+                      alt="Blog"
+                    />
                   </a>
                 </div>
                 <div className="blog-content">
@@ -282,10 +371,28 @@ export const AgentPostDetailsPage = () => {
                 <div className="blog-meta">
                   <ul>
                     <li className="blog-reaction">
-                      <div className="reaction-icon">
-                        <img src="media/figure/reaction_1.png" alt="icon" />
-                        <img src="media/figure/reaction_2.png" alt="icon" />
-                        <img src="media/figure/reaction_3.png" alt="icon" />
+                      <div className="reaction-icon !flex justify-start">
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_1.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_2.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_3.png"
+                          alt="icon"
+                        />
                       </div>
                       <div className="meta-text">+ 15 others</div>
                     </li>
@@ -298,9 +405,15 @@ export const AgentPostDetailsPage = () => {
             </div>
             <div className="col-lg-4">
               <div className="block-box user-blog">
-                <div className="blog-img">
-                  <a href="#">
-                    <img src="media/blog/blog_6.jpg" alt="Blog" />
+                <div className="blog-Image ">
+                  <a href="#" className="w-full">
+                    <Image
+                      width={500}
+                      height={500}
+                      className="w-full h-auto"
+                      src="/media/blog/blog_6.jpg"
+                      alt="Blog"
+                    />
                   </a>
                 </div>
                 <div className="blog-content">
@@ -324,10 +437,28 @@ export const AgentPostDetailsPage = () => {
                 <div className="blog-meta">
                   <ul>
                     <li className="blog-reaction">
-                      <div className="reaction-icon">
-                        <img src="media/figure/reaction_1.png" alt="icon" />
-                        <img src="media/figure/reaction_2.png" alt="icon" />
-                        <img src="media/figure/reaction_3.png" alt="icon" />
+                      <div className="reaction-icon !flex justify-start">
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_1.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_2.png"
+                          alt="icon"
+                        />
+                        <Image
+                          width={500}
+                          height={500}
+                          className="w-auto h-auto"
+                          src="/media/figure/reaction_3.png"
+                          alt="icon"
+                        />
                       </div>
                       <div className="meta-text">+ 15 others</div>
                     </li>
