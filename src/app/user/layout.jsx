@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { HeaderTop } from "./_component/HeaderTop";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
+import PostLocationValueProvider from "@/Context/postValueContext";
 
 export default function Layout({ children }) {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -29,7 +30,9 @@ export default function Layout({ children }) {
             <div>
               <HeaderLeft />{" "}
             </div>
-            <div>{children}</div>
+            <PostLocationValueProvider>
+              <div>{children}</div>
+            </PostLocationValueProvider>
             <div>
               {" "}
               <HeaderRight />{" "}

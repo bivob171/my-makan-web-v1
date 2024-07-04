@@ -14,61 +14,186 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { MdOutlineSquareFoot } from "react-icons/md";
 import { GiTowerBridge } from "react-icons/gi";
-
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 const AddPost = ({
   setTitle,
+  title,
   setDescription,
+  description,
   handleImageDelete,
   handleImageChange,
   image,
-  setLocation,
-  setCategory,
-  setAgent,
+  setPropertyCategory,
+  propertyCategoryName,
+  setPropertyType,
+  propertyTypeName,
+  setParking,
+  parking,
+  setForPost,
+  forPost,
+  setPrice,
+  price,
+  setSqft,
+  sqft,
+  setPostType,
   tags,
   setTags,
+  sellType,
+  setSellType,
   nextPanel,
+  setTowersorBuildingName,
+  formatted_address,
+  video,
+  propertyDocument,
+  titleError,
+  postType,
+  towersorBuildingName,
+  descriptionError,
+  locationError,
+  towersorBuildingNameError,
+  propertyCategoryError,
+  propertyTypeError,
+  tagsError,
+  imageUploading,
+  handleVideoChange,
+  handleVideoDelete,
+  handleDocumentChange,
+  handleDocumentDelete,
 }) => {
+  console.log(image);
   return (
     <>
       <div>
         <input
           type="text"
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full outline-[#999] outline-1 border-none bg-none px-3 h-[45px] text-[14px] placeholder:text-[14px] text-[#555] font-medium rounded-md"
-          placeholder="Post title"
+          value={title}
+          className={
+            titleError === ""
+              ? "w-full outline-[#999] outline-1 border-none bg-none px-3 h-[45px] text-[14px] placeholder:text-[14px] text-[#555] font-medium rounded-md"
+              : "border-[1px] border-rose-600 w-full outline-[#999] outline-1 bg-none px-3 h-[45px] text-[14px] placeholder:text-[14px] placeholder:text-rose-600 font-medium rounded-md"
+          }
+          placeholder={titleError === "" ? "Post title" : titleError}
         />
       </div>
       <div>
         <textarea
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full outline-[#999] outline-1 border-none bg-none px-3 py-3 text-[22px] placeholder:text-[22px] text-[#444] font-normal rounded-md !resize-none"
-          placeholder="Write your thoughts!"
+          className={
+            descriptionError === ""
+              ? "w-full outline-[#999] outline-1 border-none bg-none px-3 py-3 text-[22px] placeholder:text-[22px] text-[#444] font-normal rounded-md !resize-none"
+              : "w-full outline-[#999] outline-1 border-[1px] border-rose-600 bg-none px-3 py-3 text-[22px] placeholder:text-[20px] mt-[4px] placeholder:text-rose-600 font-normal rounded-md !resize-none"
+          }
+          placeholder={
+            descriptionError === "" ? "Write your thoughts!" : descriptionError
+          }
           rows="4"
         />
       </div>
-      {image ? (
-        <div className="relative">
-          <Image
-            width={1000}
-            height={120}
-            className="w-auto h-[80px] rounded-md mb-2"
-            src={image}
-            alt="Selected"
-          />
-          <CgClose
-            className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
-            onClick={handleImageDelete}
-          />
+      <div className="w-full  flex gap-x-[20px]">
+        <div>
+          {image?.length > 0 && (
+            <div className="w-full flex gap-x-[10px] overflow-x-auto">
+              {image.map((img, i) => {
+                return (
+                  <div key={i} className="relative">
+                    <Image
+                      width={1000}
+                      height={120}
+                      className="w-auto h-[80px] rounded-md mb-2"
+                      src={img}
+                      alt="Selected"
+                    />
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                      onClick={() => handleImageDelete(i)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
-      ) : (
-        ""
+        <div>
+          {video?.length > 0 && (
+            <div className="w-full flex gap-x-[10px] overflow-x-auto">
+              {video.map((vdo, i) => {
+                return (
+                  <div key={i} className="relative">
+                    <video width={80} height={80} controls="">
+                      <source src={vdo} type="video/mp4" />
+                      <source src={vdo} type="video/ogg" />
+                    </video>
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                      onClick={() => handleVideoDelete(i)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        <div>
+          {propertyDocument?.length > 0 && (
+            <div className="w-full flex gap-x-[10px] overflow-x-auto">
+              {propertyDocument.map((doc, i) => {
+                return (
+                  <div key={i} className="relative">
+                    <iframe
+                      className="object-cover w-[80px] h-[80px] rounded-sm"
+                      width="70"
+                      height="70"
+                      src={doc}
+                    ></iframe>
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                      onClick={() => handleDocumentDelete(i)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+      {imageUploading !== null && (
+        <div className="w-full ">
+          <div className="mb-8">
+            <div className="bg-stroke dark:bg-dark-3 relative h-4 w-full rounded-2xl">
+              <div
+                className="bg-primary absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white"
+                style={{ width: `${imageUploading}%` }}
+              >
+                {imageUploading}%
+              </div>
+            </div>
+          </div>
+        </div>
       )}
+
       <Input
         type="file"
         accept="image/*"
+        multiple
         onChange={handleImageChange}
         style={{ display: "none" }}
         id="image-input"
+      />
+      <input
+        type="file"
+        accept="video/*"
+        onChange={handleVideoChange}
+        style={{ display: "none" }}
+        id="video-input"
+      />
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={handleDocumentChange}
+        style={{ display: "none" }}
+        id="document-input"
       />
 
       <div className="grid grid-cols-7">
@@ -78,7 +203,9 @@ const AddPost = ({
               className={clsx(
                 "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
               )}
+              onChange={(e) => setPrice(e.target.value)}
               placeholder="Price"
+              value={price}
             />
             <TbCurrencyTaka className="absolute top-1/2 right-2 transform -translate-y-1/2" />
           </div>
@@ -87,47 +214,82 @@ const AddPost = ({
               className={clsx(
                 "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
               )}
+              onChange={(e) => setSqft(e.target.value)}
               placeholder="Sqft"
+              value={sqft}
             />
             <MdOutlineSquareFoot className="absolute top-1/2 right-2 transform -translate-y-1/2" />
           </div>
         </div>
         <div className="col-span-5 flex items-center gap-3 ml-3">
           <div className="relative w-full !max-w-[180px]">
-            <Select
-              onChange={(e) => setCategory(e.target.value)}
-              className={clsx(
-                "block w-full appearance-none rounded-md border-none bg-[#ededed] py-1.5 px-3 text-sm/6 text-[#444] cursor-pointer",
-                "focus:outline-none data-[focus]:outline-none",
-                "*:text-[#444]"
-              )}
-            >
-              <option value="sell">Required</option>
-              <option value="rent">Available</option>
-            </Select>
+            <>
+              <Menu>
+                <MenuButton className="inline-flex justify-between items-center gap-1 rounded-md bg-[#ededed] py-1.5 px-3 text-[14px] placeholder:text-[14px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#ededed] data-[open]:bg-[#ededed] data-[focus]:outline-1 data-[focus]:outline-white w-full">
+                  {postType}
 
-            <ChevronDownIcon
-              className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-black/60"
-              aria-hidden="true"
-            />
+                  <ChevronDownIcon className="size-3 fill-[#333]" />
+                </MenuButton>
+
+                <MenuItems
+                  transition
+                  anchor="bottom start"
+                  className="w-full !max-w-[180px] origin-top-left rounded-md border bg-[#ededed] text-[#444] mt-[2px] text-[14px] placeholder:text-[14px] font-medium transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 relative z-50 "
+                >
+                  <MenuItem>
+                    <button
+                      className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                      onClick={() => setPostType("Available")}
+                    >
+                      Available
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                      onClick={() => setPostType("Required")}
+                    >
+                      Required
+                    </button>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            </>
           </div>
           <span>for</span>
           <div className="relative  w-full !max-w-[180px]">
-            <Select
-              onChange={(e) => setAgent(e.target.value)}
-              className={clsx(
-                "block w-full appearance-none rounded-md border-none bg-[#ededed] py-1.5 px-3 text-sm/6 text-[#444] cursor-pointer",
-                "focus:outline-none data-[focus]:outline-none",
-                "*:text-[#444]"
-              )}
-            >
-              <option value="buyer">Sale</option>
-              <option value="seller">Rent</option>
-            </Select>
-            <ChevronDownIcon
-              className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-black/60"
-              aria-hidden="true"
-            />
+            <>
+              <Menu>
+                <MenuButton className="inline-flex justify-between items-center gap-1 rounded-md bg-[#ededed] py-1.5 px-3 text-[14px] placeholder:text-[14px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#ededed] data-[open]:bg-[#ededed] data-[focus]:outline-1 data-[focus]:outline-white w-full">
+                  {forPost}
+
+                  <ChevronDownIcon className="size-3 fill-[#333]" />
+                </MenuButton>
+
+                <MenuItems
+                  transition
+                  anchor="bottom start"
+                  className="w-full !max-w-[180px] origin-top-left rounded-md border bg-[#ededed] text-[#444] mt-[2px] text-[14px] placeholder:text-[14px] font-medium transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 relative z-50 "
+                >
+                  <MenuItem>
+                    <button
+                      className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                      onClick={() => setForPost("Sell")}
+                    >
+                      Sell
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                      onClick={() => setForPost("Rent")}
+                    >
+                      Required
+                    </button>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            </>
           </div>
           <div className="col flex justify-between items-center gap-2">
             <Tooltip title="Image" arrow placement="top-start">
@@ -151,8 +313,11 @@ const AddPost = ({
                 </svg>
               </button>
             </Tooltip>
-            <Tooltip title="Video" arrow placement="top-start">
-              <button>
+            <Tooltip title="Upload Video Under 30 MB" arrow placement="top-end">
+              <button
+                type="button"
+                onClick={() => document.getElementById("video-input").click()}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -169,8 +334,13 @@ const AddPost = ({
                 </svg>
               </button>
             </Tooltip>
-            <Tooltip title="File" arrow placement="top-start">
-              <button>
+            <Tooltip title="Upload pdf File" arrow placement="top-end">
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById("document-input").click()
+                }
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -199,10 +369,15 @@ const AddPost = ({
             {/* select map location show field  */}
             <Input
               className={clsx(
-                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+                locationError === ""
+                  ? "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+                  : "block w-full rounded-md border-[1px] border-rose-600 outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 placeholder:text-rose-600"
               )}
-              placeholder="Click on map"
-              disabled
+              placeholder={
+                locationError === "" ? "Click on map" : locationError
+              }
+              value={formatted_address}
+              readOnly
             />
             {/* click on map button  */}
             <Tooltip title="Click me" arrow placement="top-start">
@@ -222,9 +397,17 @@ const AddPost = ({
           <div className="relative">
             <Input
               className={clsx(
-                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+                towersorBuildingNameError === ""
+                  ? "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+                  : "block w-full rounded-md border-[1px] border-rose-600  outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 placeholder:text-rose-600"
               )}
-              placeholder="Building/Tower name..."
+              onChange={(e) => setTowersorBuildingName(e.target.value)}
+              value={towersorBuildingName}
+              placeholder={
+                towersorBuildingNameError === ""
+                  ? "Building/Tower name..."
+                  : towersorBuildingNameError
+              }
             />
             <Tooltip title="Tower" arrow placement="top-start">
               <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
@@ -235,13 +418,25 @@ const AddPost = ({
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <PropertyCategory />
-        <PropertyType />
-        <Parking />
+        <PropertyCategory
+          setPropertyCategory={setPropertyCategory}
+          propertyCategoryName={propertyCategoryName}
+          propertyCategoryError={propertyCategoryError}
+        />
+        <PropertyType
+          setPropertyType={setPropertyType}
+          propertyTypeName={propertyTypeName}
+          propertyTypeError={propertyTypeError}
+        />
+        <Parking setParking={setParking} parking={parking} />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <SaleTypeTag />
-        <TagSelect />
+        <SaleTypeTag setSellType={setSellType} sellType={sellType} />
+        <TagSelect
+          setSelectedTags={setTags}
+          selectedTags={tags}
+          tagsError={tagsError}
+        />
       </div>
     </>
   );

@@ -1,51 +1,51 @@
 const houseData = [
   {
-    rol: "Buyer",
+    role: "buyer",
     sell: "Sale",
     btn: "Urgent",
   },
   {
-    rol: "Buyer",
+    role: "buyer",
     sell: "Sale",
     btn: "Urgent",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Rent",
     btn: "Urgent",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Rent",
     btn: "Sponsored",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Sale",
     btn: "Sponsored",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Sale",
     btn: "Urgent",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Rent",
     btn: "Urgent",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Sale",
     btn: "Sponsored",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Sale",
     btn: "Urgent",
   },
   {
-    rol: "Agent",
+    role: "agent",
     sell: "Rent",
     btn: "Urgent",
   },

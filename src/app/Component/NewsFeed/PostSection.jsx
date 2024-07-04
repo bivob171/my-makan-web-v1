@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import {
   Button,
@@ -14,18 +16,78 @@ import AddPost from "./AddPost";
 import { IoMdCloseCircle } from "react-icons/io";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import MapPage from "./MapPage";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { PostLocationValueContext } from "@/Context/postValueContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const PostSection = () => {
+  const { isAuthenticated, loading, user, setRender, render, logOut } =
+    PrivateRouteContext();
+  const {
+    lata,
+    setLata,
+    lon,
+    setLon,
+    formatted_address,
+    setFormatted_address,
+    country,
+    setCountry,
+    state,
+    setState,
+    city,
+    setCity,
+    title,
+    setTitle,
+    titleError,
+    setTitleError,
+    description,
+    setDescription,
+    descriptionError,
+    setDescriptionError,
+    price,
+    setPrice,
+    sqft,
+    setSqft,
+    forPost,
+    setForPost,
+    towersorBuildingName,
+    setTowersorBuildingName,
+    towersorBuildingNameError,
+    setTowersorBuildingNameError,
+    postType,
+    setPostType,
+    selectedType,
+    setSelectedType,
+    propertyCategory,
+    setPropertyCategory,
+    propertyTypeError,
+    setPropertyTypeError,
+    propertyCategoryError,
+    setPropertyCategoryError,
+    propertyType,
+    setPropertyType,
+    parking,
+    setParking,
+    image,
+    setImage,
+    video,
+    setVideo,
+    propertyDocument,
+    setPropertyDocument,
+    tags,
+    setTags,
+    tagsError,
+    setTagsError,
+    locationError,
+    setLocationError,
+    sellType,
+    setSellType,
+  } = useContext(PostLocationValueContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("Sell");
-  const [image, setImage] = useState(null);
-  const [tags, setTags] = useState([]);
-  const [location, setLocation] = useState(null);
-  const [agent, setAgent] = useState("Buyer");
-  const [selectedType, setSelectedType] = useState("Post Type");
+  const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
+  console.log(propertyDocument);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -34,23 +96,280 @@ const PostSection = () => {
     }
   }, []);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      localStorage.setItem("selectedImage", imageUrl);
+  const handleImageChange = (e) => {
+    handleUpload([...e.target.files]);
+  };
+  const handleVideoChange = (e) => {
+    const files = [...e.target.files];
+    const validFiles = [];
+
+    for (let file of files) {
+      if (file.size <= 50 * 1024 * 1024) {
+        // Check if the file size is under 30 MB
+        validFiles.push(file);
+      } else {
+        toast.error(`${file.name} is larger than 30 MB`);
+      }
+    }
+
+    if (validFiles.length > 0) {
+      handleVideoUpload(validFiles);
+    }
+  };
+  const handleDocumentChange = (e) => {
+    const files = [...e.target.files];
+    const validFiles = [];
+
+    for (let file of files) {
+      validFiles.push(file);
+    }
+
+    if (validFiles.length > 0) {
+      handleDocumentUpload(validFiles);
     }
   };
 
-  const handleImageDelete = () => {
-    setImage(null);
-    localStorage.removeItem("selectedImage");
+  const handleUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setImage((prevImages) => [...prevImages, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
+  };
+  const handleVideoUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setVideo((prevVideos) => [...prevVideos, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
+  };
+  const handleDocumentUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setPropertyDocument((prevDocuments) => [...prevDocuments, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log({ title, description, category, image, tags, location, agent });
+  const handleImageDelete = (indexToDelete) => {
+    setImage((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToDelete)
+    );
+  };
+  const handleVideoDelete = (indexToDelete) => {
+    setVideo((prevVideo) =>
+      prevVideo.filter((_, index) => index !== indexToDelete)
+    );
+  };
+  const handleDocumentDelete = (indexToDelete) => {
+    setPropertyDocument((prevDoc) =>
+      prevDoc.filter((_, index) => index !== indexToDelete)
+    );
+  };
+
+  // live error manage
+  useEffect(() => {
+    if (title !== "") {
+      setTitleError("");
+    }
+    if (description !== "") {
+      setDescriptionError("");
+    }
+    if (towersorBuildingName !== "") {
+      setTowersorBuildingNameError("");
+    }
+    if (formatted_address !== "") {
+      setLocationError("");
+    }
+    if (tags.length !== 0) {
+      setTagsError("");
+    }
+    if (propertyCategory !== "Property Category") {
+      setPropertyCategoryError("");
+    }
+    if (propertyType !== "Property Type") {
+      setPropertyTypeError("");
+    }
+  }, [
+    title,
+    description,
+    towersorBuildingName,
+    formatted_address,
+    tags,
+    propertyCategory,
+    propertyType,
+  ]);
+
+  // post data
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      let hasError = false;
+
+      if (title === "") {
+        setTitleError("Title is required.");
+        hasError = true;
+      } else {
+        setTitleError("");
+      }
+      if (description === "") {
+        setDescriptionError("Description is required.");
+        hasError = true;
+      } else {
+        setDescription("");
+      }
+      if (towersorBuildingName === "") {
+        setTowersorBuildingNameError("Towers or Building Name is required.");
+        hasError = true;
+      } else {
+        setTowersorBuildingNameError("");
+      }
+      if (formatted_address === "") {
+        setLocationError("Location is required.");
+        hasError = true;
+      } else {
+        setLocationError("");
+      }
+      if (tags.length === 0) {
+        setTagsError("Tags is required.");
+        hasError = true;
+      } else {
+        setTagsError("");
+      }
+      if (propertyCategory === "Property Category") {
+        setPropertyCategoryError("Property Category required.");
+        hasError = true;
+      } else {
+        setPropertyCategoryError("");
+      }
+      if (propertyType === "Property Type") {
+        setPropertyTypeError("Property Type required.");
+        hasError = true;
+      } else {
+        setPropertyTypeError("");
+      }
+      if (hasError) {
+        return;
+      }
+      const postData = {
+        title: title,
+        description: description,
+        for: forPost,
+        image: image,
+        video: video,
+        doc: propertyDocument,
+        tags: tags,
+        location: {
+          lat: lata,
+          lng: lon,
+          country: country,
+          state: state,
+          city: city,
+          formatted_address: formatted_address,
+          towersorBuildingName: towersorBuildingName,
+        },
+        type: selectedType,
+        postType: postType,
+        price: price === "" ? null : price,
+        sqft: sqft === "" ? null : sqft,
+        propertyCategory: propertyCategory,
+        propertyType: propertyType,
+        parking: parking,
+        sellType: sellType,
+        role: user.role,
+      };
+
+      let token;
+      if (user.role === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      let apiUrl;
+      if (user.role === "agent") {
+        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+      } else {
+        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+      }
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Post submitted successfully!");
+        setIsOpen(false);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
   };
 
   const nextPanel = () => {
@@ -131,8 +450,11 @@ const PostSection = () => {
                 as="h3"
                 className="text-[24px] font-semibold text-[#444] text-center border-b-[1.5px] py-3"
               >
-                {currentPanel === 1 ? (<span>Create Post</span>) : (<span>Select Location</span>)}
-
+                {currentPanel === 1 ? (
+                  <span>Create Post</span>
+                ) : (
+                  <span>Select Location</span>
+                )}
               </DialogTitle>
               <button
                 className="absolute top-2 right-2 text-[#c7c7c7] z-30"
@@ -193,33 +515,69 @@ const PostSection = () => {
                   </div>
                 </div>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-2 px-6 pb-6">
+              <div className="space-y-2 px-6 pb-6">
                 {currentPanel === 1 && (
                   <div>
                     <AddPost
+                      imageUploading={imageUploading}
                       setTitle={setTitle}
+                      title={title}
                       setDescription={setDescription}
+                      description={description}
+                      setPrice={setPrice}
+                      price={price}
+                      setSqft={setSqft}
+                      sqft={sqft}
+                      setForPost={setForPost}
+                      forPost={forPost}
+                      setTowersorBuildingName={setTowersorBuildingName}
+                      towersorBuildingName={towersorBuildingName}
+                      setPostType={setPostType}
+                      postType={postType}
+                      setPropertyCategory={setPropertyCategory}
+                      propertyCategoryName={propertyCategory}
+                      setPropertyType={setPropertyType}
+                      propertyTypeName={propertyType}
                       handleImageDelete={handleImageDelete}
                       handleImageChange={handleImageChange}
+                      handleVideoChange={handleVideoChange}
+                      handleVideoDelete={handleVideoDelete}
+                      handleDocumentChange={handleDocumentChange}
+                      handleDocumentDelete={handleDocumentDelete}
                       image={image}
-                      setLocation={setLocation}
                       tags={tags}
                       setTags={setTags}
-                      setCategory={setCategory}
-                      setAgent={setAgent}
+                      setSellType={setSellType}
+                      formatted_address={formatted_address}
+                      sellType={sellType}
+                      setParking={setParking}
+                      parking={parking}
                       nextPanel={nextPanel}
+                      video={video}
+                      propertyDocument={document}
+                      titleError={titleError}
+                      descriptionError={descriptionError}
+                      locationError={locationError}
+                      towersorBuildingNameError={towersorBuildingNameError}
+                      propertyCategoryError={propertyCategoryError}
+                      propertyTypeError={propertyTypeError}
+                      tagsError={tagsError}
                     />
                   </div>
                 )}
                 {currentPanel === 2 && (
                   <div>
-                    <MapPage />
+                    <MapPage
+                      setCurrentPanel={setCurrentPanel}
+                      currentPanel={currentPanel}
+                    />
                   </div>
                 )}
                 <div className="mt-2">
                   {currentPanel === 1 ? (
                     <Button
-                      type="submit"
+                      type="button"
+                      onClick={handleSubmit}
                       className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"
                     >
                       Post Now
@@ -234,7 +592,7 @@ const PostSection = () => {
                     </Button>
                   )}
                 </div>
-              </form>
+              </div>
             </DialogPanel>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { CgClose } from "react-icons/cg";
 
-const SaleTypeTag = () => {
+const SaleTypeTag = ({ setSellType, sellType }) => {
   const initialTags = [
     "Installment",
     "Full Cash",
@@ -20,7 +20,6 @@ const SaleTypeTag = () => {
   ];
 
   const [tags, setTags] = useState(initialTags);
-  const [selectedTags, setSelectedTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -45,12 +44,12 @@ const SaleTypeTag = () => {
   };
 
   const handleTagSelect = (tag) => {
-    if (selectedTags.length < 5 && !selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-      if (selectedTags.length === 4) {
+    if (sellType.length < 5 && !sellType.includes(tag)) {
+      setSellType([...sellType, tag]);
+      if (sellType.length === 4) {
         setDropdownVisible(false);
       }
-    } else if (selectedTags.includes(tag)) {
+    } else if (sellType.includes(tag)) {
       alert("Tag already selected.");
     } else {
       alert("Maximum 5 tags can be selected.");
@@ -59,12 +58,12 @@ const SaleTypeTag = () => {
 
   const handleTagAdd = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
-      if (selectedTags.length < 5 && !selectedTags.includes(inputValue)) {
+      if (sellType.length < 5 && !sellType.includes(inputValue)) {
         setTags([...tags, inputValue]);
-        setSelectedTags([...selectedTags, inputValue]);
+        setSellType([...sellType, inputValue]);
         setInputValue("");
         setDropdownVisible(false);
-      } else if (selectedTags.includes(inputValue)) {
+      } else if (sellType.includes(inputValue)) {
         alert("Tag already selected.");
       } else {
         alert("Maximum 5 tags can be selected.");
@@ -73,7 +72,7 @@ const SaleTypeTag = () => {
   };
 
   const handleTagRemove = (tagToRemove) => {
-    setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
+    setSellType(sellType.filter((tag) => tag !== tagToRemove));
   };
 
   const filteredTags = tags.filter((tag) =>
@@ -87,7 +86,9 @@ const SaleTypeTag = () => {
 
   return (
     <div ref={wrapperRef} className="mt-1">
-        <label htmlFor="" className="font-semibold">Sale type (Multiple)</label>
+      <label htmlFor="" className="font-semibold">
+        Sale type (Multiple)
+      </label>
       <div className="relative">
         <Input
           className={clsx(
@@ -124,7 +125,7 @@ const SaleTypeTag = () => {
         )}
       </div>
       <div className="flex flex-wrap gap-2 mb-2">
-        {selectedTags.map((tag) => (
+        {sellType.map((tag) => (
           <div
             key={tag}
             className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[12px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
