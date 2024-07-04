@@ -13,6 +13,7 @@ import {
 import AddPost from "./AddPost";
 import { IoMdCloseCircle } from "react-icons/io";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import MapPage from "./MapPage";
 
 const PostSection = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,8 +25,7 @@ const PostSection = () => {
   const [location, setLocation] = useState(null);
   const [agent, setAgent] = useState("Buyer");
   const [selectedType, setSelectedType] = useState("Post Type");
-
-  //   const myApiKeys = "AIzaSyCdoayMuPOqJs2tvADbA6FWRE4oP47AAJ0";
+  const [currentPanel, setCurrentPanel] = useState(1);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -53,12 +53,21 @@ const PostSection = () => {
     console.log({ title, description, category, image, tags, location, agent });
   };
 
+  const nextPanel = () => {
+    setCurrentPanel(currentPanel + 1);
+  };
+
+  const previousPanel = () => {
+    setCurrentPanel(currentPanel - 1);
+  };
+
   function open() {
     setIsOpen(true);
   }
 
   function close() {
     setIsOpen(false);
+    setCurrentPanel(1);
   }
 
   return (
@@ -122,7 +131,8 @@ const PostSection = () => {
                 as="h3"
                 className="text-[24px] font-semibold text-[#444] text-center border-b-[1.5px] py-3"
               >
-                Create Post
+                {currentPanel === 1 ? (<span>Create Post</span>) : (<span>Select Location</span>)}
+
               </DialogTitle>
               <button
                 className="absolute top-2 right-2 text-[#c7c7c7] z-30"
@@ -184,25 +194,45 @@ const PostSection = () => {
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="space-y-2 px-6 pb-6">
-                <AddPost
-                  setTitle={setTitle}
-                  setDescription={setDescription}
-                  handleImageDelete={handleImageDelete}
-                  handleImageChange={handleImageChange}
-                  image={image}
-                  setLocation={setLocation}
-                  tags={tags}
-                  setTags={setTags}
-                  setCategory={setCategory}
-                  setAgent={setAgent}
-                />
-                <div className="mt-4">
-                  <Button
-                    type="submit"
-                    className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"
-                  >
-                    Post Now
-                  </Button>
+                {currentPanel === 1 && (
+                  <div>
+                    <AddPost
+                      setTitle={setTitle}
+                      setDescription={setDescription}
+                      handleImageDelete={handleImageDelete}
+                      handleImageChange={handleImageChange}
+                      image={image}
+                      setLocation={setLocation}
+                      tags={tags}
+                      setTags={setTags}
+                      setCategory={setCategory}
+                      setAgent={setAgent}
+                      nextPanel={nextPanel}
+                    />
+                  </div>
+                )}
+                {currentPanel === 2 && (
+                  <div>
+                    <MapPage />
+                  </div>
+                )}
+                <div className="mt-2">
+                  {currentPanel === 1 ? (
+                    <Button
+                      type="submit"
+                      className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"
+                    >
+                      Post Now
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={previousPanel}
+                      className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"
+                    >
+                      Previous
+                    </Button>
+                  )}
                 </div>
               </form>
             </DialogPanel>

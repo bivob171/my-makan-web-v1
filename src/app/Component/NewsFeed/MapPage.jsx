@@ -1,0 +1,238 @@
+"use client";
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
+import { Input } from "@headlessui/react";
+import clsx from "clsx";
+
+// Define a constant for the Google Maps API libraries
+const LIBRARIES = ["places"];
+
+// Define a constant for the Google Maps API key
+const GOOGLE_MAPS_API_KEY = "AIzaSyB2zI6llsCgJHl82vznsE0LL15lLV03CNI";
+
+const MapPage = () => {
+  const [searchBox, setSearchBox] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const mapRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Effect to initialize the search box and geolocation
+  useEffect(() => {
+    const initializeAutocomplete = () => {
+      const input = inputRef.current;
+      if (!input) {
+        console.error("Input element not found");
+        return;
+      }
+
+      const searchBoxInstance = new window.google.maps.places.Autocomplete(
+        input
+      );
+      setSearchBox(searchBoxInstance);
+
+      searchBoxInstance.addListener("place_changed", () => {
+        const place = searchBoxInstance.getPlace();
+        if (!place.geometry) {
+          console.error("No geometry found for the place");
+          return;
+        }
+
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const address = place.formatted_address;
+
+        setSelectedLocation({ lat, lng });
+        setSelectedAddress(address);
+
+        if (mapRef.current) {
+          mapRef.current.panTo({ lat, lng });
+          mapRef.current.setZoom(15); // Zoom in when a place is selected
+        }
+
+        // Log country, state, and city names
+        const addressComponents = place.address_components;
+        let country = "";
+        let state = "";
+        let city = "";
+
+        addressComponents.forEach((component) => {
+          if (component.types.includes("country")) {
+            country = component.long_name;
+          } else if (component.types.includes("administrative_area_level_1")) {
+            state = component.long_name;
+          } else if (
+            component.types.includes("locality") ||
+            component.types.includes("administrative_area_level_2")
+          ) {
+            city = component.long_name;
+          }
+        });
+
+        console.log(`Country: ${country}`);
+        console.log(`State: ${state}`);
+        console.log(`City: ${city}`);
+
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(
+            `Selected location is ${address}`
+          );
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.warn("Speech Synthesis not supported in this browser.");
+        }
+      });
+    };
+
+    const loadScriptCallback = () => {
+      if (window.google) {
+        initializeAutocomplete();
+      } else {
+        console.error("Google Maps API not loaded");
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setCurrentLocation({ lat, lng });
+
+          if (mapRef.current) {
+            mapRef.current.panTo({ lat, lng });
+          }
+        });
+      }
+    };
+
+    if (window.google && window.google.maps) {
+      initializeAutocomplete();
+    } else {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=${LIBRARIES.join(
+        ","
+      )}`;
+      script.async = true;
+      script.defer = true;
+      script.onload = loadScriptCallback;
+      script.onerror = () => console.error("Error loading Google Maps API");
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleMapClick = useCallback((e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    const latLng = new window.google.maps.LatLng(lat, lng);
+
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: latLng }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const address = results[0].formatted_address;
+        setSelectedLocation({ lat, lng });
+        setSelectedAddress(address);
+
+        const addressComponents = results[0].address_components;
+        let country = "";
+        let state = "";
+        let city = "";
+
+        addressComponents.forEach((component) => {
+          if (component.types.includes("country")) {
+            country = component.long_name;
+          } else if (component.types.includes("administrative_area_level_1")) {
+            state = component.long_name;
+          } else if (
+            component.types.includes("locality") ||
+            component.types.includes("administrative_area_level_2")
+          ) {
+            city = component.long_name;
+          }
+        });
+
+        console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+        console.log(`Address: ${address}`);
+        console.log(`Country: ${country}`);
+        console.log(`State: ${state}`);
+        console.log(`City: ${city}`);
+
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(
+            `Selected location is ${address}`
+          );
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.warn("Speech Synthesis not supported in this browser.");
+        }
+      } else {
+        console.error("Geocoder failed due to: " + status);
+      }
+    });
+  }, []);
+
+  return (
+    <div>
+      <div className="w-full">
+        <div className="w-auto">
+          <Input
+            className={clsx(
+              "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+            )}
+            placeholder="Search for a location"
+            id="location-input"
+            type="text"
+            value={searchText}
+            onChange={handleSearchChange}
+            ref={inputRef}
+          />
+        </div>
+
+        <div className="my-2">
+          <LoadScript
+            googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+            libraries={LIBRARIES}
+            onLoad={() => {
+              console.log("Google Maps API loaded successfully");
+              if (window.google) {
+                const input = inputRef.current;
+                if (input) {
+                  const searchBoxInstance =
+                    new window.google.maps.places.Autocomplete(input);
+                  setSearchBox(searchBoxInstance);
+                } else {
+                  console.error("Input element not found");
+                }
+              }
+            }}
+            onError={() => console.error("Error loading Google Maps API")}
+          >
+            <GoogleMap
+              onLoad={(map) => {
+                mapRef.current = map;
+              }}
+              mapContainerStyle={{ height: "350px", width: "100%" }}
+              zoom={10}
+              center={currentLocation || { lat: 0, lng: 0 }}
+              onClick={handleMapClick}
+            >
+              {selectedLocation && (
+                <MarkerF
+                  position={selectedLocation}
+                  title="Selected Location"
+                  name="Selected Location"
+                />
+              )}
+            </GoogleMap>
+          </LoadScript>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MapPage;

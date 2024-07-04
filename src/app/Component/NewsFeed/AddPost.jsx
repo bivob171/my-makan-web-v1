@@ -1,23 +1,19 @@
 import React from "react";
-// import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import {
-  Input,
-  Label,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Select,
-} from "@headlessui/react";
+import { Input, Select } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import TagSelect from "./TagSelect";
 import Image from "next/image";
 import { CgClose } from "react-icons/cg";
-import { Menu, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import PropertyCategory from "./PropartyCategory";
 import SaleTypeTag from "./SaleTypeTag";
 import PropertyType from "./PropertyType";
 import Parking from "./Parking";
+import { FaMapLocationDot } from "react-icons/fa6";
+import { TbCurrencyTaka } from "react-icons/tb";
+import { MdOutlineSquareFoot } from "react-icons/md";
+import { GiTowerBridge } from "react-icons/gi";
 
 const AddPost = ({
   setTitle,
@@ -30,6 +26,7 @@ const AddPost = ({
   setAgent,
   tags,
   setTags,
+  nextPanel,
 }) => {
   return (
     <>
@@ -54,12 +51,12 @@ const AddPost = ({
           <Image
             width={1000}
             height={120}
-            className="w-auto h-[120px] rounded-md mb-2"
+            className="w-auto h-[80px] rounded-md mb-2"
             src={image}
             alt="Selected"
           />
           <CgClose
-            className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-0 cursor-pointer"
+            className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
             onClick={handleImageDelete}
           />
         </div>
@@ -74,9 +71,28 @@ const AddPost = ({
         id="image-input"
       />
 
-      <div className="grid grid-cols-4">
-        <div className="col-span-1"></div>
-        <div className="col-span-3 flex items-center gap-3">
+      <div className="grid grid-cols-7">
+        <div className="col-span-2 grid grid-cols-2 gap-3">
+          <div className="relative">
+            <Input
+              className={clsx(
+                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+              )}
+              placeholder="Price"
+            />
+            <TbCurrencyTaka className="absolute top-1/2 right-2 transform -translate-y-1/2" />
+          </div>
+          <div className="relative">
+            <Input
+              className={clsx(
+                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+              )}
+              placeholder="Sqft"
+            />
+            <MdOutlineSquareFoot className="absolute top-1/2 right-2 transform -translate-y-1/2" />
+          </div>
+        </div>
+        <div className="col-span-5 flex items-center gap-3 ml-3">
           <div className="relative w-full !max-w-[180px]">
             <Select
               onChange={(e) => setCategory(e.target.value)}
@@ -113,7 +129,7 @@ const AddPost = ({
               aria-hidden="true"
             />
           </div>
-          <div className="col flex justify-between items-center gap-0">
+          <div className="col flex justify-between items-center gap-2">
             <Tooltip title="Image" arrow placement="top-start">
               <button
                 type="button"
@@ -179,23 +195,43 @@ const AddPost = ({
           <label htmlFor="" className="font-semibold">
             Select Location from map
           </label>
-          <Input
-            className={clsx(
-              "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
-            )}
-            placeholder="Select Location from map..."
-          />
+          <div className="relative">
+            {/* select map location show field  */}
+            <Input
+              className={clsx(
+                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+              )}
+              placeholder="Click on map"
+              disabled
+            />
+            {/* click on map button  */}
+            <Tooltip title="Click me" arrow placement="top-start">
+              <button
+                onClick={nextPanel}
+                className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2"
+              >
+                <FaMapLocationDot className="text-red-600 w-6 h-6" />
+              </button>
+            </Tooltip>
+          </div>
         </div>
         <div className="my-3 ">
           <label htmlFor="" className="font-semibold">
             Building/Tower name
           </label>
-          <Input
-            className={clsx(
-              "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
-            )}
-            placeholder="Building/Tower name..."
-          />
+          <div className="relative">
+            <Input
+              className={clsx(
+                "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
+              )}
+              placeholder="Building/Tower name..."
+            />
+            <Tooltip title="Tower" arrow placement="top-start">
+              <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
+                <GiTowerBridge className="text-blue-600 w-6 h-6" />
+              </button>
+            </Tooltip>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
