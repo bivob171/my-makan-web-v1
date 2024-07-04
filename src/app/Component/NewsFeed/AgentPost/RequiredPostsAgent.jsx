@@ -7,7 +7,7 @@ import Image from "next/image";
 import houseData from "@/data/houseData";
 import Link from "next/link";
 
-export default function RequiredPosts() {
+export default function RequiredPostsAgent() {
   return (
     <>
       <div className="">

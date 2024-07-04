@@ -7,9 +7,9 @@ import Image from "next/image";
 import houseData from "@/data/houseData";
 import Link from "next/link";
 
-export default function RequiredPosts() {
+const AvailablePostsAgent = () => {
   return (
-    <>
+    <div>
       <div className="">
         <div className="container">
           <div className="block-box user-search-bar justify-content-between">
@@ -315,6 +315,8 @@ export default function RequiredPosts() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default AvailablePostsAgent;
