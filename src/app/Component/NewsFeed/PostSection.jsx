@@ -515,7 +515,7 @@ const PostSection = () => {
                   </div>
                 </div>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-2 px-6 pb-6">
+              <div className="space-y-2 px-6 pb-6">
                 {currentPanel === 1 && (
                   <div>
                     <AddPost
@@ -576,8 +576,8 @@ const PostSection = () => {
                 <div className="mt-2">
                   {currentPanel === 1 ? (
                     <Button
-                      type="submit"
-                      // onClick={handleSubmit}
+                      type="button"
+                      onClick={handleSubmit}
                       className="w-full text-[18px] font-semibold rounded-md bg-[#5854EF] py-1.5 px-6 text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#5954efef] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-[#5854EF]"
                     >
                       Post Now
@@ -592,7 +592,7 @@ const PostSection = () => {
                     </Button>
                   )}
                 </div>
-              </form>
+              </div>
             </DialogPanel>
           </div>
         </div>
