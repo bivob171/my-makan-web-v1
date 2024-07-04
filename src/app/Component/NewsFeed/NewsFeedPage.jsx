@@ -18,10 +18,7 @@ export const NewsFeedPage = () => {
     PrivateRouteContext();
 
   const role = user?.role;
-
-  const [activeTab, setActiveTab] = useState(
-    role === "buyer" ? "allPostsAgent" : "allPosts"
-  );
+  const [activeTab, setActiveTab] = useState("allPosts");
 
   const dateStr = user?.createdAt;
 
@@ -76,7 +73,9 @@ export const NewsFeedPage = () => {
               </li>
             </ul>
           </div>
-          <PostSection />
+          <div>
+            <PostSection />
+          </div>
           {/* post nav section  */}
           {user?.role === "agent" ? (
             <div className="row">
@@ -162,11 +161,11 @@ export const NewsFeedPage = () => {
                     >
                       <a
                         className={`nav-link ${
-                          activeTab === "allPostsAgent" ? "active" : ""
+                          activeTab === "allPosts" ? "active" : ""
                         }`}
-                        onClick={() => setActiveTab("allPostsAgent")}
+                        onClick={() => setActiveTab("allPosts")}
                         role="tab"
-                        aria-selected={activeTab === "allPostsAgent"}
+                        aria-selected={activeTab === "allPosts"}
                       >
                         <i className="icofont-copy" />
                         All Posts
@@ -181,7 +180,7 @@ export const NewsFeedPage = () => {
                     >
                       <a
                         className={`nav-link ${
-                          activeTab === "availablePostsAgent" ? "active" : ""
+                          activeTab === "availablePosts" ? "active" : ""
                         }`}
                         onClick={() => setActiveTab("availablePostsAgent")}
                         role="tab"
@@ -212,7 +211,7 @@ export const NewsFeedPage = () => {
                     </li>
                   </ul>
                 </div>
-                {activeTab === "allPostsAgent" && <AllPostAgent />}
+                {activeTab === "allPosts" && <AllPostAgent />}
                 {activeTab === "availablePostsAgent" && <AvailablePostsAgent />}
                 {activeTab === "requiredPostsAgent" && <RequiredPostsAgent />}
               </div>
