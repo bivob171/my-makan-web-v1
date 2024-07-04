@@ -17,17 +17,26 @@ const MapPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const mapRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Effect to initialize the search box and geolocation
   useEffect(() => {
-    if (window.google) {
-      const input = document.getElementById("location-input");
-      const searchBox = new window.google.maps.places.Autocomplete(input);
-      setSearchBox(searchBox);
+    const initializeAutocomplete = () => {
+      const input = inputRef.current;
+      if (!input) {
+        console.error("Input element not found");
+        return;
+      }
 
-      searchBox.addListener("place_changed", () => {
-        const place = searchBox.getPlace();
+      const searchBoxInstance = new window.google.maps.places.Autocomplete(
+        input
+      );
+      setSearchBox(searchBoxInstance);
+
+      searchBoxInstance.addListener("place_changed", () => {
+        const place = searchBoxInstance.getPlace();
         if (!place.geometry) {
+          console.error("No geometry found for the place");
           return;
         }
 
@@ -40,6 +49,7 @@ const MapPage = () => {
 
         if (mapRef.current) {
           mapRef.current.panTo({ lat, lng });
+          mapRef.current.setZoom(15); // Zoom in when a place is selected
         }
 
         // Log country, state, and city names
@@ -74,18 +84,40 @@ const MapPage = () => {
           console.warn("Speech Synthesis not supported in this browser.");
         }
       });
-    }
+    };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        setCurrentLocation({ lat, lng });
+    const loadScriptCallback = () => {
+      if (window.google) {
+        initializeAutocomplete();
+      } else {
+        console.error("Google Maps API not loaded");
+      }
 
-        if (mapRef.current) {
-          mapRef.current.panTo({ lat, lng });
-        }
-      });
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setCurrentLocation({ lat, lng });
+
+          if (mapRef.current) {
+            mapRef.current.panTo({ lat, lng });
+          }
+        });
+      }
+    };
+
+    if (window.google && window.google.maps) {
+      initializeAutocomplete();
+    } else {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=${LIBRARIES.join(
+        ","
+      )}`;
+      script.async = true;
+      script.defer = true;
+      script.onload = loadScriptCallback;
+      script.onerror = () => console.error("Error loading Google Maps API");
+      document.head.appendChild(script);
     }
   }, []);
 
@@ -156,6 +188,7 @@ const MapPage = () => {
             type="text"
             value={searchText}
             onChange={handleSearchChange}
+            ref={inputRef}
           />
         </div>
 
@@ -163,8 +196,20 @@ const MapPage = () => {
           <LoadScript
             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
             libraries={LIBRARIES}
-            async
-            onLoad={() => console.log("Google Maps API loaded successfully")}
+            onLoad={() => {
+              console.log("Google Maps API loaded successfully");
+              if (window.google) {
+                const input = inputRef.current;
+                if (input) {
+                  const searchBoxInstance =
+                    new window.google.maps.places.Autocomplete(input);
+                  setSearchBox(searchBoxInstance);
+                } else {
+                  console.error("Input element not found");
+                }
+              }
+            }}
+            onError={() => console.error("Error loading Google Maps API")}
           >
             <GoogleMap
               onLoad={(map) => {
