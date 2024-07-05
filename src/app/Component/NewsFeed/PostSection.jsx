@@ -21,7 +21,7 @@ import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const PostSection = () => {
+const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const {
@@ -84,7 +84,6 @@ const PostSection = () => {
     sellType,
     setSellType,
   } = useContext(PostLocationValueContext);
-  const [isOpen, setIsOpen] = useState(false);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
   console.log(propertyDocument);
@@ -380,10 +379,6 @@ const PostSection = () => {
     setCurrentPanel(currentPanel - 1);
   };
 
-  function open() {
-    setIsOpen(true);
-  }
-
   function close() {
     setIsOpen(false);
     setCurrentPanel(1);
@@ -391,49 +386,6 @@ const PostSection = () => {
 
   return (
     <div className="newsfeed-search">
-      <ul className="member-list gap-2">
-        <li className="active-member">
-          <Image
-            width={40}
-            height={40}
-            alt="img"
-            src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-            className="w-[45px] h-[45px] rounded-full border-2"
-          />
-        </li>
-        <li>
-          <button className="cursor-pointer" onClick={open}>
-            <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-              <span className="text-[16px] font-mono font-medium">
-                What&apos;s on your mind, Baizid?
-              </span>
-            </div>
-          </button>
-        </li>
-      </ul>
-      <ul className="search-list">
-        <li className="search-filter">
-          <button className="drop-btn" type="button">
-            <i className="icofont-abacus-alt" />
-          </button>
-          <div className="drop-menu">
-            <select className="select2">
-              <option>--Everything--</option>
-              <option>Status</option>
-              <option>Quotes</option>
-              <option>Photos</option>
-              <option>Videos</option>
-              <option>Audios</option>
-              <option>slideshows</option>
-              <option>files</option>
-              <option>Updates</option>
-              <option>New Members</option>
-              <option>Posts</option>
-              <option>New Groups</option>
-            </select>
-          </div>
-        </li>
-      </ul>
       <Dialog
         open={isOpen}
         as="div"

@@ -5951,6 +5951,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 .why-choose-us .why-choose-box .features-list .media-body .item-title {
   font-size: 22px;
+  font-family: "Nunito", sans-serif;
   margin-bottom: 12px;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
