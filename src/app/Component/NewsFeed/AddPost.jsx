@@ -128,13 +128,13 @@ const AddPost = ({
           rows="4"
         />
       </div>
-      <div className="w-full  flex gap-x-[20px] overflow-x-scroll">
+      <div className="w-full flex gap-x-[20px] overflow-x-scroll">
         <div>
           {image?.length > 0 && (
             <div className="w-full flex gap-x-[10px] overflow-x-auto">
               {image.map((img, i) => {
                 return (
-                  <div key={i} className="relative">
+                  <div key={i} className="relative flex-shrink-0">
                     <Image
                       width={1000}
                       height={120}
@@ -197,7 +197,7 @@ const AddPost = ({
       </div>
       {imageUploading !== null && (
         <div className="w-full ">
-          <div className="mb-8">
+          <div className="mb-4">
             <div className="bg-stroke dark:bg-dark-3 relative h-4 w-full rounded-2xl">
               <div
                 className="bg-primary absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white"
