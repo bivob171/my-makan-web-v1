@@ -101,7 +101,7 @@ export const AboutPage = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           headers: {
@@ -138,7 +138,7 @@ export const AboutPage = () => {
       const token = localStorage.getItem("buyerAccessToken");
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/user/update-profile",
+        "http://localhost:4000/user/update-profile",
         {
           method: "PATCH",
           headers: {
@@ -179,7 +179,7 @@ export const AboutPage = () => {
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/agent/update-profile",
+        "http://localhost:4000/agent/update-profile",
         {
           method: "PATCH",
           headers: {
