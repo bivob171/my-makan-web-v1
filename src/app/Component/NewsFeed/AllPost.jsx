@@ -253,7 +253,7 @@ const AllPost = () => {
                                       Jamshed Rony{" "}
                                     </p>
                                   )}
-                                  <div className="mb-[5px]">
+                                  <div className="mb-[15px]">
                                     <Image
                                       width={15}
                                       height={15}
@@ -261,7 +261,7 @@ const AllPost = () => {
                                       src="/homeCard/verified.png"
                                     />
                                   </div>
-                                  <div className="flex items-center gap-x-[5px] mt-[5px]">
+                                  <div className="flex items-center gap-x-[5px] mt-[2px]">
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                       {userId?.avgrating}
                                     </p>
@@ -272,7 +272,7 @@ const AllPost = () => {
                                 </div>
                               </div>
                               {item.role === "buyer" ? (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[15px]">
                                   Buyer From{" "}
                                   <span className="text-[#E6533C]">
                                     {" "}
@@ -280,11 +280,11 @@ const AllPost = () => {
                                   </span>
                                 </p>
                               ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[15px]">
                                   Rapid Properties
                                 </p>
                               )}
-                              <div className="flex flex-wrap items-center mt-[2px] ">
+                              <div className="flex flex-wrap items-center mt-[15px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem]">
                                     {formatDate(createdAt)}
