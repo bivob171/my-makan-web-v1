@@ -49,10 +49,10 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   };
 
   const handleTagSelect = (tag) => {
-    if (sellType.length < 5 && !sellType.includes(tag)) {
-      setSellType([...sellType, tag]);
+    if (selectedTags.length < 5 && !selectedTags.includes(tag)) {
+      setSelectedTags([...selectedTags, tag]);
       setDropdownVisible(false);
-    } else if (sellType.includes(tag)) {
+    } else if (selectedTags.includes(tag)) {
       alert("Tag already selected.");
     } else {
       alert("Maximum 5 tags can be selected.");
@@ -63,14 +63,14 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
       const newTag = { name: inputValue.trim() };
       if (
-        sellType.length < 5 &&
-        !sellType.some((tag) => tag.name === newTag.name)
+        selectedTags.length < 5 &&
+        !selectedTags.some((tag) => tag.name === newTag.name)
       ) {
         setTags([...tags, newTag]);
-        setSellType([...sellType, newTag.name]);
+        setSelectedTags([...selectedTags, newTag.name]);
         setInputValue("");
         setDropdownVisible(false);
-      } else if (sellType.some((tag) => tag.name === newTag.name)) {
+      } else if (selectedTags.some((tag) => tag.name === newTag.name)) {
         alert("Tag already selected.");
       } else {
         alert("Maximum 5 tags can be selected.");
@@ -79,7 +79,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   };
 
   const handleTagRemove = (tagToRemove) => {
-    setSellType(sellType.filter((tag) => tag !== tagToRemove));
+    setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
   };
 
   const filteredTags = tags
@@ -94,7 +94,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   return (
     <div ref={wrapperRef} className="mt-1">
       <label htmlFor="" className="font-semibold">
-        Tags (Multiple)
+        Tag (Multiple)
       </label>
       <div className="relative">
         <Input
@@ -108,7 +108,6 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
           onChange={handleInputChange}
           onKeyDown={handleTagAdd}
         />
-        {/* Button to show all tags */}
         <button
           className="absolute top-1/2 right-8 transform -translate-y-1/2 text-[#444]"
           onClick={showAllTags}
@@ -116,9 +115,8 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
           Show All
         </button>
         <ChevronDownIcon className="size-4 fill-[#333] absolute top-1/2 right-2 transform -translate-y-1/2" />
-        {/* Dropdown */}
         {dropdownVisible && (
-          <div className="absolute z-30 h-[180px] overflow-y-auto right-0 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
+          <div className="absolute z-30 h-[180px] overflow-y-auto bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
             {filteredTags.length ? (
               filteredTags.map((tag) => (
                 <div
@@ -136,10 +134,10 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
         )}
       </div>
       <div className="flex flex-wrap gap-2 mb-2">
-        {selectedTags.map((tag) => (
+        {selectedTags?.map((tag) => (
           <div
             key={tag}
-            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[12px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
+            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[14px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
           >
             <span>{tag}</span>
             <CgClose

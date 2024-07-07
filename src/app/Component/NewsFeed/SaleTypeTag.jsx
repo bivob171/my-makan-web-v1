@@ -136,7 +136,7 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
         {sellType.map((tag) => (
           <div
             key={tag}
-            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[12px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
+            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[14px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
           >
             <span>{tag}</span>
             <CgClose
