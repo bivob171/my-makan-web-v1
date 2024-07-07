@@ -63,7 +63,7 @@ export default function Login() {
                 <CardHeader className="items-center text-center">
                   <BrandLogo />
                   <div>
-                    <CardTitle>SignInto your Account</CardTitle>
+                    <CardTitle>Sign Into your Account</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
