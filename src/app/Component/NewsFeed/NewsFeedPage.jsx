@@ -51,10 +51,10 @@ export const NewsFeedPage = () => {
               </div>
               <div className="bg-white w-[5px] h-[65px] rounded-b-[10px] rounded-t-[10px]"></div>
               <div className="media-body">
-                <h3 className="text-white   font-extrabold text-[28px] ">
+                <h3 className="text-white font-iuter  font-extrabold text-[32px] ">
                   My Makan Newsfeed
                 </h3>
-                <p className=" text-white">
+                <p className="font-iuter text-white">
                   All Realtors and Buyers Latest post
                 </p>
               </div>

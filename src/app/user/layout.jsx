@@ -7,7 +7,12 @@ import { HeaderTop } from "./_component/HeaderTop";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import PostLocationValueProvider from "@/Context/postValueContext";
-
+import { Nunito } from "next/font/google";
+const nunito = Nunito({
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
+  subsets: ["latin"],
+  display: "swap",
+});
 export default function Layout({ children }) {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
@@ -31,7 +36,7 @@ export default function Layout({ children }) {
               <HeaderLeft />{" "}
             </div>
             <PostLocationValueProvider>
-              <div>{children}</div>
+              <div className={nunito.className}>{children}</div>
             </PostLocationValueProvider>
             <div>
               {" "}

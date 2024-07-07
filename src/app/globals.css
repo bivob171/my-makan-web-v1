@@ -1,11 +1,13 @@
+@import '../app/style/font.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root{
-  font-family: Nunito;
-}
 
+:root {
+  font-family: 'Nunito', sans-serif;
+  /* other styles */
+}
 .container {
   position: relative;
 }
@@ -23176,3 +23178,6 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .custom-next-button {
   right: 10px; /* Adjust as needed */
 }
+
+
+
