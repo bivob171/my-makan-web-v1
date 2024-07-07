@@ -182,9 +182,9 @@ export const NewsFeedPage = () => {
                         className={`nav-link ${
                           activeTab === "availablePosts" ? "active" : ""
                         }`}
-                        onClick={() => setActiveTab("availablePostsAgent")}
+                        onClick={() => setActiveTab("availablePosts")}
                         role="tab"
-                        aria-selected={activeTab === "availablePostsAgent"}
+                        aria-selected={activeTab === "availablePosts"}
                       >
                         <i className="icofont-image" />
                         Available Posts

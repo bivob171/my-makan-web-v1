@@ -20,10 +20,12 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { AccountVerifyModal } from "./AccountVerifyModal";
 
 const PostSection = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
+  const userName = user?.fullName?.split(" ")[0];
   const {
     lata,
     setLata,
@@ -87,7 +89,7 @@ const PostSection = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
-  console.log(propertyDocument);
+  const [verifyPopup, setVerifyPopup] = useState(false);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -137,7 +139,7 @@ const PostSection = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -164,7 +166,7 @@ const PostSection = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -191,7 +193,7 @@ const PostSection = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -336,7 +338,6 @@ const PostSection = () => {
         propertyType: propertyType,
         parking: parking,
         sellType: sellType,
-        role: user.role,
       };
 
       let token;
@@ -347,9 +348,9 @@ const PostSection = () => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+        apiUrl = "http://localhost:4000/post-agent/post";
       } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+        apiUrl = "http://localhost:4000/post-user/post";
       }
 
       const response = await fetch(apiUrl, {
@@ -397,18 +398,47 @@ const PostSection = () => {
             width={40}
             height={40}
             alt="img"
-            src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
+            src={user?.image}
             className="w-[45px] h-[45px] rounded-full border-2"
           />
         </li>
         <li>
-          <button className="cursor-pointer" onClick={open}>
-            <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-              <span className="text-[16px] font-mono font-medium">
-                What&apos;s on your mind, Baizid?
-              </span>
-            </div>
-          </button>
+          {user?.role === "agent" ? (
+            <>
+              {user?.verified === false ? (
+                <>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => setVerifyPopup(true)}
+                  >
+                    <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                      <span className="text-[16px] font-mono font-medium">
+                        what are you looking for, {userName}?
+                      </span>
+                    </div>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="cursor-pointer" onClick={open}>
+                    <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                      <span className="text-[16px] font-mono font-medium">
+                        what are you looking for, {userName}?
+                      </span>
+                    </div>
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <button className="cursor-pointer" onClick={open}>
+              <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                <span className="text-[16px] font-mono font-medium">
+                  what are you looking for, {userName}?
+                </span>
+              </div>
+            </button>
+          )}
         </li>
       </ul>
       <ul className="search-list">
@@ -467,12 +497,12 @@ const PostSection = () => {
                   width={40}
                   height={40}
                   alt="img"
-                  src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
+                  src={user?.image}
                   className="w-[45px] h-[45px] rounded-full border-2"
                 />
                 <div>
                   <h4 className="text-[14px] text-[#666] m-0 leading-4">
-                    Bizid Hassan
+                    {user?.fullName}
                   </h4>
                   <div className="">
                     <Menu>
@@ -597,6 +627,8 @@ const PostSection = () => {
           </div>
         </div>
       </Dialog>
+
+      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </div>
   );
 };

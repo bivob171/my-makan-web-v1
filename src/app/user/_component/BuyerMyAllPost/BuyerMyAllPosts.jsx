@@ -6,25 +6,24 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
-import { PostLodaing } from "../PostLodaing/PostLodaing";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 
-const RequiredPostsAgent = () => {
-  const { user } = PrivateRouteContext();
+const BuyerMyAllPosts = () => {
+  const { user, setRender, render } = PrivateRouteContext();
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [postType, setPostType] = useState("Required");
   const [limit, setLimit] = useState(100);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [like, setlike] = useState(true);
+  const userId = user?._id;
   const getAllPosts = async () => {
     try {
-      let url = "http://localhost:4000/post-agent/get?";
+      let url = "http://localhost:4000/post-user/get?";
       // Constructing the URL with query parameters based on state variables
-      url += `postType=${postType}&`;
+      url += `userId=${userId}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -36,7 +35,7 @@ const RequiredPostsAgent = () => {
       // if (type !== "") url += `&type=${type}`;
       // if (planId !== "") url += `&planId=${planId}`;
       // if (packageId !== "") url += `&packageId=${packageId}`;
-      // if (agentId !== "") url += `&agentId=${agentId}`;
+      // if (userId !== "") url += `&userId=${userId}`;
       // if (doctorId !== "") url += `&doctorId=${doctorId}`;
 
       const response = await fetch(url);
@@ -57,8 +56,7 @@ const RequiredPostsAgent = () => {
 
   useEffect(() => {
     getAllPosts();
-  }, [sortOrder, sortBy, limit, page, like]);
-  console.log(allPosts);
+  }, [sortOrder, sortBy, limit, page, userId]);
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
     setOldOrNewPostDropdown(!oldOrNewPostDropdown);
@@ -78,7 +76,7 @@ const RequiredPostsAgent = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `http://localhost:4000/post-agent/${id}/like`;
+    const url = `http://localhost:4000/post-user/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -104,7 +102,7 @@ const RequiredPostsAgent = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://localhost:4000/post-agent/${id}/unlike`;
+    const url = `http://localhost:4000/post-user/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -196,7 +194,7 @@ const RequiredPostsAgent = () => {
                 {allPosts?.map((item, i) => {
                   const {
                     role,
-                    agentId,
+                    userId,
                     createdAt,
                     location,
                     tags,
@@ -251,7 +249,7 @@ const RequiredPostsAgent = () => {
                                     width={40}
                                     height={40}
                                     alt="img"
-                                    src={agentId?.image}
+                                    src={userId?.image}
                                     className="w-[40px] h-[40px] rounded-full"
                                   />
                                 </div>
@@ -269,15 +267,10 @@ const RequiredPostsAgent = () => {
                             <div>
                               <div className=" -mb-[20px] ">
                                 <div className="flex gap-x-[8px] items-center">
-                                  {item.role === "buyer" ? (
-                                    <p className="text-[0.875rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
-                                    </p>
-                                  ) : (
-                                    <p className="text-[0.875rem] text-[#333335] font-semibold">
-                                      {agentId?.fullName}
-                                    </p>
-                                  )}
+                                  <p className="text-[0.875rem] text-[#333335] font-semibold">
+                                    {userId?.fullName}{" "}
+                                  </p>
+
                                   <div className="mb-[5px]">
                                     <Image
                                       width={15}
@@ -288,7 +281,7 @@ const RequiredPostsAgent = () => {
                                   </div>
                                   <div className="flex items-center gap-x-[5px] mt-[5px]">
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                      {agentId?.avgrating}
+                                      {userId?.avgrating}
                                     </p>
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                       <GoStarFill />
@@ -296,19 +289,14 @@ const RequiredPostsAgent = () => {
                                   </div>
                                 </div>
                               </div>
-                              {item.role === "buyer" ? (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Buyer From{" "}
-                                  <span className="text-[#E6533C]">
-                                    {" "}
-                                    {agentId?.country}
-                                  </span>
-                                </p>
-                              ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Rapid Properties
-                                </p>
-                              )}
+                              <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                From{" "}
+                                <span className="text-[#E6533C]">
+                                  {" "}
+                                  {userId?.country}
+                                </span>
+                              </p>
+
                               <div className="flex flex-wrap items-center mt-[2px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem]">
@@ -346,7 +334,7 @@ const RequiredPostsAgent = () => {
                               {item?.postType}
                             </p>
                             <span className="leading-normal text-[0.755rem] sm:block align-right text-end text-black font-medium">
-                              For {item?.for}
+                              For {item.for}
                             </span>
                           </div>
                         </div>
@@ -356,7 +344,7 @@ const RequiredPostsAgent = () => {
                             <p className="font-inter text-[0.875rem] text-[#333335] font-semibold -mb-[0px] leading-[40px]">
                               {item?.title}
                             </p>
-                            {item?.description?.length > 132 ? (
+                            {item?.description.length > 132 ? (
                               <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
                                 {item?.description.slice(0, 133)}...
                                 <Link
@@ -391,7 +379,7 @@ const RequiredPostsAgent = () => {
                         </div>
                         <div className="px-[20px] flex items-center justify-between">
                           <div className="flex flex-wrap gap-x-[5px]">
-                            {tags?.map((tag, index) => {
+                            {tags.map((tag, index) => {
                               const { bgColor, textColor } =
                                 getTagStyles(index);
                               return (
@@ -490,7 +478,7 @@ const RequiredPostsAgent = () => {
                                 <BiCommentDetail />
                               </p>
                               <p className="text-[#AFB2B7] font-medium text-[11px] mb-[1px]">
-                                {comment?.length === 0 ? "00" : comment?.length}{" "}
+                                {comment.length === 0 ? "00" : comment.length}{" "}
                               </p>
                             </div>
                             <div>
@@ -525,6 +513,7 @@ const RequiredPostsAgent = () => {
                 })}
               </div>
             )}
+
             {hasMore && !loading && (
               <footer className="">
                 <div
@@ -545,4 +534,4 @@ const RequiredPostsAgent = () => {
   );
 };
 
-export default RequiredPostsAgent;
+export default BuyerMyAllPosts;
