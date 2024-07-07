@@ -19,6 +19,8 @@ const RequiredPostsAgent = () => {
   const [limit, setLimit] = useState(100);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const getAllPosts = async () => {
     try {
@@ -45,20 +47,41 @@ const RequiredPostsAgent = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allPostsList = await response.json();
-      setAllPosts(allPostsList);
+      setHasMore(allPostsList.length === limit);
+      setAllPosts((prevPost) =>
+        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+      );
       setLoading(false);
-      if (allPostsList?.length < limit) {
-        setHasMore(false);
-      }
     } catch (error) {
       console.error("Error fetching:", error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
   useEffect(() => {
     getAllPosts();
   }, [sortOrder, sortBy, limit, page, like]);
-  console.log(allPosts);
+
+  const handleScrollPostResult = () => {
+    const containerM = containerRefPost.current;
+    if (
+      containerM.scrollTop + containerM.clientHeight >=
+        containerM.scrollHeight - 2 &&
+      !isFetching &&
+      hasMore
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    const containerM = containerRefPost.current;
+    containerM.addEventListener("scroll", handleScrollPostResult);
+    return () =>
+      containerM.removeEventListener("scroll", handleScrollPostResult);
+  }, [isFetching, hasMore]);
+
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
     setOldOrNewPostDropdown(!oldOrNewPostDropdown);
@@ -131,7 +154,7 @@ const RequiredPostsAgent = () => {
   };
 
   return (
-    <div className="">
+    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
           <div className="block-box user-search-bar justify-content-between">
@@ -525,18 +548,15 @@ const RequiredPostsAgent = () => {
                 })}
               </div>
             )}
-            {hasMore && !loading && (
-              <footer className="">
-                <div
-                  onClick={handleLoadMore}
-                  className="block-box load-more-btn mt-10 w-full"
-                >
-                  <p className="item-btn">
-                    <i className="icofont-refresh" />
-                    Load More Posts
-                  </p>
-                </div>
-              </footer>
+            {isFetching && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>Loading more Post...</p>
+              </div>
+            )}
+            {!hasMore && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>No more Post to load.</p>
+              </div>
             )}
           </div>
         </div>

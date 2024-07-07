@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -16,9 +16,11 @@ const AvailablePosts = () => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
   const [postType, setPostType] = useState("Available");
-  const [limit, setLimit] = useState(100);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const getAllPosts = async () => {
     try {
@@ -45,20 +47,39 @@ const AvailablePosts = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allPostsList = await response.json();
-      setAllPosts(allPostsList);
+      setHasMore(allPostsList.length === limit);
+      setAllPosts((prevPost) =>
+        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+      );
       setLoading(false);
-      if (allPostsList?.length < limit) {
-        setHasMore(false);
-      }
     } catch (error) {
       console.error("Error fetching:", error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
   useEffect(() => {
     getAllPosts();
   }, [sortOrder, sortBy, limit, page, like]);
-  console.log(allPosts);
+  const handleScrollPostResult = () => {
+    const containerM = containerRefPost.current;
+    if (
+      containerM.scrollTop + containerM.clientHeight >=
+        containerM.scrollHeight - 2 &&
+      !isFetching &&
+      hasMore
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    const containerM = containerRefPost.current;
+    containerM.addEventListener("scroll", handleScrollPostResult);
+    return () =>
+      containerM.removeEventListener("scroll", handleScrollPostResult);
+  }, [isFetching, hasMore]);
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
     setOldOrNewPostDropdown(!oldOrNewPostDropdown);
@@ -131,54 +152,9 @@ const AvailablePosts = () => {
   };
 
   return (
-    <div>
+    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
-          <div className="block-box user-search-bar justify-content-between">
-            <div className="box-item">
-              <div className="item-show-title">
-                Total {allPosts?.length} Posts
-              </div>
-            </div>
-            <div className="box-item search-filter">
-              <div className="dropdown">
-                <label className="mr-[5px]">Order By:</label>
-                <button
-                  onClick={handelOldOrNewPostDropdown}
-                  className="dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {sortOrder === "desc" ? "Newest Post" : " Oldest Post"}
-                </button>
-                {oldOrNewPostDropdown === true && (
-                  <div
-                    className="absolute right-0 z-10 mt-2 w-[150px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="menu-button"
-                    tabindex="-1"
-                  >
-                    <div className="py-1 mt-[7px]" role="none">
-                      <p
-                        onClick={handelNewPosts}
-                        className="block px-4  cursor-pointer text-sm text-gray-700"
-                      >
-                        Newest Post
-                      </p>
-                      <p
-                        onClick={handelOldPosts}
-                        className="block px-4   cursor-pointer  text-sm text-gray-700"
-                      >
-                        Oldest Post
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
           <div className="">
             {loading && (
               <div>
@@ -524,18 +500,15 @@ const AvailablePosts = () => {
                 })}
               </div>
             )}
-            {hasMore && !loading && (
-              <footer className="">
-                <div
-                  onClick={handleLoadMore}
-                  className="block-box load-more-btn mt-10 w-full"
-                >
-                  <p className="item-btn">
-                    <i className="icofont-refresh" />
-                    Load More Posts
-                  </p>
-                </div>
-              </footer>
+            {isFetching && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>Loading more Post...</p>
+              </div>
+            )}
+            {!hasMore && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>No more Post to load.</p>
+              </div>
             )}
           </div>
         </div>
