@@ -5,11 +5,13 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import houseData from "@/data/houseData";
+import Link from "next/link";
 export const SaveAllPostTimeline = () => {
   return (
     <div className="">
       <div className="grid grid-cols-1 gap-4 ">
         {houseData.map((item, i) => {
+          const { role } = item;
           return (
             <div
               key={i}
@@ -43,7 +45,7 @@ export const SaveAllPostTimeline = () => {
                     <div>
                       <div className=" -mb-[20px] ">
                         <div className="flex gap-x-[8px] items-center">
-                          {item.rol === "Buyer" ? (
+                          {item.role === "buyer" ? (
                             <p className="text-[0.875rem] text-[#8F8F8F] font-semibold">
                               Hidden Name{" "}
                             </p>
@@ -70,7 +72,7 @@ export const SaveAllPostTimeline = () => {
                           </div>
                         </div>
                       </div>
-                      {item.rol === "Buyer" ? (
+                      {item.role === "Buyer" ? (
                         <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
                           Buyer From{" "}
                           <span className="text-[#E6533C]">India</span>
@@ -130,9 +132,17 @@ export const SaveAllPostTimeline = () => {
                     <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
                       Required Two Bedroom Hall open or Close kitchen For Rent
                       in City Tower, Ready to Move, for Family...
-                      <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] font-medium cursor-pointer font-inter">
-                        see more
-                      </span>
+                      <Link
+                        href={`${
+                          role === "agent"
+                            ? "/user/agent-post-details"
+                            : "/user/buyer-post-details"
+                        }/${i}`}
+                      >
+                        <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] font-medium cursor-pointer font-inter">
+                          see more
+                        </span>
+                      </Link>
                     </p>
                   </div>
                 </div>
