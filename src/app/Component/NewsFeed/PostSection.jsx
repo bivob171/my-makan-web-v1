@@ -20,7 +20,6 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { AccountVerifyModal } from "./AccountVerifyModal";
 
 const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -88,7 +87,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
   } = useContext(PostLocationValueContext);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
-  const [verifyPopup, setVerifyPopup] = useState(false);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -550,8 +548,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       </Dialog>
-
-      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </div>
   );
 };

@@ -284,13 +284,13 @@ export const HeaderTop = () => {
                   <hr />
                   <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
                     <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
-                    <a
-                      href="#"
+                    <Link
+                      href="/user/profile/settings"
                       className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
                       role="menuitem"
                     >
                       Profile Settings
-                    </a>
+                    </Link>
                   </div>
                   <hr />
                   <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
