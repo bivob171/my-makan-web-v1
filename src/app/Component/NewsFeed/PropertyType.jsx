@@ -50,7 +50,7 @@ const PropertyType = ({
           {categories.map((category) => (
             <MenuItem key={category._id}>
               <button
-                className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                className="group flex w-full items-center gap-2 rounded-md py-[3px] text-[15px] px-2 data-[focus]:bg-white/10"
                 onClick={() => setPropertyType(category?.name)}
               >
                 {category.name}

@@ -18,7 +18,7 @@ const Parking = ({ parking, setParking }) => {
         >
           <MenuItem>
             <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+              className="group flex w-full items-center gap-2 rounded-md py-[3px] text-[14px] px-2 data-[focus]:bg-white/10"
               onClick={() => setParking("With Parking")}
             >
               With Parking
@@ -26,7 +26,7 @@ const Parking = ({ parking, setParking }) => {
           </MenuItem>
           <MenuItem>
             <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+              className="group flex w-full items-center gap-2 rounded-md py-[3px] text-[14px] px-2 data-[focus]:bg-white/10"
               onClick={() => setParking("No Parking")}
             >
               No Parking

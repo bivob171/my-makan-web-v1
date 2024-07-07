@@ -121,7 +121,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
               filteredTags.map((tag) => (
                 <div
                   key={tag}
-                  className="cursor-pointer px-4 py-2 text-sm text-[#444] hover:bg-[#ededed]"
+                  className="cursor-pointer px-4 py-[2px] text-[14px] text-[#444] hover:bg-[#ededed]"
                   onClick={() => handleTagSelect(tag)}
                 >
                   {tag}
@@ -137,7 +137,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
         {selectedTags?.map((tag) => (
           <div
             key={tag}
-            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[14px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
+            className="inline-flex justify-between items-center gap-1 rounded-sm bg-[#ededed] py-[2px] leading-4 pl-2 pr-1 text-[16px] font-medium text-[#333] shadow-inner shadow-white/10 focus:outline-none"
           >
             <span>{tag}</span>
             <CgClose
