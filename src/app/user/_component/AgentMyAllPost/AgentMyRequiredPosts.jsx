@@ -20,6 +20,8 @@ const AgentMyRequiredPosts = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [like, setlike] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+
   const containerRefPost = useRef(null);
   const agentId = user?._id;
   const getAllPosts = async () => {
