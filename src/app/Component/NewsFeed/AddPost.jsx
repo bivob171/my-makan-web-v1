@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Select } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
@@ -60,7 +60,44 @@ const AddPost = ({
   handleDocumentChange,
   handleDocumentDelete,
 }) => {
-  console.log(image);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const towerNames = [
+    "Empire State Building",
+    "Burj Khalifa",
+    "Shanghai Tower",
+    "Eiffel Tower",
+    "CN Tower",
+  ];
+
+  useEffect(() => {
+    const filtered = towersorBuildingName
+      ? towerNames.filter((name) =>
+          name.toLowerCase().includes(towersorBuildingName.toLowerCase())
+        )
+      : [];
+    setFilteredSuggestions(filtered);
+    setShowSuggestions(filtered.length > 0);
+    setActiveSuggestionIndex(0);
+  }, [towersorBuildingName]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      if (activeSuggestionIndex < filteredSuggestions.length - 1) {
+        setActiveSuggestionIndex(activeSuggestionIndex + 1);
+      }
+    } else if (e.key === "ArrowUp") {
+      if (activeSuggestionIndex > 0) {
+        setActiveSuggestionIndex(activeSuggestionIndex - 1);
+      }
+    } else if (e.key === "Enter") {
+      setTowersorBuildingName(filteredSuggestions[activeSuggestionIndex]);
+      setShowSuggestions(false);
+    }
+  };
+
   return (
     <>
       <div>
@@ -91,13 +128,13 @@ const AddPost = ({
           rows="4"
         />
       </div>
-      <div className="w-full  flex gap-x-[20px]">
+      <div className="w-full flex gap-x-[20px] overflow-x-scroll">
         <div>
           {image?.length > 0 && (
             <div className="w-full flex gap-x-[10px] overflow-x-auto">
               {image.map((img, i) => {
                 return (
-                  <div key={i} className="relative">
+                  <div key={i} className="relative flex-shrink-0">
                     <Image
                       width={1000}
                       height={120}
@@ -160,7 +197,7 @@ const AddPost = ({
       </div>
       {imageUploading !== null && (
         <div className="w-full ">
-          <div className="mb-8">
+          <div className="mb-4">
             <div className="bg-stroke dark:bg-dark-3 relative h-4 w-full rounded-2xl">
               <div
                 className="bg-primary absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white"
@@ -390,7 +427,7 @@ const AddPost = ({
             </Tooltip>
           </div>
         </div>
-        <div className="my-3 ">
+        <div className="my-3">
           <label htmlFor="" className="font-semibold">
             Building/Tower name
           </label>
@@ -408,12 +445,32 @@ const AddPost = ({
                   ? "Building/Tower name..."
                   : towersorBuildingNameError
               }
+              onKeyDown={handleKeyDown}
             />
             <Tooltip title="Tower" arrow placement="top-start">
               <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
                 <GiTowerBridge className="text-blue-600 w-6 h-6" />
               </button>
             </Tooltip>
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 z-20">
+                {filteredSuggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className={clsx(
+                      "px-3 py-1 cursor-pointer",
+                      index === activeSuggestionIndex ? "bg-gray-200" : ""
+                    )}
+                    onMouseDown={() => {
+                      setTowersorBuildingName(suggestion);
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

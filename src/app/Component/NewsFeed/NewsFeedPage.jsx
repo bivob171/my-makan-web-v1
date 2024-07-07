@@ -18,6 +18,10 @@ export const NewsFeedPage = () => {
     PrivateRouteContext();
 
   const role = user?.role;
+  const [isOpen, setIsOpen] = useState(false);
+  function open() {
+    setIsOpen(true);
+  }
   const [activeTab, setActiveTab] = useState("allPosts");
 
   const dateStr = user?.createdAt;
@@ -74,7 +78,7 @@ export const NewsFeedPage = () => {
             </ul>
           </div>
           <div>
-            <PostSection />
+          <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           {/* post nav section  */}
           {user?.role === "agent" ? (
