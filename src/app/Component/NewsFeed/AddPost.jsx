@@ -132,76 +132,67 @@ const AddPost = ({
         <div>
           {image?.length > 0 && (
             <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {image.map((img, i) => {
-                return (
-                  <div key={i} className="relative flex-shrink-0">
-                    <Image
-                      width={1000}
-                      height={120}
-                      className="w-auto h-[80px] rounded-md mb-2"
-                      src={img}
-                      alt="Selected"
-                    />
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleImageDelete(i)}
-                    />
-                  </div>
-                );
-              })}
+              {image.map((img, i) => (
+                <div key={i} className="relative flex-shrink-0">
+                  <Image
+                    width={1000}
+                    height={120}
+                    className="w-auto h-[80px] rounded-md mb-2"
+                    src={img}
+                    alt="Selected"
+                  />
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                    onClick={() => handleImageDelete(i)}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
         <div>
           {video?.length > 0 && (
             <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {video.map((vdo, i) => {
-                return (
-                  <div key={i} className="relative">
-                    <video width={80} height={80} controls="">
-                      <source src={vdo} type="video/mp4" />
-                      <source src={vdo} type="video/ogg" />
-                    </video>
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleVideoDelete(i)}
-                    />
-                  </div>
-                );
-              })}
+              {video.map((vdo, i) => (
+                <div key={i} className="relative">
+                  <video src={vdo} width={80} height={80} controls=""></video>
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                    onClick={() => handleVideoDelete(i)}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
         <div>
           {propertyDocument?.length > 0 && (
             <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {propertyDocument.map((doc, i) => {
-                return (
-                  <div key={i} className="relative">
-                    <iframe
-                      className="object-cover w-[80px] h-[80px] rounded-sm"
-                      width="70"
-                      height="70"
-                      src={doc}
-                    ></iframe>
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleDocumentDelete(i)}
-                    />
-                  </div>
-                );
-              })}
+              {propertyDocument.map((doc, i) => (
+                <div key={i} className="relative">
+                  <iframe
+                    className="object-cover w-[80px] h-[80px] rounded-sm"
+                    width="70"
+                    height="70"
+                    src={doc}
+                  ></iframe>
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
+                    onClick={() => handleDocumentDelete(i)}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
       {/* uploding image  */}
       {imageUploading !== null && (
-        <div className="w-full ">
+        <div className="w-full">
           <div className="mb-4">
-            <div className="bg-stroke dark:bg-dark-3 relative h-4 w-full rounded-2xl">
+            <div className="bg-stroke dark:bg-dark-3 relative h-3 w-full rounded-2xl">
               <div
-                className="bg-primary absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white"
+                className="bg-red-600 absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-[0.7vw] font-semibold text-white"
                 style={{ width: `${imageUploading}%` }}
               >
                 {imageUploading}%
@@ -219,21 +210,20 @@ const AddPost = ({
         style={{ display: "none" }}
         id="image-input"
       />
-      <input
+      <Input
         type="file"
         accept="video/*"
         onChange={handleVideoChange}
         style={{ display: "none" }}
         id="video-input"
       />
-      <input
+      <Input
         type="file"
         accept=".pdf"
         onChange={handleDocumentChange}
         style={{ display: "none" }}
         id="document-input"
       />
-
       <div className="grid grid-cols-7">
         <div className="col-span-2 grid grid-cols-2 gap-3">
           <div className="relative">
@@ -329,72 +319,78 @@ const AddPost = ({
               </Menu>
             </>
           </div>
-          <div className="col flex justify-between items-center gap-2">
-            <Tooltip title="Image" arrow placement="top-start">
-              <button
-                type="button"
-                onClick={() => document.getElementById("image-input").click()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-blue-400 hover:drop-shadow-lg hover:shadow-blue-600"
+          <div className="col-span-5 flex items-center gap-3 ml-3">
+            <div className="col flex justify-between items-center gap-2">
+              <Tooltip title="Image" arrow placement="top-start">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("image-input").click()}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
-            <Tooltip title="Upload Video Under 30 MB" arrow placement="top-end">
-              <button
-                type="button"
-                onClick={() => document.getElementById("video-input").click()}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-blue-400 hover:drop-shadow-lg hover:shadow-blue-600"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                    />
+                  </svg>
+                </button>
+              </Tooltip>
+              <Tooltip
+                title="Upload Video Under 30 MB"
+                arrow
+                placement="top-end"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-yellow-400 hover:drop-shadow-lg hover:shadow-blue-600"
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("video-input").click()}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
-            <Tooltip title="Upload pdf File" arrow placement="top-end">
-              <button
-                type="button"
-                onClick={() =>
-                  document.getElementById("document-input").click()
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-green-400 hover:drop-shadow-lg hover:shadow-blue-600"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-yellow-400 hover:drop-shadow-lg hover:shadow-blue-600"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+                    />
+                  </svg>
+                </button>
+              </Tooltip>
+              <Tooltip title="Upload pdf File" arrow placement="top-end">
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("document-input").click()
+                  }
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-green-400 hover:drop-shadow-lg hover:shadow-blue-600"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
+                    />
+                  </svg>
+                </button>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
