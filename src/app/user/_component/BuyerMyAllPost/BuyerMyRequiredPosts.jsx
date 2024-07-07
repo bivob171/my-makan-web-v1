@@ -20,6 +20,7 @@ const BuyerMyRequiredPosts = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
+
   const containerRefPost = useRef(null);
   const userId = user?._id;
   const getAllPosts = async () => {
