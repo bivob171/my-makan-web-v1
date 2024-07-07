@@ -19,9 +19,6 @@ export const NewsFeedPage = () => {
     setIsOpen(true);
   }
 
-
-  const role = user?.role;
-
   const [activeTab, setActiveTab] = useState("allPosts");
 
   const dateStr = user?.createdAt;
@@ -77,11 +74,7 @@ export const NewsFeedPage = () => {
               </li>
             </ul>
           </div>
-
-          <div>
-            <PostSection />
-          </div>
-
+          <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           {/* post nav section  */}
           <div className="row">
             <div className="col-lg-8">
@@ -147,62 +140,49 @@ export const NewsFeedPage = () => {
                       role="tab"
                       aria-selected={activeTab === "allPosts"}
                     >
-
-                      <a
-                        className={`nav-link ${
-                          activeTab === "allPosts" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("allPosts")}
-                        role="tab"
-                        aria-selected={activeTab === "allPosts"}
-                      >
-                        <i className="icofont-copy" />
-                        All Posts
-                      </a>
-                    </li>
-                    <li
-                      className="nav-item"
-                      role="presentation"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="MEDIA"
+                      <i className="icofont-copy" />
+                      All Posts
+                    </a>
+                  </li>
+                  <li
+                    className="nav-item"
+                    role="presentation"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="MEDIA"
+                  >
+                    <a
+                      className={`nav-link ${
+                        activeTab === "availablePosts" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("availablePosts")}
+                      role="tab"
+                      aria-selected={activeTab === "availablePosts"}
                     >
-                      <a
-                        className={`nav-link ${
-                          activeTab === "availablePosts" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("availablePosts")}
-                        role="tab"
-                        aria-selected={activeTab === "availablePosts"}
-                      >
-                        <i className="icofont-image" />
-                        Available Posts
-                      </a>
-                    </li>
-                    <li
-                      className="nav-item"
-                      role="presentation"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="BLOG"
+                      <i className="icofont-image" />
+                      Available Posts
+                    </a>
+                  </li>
+                  <li
+                    className="nav-item"
+                    role="presentation"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="BLOG"
+                  >
+                    <a
+                      className={`nav-link ${
+                        activeTab === "required" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("required")}
+                      role="tab"
+                      aria-selected={activeTab === "required"}
                     >
-                      <a
-                        className={`nav-link ${
-                          activeTab === "requiredPostsAgent" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("requiredPostsAgent")}
-                        role="tab"
-                        aria-selected={activeTab === "requiredPostsAgent"}
-                      >
-                        <i className="icofont-list" />
-                        Required Posts
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                {activeTab === "allPosts" && <AllPostAgent />}
-                {activeTab === "availablePostsAgent" && <AvailablePostsAgent />}
-                {activeTab === "requiredPostsAgent" && <RequiredPostsAgent />}
+                      <i className="icofont-list" />
+                      Required Posts
+                    </a>
+                  </li>
+                </ul>
               </div>
               {activeTab === "allPosts" && <AllPost />}
               {activeTab === "availablePosts" && <AvailablePosts />}

@@ -28,7 +28,6 @@ export const SocialLogin = ({ setError }) => {
         email: session?.user?.email,
         image: session?.user?.image,
         role,
-        device: "web",
       };
 
       const response = await fetch(endpoint, {
@@ -48,7 +47,8 @@ export const SocialLogin = ({ setError }) => {
       localStorage.setItem(`${role}Id`, data.userId);
       localStorage.setItem("role", data.role);
 
-      fetchUserProfile();
+      toast.success("Successfully logged in to your account");
+      router.push(role === "buyer" ? "/user/newsfeed" : "/user/newsfeed");
     } catch (error) {
       console.error(error);
       setError(error.message);
@@ -57,49 +57,12 @@ export const SocialLogin = ({ setError }) => {
     }
   };
 
-  const fetchUserProfile = async () => {
-    const userId = localStorage.getItem(`${role}Id`);
-    if (!userId) return; // Exit if userId is not available
-    const endpoint =
-      role === "buyer"
-        ? `http://localhost:4000/user/${userId}`
-        : `http://localhost:4000/agent/${userId}`;
-    try {
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
-      }
-      const profile = await response.json();
-      console.log(profile);
-      if (role === "agent") {
-        if (profile.companyName === null) {
-          router.push("/user/profile/add-company-name");
-          toast.success("Successfully logged in to your account");
-        } else {
-          router.push("/user/newsfeed");
-          toast.success("Successfully logged in to your account");
-        }
-      } else {
-        router.push("/user/newsfeed");
-        toast.success("Successfully logged in to your account");
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-    }
-  };
-
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
       const endpoint =
         role === "buyer"
-          ? "http://localhost:4000/auth/user/signUp-with-Google"
-          : "http://localhost:4000/auth/agent/signUp-with-gmail";
+          ? "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp-with-Google"
+          : "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp-with-gmail";
       createAccountWithGoogle(endpoint);
     }
   }, [status, session, role]);
