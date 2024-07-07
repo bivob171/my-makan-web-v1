@@ -278,8 +278,8 @@ const RequiredPosts = () => {
                                   </span>
                                 </p>
                               ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Rapid Properties
+                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[12px] font-medium -mb-[10px]">
+                                  Rapid
                                 </p>
                               )}
                               <div className="flex flex-wrap items-center mt-[2px] ">

@@ -66,15 +66,29 @@ export const ProfileCard = () => {
             <h4 className="author-name">
               <a href="#">{user?.fullName}</a>
             </h4>
-            <div className="author-location">
-              <a href="#">
-                <b>Rapid Properties</b>
-              </a>
-            </div>
+            {user?.role === "buyer" ? (
+              <div className="author-location">
+                <a href="#">
+                  <b className="-mb-0"></b>
+                </a>
+              </div>
+            ) : (
+              <div className="author-location">
+                <a href="#">
+                  <b>{user?.companyName}</b>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="flex justify-center -mt-[27px] ">
+        <div
+          className={`${
+            user?.role === "buyer"
+              ? "flex justify-center -mt-[47px] "
+              : "flex justify-center -mt-[27px] "
+          }`}
+        >
           <span className="flex gap-x-[3px] -mb-0 mt-[5px] text-[#F5B849]">
             <IoIosStar />
             <IoIosStar />
