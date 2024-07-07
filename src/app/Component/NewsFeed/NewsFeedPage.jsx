@@ -9,15 +9,19 @@ import ChatModal from "./ChatModal";
 import PostSection from "./PostSection";
 import AvailablePosts from "@/app/user/profile/available-post/page";
 import RequiredPosts from "@/app/user/profile/required-post/page";
-import AllPostAgent from "./AgentPost/AllPostAgent";
-import AvailablePostsAgent from "./AgentPost/AvailablePostsAgent";
-import RequiredPostsAgent from "./AgentPost/RequiredPostsAgent";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
+  const [isOpen, setIsOpen] = useState(false);
+
 
   const role = user?.role;
+
+  function open() {
+    setIsOpen(true);
+  }
+
   const [activeTab, setActiveTab] = useState("allPosts");
 
   const dateStr = user?.createdAt;
@@ -73,9 +77,8 @@ export const NewsFeedPage = () => {
               </li>
             </ul>
           </div>
-          <div>
-            <PostSection />
-          </div>
+
+          <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           {/* post nav section  */}
           {user?.role === "agent" ? (
             <div className="row">
