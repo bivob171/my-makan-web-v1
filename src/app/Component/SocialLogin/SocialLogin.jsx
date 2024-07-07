@@ -62,8 +62,8 @@ export const SocialLogin = ({ setError }) => {
     if (!userId) return; // Exit if userId is not available
     const endpoint =
       role === "buyer"
-        ? `http://localhost:4000/user/${userId}`
-        : `http://localhost:4000/agent/${userId}`;
+        ? `https://q4m0gph5-4000.asse.devtunnels.ms/user/${userId}`
+        : `https://q4m0gph5-4000.asse.devtunnels.ms/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -76,7 +76,6 @@ export const SocialLogin = ({ setError }) => {
         throw new Error("Failed to fetch user profile");
       }
       const profile = await response.json();
-      console.log(profile);
       if (role === "agent") {
         if (profile.companyName === null) {
           router.push("/user/profile/add-company-name");
@@ -98,8 +97,8 @@ export const SocialLogin = ({ setError }) => {
     if (status === "authenticated" && session?.user) {
       const endpoint =
         role === "buyer"
-          ? "http://localhost:4000/auth/user/signUp-with-Google"
-          : "http://localhost:4000/auth/agent/signUp-with-gmail";
+          ? "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp-with-Google"
+          : "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp-with-gmail";
       createAccountWithGoogle(endpoint);
     }
   }, [status, session, role]);

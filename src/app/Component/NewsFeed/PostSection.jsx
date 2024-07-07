@@ -136,7 +136,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -163,7 +163,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -190,7 +190,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -345,9 +345,9 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "http://localhost:4000/post-agent/post";
+        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
       } else {
-        apiUrl = "http://localhost:4000/post-user/post";
+        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
       }
 
       const response = await fetch(apiUrl, {

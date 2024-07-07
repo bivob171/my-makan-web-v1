@@ -4,21 +4,27 @@ import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { CgClose } from "react-icons/cg";
 const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
-  const initialTags = [
-    "Installment",
-    "Full Cash",
-    "Off plan",
-    "Furnished",
-    "Close Kitchen",
-    "Empty",
-    "Partial Seaview",
-    "Open View",
-    "Full Seaview",
-    "Golf View",
-    "Higher Floor",
-  ];
+  const [tags, setTags] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:4000/post-field-data/tags")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setTags(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
 
-  const [tags, setTags] = useState(initialTags);
   const [inputValue, setInputValue] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -35,7 +41,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [wrapperRef]);
+  }, []);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -43,12 +49,10 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   };
 
   const handleTagSelect = (tag) => {
-    if (selectedTags.length < 5 && !selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-      if (selectedTags.length === 4) {
-        setDropdownVisible(false);
-      }
-    } else if (selectedTags.includes(tag)) {
+    if (sellType.length < 5 && !sellType.includes(tag)) {
+      setSellType([...sellType, tag]);
+      setDropdownVisible(false);
+    } else if (sellType.includes(tag)) {
       alert("Tag already selected.");
     } else {
       alert("Maximum 5 tags can be selected.");
@@ -57,12 +61,16 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
 
   const handleTagAdd = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
-      if (selectedTags.length < 5 && !selectedTags.includes(inputValue)) {
-        setTags([...tags, inputValue]);
-        setSelectedTags([...selectedTags, inputValue]);
+      const newTag = { name: inputValue.trim() };
+      if (
+        sellType.length < 5 &&
+        !sellType.some((tag) => tag.name === newTag.name)
+      ) {
+        setTags([...tags, newTag]);
+        setSellType([...sellType, newTag.name]);
         setInputValue("");
         setDropdownVisible(false);
-      } else if (selectedTags.includes(inputValue)) {
+      } else if (sellType.some((tag) => tag.name === newTag.name)) {
         alert("Tag already selected.");
       } else {
         alert("Maximum 5 tags can be selected.");
@@ -71,12 +79,12 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   };
 
   const handleTagRemove = (tagToRemove) => {
-    setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
+    setSellType(sellType.filter((tag) => tag !== tagToRemove));
   };
 
-  const filteredTags = tags.filter((tag) =>
-    tag.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  const filteredTags = tags
+    .map((tag) => tag.name)
+    .filter((tag) => tag.toLowerCase().includes(inputValue.toLowerCase()));
 
   const showAllTags = () => {
     setInputValue("");
@@ -110,7 +118,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
         <ChevronDownIcon className="size-4 fill-[#333] absolute top-1/2 right-2 transform -translate-y-1/2" />
         {/* Dropdown */}
         {dropdownVisible && (
-          <div className="absolute z-30 right-0 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
+          <div className="absolute z-30 h-[180px] overflow-y-auto right-0 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
             {filteredTags.length ? (
               filteredTags.map((tag) => (
                 <div

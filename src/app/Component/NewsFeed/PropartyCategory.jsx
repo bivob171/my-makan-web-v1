@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
@@ -7,6 +7,27 @@ const PropertyCategory = ({
   propertyCategoryName,
   propertyCategoryError,
 }) => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:4000/post-field-data/property-category")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCategories(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <>
       <Menu>
@@ -27,40 +48,18 @@ const PropertyCategory = ({
         <MenuItems
           transition
           anchor="bottom start"
-          className="w-full !max-w-[180px] origin-top-left rounded-md border bg-[#ededed] text-[#444] mt-[2px] text-[14px] placeholder:text-[14px] font-medium transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 relative z-50 "
+          className="w-full h-[180px] overflow-y-auto !max-w-[180px] origin-top-left rounded-md border bg-[#ededed] text-[#444] mt-[2px] text-[14px] placeholder:text-[14px] font-medium transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 relative z-50 "
         >
-          <MenuItem>
-            <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
-              onClick={() => setPropertyCategory("Villa")}
-            >
-              Villa
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
-              onClick={() => setPropertyCategory("Flat")}
-            >
-              Flat
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
-              onClick={() => setPropertyCategory("Building")}
-            >
-              Building
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button
-              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
-              onClick={() => setPropertyCategory("Commercial Land")}
-            >
-              Commercial Land
-            </button>
-          </MenuItem>
+          {categories.map((category) => (
+            <MenuItem key={category._id}>
+              <button
+                className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
+                onClick={() => setPropertyCategory(category?.name)}
+              >
+                {category.name}
+              </button>
+            </MenuItem>
+          ))}
         </MenuItems>
       </Menu>
     </>

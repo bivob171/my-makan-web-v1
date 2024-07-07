@@ -187,13 +187,16 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch("http://localhost:4000/auth/user/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userCreateData),
-      });
+      const response = await fetch(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userCreateData),
+        }
+      );
 
       if (!response.ok) {
         console.error(` ${response.status}`);
@@ -300,13 +303,16 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch("http://localhost:4000/auth/agent/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(agentCreateData),
-      });
+      const response = await fetch(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(agentCreateData),
+        }
+      );
       console.log(response);
       if (!response.ok) {
         console.error(` ${response.status}`);
@@ -352,13 +358,16 @@ export const SignupForm = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get("http://localhost:4000/company", {
-        params: {
-          search,
-          page,
-          limit,
-        },
-      });
+      const response = await axios.get(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        {
+          params: {
+            search,
+            page,
+            limit,
+          },
+        }
+      );
       const newCompanies = response.data;
       console.log("Fetched companies:", newCompanies); // Debug log
       setHasMore(newCompanies.length === limit);

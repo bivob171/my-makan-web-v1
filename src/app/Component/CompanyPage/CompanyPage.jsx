@@ -24,7 +24,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get("http://localhost:4000/company", {
+//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
 //         params: {
 //           search,
 //           page,
@@ -183,7 +183,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get("http://localhost:4000/company", {
+//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
 //         params: {
 //           search,
 //           page,
@@ -247,7 +247,7 @@
 //   const fetchResultCompanies = async () => {
 //     setHasMoreCompany(true);
 //     try {
-//       const response = await axios.get("http://localhost:4000/company", {
+//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
 //         params: {
 //           search: searchCompany,
 //           page: pageCompany,
@@ -424,13 +424,16 @@ export const CompanyPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get("http://localhost:4000/company", {
-        params: {
-          search,
-          page,
-          limit,
-        },
-      });
+      const response = await axios.get(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        {
+          params: {
+            search,
+            page,
+            limit,
+          },
+        }
+      );
       const newCompanies = response.data;
       setHasMore(newCompanies.length === limit);
       setSuggestedCompanies((prevCompanies) => {
@@ -486,13 +489,16 @@ export const CompanyPage = () => {
   const fetchResultCompanies = async () => {
     setIsFetchingCompany(true);
     try {
-      const response = await axios.get("http://localhost:4000/company", {
-        params: {
-          name: searchCompany,
-          page: pageCompany,
-          limit: limitCompany,
-        },
-      });
+      const response = await axios.get(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        {
+          params: {
+            name: searchCompany,
+            page: pageCompany,
+            limit: limitCompany,
+          },
+        }
+      );
       const newCompanies = response.data;
       setHasMoreCompany(newCompanies.length === limitCompany);
       setCompanies((prevCompanies) => {
@@ -609,7 +615,7 @@ export const CompanyPage = () => {
                 No company available.
               </div>
             )}
-            {!loadingCompany && companies.length > 0 && (
+            {!loadingCompany && companies?.length > 0 && (
               <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
                 {companies?.map((data) => (
                   <div
@@ -649,7 +655,7 @@ export const CompanyPage = () => {
                 <p>Loading more companies...</p>
               </div>
             )}
-            {!hasMoreCompany && (
+            {!hasMoreCompany && companies?.length !== 0 && (
               <div className="mb-[20px] mt-[40px] text-center">
                 <p>No more companies to load.</p>
               </div>

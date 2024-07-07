@@ -15,7 +15,7 @@ const AllPost = () => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -23,7 +23,7 @@ const AllPost = () => {
   const [like, setlike] = useState(true);
   const getAllPosts = async () => {
     try {
-      let url = "http://localhost:4000/post-user/get?";
+      let url = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/get?";
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -99,7 +99,7 @@ const AllPost = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `http://localhost:4000/post-user/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -125,7 +125,7 @@ const AllPost = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://localhost:4000/post-user/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -152,55 +152,9 @@ const AllPost = () => {
   };
 
   return (
-    <div ref={containerRefPost} className="h-screen overflow-auto pb-[330px]">
+    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
-          <div className="block-box user-search-bar justify-content-between">
-            <div className="box-item">
-              <div className="item-show-title">
-                Total {allPosts?.length} Posts
-              </div>
-            </div>
-
-            <div className="box-item search-filter">
-              <div className="dropdown">
-                <label className="mr-[5px]">Order By:</label>
-                <button
-                  onClick={handelOldOrNewPostDropdown}
-                  className="dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {sortOrder === "desc" ? "Newest Post" : " Oldest Post"}
-                </button>
-                {oldOrNewPostDropdown === true && (
-                  <div
-                    className="absolute right-0 z-10 mt-2 w-[150px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="menu-button"
-                    tabindex="-1"
-                  >
-                    <div className="py-1 mt-[7px]" role="none">
-                      <p
-                        onClick={handelNewPosts}
-                        className="block px-4  cursor-pointer text-sm text-gray-700"
-                      >
-                        Newest Post
-                      </p>
-                      <p
-                        onClick={handelOldPosts}
-                        className="block px-4   cursor-pointer  text-sm text-gray-700"
-                      >
-                        Oldest Post
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
           <div>
             {loading && (
               <div>
@@ -547,19 +501,16 @@ const AllPost = () => {
               </div>
             )}
 
-            {/* {hasMore && !loading && (
-              <footer className="">
-                <div
-                  onClick={handleLoadMore}
-                  className="block-box load-more-btn mt-10 w-full"
-                >
-                  <p className="item-btn">
-                    <i className="icofont-refresh" />
-                    Load More Posts
-                  </p>
-                </div>
-              </footer>
-            )} */}
+            {isFetching && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>Loading more Post...</p>
+              </div>
+            )}
+            {!hasMore && allPosts.length !== 0 && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>No more Post to load.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

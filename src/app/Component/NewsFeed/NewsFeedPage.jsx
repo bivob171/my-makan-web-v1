@@ -39,19 +39,24 @@ export const NewsFeedPage = () => {
         <div className="container">
           {/* Banner Area Start */}
           <div className="newsfeed-banner">
-            <div className="media flex">
-              <div className="item-icon mb-2">
+            <div className="media  gap-x-5 items-center flex">
+              <div className="flex gap-x-5 mb-2">
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto py-4"
+                  className="w-[60px] h-auto py-4"
                   src="/media/favicon.jpg"
                   alt=""
                 />
               </div>
+              <div className="bg-white w-[5px] h-[65px] rounded-b-[10px] rounded-t-[10px]"></div>
               <div className="media-body">
-                <h3 className="item-title">My Makan News Feed</h3>
-                <p>All Realtors and Buyers Latest post</p>
+                <h3 className="text-white  font-extrabold text-[34px] ">
+                  My Makan Newsfeed
+                </h3>
+                <p className=" text-white">
+                  All Realtors and Buyers Latest post
+                </p>
               </div>
             </div>
             <ul className="animation-img">
@@ -305,11 +310,11 @@ export const NewsFeedPage = () => {
                     >
                       <a
                         className={`nav-link ${
-                          activeTab === "availablePosts" ? "active" : ""
+                          activeTab === "availablePostsAgent" ? "active" : ""
                         }`}
-                        onClick={() => setActiveTab("availablePosts")}
+                        onClick={() => setActiveTab("availablePostsAgent")}
                         role="tab"
-                        aria-selected={activeTab === "availablePosts"}
+                        aria-selected={activeTab === "availablePostsAgent"}
                       >
                         <i className="icofont-image" />
                         Available Posts

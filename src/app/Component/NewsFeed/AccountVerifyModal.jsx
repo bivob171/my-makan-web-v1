@@ -31,12 +31,11 @@ export const AccountVerifyModal = ({ visible, closePopUp }) => {
                     class="text-base font-semibold leading-6 text-gray-900"
                     id="modal-title"
                   >
-                    Your Identy Was not verified.
+                    Your Identity Was not verified.
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Are you sure you want to post? Please Verify your Identity
-                      first.
+                      Are you want to post? Please Verify your Identity.
                     </p>
                   </div>
                 </div>

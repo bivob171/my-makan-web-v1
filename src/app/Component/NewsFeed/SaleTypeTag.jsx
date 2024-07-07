@@ -5,21 +5,27 @@ import clsx from "clsx";
 import { CgClose } from "react-icons/cg";
 
 const SaleTypeTag = ({ setSellType, sellType }) => {
-  const initialTags = [
-    "Installment",
-    "Full Cash",
-    "Off plan",
-    "Furnished",
-    "Close Kitchen",
-    "Empty",
-    "Partial Seaview",
-    "Open View",
-    "Full Seaview",
-    "Golf View",
-    "Higher Floor",
-  ];
+  const [tags, setTags] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:4000/post-field-data/sell-type")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setTags(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
 
-  const [tags, setTags] = useState(initialTags);
   const [inputValue, setInputValue] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -36,7 +42,7 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [wrapperRef]);
+  }, []);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -46,9 +52,7 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
   const handleTagSelect = (tag) => {
     if (sellType.length < 5 && !sellType.includes(tag)) {
       setSellType([...sellType, tag]);
-      if (sellType.length === 4) {
-        setDropdownVisible(false);
-      }
+      setDropdownVisible(false);
     } else if (sellType.includes(tag)) {
       alert("Tag already selected.");
     } else {
@@ -58,12 +62,16 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
 
   const handleTagAdd = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
-      if (sellType.length < 5 && !sellType.includes(inputValue)) {
-        setTags([...tags, inputValue]);
-        setSellType([...sellType, inputValue]);
+      const newTag = { name: inputValue.trim() };
+      if (
+        sellType.length < 5 &&
+        !sellType.some((tag) => tag.name === newTag.name)
+      ) {
+        setTags([...tags, newTag]);
+        setSellType([...sellType, newTag.name]);
         setInputValue("");
         setDropdownVisible(false);
-      } else if (sellType.includes(inputValue)) {
+      } else if (sellType.some((tag) => tag.name === newTag.name)) {
         alert("Tag already selected.");
       } else {
         alert("Maximum 5 tags can be selected.");
@@ -75,9 +83,9 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
     setSellType(sellType.filter((tag) => tag !== tagToRemove));
   };
 
-  const filteredTags = tags.filter((tag) =>
-    tag.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  const filteredTags = tags
+    .map((tag) => tag.name)
+    .filter((tag) => tag.toLowerCase().includes(inputValue.toLowerCase()));
 
   const showAllTags = () => {
     setInputValue("");
@@ -107,7 +115,7 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
         </button>
         <ChevronDownIcon className="size-4 fill-[#333] absolute top-1/2 right-2 transform -translate-y-1/2" />
         {dropdownVisible && (
-          <div className="absolute z-30 bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
+          <div className="absolute z-30 h-[180px] overflow-y-auto bottom-11 w-full max-w-[180px] rounded-md bg-[#fffbfb] shadow-[0_5px_10px_-10px_rgba(0,0,0,0.3)] border-[1px] py-2">
             {filteredTags.length ? (
               filteredTags.map((tag) => (
                 <div
