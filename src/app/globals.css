@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root{
-  font-family: Nunito;
-} */
+:root{
+font-family: Nunito;
+}
 
 .container {
   position: relative;
