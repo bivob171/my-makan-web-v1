@@ -22,7 +22,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { AccountVerifyModal } from "./AccountVerifyModal";
 
-const PostSection = () => {
+const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
@@ -86,7 +86,6 @@ const PostSection = () => {
     sellType,
     setSellType,
   } = useContext(PostLocationValueContext);
-  const [isOpen, setIsOpen] = useState(false);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
   const [verifyPopup, setVerifyPopup] = useState(false);
@@ -381,10 +380,6 @@ const PostSection = () => {
     setCurrentPanel(currentPanel - 1);
   };
 
-  function open() {
-    setIsOpen(true);
-  }
-
   function close() {
     setIsOpen(false);
     setCurrentPanel(1);
@@ -392,6 +387,7 @@ const PostSection = () => {
 
   return (
     <div className="newsfeed-search">
+
       <ul className="member-list gap-2">
         <li className="active-member">
           <Image
