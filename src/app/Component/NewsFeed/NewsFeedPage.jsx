@@ -12,6 +12,7 @@ import RequiredPosts from "@/app/user/profile/required-post/page";
 import AllPostAgent from "./AgentPost/AllPostAgent";
 import AvailablePostsAgent from "./AgentPost/AvailablePostsAgent";
 import RequiredPostsAgent from "./AgentPost/RequiredPostsAgent";
+import { AccountVerifyModal } from "./AccountVerifyModal";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -19,7 +20,9 @@ export const NewsFeedPage = () => {
   const userName = user?.fullName?.split(" ")[0];
   const [verifyPopup, setVerifyPopup] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  function open() {
+    setIsOpen(true);
+  }
   const role = user?.role;
   const [activeTab, setActiveTab] = useState("allPosts");
 
@@ -227,6 +230,51 @@ export const NewsFeedPage = () => {
           ) : (
             <div className="row">
               <div className="col-lg-8">
+                <div className="newsfeed-search">
+                  <ul className="member-list gap-2">
+                    <li className="active-member">
+                      <Image
+                        width={40}
+                        height={40}
+                        alt="img"
+                        src={user?.image}
+                        className="w-[45px] h-[45px] rounded-full border-2"
+                      />
+                    </li>
+                    <li>
+                      <button className="cursor-pointer" onClick={open}>
+                        <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                          <span className="text-[16px] font-mono font-medium">
+                            what are you looking for, {userName}?
+                          </span>
+                        </div>
+                      </button>
+                    </li>
+                  </ul>
+                  <ul className="search-list">
+                    <li className="search-filter">
+                      <button className="drop-btn" type="button">
+                        <i className="icofont-abacus-alt" />
+                      </button>
+                      <div className="drop-menu">
+                        <select className="select2">
+                          <option>--Everything--</option>
+                          <option>Status</option>
+                          <option>Quotes</option>
+                          <option>Photos</option>
+                          <option>Videos</option>
+                          <option>Audios</option>
+                          <option>slideshows</option>
+                          <option>files</option>
+                          <option>Updates</option>
+                          <option>New Members</option>
+                          <option>Posts</option>
+                          <option>New Groups</option>
+                        </select>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
                 <div className="block-box post-input-tab">
                   <ul className="nav nav-tabs" role="tablist">
                     <li
@@ -300,6 +348,7 @@ export const NewsFeedPage = () => {
 
       {/* Chat Modal Here */}
       <ChatModal />
+      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </>
   );
 };

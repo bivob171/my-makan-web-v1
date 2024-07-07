@@ -195,6 +195,7 @@ const AddPost = ({
           )}
         </div>
       </div>
+      {/* uploding image  */}
       {imageUploading !== null && (
         <div className="w-full ">
           <div className="mb-4">

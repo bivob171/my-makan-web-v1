@@ -20,12 +20,10 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { AccountVerifyModal } from "./AccountVerifyModal";
 
 const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
-  const userName = user?.fullName?.split(" ")[0];
   const {
     lata,
     setLata,
@@ -550,8 +548,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       </Dialog>
-
-      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </div>
   );
 };
