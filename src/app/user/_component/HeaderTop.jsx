@@ -86,13 +86,22 @@ export const HeaderTop = () => {
                       Properties
                     </a>
                   </li>
-                  {user?.role === "agent" && (
+                  {user?.role === "agent" ? (
                     <li className="header-nav-item">
                       <Link
                         href="/user/agent-posts"
                         className="menu-link active"
                       >
                         Agent Posts
+                      </Link>
+                    </li>
+                  ) : (
+                    <li className="header-nav-item">
+                      <Link
+                        href="/user/buyer-posts"
+                        className="menu-link active"
+                      >
+                        Buyer Posts
                       </Link>
                     </li>
                   )}

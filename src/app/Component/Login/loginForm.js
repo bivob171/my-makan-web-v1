@@ -56,16 +56,13 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch("http://localhost:4000/auth/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
@@ -106,16 +103,13 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch("http://localhost:4000/auth/agent/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
       console.log(data);
       if (!response.ok) {

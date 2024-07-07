@@ -79,16 +79,13 @@ export default function EmailChange() {
         newEmail: emailNew,
         password: password,
       };
-      const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/email-change",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(emailChangeData),
-        }
-      );
+      const response = await fetch("http://localhost:4000/auth/email-change", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailChangeData),
+      });
 
       if (response.ok === false) {
         setEmailError("Buyer Acount Not Found with this email.");
@@ -135,7 +132,7 @@ export default function EmailChange() {
       };
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/email-change",
+        "http://localhost:4000/auth/agent/email-change",
         {
           method: "POST",
           headers: {

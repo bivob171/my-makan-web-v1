@@ -20,10 +20,12 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { AccountVerifyModal } from "./AccountVerifyModal";
 
 const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
+  const userName = user?.fullName?.split(" ")[0];
   const {
     lata,
     setLata,
@@ -86,7 +88,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
   } = useContext(PostLocationValueContext);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
-  console.log(propertyDocument);
+  const [verifyPopup, setVerifyPopup] = useState(false);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -136,7 +138,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -163,7 +165,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -190,7 +192,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -335,7 +337,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         propertyType: propertyType,
         parking: parking,
         sellType: sellType,
-        role: user.role,
       };
 
       let token;
@@ -346,9 +347,9 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+        apiUrl = "http://localhost:4000/post-agent/post";
       } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+        apiUrl = "http://localhost:4000/post-user/post";
       }
 
       const response = await fetch(apiUrl, {
@@ -386,6 +387,79 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
   return (
     <div className="newsfeed-search">
+
+      <ul className="member-list gap-2">
+        <li className="active-member">
+          <Image
+            width={40}
+            height={40}
+            alt="img"
+            src={user?.image}
+            className="w-[45px] h-[45px] rounded-full border-2"
+          />
+        </li>
+        <li>
+          {user?.role === "agent" ? (
+            <>
+              {user?.verified === false ? (
+                <>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => setVerifyPopup(true)}
+                  >
+                    <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                      <span className="text-[16px] font-mono font-medium">
+                        what are you looking for, {userName}?
+                      </span>
+                    </div>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="cursor-pointer" onClick={open}>
+                    <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                      <span className="text-[16px] font-mono font-medium">
+                        what are you looking for, {userName}?
+                      </span>
+                    </div>
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <button className="cursor-pointer" onClick={open}>
+              <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                <span className="text-[16px] font-mono font-medium">
+                  what are you looking for, {userName}?
+                </span>
+              </div>
+            </button>
+          )}
+        </li>
+      </ul>
+      <ul className="search-list">
+        <li className="search-filter">
+          <button className="drop-btn" type="button">
+            <i className="icofont-abacus-alt" />
+          </button>
+          <div className="drop-menu">
+            <select className="select2">
+              <option>--Everything--</option>
+              <option>Status</option>
+              <option>Quotes</option>
+              <option>Photos</option>
+              <option>Videos</option>
+              <option>Audios</option>
+              <option>slideshows</option>
+              <option>files</option>
+              <option>Updates</option>
+              <option>New Members</option>
+              <option>Posts</option>
+              <option>New Groups</option>
+            </select>
+          </div>
+        </li>
+      </ul>
       <Dialog
         open={isOpen}
         as="div"
@@ -419,12 +493,12 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                   width={40}
                   height={40}
                   alt="img"
-                  src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
+                  src={user?.image}
                   className="w-[45px] h-[45px] rounded-full border-2"
                 />
                 <div>
                   <h4 className="text-[14px] text-[#666] m-0 leading-4">
-                    Bizid Hassan
+                    {user?.fullName}
                   </h4>
                   <div className="">
                     <Menu>
@@ -549,6 +623,8 @@ const PostSection = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       </Dialog>
+
+      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </div>
   );
 };
