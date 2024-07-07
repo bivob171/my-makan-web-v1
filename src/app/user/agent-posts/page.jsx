@@ -8,10 +8,14 @@ import React, { useState } from "react";
 
 export default function AgentPosts() {
   const [activeTab, setActiveTab] = useState("allPostsAgent");
+  const [isOpen, setIsOpen] = useState(false);
+  function open() {
+    setIsOpen(true);
+  }
   return (
     <div className="page-content">
       <div className="container">
-        <PostSection />
+        <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
         {/* post nav section  */}
 
         <div className="row">

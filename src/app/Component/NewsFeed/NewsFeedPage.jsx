@@ -78,7 +78,7 @@ export const NewsFeedPage = () => {
             </ul>
           </div>
           <div>
-          <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
+            <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           {/* post nav section  */}
           {user?.role === "agent" ? (
