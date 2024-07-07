@@ -6,11 +6,11 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
-import { PostLodaing } from "../PostLodaing/PostLodaing";
+import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
-const RequiredPostsAgent = () => {
-  const { user } = PrivateRouteContext();
+const AgentMyRequiredPosts = () => {
+  const { user, setRender, render } = PrivateRouteContext();
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -20,10 +20,12 @@ const RequiredPostsAgent = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [like, setlike] = useState(true);
+  const agentId = user?._id;
   const getAllPosts = async () => {
     try {
       let url = "http://localhost:4000/post-agent/get?";
       // Constructing the URL with query parameters based on state variables
+      url += `agentId=${agentId}&`;
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -57,7 +59,7 @@ const RequiredPostsAgent = () => {
 
   useEffect(() => {
     getAllPosts();
-  }, [sortOrder, sortBy, limit, page, like]);
+  }, [sortOrder, sortBy, limit, page, agentId, like]);
   console.log(allPosts);
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
@@ -346,7 +348,7 @@ const RequiredPostsAgent = () => {
                               {item?.postType}
                             </p>
                             <span className="leading-normal text-[0.755rem] sm:block align-right text-end text-black font-medium">
-                              For {item?.for}
+                              For {item.for}
                             </span>
                           </div>
                         </div>
@@ -356,7 +358,7 @@ const RequiredPostsAgent = () => {
                             <p className="font-inter text-[0.875rem] text-[#333335] font-semibold -mb-[0px] leading-[40px]">
                               {item?.title}
                             </p>
-                            {item?.description?.length > 132 ? (
+                            {item?.description.length > 132 ? (
                               <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
                                 {item?.description.slice(0, 133)}...
                                 <Link
@@ -391,7 +393,7 @@ const RequiredPostsAgent = () => {
                         </div>
                         <div className="px-[20px] flex items-center justify-between">
                           <div className="flex flex-wrap gap-x-[5px]">
-                            {tags?.map((tag, index) => {
+                            {tags.map((tag, index) => {
                               const { bgColor, textColor } =
                                 getTagStyles(index);
                               return (
@@ -463,6 +465,15 @@ const RequiredPostsAgent = () => {
                           </div>
                           <div className="flex gap-x-[7px] items-center flex-wrap">
                             <div className="flex items-center">
+                              <p className="text-[#845ADF] text-[11px] -mb-0 mr-[2px]">
+                                {" "}
+                                <BiSolidLike />
+                              </p>
+                              <p className="text-[#845ADF] font-medium text-[11px] -mb-0">
+                                {likeCount === 0 ? "00" : likeCount}
+                              </p>
+                            </div>
+                            <div className="flex items-center">
                               {hasId === true ? (
                                 <p
                                   onClick={() => giveUnLike(_id)}
@@ -480,17 +491,8 @@ const RequiredPostsAgent = () => {
                                   <BiSolidLike />
                                 </p>
                               )}
-                              <p className="text-[#845ADF] font-medium text-[11px] -mb-0">
-                                {likeCount === 0 ? "00" : likeCount}
-                              </p>
-                            </div>
-                            <div className="flex items-center">
-                              <p className="text-[#AFB2B7] text-[11px] -mb-0 mr-[2px]">
-                                {" "}
-                                <BiCommentDetail />
-                              </p>
                               <p className="text-[#AFB2B7] font-medium text-[11px] mb-[1px]">
-                                {comment?.length === 0 ? "00" : comment?.length}{" "}
+                                {comment.length === 0 ? "00" : comment.length}{" "}
                               </p>
                             </div>
                             <div>
@@ -545,4 +547,4 @@ const RequiredPostsAgent = () => {
   );
 };
 
-export default RequiredPostsAgent;
+export default AgentMyRequiredPosts;

@@ -25,7 +25,7 @@ export const UserHeaderPage = () => {
                           width={113}
                           height={113}
                           className="w-[113px] h-[113px] rounded-full"
-                          src={user.image}
+                          src={user?.image}
                           alt="User"
                         />
                       ) : (

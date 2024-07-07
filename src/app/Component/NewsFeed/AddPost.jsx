@@ -195,6 +195,7 @@ const AddPost = ({
           )}
         </div>
       </div>
+      {/* uploding image  */}
       {imageUploading !== null && (
         <div className="w-full ">
           <div className="mb-4">
@@ -321,7 +322,7 @@ const AddPost = ({
                       className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 data-[focus]:bg-white/10"
                       onClick={() => setForPost("Rent")}
                     >
-                      Required
+                      Rent
                     </button>
                   </MenuItem>
                 </MenuItems>

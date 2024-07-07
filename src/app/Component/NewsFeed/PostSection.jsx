@@ -86,7 +86,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
   } = useContext(PostLocationValueContext);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
-  console.log(propertyDocument);
+  const [verifyPopup, setVerifyPopup] = useState(false);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("selectedImage");
@@ -136,7 +136,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -163,7 +163,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -190,7 +190,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -335,7 +335,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         propertyType: propertyType,
         parking: parking,
         sellType: sellType,
-        role: user.role,
       };
 
       let token;
@@ -346,9 +345,9 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+        apiUrl = "http://localhost:4000/post-agent/post";
       } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+        apiUrl = "http://localhost:4000/post-user/post";
       }
 
       const response = await fetch(apiUrl, {
@@ -419,12 +418,12 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                   width={40}
                   height={40}
                   alt="img"
-                  src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
+                  src={user?.image}
                   className="w-[45px] h-[45px] rounded-full border-2"
                 />
                 <div>
                   <h4 className="text-[14px] text-[#666] m-0 leading-4">
-                    Bizid Hassan
+                    {user?.fullName}
                   </h4>
                   <div className="">
                     <Menu>

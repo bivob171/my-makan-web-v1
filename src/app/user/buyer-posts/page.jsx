@@ -1,15 +1,15 @@
 "use client";
-import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import { AccountVerifyModal } from "@/app/Component/NewsFeed/AccountVerifyModal";
-import AllPostAgent from "@/app/Component/NewsFeed/AgentPost/AllPostAgent";
-import AvailablePostsAgent from "@/app/Component/NewsFeed/AgentPost/AvailablePostsAgent";
-import RequiredPostsAgent from "@/app/Component/NewsFeed/AgentPost/RequiredPostsAgent";
+import AllPost from "@/app/Component/NewsFeed/AllPost";
 import NewsFeedRightSection from "@/app/Component/NewsFeed/NewsFeedRightSection";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
-import Image from "next/image";
 import React, { useState } from "react";
+import AvailablePosts from "../profile/available-post/page";
+import RequiredPosts from "../profile/required-post/page";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import Image from "next/image";
 
-export default function AgentPosts() {
+export default function BuyerPosts() {
+  const [activeTab, setActiveTab] = useState("allPosts");
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
@@ -18,7 +18,7 @@ export default function AgentPosts() {
   function open() {
     setIsOpen(true);
   }
-  const [activeTab, setActiveTab] = useState("allPostsAgent");
+  const role = user?.role;
   return (
     <div className="page-content">
       <div className="container">
@@ -36,42 +36,13 @@ export default function AgentPosts() {
               />
             </li>
             <li>
-              {user?.role === "agent" ? (
-                <>
-                  {user?.verified === false ? (
-                    <>
-                      <button
-                        className="cursor-pointer"
-                        onClick={() => setVerifyPopup(true)}
-                      >
-                        <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-                          <span className="text-[16px] font-mono font-medium">
-                            what are you looking for, {userName}?
-                          </span>
-                        </div>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button className="cursor-pointer" onClick={open}>
-                        <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-                          <span className="text-[16px] font-mono font-medium">
-                            what are you looking for, {userName}?
-                          </span>
-                        </div>
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : (
-                <button className="cursor-pointer" onClick={open}>
-                  <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-                    <span className="text-[16px] font-mono font-medium">
-                      what are you looking for, {userName}?
-                    </span>
-                  </div>
-                </button>
-              )}
+              <button className="cursor-pointer" onClick={open}>
+                <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                  <span className="text-[16px] font-mono font-medium">
+                    what are you looking for, {userName}?
+                  </span>
+                </div>
+              </button>
             </li>
           </ul>
           <ul className="search-list">
@@ -112,11 +83,11 @@ export default function AgentPosts() {
                 >
                   <a
                     className={`nav-link ${
-                      activeTab === "allPostsAgent" ? "active" : ""
+                      activeTab === "allPosts" ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab("allPostsAgent")}
+                    onClick={() => setActiveTab("allPosts")}
                     role="tab"
-                    aria-selected={activeTab === "allPostsAgent"}
+                    aria-selected={activeTab === "allPosts"}
                   >
                     <i className="icofont-copy" />
                     All Posts
@@ -131,11 +102,11 @@ export default function AgentPosts() {
                 >
                   <a
                     className={`nav-link ${
-                      activeTab === "availablePostsAgent" ? "active" : ""
+                      activeTab === "availablePosts" ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab("availablePostsAgent")}
+                    onClick={() => setActiveTab("availablePosts")}
                     role="tab"
-                    aria-selected={activeTab === "availablePostsAgent"}
+                    aria-selected={activeTab === "availablePosts"}
                   >
                     <i className="icofont-image" />
                     Available Posts
@@ -150,11 +121,11 @@ export default function AgentPosts() {
                 >
                   <a
                     className={`nav-link ${
-                      activeTab === "requiredPostsAgent" ? "active" : ""
+                      activeTab === "required" ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab("requiredPostsAgent")}
+                    onClick={() => setActiveTab("required")}
                     role="tab"
-                    aria-selected={activeTab === "requiredPostsAgent"}
+                    aria-selected={activeTab === "required"}
                   >
                     <i className="icofont-list" />
                     Required Posts
@@ -162,14 +133,13 @@ export default function AgentPosts() {
                 </li>
               </ul>
             </div>
-            {activeTab === "allPostsAgent" && <AllPostAgent />}
-            {activeTab === "availablePostsAgent" && <AvailablePostsAgent />}
-            {activeTab === "requiredPostsAgent" && <RequiredPostsAgent />}
+            {activeTab === "allPosts" && <AllPost />}
+            {activeTab === "availablePosts" && <AvailablePosts />}
+            {activeTab === "required" && <RequiredPosts />}
           </div>
           <NewsFeedRightSection />
         </div>
       </div>
-      <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
     </div>
   );
 }
