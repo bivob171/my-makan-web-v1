@@ -9,8 +9,8 @@ import Link from "next/link";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
-const RequiredPosts = () => {
-  const { user } = PrivateRouteContext();
+const AgentMyRequiredPosts = () => {
+  const { user, setRender, render } = PrivateRouteContext();
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -20,10 +20,12 @@ const RequiredPosts = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [like, setlike] = useState(true);
+  const agentId = user?._id;
   const getAllPosts = async () => {
     try {
-      let url = "http://localhost:4000/post-user/get?";
+      let url = "http://localhost:4000/post-agent/get?";
       // Constructing the URL with query parameters based on state variables
+      url += `agentId=${agentId}&`;
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -36,7 +38,7 @@ const RequiredPosts = () => {
       // if (type !== "") url += `&type=${type}`;
       // if (planId !== "") url += `&planId=${planId}`;
       // if (packageId !== "") url += `&packageId=${packageId}`;
-      // if (userId !== "") url += `&userId=${userId}`;
+      // if (agentId !== "") url += `&agentId=${agentId}`;
       // if (doctorId !== "") url += `&doctorId=${doctorId}`;
 
       const response = await fetch(url);
@@ -57,7 +59,7 @@ const RequiredPosts = () => {
 
   useEffect(() => {
     getAllPosts();
-  }, [sortOrder, sortBy, limit, page, like]);
+  }, [sortOrder, sortBy, limit, page, agentId, like]);
   console.log(allPosts);
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
@@ -75,9 +77,10 @@ const RequiredPosts = () => {
     // setPage((prevPage) => prevPage + 1);
     setLimit((prevLimit) => prevLimit + 100);
   };
+
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `http://localhost:4000/post-user/${id}/like`;
+    const url = `http://localhost:4000/post-agent/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -103,7 +106,7 @@ const RequiredPosts = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://localhost:4000/post-user/${id}/unlike`;
+    const url = `http://localhost:4000/post-agent/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -128,8 +131,9 @@ const RequiredPosts = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
   return (
-    <div>
+    <div className="">
       <div className="">
         <div className="container">
           <div className="block-box user-search-bar justify-content-between">
@@ -138,6 +142,7 @@ const RequiredPosts = () => {
                 Total {allPosts?.length} Posts
               </div>
             </div>
+
             <div className="box-item search-filter">
               <div className="dropdown">
                 <label className="mr-[5px]">Order By:</label>
@@ -193,7 +198,7 @@ const RequiredPosts = () => {
                 {allPosts?.map((item, i) => {
                   const {
                     role,
-                    userId,
+                    agentId,
                     createdAt,
                     location,
                     tags,
@@ -248,7 +253,7 @@ const RequiredPosts = () => {
                                     width={40}
                                     height={40}
                                     alt="img"
-                                    src={userId?.image}
+                                    src={agentId?.image}
                                     className="w-[40px] h-[40px] rounded-full"
                                   />
                                 </div>
@@ -272,7 +277,7 @@ const RequiredPosts = () => {
                                     </p>
                                   ) : (
                                     <p className="text-[0.875rem] text-[#333335] font-semibold">
-                                      Jamshed Rony{" "}
+                                      {agentId?.fullName}
                                     </p>
                                   )}
                                   <div className="mb-[5px]">
@@ -285,7 +290,7 @@ const RequiredPosts = () => {
                                   </div>
                                   <div className="flex items-center gap-x-[5px] mt-[5px]">
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                      {userId?.avgrating}
+                                      {agentId?.avgrating}
                                     </p>
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                       <GoStarFill />
@@ -298,7 +303,7 @@ const RequiredPosts = () => {
                                   Buyer From{" "}
                                   <span className="text-[#E6533C]">
                                     {" "}
-                                    {userId?.country}
+                                    {agentId?.country}
                                   </span>
                                 </p>
                               ) : (
@@ -460,6 +465,15 @@ const RequiredPosts = () => {
                           </div>
                           <div className="flex gap-x-[7px] items-center flex-wrap">
                             <div className="flex items-center">
+                              <p className="text-[#845ADF] text-[11px] -mb-0 mr-[2px]">
+                                {" "}
+                                <BiSolidLike />
+                              </p>
+                              <p className="text-[#845ADF] font-medium text-[11px] -mb-0">
+                                {likeCount === 0 ? "00" : likeCount}
+                              </p>
+                            </div>
+                            <div className="flex items-center">
                               {hasId === true ? (
                                 <p
                                   onClick={() => giveUnLike(_id)}
@@ -477,15 +491,6 @@ const RequiredPosts = () => {
                                   <BiSolidLike />
                                 </p>
                               )}
-                              <p className="text-[#845ADF] font-medium text-[11px] -mb-0">
-                                {likeCount === 0 ? "00" : likeCount}
-                              </p>
-                            </div>
-                            <div className="flex items-center">
-                              <p className="text-[#AFB2B7] text-[11px] -mb-0 mr-[2px]">
-                                {" "}
-                                <BiCommentDetail />
-                              </p>
                               <p className="text-[#AFB2B7] font-medium text-[11px] mb-[1px]">
                                 {comment.length === 0 ? "00" : comment.length}{" "}
                               </p>
@@ -494,13 +499,13 @@ const RequiredPosts = () => {
                               {item.type === "Urgent" ? (
                                 <button className="rounded-[5px] w-[45px] h-[23px] hover:bg-[#E6533C] bg-[#FCEDEB] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#E6533C] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                 </button>
-                              ) : item?.type === "Sponsored" ? (
+                              ) : item.type === "Sponsored" ? (
                                 <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                   <p className="text-[#F5B849] text-[8px] font-semibold -mb-[1px]">
                                     <GoStarFill />
@@ -509,7 +514,7 @@ const RequiredPosts = () => {
                               ) : (
                                 <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                 </button>
                               )}
@@ -542,4 +547,4 @@ const RequiredPosts = () => {
   );
 };
 
-export default RequiredPosts;
+export default AgentMyRequiredPosts;

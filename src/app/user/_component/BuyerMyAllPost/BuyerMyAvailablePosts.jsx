@@ -6,30 +6,32 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
-import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 
-const RequiredPosts = () => {
-  const { user } = PrivateRouteContext();
+const BuyerMyAvailablePosts = () => {
+  const { user, setRender, render } = PrivateRouteContext();
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [postType, setPostType] = useState("Required");
+  const [postType, setPostType] = useState("Available");
   const [limit, setLimit] = useState(100);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [like, setlike] = useState(true);
+  const userId = user?._id;
+
   const getAllPosts = async () => {
     try {
       let url = "http://localhost:4000/post-user/get?";
       // Constructing the URL with query parameters based on state variables
+      url += `userId=${userId}&`;
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
-
+      console.log(url);
       // Add other query parameters conditionally based on state variables
       // if (status !== "") url += `&status=${status}`;
       // if (packageExpired !== "") url += `&packageExpired=${packageExpired}`;
@@ -57,8 +59,7 @@ const RequiredPosts = () => {
 
   useEffect(() => {
     getAllPosts();
-  }, [sortOrder, sortBy, limit, page, like]);
-  console.log(allPosts);
+  }, [sortOrder, sortBy, limit, page, userId]);
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
     setOldOrNewPostDropdown(!oldOrNewPostDropdown);
@@ -75,6 +76,7 @@ const RequiredPosts = () => {
     // setPage((prevPage) => prevPage + 1);
     setLimit((prevLimit) => prevLimit + 100);
   };
+
   const myId = user?._id;
   const giveLike = async (id) => {
     const url = `http://localhost:4000/post-user/${id}/like`;
@@ -128,8 +130,9 @@ const RequiredPosts = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
   return (
-    <div>
+    <div className="">
       <div className="">
         <div className="container">
           <div className="block-box user-search-bar justify-content-between">
@@ -138,6 +141,7 @@ const RequiredPosts = () => {
                 Total {allPosts?.length} Posts
               </div>
             </div>
+
             <div className="box-item search-filter">
               <div className="dropdown">
                 <label className="mr-[5px]">Order By:</label>
@@ -266,15 +270,10 @@ const RequiredPosts = () => {
                             <div>
                               <div className=" -mb-[20px] ">
                                 <div className="flex gap-x-[8px] items-center">
-                                  {item.role === "buyer" ? (
-                                    <p className="text-[0.875rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
-                                    </p>
-                                  ) : (
-                                    <p className="text-[0.875rem] text-[#333335] font-semibold">
-                                      Jamshed Rony{" "}
-                                    </p>
-                                  )}
+                                  <p className="text-[0.875rem] text-[#333335] font-semibold">
+                                    {userId?.fullName}{" "}
+                                  </p>
+
                                   <div className="mb-[5px]">
                                     <Image
                                       width={15}
@@ -293,19 +292,14 @@ const RequiredPosts = () => {
                                   </div>
                                 </div>
                               </div>
-                              {item.role === "buyer" ? (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Buyer From{" "}
-                                  <span className="text-[#E6533C]">
-                                    {" "}
-                                    {userId?.country}
-                                  </span>
-                                </p>
-                              ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Rapid Properties
-                                </p>
-                              )}
+                              <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                From{" "}
+                                <span className="text-[#E6533C]">
+                                  {" "}
+                                  {userId?.country}
+                                </span>
+                              </p>
+
                               <div className="flex flex-wrap items-center mt-[2px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem]">
@@ -494,13 +488,13 @@ const RequiredPosts = () => {
                               {item.type === "Urgent" ? (
                                 <button className="rounded-[5px] w-[45px] h-[23px] hover:bg-[#E6533C] bg-[#FCEDEB] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#E6533C] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                 </button>
-                              ) : item?.type === "Sponsored" ? (
+                              ) : item.type === "Sponsored" ? (
                                 <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                   <p className="text-[#F5B849] text-[8px] font-semibold -mb-[1px]">
                                     <GoStarFill />
@@ -509,7 +503,7 @@ const RequiredPosts = () => {
                               ) : (
                                 <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
-                                    {item?.type}
+                                    {item.type}
                                   </p>
                                 </button>
                               )}
@@ -522,6 +516,7 @@ const RequiredPosts = () => {
                 })}
               </div>
             )}
+
             {hasMore && !loading && (
               <footer className="">
                 <div
@@ -542,4 +537,4 @@ const RequiredPosts = () => {
   );
 };
 
-export default RequiredPosts;
+export default BuyerMyAvailablePosts;

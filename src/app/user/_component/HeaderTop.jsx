@@ -86,11 +86,25 @@ export const HeaderTop = () => {
                       Properties
                     </a>
                   </li>
-                  <li className="header-nav-item">
-                    <a href="#" className="menu-link">
-                      Buyer Posts
-                    </a>
-                  </li>
+                  {user?.role === "agent" ? (
+                    <li className="header-nav-item">
+                      <Link
+                        href="/user/agent-posts"
+                        className="menu-link active"
+                      >
+                        Agent Posts
+                      </Link>
+                    </li>
+                  ) : (
+                    <li className="header-nav-item">
+                      <Link
+                        href="/user/buyer-posts"
+                        className="menu-link active"
+                      >
+                        Buyer Posts
+                      </Link>
+                    </li>
+                  )}
                   <li className="header-nav-item">
                     <a href="#" className="menu-link have-sub">
                       By location
