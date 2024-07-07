@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -20,6 +20,7 @@ const AgentMyRequiredPosts = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [like, setlike] = useState(true);
+  const containerRefPost = useRef(null);
   const agentId = user?._id;
   const getAllPosts = async () => {
     try {
