@@ -188,7 +188,7 @@ export const SignupForm = () => {
       };
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/user/signUp`,
         {
           method: "POST",
           headers: {
@@ -304,7 +304,7 @@ export const SignupForm = () => {
       };
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/signUp`,
         {
           method: "POST",
           headers: {
@@ -359,7 +359,7 @@ export const SignupForm = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        `${process.env.NEXT_PUBLIC_API_URL}/company`,
         {
           params: {
             search,

@@ -23,7 +23,7 @@ const AllPost = () => {
   const [like, setlike] = useState(true);
   const getAllPosts = async () => {
     try {
-      let url = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/get?";
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -99,7 +99,7 @@ const AllPost = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/like`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -125,7 +125,7 @@ const AllPost = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/unlike`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -253,7 +253,7 @@ const AllPost = () => {
                                       Jamshed Rony{" "}
                                     </p>
                                   )}
-                                  <div className="mb-[15px]">
+                                  <div className="mb-[10px]">
                                     <Image
                                       width={15}
                                       height={15}
@@ -284,7 +284,7 @@ const AllPost = () => {
                                   Rapid Properties
                                 </p>
                               )}
-                              <div className="flex flex-wrap items-center mt-[15px] ">
+                              <div className="flex flex-wrap items-center mt-[7px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem]">
                                     {formatDate(createdAt)}

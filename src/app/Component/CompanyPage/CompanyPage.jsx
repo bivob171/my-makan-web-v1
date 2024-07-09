@@ -24,7 +24,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
+//       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/company", {
 //         params: {
 //           search,
 //           page,
@@ -183,7 +183,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
+//       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/company", {
 //         params: {
 //           search,
 //           page,
@@ -247,7 +247,7 @@
 //   const fetchResultCompanies = async () => {
 //     setHasMoreCompany(true);
 //     try {
-//       const response = await axios.get("https://q4m0gph5-4000.asse.devtunnels.ms/company", {
+//       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/company", {
 //         params: {
 //           search: searchCompany,
 //           page: pageCompany,
@@ -425,7 +425,7 @@ export const CompanyPage = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        `${process.env.NEXT_PUBLIC_API_URL}/company`,
         {
           params: {
             search,
@@ -490,7 +490,7 @@ export const CompanyPage = () => {
     setIsFetchingCompany(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        `${process.env.NEXT_PUBLIC_API_URL}/company`,
         {
           params: {
             name: searchCompany,

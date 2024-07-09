@@ -40,8 +40,8 @@ export const EmailChangePopup = ({ visible, closePopUp, role, oldEmail }) => {
     // Adjust endpoint based on role
     const endpoint =
       role === "buyer"
-        ? "https://q4m0gph5-4000.asse.devtunnels.ms/auth/email-change"
-        : "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/email-change";
+        ? `${process.env.NEXT_PUBLIC_API_URL}/auth/email-change`
+        : `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/email-change`;
 
     try {
       const response = await axios.post(endpoint, {

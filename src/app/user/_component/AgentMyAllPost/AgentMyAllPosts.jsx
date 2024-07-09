@@ -24,7 +24,7 @@ const AgentMyAllPosts = () => {
   const agentId = user?._id;
   const getAllPosts = async () => {
     try {
-      let url = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/get?";
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/post-agent/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `agentId=${agentId}&`;
       url += `sortBy=${sortBy}&`;
@@ -101,7 +101,7 @@ const AgentMyAllPosts = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/like`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-agent/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -127,7 +127,7 @@ const AgentMyAllPosts = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/unlike`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-agent/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);

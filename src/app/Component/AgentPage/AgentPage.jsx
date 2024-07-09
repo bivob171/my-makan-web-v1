@@ -27,7 +27,7 @@ export const AgentPage = () => {
   const getAllPosts = async () => {
     setIsFetchingAgent(true);
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
       if (countryFind) url += `&country=${countryFind}`;
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
@@ -121,7 +121,7 @@ export const AgentPage = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        `${process.env.NEXT_PUBLIC_API_URL}/company`,
         {
           params: {
             search,
@@ -190,7 +190,7 @@ export const AgentPage = () => {
     setIsFetchingCountry(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/country",
+        `${process.env.NEXT_PUBLIC_API_URL}/country`,
         {
           params: {
             search: searchCountry,

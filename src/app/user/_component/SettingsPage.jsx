@@ -36,8 +36,8 @@ export const SettingsPage = () => {
   const handleEmailVerifyCodeSent = async () => {
     const endpoint =
       role === "agent"
-        ? "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/email-verify"
-        : "https://q4m0gph5-4000.asse.devtunnels.ms/auth/buyer/email-verify";
+        ? `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/email-verify`
+        : `${process.env.NEXT_PUBLIC_API_URL}/auth/buyer/email-verify`;
 
     try {
       const response = await axios.post(endpoint, {
@@ -156,7 +156,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/change-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`,
         data
       );
       console.log(response);
@@ -211,7 +211,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/password-change",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/password-change`,
         data
       );
       if (response.status === 200) {
@@ -247,7 +247,7 @@ export const SettingsPage = () => {
 
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/agent/update-profile",
+        `${process.env.NEXT_PUBLIC_API_URL}/agent/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -287,7 +287,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        `${process.env.NEXT_PUBLIC_API_URL}/file-upload/upload`,
         formData,
         {
           headers: {

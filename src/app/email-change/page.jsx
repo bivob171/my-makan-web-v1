@@ -80,7 +80,7 @@ export default function EmailChange() {
         password: password,
       };
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/email-change",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/email-change`,
         {
           method: "POST",
           headers: {
@@ -135,7 +135,7 @@ export default function EmailChange() {
       };
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/email-change",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/email-change`,
         {
           method: "POST",
           headers: {

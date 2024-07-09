@@ -57,7 +57,7 @@ export const LoginForm = () => {
         return; // exit function if any of the fields are empty
       }
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/user/login`,
         {
           method: "POST",
           headers: {
@@ -107,7 +107,7 @@ export const LoginForm = () => {
         return; // exit function if any of the fields are empty
       }
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/login`,
         {
           method: "POST",
           headers: {

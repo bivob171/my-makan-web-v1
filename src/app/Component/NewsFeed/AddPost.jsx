@@ -78,7 +78,7 @@ const AddPost = ({
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/country/tower",
+        `${process.env.NEXT_PUBLIC_API_URL}/country/tower`,
         {
           params: {
             search,

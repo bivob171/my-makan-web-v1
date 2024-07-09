@@ -8,7 +8,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:4000/post-field-data/tags")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/post-field-data/tags`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

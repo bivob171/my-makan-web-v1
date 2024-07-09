@@ -73,9 +73,9 @@ const PrivateRouteContext = () => {
     let endpoint = null;
 
     if (userRole === "agent") {
-      endpoint = "https://q4m0gph5-4000.asse.devtunnels.ms/agent/myProfile";
+      endpoint = `${process.env.NEXT_PUBLIC_API_URL}/agent/myProfile`;
     } else if (userRole === "buyer") {
-      endpoint = "https://q4m0gph5-4000.asse.devtunnels.ms/user/myProfile";
+      endpoint = `${process.env.NEXT_PUBLIC_API_URL}/user/myProfile`;
     }
 
     if (endpoint) {

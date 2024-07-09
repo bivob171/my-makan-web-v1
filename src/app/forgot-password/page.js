@@ -52,7 +52,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/forgot-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/forgot-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/forgot-password`,
         {
           method: "POST",
           headers: {

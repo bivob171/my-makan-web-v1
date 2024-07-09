@@ -25,7 +25,7 @@ export const AddCompanyPage = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        `${process.env.NEXT_PUBLIC_API_URL}/company`,
         {
           params: {
             search,
@@ -82,7 +82,7 @@ export const AddCompanyPage = () => {
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/agent/update-profile",
+        `${process.env.NEXT_PUBLIC_API_URL}/agent/update-profile`,
         {
           method: "PATCH",
           headers: {
