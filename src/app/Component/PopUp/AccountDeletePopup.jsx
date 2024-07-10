@@ -16,8 +16,8 @@ export const AccountDeletePopup = ({ visible, closePopUp, role }) => {
     try {
       const baseUrl =
         role === "buyer"
-          ? `${process.env.NEXT_PUBLIC_API_URL}/user/delete`
-          : `${process.env.NEXT_PUBLIC_API_URL}/agent/delete`;
+          ? `https://q4m0gph5-4000.asse.devtunnels.ms/user/delete`
+          : `https://q4m0gph5-4000.asse.devtunnels.ms/agent/delete`;
       const token =
         role === "buyer"
           ? localStorage.getItem("buyerAccessToken")

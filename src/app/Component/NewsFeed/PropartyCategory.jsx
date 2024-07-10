@@ -12,7 +12,7 @@ const PropertyCategory = ({
   const [error, setError] = useState(null);
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/post-field-data/property-category`
+      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
     )
       .then((response) => {
         if (!response.ok) {

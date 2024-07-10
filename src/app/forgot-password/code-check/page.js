@@ -79,7 +79,7 @@ export default function CodeCheck() {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password-code-check`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/reset-password-code-check`,
         data
       );
       setResponseMessage("Code Match Successfully");
@@ -116,7 +116,7 @@ export default function CodeCheck() {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/reset-password-code-check`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/reset-password-code-check`,
         data
       );
       setResponseMessage("Code Match Successfully");
@@ -139,7 +139,7 @@ export default function CodeCheck() {
     // Your email post logic here
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -182,7 +182,7 @@ export default function CodeCheck() {
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/forgot-password`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/forgot-password`,
         {
           method: "POST",
           headers: {

@@ -26,7 +26,7 @@ export const SaveAbailableAllPostTimeline = () => {
   console.log(allPosts);
   const getAllPosts = async (token) => {
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/save-post/my-save-post?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/my-save-post?`;
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
@@ -93,7 +93,7 @@ export const SaveAbailableAllPostTimeline = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-agent/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -119,7 +119,7 @@ export const SaveAbailableAllPostTimeline = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-agent/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);

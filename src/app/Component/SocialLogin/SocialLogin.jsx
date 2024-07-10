@@ -62,8 +62,8 @@ export const SocialLogin = ({ setError }) => {
     if (!userId) return; // Exit if userId is not available
     const endpoint =
       role === "buyer"
-        ? `${process.env.NEXT_PUBLIC_API_URL}/user/${userId}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/agent/${userId}`;
+        ? `https://q4m0gph5-4000.asse.devtunnels.ms/user/${userId}`
+        : `https://q4m0gph5-4000.asse.devtunnels.ms/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -97,8 +97,8 @@ export const SocialLogin = ({ setError }) => {
     if (status === "authenticated" && session?.user) {
       const endpoint =
         role === "buyer"
-          ? `${process.env.NEXT_PUBLIC_API_URL}/auth/user/signUp-with-Google`
-          : `${process.env.NEXT_PUBLIC_API_URL}/auth/agent/signUp-with-gmail`;
+          ? `https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp-with-Google`
+          : `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp-with-gmail`;
       createAccountWithGoogle(endpoint);
     }
   }, [status, session, role]);

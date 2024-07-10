@@ -23,7 +23,7 @@ const BuyerMyAllPosts = () => {
   const userId = user?._id;
   const getAllPosts = async () => {
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `userId=${userId}&`;
       url += `sortBy=${sortBy}&`;
@@ -100,7 +100,7 @@ const BuyerMyAllPosts = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -126,7 +126,7 @@ const BuyerMyAllPosts = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/post-user/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
