@@ -27,7 +27,7 @@ export const AgentPage = () => {
   const getAllPosts = async () => {
     setIsFetchingAgent(true);
     try {
-      let url = `http://3.28.239.173:4000/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
       if (countryFind) url += `&country=${countryFind}`;
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
@@ -120,13 +120,16 @@ export const AgentPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get("http://3.28.239.173:4000/company", {
-        params: {
-          search,
-          page: pageco,
-          limit: limitco,
-        },
-      });
+      const response = await axios.get(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/company",
+        {
+          params: {
+            search,
+            page: pageco,
+            limit: limitco,
+          },
+        }
+      );
       const newCompanies = response.data;
       setHasMoreco(newCompanies.length === limitco);
       setCompanies((prevCompanies) =>
@@ -186,13 +189,16 @@ export const AgentPage = () => {
   const fetchCountries = async () => {
     setIsFetchingCountry(true);
     try {
-      const response = await axios.get("http://3.28.239.173:4000/country", {
-        params: {
-          search: searchCountry,
-          page: pageCountry,
-          limit: limitCountry,
-        },
-      });
+      const response = await axios.get(
+        "https://q4m0gph5-4000.asse.devtunnels.ms/country",
+        {
+          params: {
+            search: searchCountry,
+            page: pageCountry,
+            limit: limitCountry,
+          },
+        }
+      );
       const newCountries = response.data;
       setHasMoreCountry(newCountries.length === limitCountry);
       setData((prevCountries) =>

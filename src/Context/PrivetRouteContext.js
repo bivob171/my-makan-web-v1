@@ -73,9 +73,9 @@ const PrivateRouteContext = () => {
     let endpoint = null;
 
     if (userRole === "agent") {
-      endpoint = "http://3.28.239.173:4000/agent/myProfile";
+      endpoint = "https://q4m0gph5-4000.asse.devtunnels.ms/agent/myProfile";
     } else if (userRole === "buyer") {
-      endpoint = "http://3.28.239.173:4000/user/myProfile";
+      endpoint = "https://q4m0gph5-4000.asse.devtunnels.ms/user/myProfile";
     }
 
     if (endpoint) {

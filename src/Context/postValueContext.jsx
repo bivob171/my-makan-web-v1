@@ -35,10 +35,13 @@ const PostLocationValueProvider = ({ children }) => {
   const [tagsError, setTagsError] = useState("");
   const [locationError, setLocationError] = useState("");
   const [sellType, setSellType] = useState([]);
+  const [media, setmedia] = useState([]);
 
   return (
     <PostLocationValueContext.Provider
       value={{
+        media,
+        setmedia,
         lata,
         setLata,
         lon,

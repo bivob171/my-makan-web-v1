@@ -80,7 +80,7 @@ export default function EmailChange() {
         password: password,
       };
       const response = await fetch(
-        "http://3.28.239.173:4000/auth/email-change",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/email-change",
         {
           method: "POST",
           headers: {
@@ -135,7 +135,7 @@ export default function EmailChange() {
       };
 
       const response = await fetch(
-        "http://3.28.239.173:4000/auth/agent/email-change",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/email-change",
         {
           method: "POST",
           headers: {

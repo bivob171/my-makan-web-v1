@@ -24,7 +24,7 @@ const AvailablePosts = () => {
   const [like, setlike] = useState(true);
   const getAllPosts = async () => {
     try {
-      let url = "http://3.28.239.173:4000/post-user/get?";
+      let url = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/get?";
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
@@ -99,7 +99,7 @@ const AvailablePosts = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `http://3.28.239.173:4000/post-user/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -125,7 +125,7 @@ const AvailablePosts = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://3.28.239.173:4000/post-user/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);

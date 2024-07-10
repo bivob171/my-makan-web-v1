@@ -13,7 +13,6 @@ import AllPostAgent from "./AgentPost/AllPostAgent";
 import AvailablePostsAgent from "./AgentPost/AvailablePostsAgent";
 import RequiredPostsAgent from "./AgentPost/RequiredPostsAgent";
 import { AccountVerifyModal } from "./AccountVerifyModal";
-import VideoPdf from "./VideoPdf";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -83,7 +82,6 @@ export const NewsFeedPage = () => {
           <div>
             <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
-          <VideoPdf />
           {/* post nav section  */}
           {user?.role === "agent" ? (
             <div className="row">
