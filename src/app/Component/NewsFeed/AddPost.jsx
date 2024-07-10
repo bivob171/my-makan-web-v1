@@ -320,7 +320,7 @@ const AddPost = ({
             </>
           </div>
           <div className="col-span-5 flex items-center gap-3 ml-3">
-            <div className="col flex justify-between items-center gap-2">
+            <div className="flex justify-between items-center gap-2">
               <Tooltip title="Image" arrow placement="top-start">
                 <button
                   type="button"

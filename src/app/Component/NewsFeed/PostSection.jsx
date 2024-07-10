@@ -104,7 +104,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     for (let file of files) {
       if (file.size <= 50 * 1024 * 1024) {
-        // Check if the file size is under 30 MB
         validFiles.push(file);
       } else {
         toast.error(`${file.name} is larger than 30 MB`);
@@ -136,7 +135,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://3.28.239.173:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -163,7 +162,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://3.28.239.173:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -190,7 +189,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.post(
-        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
+        "http://3.28.239.173:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -345,9 +344,9 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+        apiUrl = "http://3.28.239.173:4000/post-agent/post";
       } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+        apiUrl = "http://3.28.239.173:4000/post-user/post";
       }
 
       const response = await fetch(apiUrl, {
