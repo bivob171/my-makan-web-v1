@@ -69,8 +69,12 @@ const PostSection = ({ isOpen, setIsOpen }) => {
     setPropertyType,
     parking,
     setParking,
-    media,
-    setmedia,
+    image,
+    setImage,
+    video,
+    setVideo,
+    propertyDocument,
+    setPropertyDocument,
     tags,
     setTags,
     tagsError,
@@ -83,6 +87,143 @@ const PostSection = ({ isOpen, setIsOpen }) => {
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
   const [verifyPopup, setVerifyPopup] = useState(false);
+
+  useEffect(() => {
+    const storedImage = localStorage.getItem("selectedImage");
+    if (storedImage) {
+      setImage(storedImage);
+    }
+  }, []);
+
+  const handleImageChange = (e) => {
+    handleUpload([...e.target.files]);
+  };
+  const handleVideoChange = (e) => {
+    const files = [...e.target.files];
+    const validFiles = [];
+
+    for (let file of files) {
+      if (file.size <= 50 * 1024 * 1024) {
+        validFiles.push(file);
+      } else {
+        toast.error(`${file.name} is larger than 30 MB`);
+      }
+    }
+
+    if (validFiles.length > 0) {
+      handleVideoUpload(validFiles);
+    }
+  };
+  const handleDocumentChange = (e) => {
+    const files = [...e.target.files];
+    const validFiles = [];
+
+    for (let file of files) {
+      validFiles.push(file);
+    }
+
+    if (validFiles.length > 0) {
+      handleDocumentUpload(validFiles);
+    }
+  };
+
+  const handleUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "http://3.28.239.173:4000/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setImage((prevImages) => [...prevImages, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
+  };
+  const handleVideoUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "http://3.28.239.173:4000/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setVideo((prevVideos) => [...prevVideos, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
+  };
+  const handleDocumentUpload = async (files) => {
+    const formData = new FormData();
+    for (let file of files) {
+      formData.append("files", file);
+    }
+
+    try {
+      const response = await axios.post(
+        "http://3.28.239.173:4000/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            setImageUploading(Math.round((data.loaded / data.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const links = response.data.map((item) => item.Location);
+      setPropertyDocument((prevDocuments) => [...prevDocuments, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setImageUploading(null);
+    }
+  };
+
+  const handleImageDelete = (indexToDelete) => {
+    setImage((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToDelete)
+    );
+  };
+  const handleVideoDelete = (indexToDelete) => {
+    setVideo((prevVideo) =>
+      prevVideo.filter((_, index) => index !== indexToDelete)
+    );
+  };
+  const handleDocumentDelete = (indexToDelete) => {
+    setPropertyDocument((prevDoc) =>
+      prevDoc.filter((_, index) => index !== indexToDelete)
+    );
+  };
 
   // live error manage
   useEffect(() => {
@@ -172,7 +313,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         title: title,
         description: description,
         for: forPost,
-        media: media,
+        image: image,
         video: video,
         doc: propertyDocument,
         tags: tags,
@@ -203,9 +344,9 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       }
       let apiUrl;
       if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+        apiUrl = "http://3.28.239.173:4000/post-agent/post";
       } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+        apiUrl = "http://3.28.239.173:4000/post-user/post";
       }
 
       const response = await fetch(apiUrl, {
@@ -347,8 +488,13 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                       propertyCategoryName={propertyCategory}
                       setPropertyType={setPropertyType}
                       propertyTypeName={propertyType}
-                      media={media}
-                      setmedia={setmedia}
+                      handleImageDelete={handleImageDelete}
+                      handleImageChange={handleImageChange}
+                      handleVideoChange={handleVideoChange}
+                      handleVideoDelete={handleVideoDelete}
+                      handleDocumentChange={handleDocumentChange}
+                      handleDocumentDelete={handleDocumentDelete}
+                      image={image}
                       tags={tags}
                       setTags={setTags}
                       setSellType={setSellType}
@@ -357,6 +503,8 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                       setParking={setParking}
                       parking={parking}
                       nextPanel={nextPanel}
+                      video={video}
+                      propertyDocument={document}
                       titleError={titleError}
                       descriptionError={descriptionError}
                       locationError={locationError}

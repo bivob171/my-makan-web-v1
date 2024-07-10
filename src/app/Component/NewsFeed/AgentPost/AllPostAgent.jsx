@@ -24,7 +24,7 @@ const AllPostAgent = () => {
 
   const getAllPosts = async () => {
     try {
-      let url = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/get?";
+      let url = "http://3.28.239.173:4000/post-agent/get?";
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -98,7 +98,7 @@ const AllPostAgent = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/like`;
+    const url = `http://3.28.239.173:4000/post-agent/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -124,7 +124,7 @@ const AllPostAgent = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/unlike`;
+    const url = `http://3.28.239.173:4000/post-agent/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
