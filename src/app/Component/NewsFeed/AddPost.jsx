@@ -64,6 +64,24 @@ const AddPost = ({
     ...files.filter((file) => file.type === "video"),
     ...files.filter((file) => file.type === "pdf"),
   ];
+
+  const handleVideoClick = (index) => {
+    if (videoRefs.current[index]) {
+      if (videoRefs.current[index].paused) {
+        videoRefs.current[index].play();
+      } else {
+        videoRefs.current[index].pause();
+      }
+    }
+  };
+
+  const handleFileDelete = (fileId) => {
+    console.log(fileId);
+    // Filter out the file with the specified _id
+    setFiles((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
+    setmedia((prevMedia) => prevMedia.filter((media) => media._id !== fileId));
+  };
+
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
