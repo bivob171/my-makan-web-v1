@@ -15,15 +15,12 @@ import { TbCurrencyTaka } from "react-icons/tb";
 import { MdOutlineSquareFoot } from "react-icons/md";
 import { GiTowerBridge } from "react-icons/gi";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import axios from "axios";
+import VideoPdf from "./VideoPdf";
 const AddPost = ({
   setTitle,
   title,
   setDescription,
   description,
-  handleImageDelete,
-  handleImageChange,
-  image,
   setPropertyCategory,
   propertyCategoryName,
   setPropertyType,
@@ -44,8 +41,6 @@ const AddPost = ({
   nextPanel,
   setTowersorBuildingName,
   formatted_address,
-  video,
-  propertyDocument,
   titleError,
   postType,
   towersorBuildingName,
@@ -55,75 +50,73 @@ const AddPost = ({
   propertyCategoryError,
   propertyTypeError,
   tagsError,
-  imageUploading,
-  handleVideoChange,
-  handleVideoDelete,
-  handleDocumentChange,
-  handleDocumentDelete,
+  media,
+  setmedia,
 }) => {
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedTower, setSelectedTower] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const limit = 10;
-  const containerRefTowerResult = useRef(null);
-  useEffect(() => {
-    fetchTower();
-  }, [search, page]);
-  const fetchTower = async () => {
-    setIsFetching(true);
-    try {
-      const response = await axios.get(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
-        {
-          params: {
-            search,
-            page,
-            limit,
-          },
-        }
-      );
-      const newTower = response.data;
-      setHasMore(newTower.length === limit);
-      setFilteredSuggestions((prevTower) => {
-        return page === 1 ? newTower : [...prevTower, ...newTower];
-      });
-    } catch (error) {
-      console.error("Error fetching companies:", error);
-    } finally {
-      setIsFetching(false);
+  const [files, setFiles] = useState([]);
+  const elementRef = useRef(null);
+  const videoRefs = useRef([]);
+  const [imageUploading, setImageUploading] = useState(null);
+  const [videoUploading, setVideoUploading] = useState(null);
+  const [pdfUploading, setPdfUploading] = useState(null);
+  const sortedFiles = [
+    ...files.filter((file) => file.type === "image"),
+    ...files.filter((file) => file.type === "video"),
+    ...files.filter((file) => file.type === "pdf"),
+  ];
+
+  const handleVideoClick = (index) => {
+    if (videoRefs.current[index]) {
+      if (videoRefs.current[index].paused) {
+        videoRefs.current[index].play();
+      } else {
+        videoRefs.current[index].pause();
+      }
     }
   };
 
-  const handleInputTowerChange = (e) => {
-    const searchTerm = e.target.value;
-    setSearch(searchTerm);
-    setSelectedTower(searchTerm);
-    setTowersorBuildingName(searchTerm);
-    setPage(1); // Reset to first page on search change
-    setFilteredSuggestions([]); // Clear current companies
-    setHasMore(true); // Reset hasMore when search changes
+  const handleFileDelete = (fileId) => {
+    console.log(fileId);
+    // Filter out the file with the specified _id
+    setFiles((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
+    setmedia((prevMedia) => prevMedia.filter((media) => media._id !== fileId));
   };
 
-  const handleTowerChange = (tower) => {
-    setSelectedTower(tower.name);
-    setTowersorBuildingName(tower.name);
-    setShowSuggestions(false);
-  };
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const handleScroll = () => {
-    const container = containerRefTowerResult.current;
-    if (
-      container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 5 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1); // Increment page when user scrolls to the bottom
+  const towerNames = [
+    "Empire State Building",
+    "Burj Khalifa",
+    "Shanghai Tower",
+    "Eiffel Tower",
+    "CN Tower",
+  ];
+
+  useEffect(() => {
+    const filtered = towersorBuildingName
+      ? towerNames.filter((name) =>
+          name.toLowerCase().includes(towersorBuildingName.toLowerCase())
+        )
+      : [];
+    setFilteredSuggestions(filtered);
+    setShowSuggestions(filtered.length > 0);
+    setActiveSuggestionIndex(0);
+  }, [towersorBuildingName]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      if (activeSuggestionIndex < filteredSuggestions.length - 1) {
+        setActiveSuggestionIndex(activeSuggestionIndex + 1);
+      }
+    } else if (e.key === "ArrowUp") {
+      if (activeSuggestionIndex > 0) {
+        setActiveSuggestionIndex(activeSuggestionIndex - 1);
+      }
+    } else if (e.key === "Enter") {
+      setTowersorBuildingName(filteredSuggestions[activeSuggestionIndex]);
+      setShowSuggestions(false);
     }
   };
 
@@ -157,112 +150,181 @@ const AddPost = ({
           rows="4"
         />
       </div>
-      <div className="w-full flex gap-x-[20px] overflow-x-scroll">
-        <div>
-          {image?.length > 0 && (
-            <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {image.map((img, i) => {
-                return (
-                  <div key={i} className="relative flex-shrink-0">
-                    <Image
-                      width={1000}
-                      height={120}
-                      className="w-auto h-[80px] rounded-md mb-2"
-                      src={img}
-                      alt="Selected"
-                    />
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleImageDelete(i)}
-                    />
-                  </div>
-                );
-              })}
+      <div>
+        <div
+          className="mt-10 p-10 flex justify-start items-center gap-2 overflow-x-auto scrollbar scrollbar-thumb-blue-500 scrollbar-track-blue-200"
+          ref={elementRef}
+        >
+          {sortedFiles.map((file, index) => (
+            <div key={index} className="relative flex-shrink-0">
+              {file.type === "image" && (
+                <div className="relative flex-shrink-0">
+                  <Image
+                    width={1000}
+                    height={120}
+                    className="w-auto h-[80px] rounded-"
+                    src={file.url}
+                    alt={`Uploaded ${index}`}
+                  />
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                    onClick={() => handleFileDelete(file._id)}
+                  />
+                  {imageUploading !== null && (
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="relative size-5">
+                        <svg
+                          class="size-full"
+                          width="36"
+                          height="36"
+                          viewBox="0 0 36 36"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="16"
+                            fill="none"
+                            class="stroke-current text-gray-200 dark:text-neutral-700"
+                            stroke-width="2"
+                          ></circle>
+                          <g class="origin-center -rotate-90 transform">
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              stroke-width="2"
+                              stroke-dasharray="100"
+                              stroke-dashoffset="75"
+                            ></circle>
+                          </g>
+                        </svg>
+                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                            {imageUploading}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {file.type === "video" && (
+                <div className="relative flex-shrink-0">
+                  <video
+                    width="200"
+                    className="rounded-md cursor-pointer w-auto h-[80px]"
+                    ref={(el) => (videoRefs.current[index] = el)}
+                    onClick={() => handleVideoClick(index)}
+                  >
+                    <source src={file.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                    onClick={() => handleFileDelete(file._id)}
+                  />
+                  {videoUploading !== null && (
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="relative size-5">
+                        <svg
+                          class="size-full"
+                          width="36"
+                          height="36"
+                          viewBox="0 0 36 36"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="16"
+                            fill="none"
+                            class="stroke-current text-gray-200 dark:text-neutral-700"
+                            stroke-width="2"
+                          ></circle>
+                          <g class="origin-center -rotate-90 transform">
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              stroke-width="2"
+                              stroke-dasharray="100"
+                              strokeDashoffset={100 - videoUploading}
+                            ></circle>
+                          </g>
+                        </svg>
+                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                            {videoUploading}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {file.type === "pdf" && (
+                <div className="relative flex-shrink-0">
+                  <iframe
+                    width={100}
+                    height={80}
+                    src={file.url}
+                    title={`PDF Viewer ${index}`}
+                    className="scroll-mr-0 rounded-md w-[110px] h-[80px]"
+                  ></iframe>
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                    onClick={() => handleFileDelete(file._id)}
+                  />
+                  {pdfUploading !== null && (
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="relative size-5">
+                        <svg
+                          class="size-full"
+                          width="36"
+                          height="36"
+                          viewBox="0 0 36 36"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="16"
+                            fill="none"
+                            class="stroke-current text-gray-200 dark:text-neutral-700"
+                            stroke-width="2"
+                          ></circle>
+                          <g class="origin-center -rotate-90 transform">
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              stroke-width="2"
+                              stroke-dasharray="100"
+                              stroke-dashoffset="75"
+                            ></circle>
+                          </g>
+                        </svg>
+                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                            {pdfUploading}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div>
-          {video?.length > 0 && (
-            <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {video.map((vdo, i) => {
-                return (
-                  <div key={i} className="relative">
-                    <video width={80} height={80} controls="">
-                      <source src={vdo} type="video/mp4" />
-                      <source src={vdo} type="video/ogg" />
-                    </video>
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleVideoDelete(i)}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div>
-          {propertyDocument?.length > 0 && (
-            <div className="w-full flex gap-x-[10px] overflow-x-auto">
-              {propertyDocument.map((doc, i) => {
-                return (
-                  <div key={i} className="relative">
-                    <iframe
-                      className="object-cover w-[80px] h-[80px] rounded-sm"
-                      width="70"
-                      height="70"
-                      src={doc}
-                    ></iframe>
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-0 -left-[0px] cursor-pointer"
-                      onClick={() => handleDocumentDelete(i)}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          ))}
         </div>
       </div>
-      {/* uploding image  */}
-      {imageUploading !== null && (
-        <div className="w-full ">
-          <div className="mb-4">
-            <div className="bg-stroke dark:bg-dark-3 relative h-4 w-full rounded-2xl">
-              <div
-                className="bg-primary absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white"
-                style={{ width: `${imageUploading}%` }}
-              >
-                {imageUploading}%
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <Input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleImageChange}
-        style={{ display: "none" }}
-        id="image-input"
-      />
-      <input
-        type="file"
-        accept="video/*"
-        onChange={handleVideoChange}
-        style={{ display: "none" }}
-        id="video-input"
-      />
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={handleDocumentChange}
-        style={{ display: "none" }}
-        id="document-input"
-      />
-
       <div className="grid grid-cols-7">
         <div className="col-span-2 grid grid-cols-2 gap-3">
           <div className="relative">
@@ -358,72 +420,16 @@ const AddPost = ({
               </Menu>
             </>
           </div>
-          <div className="col flex justify-between items-center gap-2">
-            <Tooltip title="Image" arrow placement="top-start">
-              <button
-                type="button"
-                onClick={() => document.getElementById("image-input").click()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-blue-400 hover:drop-shadow-lg hover:shadow-blue-600"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
-            <Tooltip title="Upload Video Under 30 MB" arrow placement="top-end">
-              <button
-                type="button"
-                onClick={() => document.getElementById("video-input").click()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-yellow-400 hover:drop-shadow-lg hover:shadow-blue-600"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
-            <Tooltip title="Upload pdf File" arrow placement="top-end">
-              <button
-                type="button"
-                onClick={() =>
-                  document.getElementById("document-input").click()
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-green-400 hover:drop-shadow-lg hover:shadow-blue-600"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
+          <div className="col-span-5 flex items-center gap-3 ml-3">
+            <VideoPdf
+              files={files}
+              setFiles={setFiles}
+              media={media}
+              setmedia={setmedia}
+              setImageUploading={setImageUploading}
+              setVideoUploading={setVideoUploading}
+              setPdfUploading={setPdfUploading}
+            />
           </div>
         </div>
       </div>
@@ -468,49 +474,37 @@ const AddPost = ({
                   ? "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
                   : "block w-full rounded-md border-[1px] border-rose-600  outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 placeholder:text-rose-600"
               )}
-              onChange={handleInputTowerChange}
-              onClick={() => setShowSuggestions(true)}
+              onChange={(e) => setTowersorBuildingName(e.target.value)}
               value={towersorBuildingName}
               placeholder={
                 towersorBuildingNameError === ""
                   ? "Building/Tower name..."
                   : towersorBuildingNameError
               }
+              onKeyDown={handleKeyDown}
             />
             <Tooltip title="Tower" arrow placement="top-start">
               <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
                 <GiTowerBridge className="text-blue-600 w-6 h-6" />
               </button>
             </Tooltip>
-            {showSuggestions && (
-              <div
-                onMouseLeave={() => setShowSuggestions(false)}
-                ref={containerRefTowerResult}
-                onScroll={handleScroll}
-                className="font-noto absolute top-full bg-white border shadow-lg max-w-[350px] pb-[11px] rounded-b-[10px] py-[10px] transition-all ease-in-out duration-500 opacity-100 z-50 rounded-[7px] h-[180px] overflow-auto"
-              >
-                <div>
-                  {filteredSuggestions?.length > 0 &&
-                    filteredSuggestions.map((tower, i) => (
-                      <p
-                        key={i}
-                        onClick={() => handleTowerChange(tower)}
-                        className="font-noto font-normal cursor-pointer text-[#95004A] text-[14px] leading-[36px] w-[360px] h-[30px] hover:bg-[#EBEBEB] flex items-center pt-[1px] pl-[20px] mb-[3px] left-0 right-0"
-                      >
-                        {tower.name}
-                      </p>
-                    ))}
-                  {isFetching === false && filteredSuggestions.length === 0 && (
-                    <p className="font-noto font-normal text-[#95004A] text-[14px] leading-[36px] w-[332px] h-[30px] flex items-center pt-[6px] pl-[20px] mb-[3px]">
-                      No tower found
-                    </p>
-                  )}
-                  {isFetching && (
-                    <p className="font-noto font-normal text-[#95004A] text-[14px] leading-[36px] w-[332px] h-[30px] flex items-center pt-[6px] pl-[20px] mb-[3px]">
-                      Loading...
-                    </p>
-                  )}
-                </div>
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 z-20">
+                {filteredSuggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className={clsx(
+                      "px-3 py-1 cursor-pointer",
+                      index === activeSuggestionIndex ? "bg-gray-200" : ""
+                    )}
+                    onMouseDown={() => {
+                      setTowersorBuildingName(suggestion);
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
               </div>
             )}
           </div>

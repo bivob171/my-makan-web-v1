@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import AgentComment from "./AgentComment";
 
 export const AgentPostDetailsPage = () => {
   return (
@@ -207,64 +210,7 @@ export const AgentPostDetailsPage = () => {
                 </a>
               </div>
             </div>
-            <div className="blog-comment-form">
-              <h3 className="item-title">Leave a Comment</h3>
-              <form>
-                <div className="row gutters-20">
-                  <div className="col-lg-4 form-group">
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      placeholder="Name"
-                    />
-                  </div>
-                  <div className="col-lg-4 form-group">
-                    <input
-                      type="email"
-                      name="email"
-                      className="form-control"
-                      placeholder="E-mail"
-                      style={{
-                        backgroundImage: 'url("data:image/png',
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: 20,
-                        backgroundPosition: "97% center",
-                        cursor: "auto",
-                      }}
-                      data-temp-mail-org={0}
-                    />
-                  </div>
-                  <div className="col-lg-4 form-group">
-                    <input
-                      type="text"
-                      name="website"
-                      className="form-control"
-                      placeholder="website"
-                    />
-                  </div>
-                  <div className="col-lg-12 form-group">
-                    <textarea
-                      name="message"
-                      id="message"
-                      className="form-control textarea"
-                      placeholder="Comments"
-                      cols={30}
-                      rows={7}
-                      defaultValue={""}
-                    />
-                  </div>
-                  <div className="col-lg-12 form-group">
-                    <input
-                      type="submit"
-                      className="submit-btn"
-                      name="post-comment"
-                      defaultValue="Post Comment"
-                    />
-                  </div>
-                </div>
-              </form>
-            </div>
+            <AgentComment />
           </div>
         </div>
         <div className="realated-blog">
