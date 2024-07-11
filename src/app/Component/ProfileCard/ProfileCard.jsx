@@ -13,7 +13,6 @@ export const ProfileCard = () => {
     PrivateRouteContext();
 
   const [totalPoset, setTotalPost] = useState();
-  console.log(totalPoset);
   const dateStr = user?.createdAt;
 
   const dateObj = new Date(dateStr);
@@ -149,7 +148,7 @@ export const ProfileCard = () => {
           <li>
             <a href="#">
               <span className="item-numbe text-[#525252] font-bold ">
-                {totalPoset.totalPosts}
+                {totalPoset?.totalPosts}
               </span>{" "}
               <br />
               <span className="item-tex text-[#9e9faf] font-semibold text-[11px]">
@@ -170,7 +169,7 @@ export const ProfileCard = () => {
             <a href="#">
               <span className="item-numbe text-[#525252] font-bold">
                 {" "}
-                {totalPoset.sponsoredPosts}
+                {totalPoset?.sponsoredPosts}
               </span>
 
               <br />
@@ -234,7 +233,7 @@ export const ProfileCard = () => {
                 {user?.country === null ? (
                   <Link href="/user/profile/about">
                     <p className="-mb-0 text-[14px] text-blue-500 text-opacity-80 font-semibold">
-                      Add country
+                      Add Country
                     </p>
                   </Link>
                 ) : (

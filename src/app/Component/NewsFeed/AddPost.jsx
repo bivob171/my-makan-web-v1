@@ -16,6 +16,7 @@ import { MdOutlineSquareFoot } from "react-icons/md";
 import { GiTowerBridge } from "react-icons/gi";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import VideoPdf from "./VideoPdf";
+import axios from "axios";
 const AddPost = ({
   setTitle,
   title,
@@ -83,40 +84,67 @@ const AddPost = ({
   };
 
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
-
-  const towerNames = [
-    "Empire State Building",
-    "Burj Khalifa",
-    "Shanghai Tower",
-    "Eiffel Tower",
-    "CN Tower",
-  ];
-
+  const [selectedTower, setSelectedTower] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const containerRefTowerResult = useRef(null);
   useEffect(() => {
-    const filtered = towersorBuildingName
-      ? towerNames.filter((name) =>
-          name.toLowerCase().includes(towersorBuildingName.toLowerCase())
-        )
-      : [];
-    setFilteredSuggestions(filtered);
-    setShowSuggestions(filtered.length > 0);
-    setActiveSuggestionIndex(0);
-  }, [towersorBuildingName]);
+    fetchTower();
+  }, [search, page]);
+  const fetchTower = async () => {
+    setIsFetching(true);
+    try {
+      const response = await axios.get(
+        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
+        {
+          params: {
+            search,
+            page,
+            limit,
+          },
+        }
+      );
+      const newTower = response.data;
+      setHasMore(newTower.length === limit);
+      setFilteredSuggestions((prevTower) => {
+        return page === 1 ? newTower : [...prevTower, ...newTower];
+      });
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "ArrowDown") {
-      if (activeSuggestionIndex < filteredSuggestions.length - 1) {
-        setActiveSuggestionIndex(activeSuggestionIndex + 1);
-      }
-    } else if (e.key === "ArrowUp") {
-      if (activeSuggestionIndex > 0) {
-        setActiveSuggestionIndex(activeSuggestionIndex - 1);
-      }
-    } else if (e.key === "Enter") {
-      setTowersorBuildingName(filteredSuggestions[activeSuggestionIndex]);
-      setShowSuggestions(false);
+  const handleInputTowerChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearch(searchTerm);
+    setSelectedTower(searchTerm);
+    setTowersorBuildingName(searchTerm);
+    setPage(1); // Reset to first page on search change
+    setFilteredSuggestions([]); // Clear current companies
+    setHasMore(true); // Reset hasMore when search changes
+  };
+
+  const handleTowerChange = (tower) => {
+    setSelectedTower(tower.name);
+    setTowersorBuildingName(tower.name);
+    setShowSuggestions(false);
+  };
+
+  const handleScroll = () => {
+    const container = containerRefTowerResult.current;
+    if (
+      container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 5 &&
+      !isFetching &&
+      hasMore
+    ) {
+      setPage((prevPage) => prevPage + 1); // Increment page when user scrolls to the bottom
     }
   };
 
@@ -476,37 +504,49 @@ const AddPost = ({
                   ? "block w-full rounded-md border-[1px] outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 text-[#444]"
                   : "block w-full rounded-md border-[1px] border-rose-600  outline-1 outline-[#999] bg-white py-1.5 px-3 text-sm/6 placeholder:text-rose-600"
               )}
-              onChange={(e) => setTowersorBuildingName(e.target.value)}
+              onChange={handleInputTowerChange}
+              onClick={() => setShowSuggestions(true)}
               value={towersorBuildingName}
               placeholder={
                 towersorBuildingNameError === ""
                   ? "Building/Tower name..."
                   : towersorBuildingNameError
               }
-              onKeyDown={handleKeyDown}
             />
             <Tooltip title="Tower" arrow placement="top-start">
               <button className="absolute top-1/2 right-2 z-30 transform -translate-y-1/2">
                 <GiTowerBridge className="text-blue-600 w-6 h-6" />
               </button>
             </Tooltip>
-            {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 z-20">
-                {filteredSuggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className={clsx(
-                      "px-3 py-1 cursor-pointer",
-                      index === activeSuggestionIndex ? "bg-gray-200" : ""
-                    )}
-                    onMouseDown={() => {
-                      setTowersorBuildingName(suggestion);
-                      setShowSuggestions(false);
-                    }}
-                  >
-                    {suggestion}
-                  </div>
-                ))}
+            {showSuggestions && (
+              <div
+                onMouseLeave={() => setShowSuggestions(false)}
+                ref={containerRefTowerResult}
+                onScroll={handleScroll}
+                className="font-noto absolute top-full bg-white border shadow-lg max-w-[350px] pb-[11px] rounded-b-[10px] py-[10px] transition-all ease-in-out duration-500 opacity-100 z-50 rounded-[7px] h-[180px] overflow-auto"
+              >
+                <div>
+                  {filteredSuggestions?.length > 0 &&
+                    filteredSuggestions.map((tower, i) => (
+                      <p
+                        key={i}
+                        onClick={() => handleTowerChange(tower)}
+                        className="font-noto font-normal cursor-pointer text-[#95004A] text-[14px] leading-[36px] w-[360px] h-[30px] hover:bg-[#EBEBEB] flex items-center pt-[1px] pl-[20px] mb-[3px] left-0 right-0"
+                      >
+                        {tower.name}
+                      </p>
+                    ))}
+                  {isFetching === false && filteredSuggestions.length === 0 && (
+                    <p className="font-noto font-normal text-[#95004A] text-[14px] leading-[36px] w-[332px] h-[30px] flex items-center pt-[6px] pl-[20px] mb-[3px]">
+                      No tower found
+                    </p>
+                  )}
+                  {isFetching && (
+                    <p className="font-noto font-normal text-[#95004A] text-[14px] leading-[36px] w-[332px] h-[30px] flex items-center pt-[6px] pl-[20px] mb-[3px]">
+                      Loading...
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
