@@ -10,22 +10,26 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 
 const BuyerMyAllPosts = () => {
-  const { user, setRender, render } = PrivateRouteContext();
+  const { user } = PrivateRouteContext();
+  const myRole = user?.role;
+  const myId = user?._id;
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(100);
+  const [role, setRole] = useState("buyer");
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
-  const userId = user?._id;
-  const getAllPosts = async () => {
+  const [like, setlike] = useState(true);
+  const getAllPosts = async (token, myId) => {
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
-      url += `userId=${userId}&`;
+      url += `userId=${myId}&`;
+      url += `role=${role}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -40,7 +44,13 @@ const BuyerMyAllPosts = () => {
       // if (userId !== "") url += `&userId=${userId}`;
       // if (doctorId !== "") url += `&doctorId=${doctorId}`;
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -59,8 +69,10 @@ const BuyerMyAllPosts = () => {
   };
 
   useEffect(() => {
-    getAllPosts();
-  }, [sortOrder, sortBy, limit, page, userId]);
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    getAllPosts(token, myId);
+  }, [sortOrder, sortBy, limit, page, like, myId]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -98,9 +110,8 @@ const BuyerMyAllPosts = () => {
     setLimit((prevLimit) => prevLimit + 100);
   };
 
-  const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -126,7 +137,7 @@ const BuyerMyAllPosts = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-user/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -156,7 +167,7 @@ const BuyerMyAllPosts = () => {
     <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
-          <div className="">
+          <div>
             {loading && (
               <div>
                 <PostLodaing />
@@ -173,6 +184,7 @@ const BuyerMyAllPosts = () => {
                   const {
                     role,
                     userId,
+                    agentId,
                     createdAt,
                     location,
                     tags,
@@ -181,7 +193,10 @@ const BuyerMyAllPosts = () => {
                     comment,
                     likedBy,
                   } = item;
-                  const hasId = likedBy.some((id) => id === myId);
+
+                  const userinfo = role === "agent" ? agentId : userId;
+                  const hasId = likedBy.some((user) => user._id === myId);
+
                   const formatDate = (isoString) => {
                     const date = new Date(isoString);
 
@@ -217,38 +232,51 @@ const BuyerMyAllPosts = () => {
                       key={i}
                       className="w-full h-auto bg-white rounded-[15px] py-[25px] "
                     >
-                      <div>
-                        <div className="flex justify-between px-[15px]">
+                      <div className="pt-2">
+                        <div className="flex justify-between px-[15px] ">
                           <div className="flex gap-x-[15px] items-center h-[45px] ">
                             <div className="mb-[17px]">
-                              <div className=" relative w-[40px] h-[40px]">
+                              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
                                 <div>
                                   <Image
                                     width={40}
                                     height={40}
                                     alt="img"
-                                    src={userId?.image}
-                                    className="w-[40px] h-[40px] rounded-full"
+                                    src={userinfo?.image}
+                                    className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full"
                                   />
                                 </div>
-                                <div className="absolute bottom-[2px] right-0 bg-white w-[10px] h-[10px] rounded-full flex items-center justify-center">
+                                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center">
                                   <Image
                                     width={8}
                                     height={8}
                                     alt=""
-                                    className="pl-[]"
+                                    className="pl-[] w-full h-full"
                                     src="/homeCard/active.png"
                                   />
                                 </div>
                               </div>
                             </div>
                             <div>
-                              <div className=" -mb-[20px] ">
+                              <div className=" -mb-[20px] md:-mb-4 ">
                                 <div className="flex gap-x-[8px] items-center">
-                                  <p className="text-[0.875rem] text-[#333335] font-semibold">
-                                    {userId?.fullName}{" "}
-                                  </p>
-
+                                  {item.role === "buyer" ? (
+                                    <>
+                                      {userinfo?._id === myId ? (
+                                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                          {userinfo?.fullName}
+                                        </p>
+                                      ) : (
+                                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                                          Hidden Name{" "}
+                                        </p>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                      {userinfo?.fullName}
+                                    </p>
+                                  )}
                                   <div className="mb-[5px]">
                                     <Image
                                       width={15}
@@ -259,7 +287,7 @@ const BuyerMyAllPosts = () => {
                                   </div>
                                   <div className="flex items-center gap-x-[5px] mt-[5px]">
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                      {userId?.avgrating}
+                                      {userinfo?.avgrating}
                                     </p>
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                       <GoStarFill />
@@ -267,17 +295,22 @@ const BuyerMyAllPosts = () => {
                                   </div>
                                 </div>
                               </div>
-                              <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                From{" "}
-                                <span className="text-[#E6533C]">
-                                  {" "}
-                                  {userId?.country}
-                                </span>
-                              </p>
-
+                              {item.role === "buyer" ? (
+                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                                  Buyer From{" "}
+                                  <span className="text-[#E6533C]">
+                                    {" "}
+                                    {userinfo?.country}
+                                  </span>
+                                </p>
+                              ) : (
+                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                                  {userinfo?.companyName}
+                                </p>
+                              )}
                               <div className="flex flex-wrap items-center mt-[2px] ">
                                 <div>
-                                  <p className="text-[#8C9097] text-[0.625rem]">
+                                  <p className="text-[#8C9097] text-[0.625rem] md:text-[0.8rem]">
                                     {formatDate(createdAt)}
                                   </p>
                                 </div>
@@ -295,7 +328,7 @@ const BuyerMyAllPosts = () => {
                                     {location?.city}
                                   </p>
                                 </div>
-                                <div className="w-[10px] h-[5px] mb-[16px] ml-[4px]">
+                                <div className="w-full max-w-[14px] h-auto mb-[16px] ml-[4px]">
                                   <Image
                                     width={40}
                                     height={2}
@@ -307,47 +340,35 @@ const BuyerMyAllPosts = () => {
                               </div>
                             </div>
                           </div>
-                          <div>
-                            <p className="leading-normal text-[0.825rem] text-red  ps-4 font-semibold -mb-[1px]">
+                          <div className="text-end">
+                            <p className="leading-normal text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px]">
                               {item?.postType}
                             </p>
-                            <span className="leading-normal text-[0.755rem] sm:block align-right text-end text-black font-medium">
-                              For {item.for}
+                            <span className="leading-normal text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end text-black font-medium">
+                              For {item?.for}
                             </span>
                           </div>
                         </div>
                         <div className="h-[0.5px] w-full bg-[#F0F1F7] mt-[20px]"></div>
                         <div className="px-[15px] mt-[7px]">
                           <div>
-                            <p className="font-inter text-[0.875rem] text-[#333335] font-semibold -mb-[0px] leading-[40px]">
+                            <p className="font-inter text-[0.875rem] md:text-[1.5rem] text-[#333335] font-semibold mb-2 leading-[40px]">
                               {item?.title}
                             </p>
-                            {item?.description.length > 132 ? (
-                              <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
+                            {item?.description?.length > 132 ? (
+                              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal leading-[20px]">
                                 {item?.description.slice(0, 133)}...
-                                <Link
-                                  href={`${
-                                    role === "agent"
-                                      ? "/user/agent-post-details"
-                                      : "/user/buyer-post-details"
-                                  }/${_id}`}
-                                >
-                                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] font-medium cursor-pointer font-inter">
+                                <Link href={`${"/user/post-details"}/${_id}`}>
+                                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
                                     see more
                                   </span>
                                 </Link>
                               </p>
                             ) : (
-                              <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
+                              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
                                 {item?.description}...
-                                <Link
-                                  href={`${
-                                    role === "agent"
-                                      ? "/user/agent-post-details"
-                                      : "/user/buyer-post-details"
-                                  }/${_id}`}
-                                >
-                                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] font-medium cursor-pointer font-inter">
+                                <Link href={`${"/user/post-details"}/${_id}`}>
+                                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
                                     see more
                                   </span>
                                 </Link>
@@ -356,31 +377,31 @@ const BuyerMyAllPosts = () => {
                           </div>
                         </div>
                         <div className="px-[20px] flex items-center justify-between">
-                          <div className="flex flex-wrap gap-x-[5px]">
-                            {tags.map((tag, index) => {
+                          <div className="flex flex-wrap gap-x-[8px] mt-2">
+                            {tags?.map((tag, index) => {
                               const { bgColor, textColor } =
                                 getTagStyles(index);
                               return (
                                 <button
                                   key={index}
-                                  className="h-[17px] px-[7px] rounded flex items-center"
+                                  className="!py-[0px] px-[7px] md:px-4 rounded "
                                   style={{ backgroundColor: bgColor }}
                                 >
-                                  <p
-                                    className="text-[10px] font-medium font-inter pt-[9px]"
+                                  <span
+                                    className="text-[10px] md:text-[14px] font-medium font-inter"
                                     style={{ color: textColor }}
                                   >
                                     {tag}
-                                  </p>
+                                  </span>
                                 </button>
                               );
                             })}
                           </div>
                           <div>
-                            <button className="bg-[#F2EEFC] h-[25px] px-[13px] rounded flex items-center">
-                              <p className="text-[15px] font-medium font-inter h-[17px]  text-[#26BF94] -mb-[1px]">
+                            <button className="bg-[#F2EEFC] p-[13px] rounded flex items-center">
+                              <p className="text-[15px] font-medium font-inter text-[#26BF94] -mb-[1px]">
                                 {" "}
-                                <FaRegComment />
+                                <FaRegComment className="w-4 h-4 md:w-5 md:h-5" />
                               </p>
                             </button>
                           </div>
@@ -394,37 +415,39 @@ const BuyerMyAllPosts = () => {
                                 height={18}
                                 src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
                                 alt="..."
-                                className="w-[18px] h-[18px] rounded-full border-2 border-blueGray-50 shadow hover:z-50 hover:-mt-[2.5px]"
+                                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow hover:z-50 hover:-mt-[2.5px]"
                               ></Image>
                               <Image
                                 width={18}
                                 height={18}
                                 src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
                                 alt="..."
-                                className="w-[18px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
+                                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
                               ></Image>
                               <Image
                                 width={18}
                                 height={18}
                                 src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
                                 alt="..."
-                                className="w-[18px] h-[18px] rounded-full border-2 border-blueGray-50 hover:z-50 hover:-mt-[2.5px] shadow -ml-[6px]"
+                                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 hover:z-50 hover:-mt-[2.5px] shadow -ml-[6px]"
                               ></Image>
                               <Image
                                 width={18}
                                 height={18}
                                 src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
                                 alt="..."
-                                className="w-[18px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
+                                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
                               ></Image>
-                              <div className="w-[18px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-50 hover:-mt-[2.5px] flex items-center justify-center">
+                              <div className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-50 hover:-mt-[2.5px] flex items-center justify-center">
                                 <p className="text-[8px] -mb-[1px] text-white font-normal">
                                   +2
                                 </p>
                               </div>
                             </div>
                             <div>
-                              <p className="-mb-0 text-[11px]">+65 Matched</p>
+                              <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+                                +65 Matched
+                              </p>
                             </div>
                           </div>
                           <div className="flex gap-x-[7px] items-center flex-wrap">
@@ -432,7 +455,7 @@ const BuyerMyAllPosts = () => {
                               {hasId === true ? (
                                 <p
                                   onClick={() => giveUnLike(_id)}
-                                  className="text-[#845ADF]  cursor-pointer   text-[11px] -mb-0 mr-[2px]"
+                                  className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
                                 >
                                   {" "}
                                   <BiSolidLike />
@@ -440,23 +463,23 @@ const BuyerMyAllPosts = () => {
                               ) : (
                                 <p
                                   onClick={() => giveLike(_id)}
-                                  className=" cursor-pointer text-[11px] -mb-0 mr-[2px]"
+                                  className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
                                 >
                                   {" "}
                                   <BiSolidLike />
                                 </p>
                               )}
-                              <p className="text-[#845ADF] font-medium text-[11px] -mb-0">
+                              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0">
                                 {likeCount === 0 ? "00" : likeCount}
                               </p>
                             </div>
                             <div className="flex items-center">
-                              <p className="text-[#AFB2B7] text-[11px] -mb-0 mr-[2px]">
+                              <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
                                 {" "}
                                 <BiCommentDetail />
                               </p>
-                              <p className="text-[#AFB2B7] font-medium text-[11px] mb-[1px]">
-                                {comment.length === 0 ? "00" : comment.length}{" "}
+                              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px]">
+                                {comment?.length === 0 ? "00" : comment?.length}{" "}
                               </p>
                             </div>
                             <div>
@@ -471,12 +494,12 @@ const BuyerMyAllPosts = () => {
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
                                     {item.type}
                                   </p>
-                                  <p className="text-[#F5B849] text-[8px] font-semibold -mb-[1px]">
+                                  <p className="text-[#F5B849] text-[8px] md:text-[12px] font-semibold -mb-[1px]">
                                     <GoStarFill />
                                   </p>
                                 </button>
                               ) : (
-                                <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
+                                <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center">
                                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[8px] font-semibold">
                                     {item.type}
                                   </p>

@@ -20,6 +20,7 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const PostSection = ({ isOpen, setIsOpen }) => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -83,7 +84,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
   const [verifyPopup, setVerifyPopup] = useState(false);
-
+  const router = useRouter();
   // live error manage
   useEffect(() => {
     if (title !== "") {
@@ -173,8 +174,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         description: description,
         for: forPost,
         media: media,
-        video: video,
-        doc: propertyDocument,
         tags: tags,
         location: {
           lat: lata,
@@ -201,12 +200,12 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      let apiUrl;
-      if (user.role === "agent") {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
-      } else {
-        apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
-      }
+      const apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/allposts/post";
+      // if (user.role === "agent") {
+      //   apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+      // } else {
+      //   apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+      // }
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -220,6 +219,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
+        router.push("/profile/posts");
         toast.success("Post submitted successfully!");
         setIsOpen(false);
       }

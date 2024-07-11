@@ -7,30 +7,26 @@ import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
+import { PostLodaing } from "../PostLodaing/PostLodaing";
 
-const BuyerMyAvailablePosts = () => {
+export const RequiredTotalPost = () => {
   const { user } = PrivateRouteContext();
   const myRole = user?.role;
-  const myId = user?._id;
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [role, setRole] = useState("buyer");
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
-  const [postType, setPostType] = useState("Available");
-  const getAllPosts = async (token, myId) => {
+  const [postType, setPostType] = useState("Required");
+  const getAllPosts = async (token) => {
     try {
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
-      url += `userId=${myId}&`;
-      url += `role=${role}&`;
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -73,8 +69,8 @@ const BuyerMyAvailablePosts = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllPosts(token, myId);
-  }, [sortOrder, sortBy, limit, page, like, myId]);
+    getAllPosts(token);
+  }, [sortOrder, sortBy, limit, page, like]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -112,6 +108,7 @@ const BuyerMyAvailablePosts = () => {
     setLimit((prevLimit) => prevLimit + 100);
   };
 
+  const myId = user?._id;
   const giveLike = async (id) => {
     const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
@@ -533,5 +530,3 @@ const BuyerMyAvailablePosts = () => {
     </div>
   );
 };
-
-export default BuyerMyAvailablePosts;

@@ -6,41 +6,49 @@ import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
-import { PostLodaing } from "../PostLodaing/PostLodaing";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { PostLodaing } from "../PostLodaing/PostLodaing";
 
 const AllPostAgent = () => {
   const { user } = PrivateRouteContext();
+  const myRole = user?.role;
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(100);
+  const [role, setRole] = useState("agent");
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
-
-  const getAllPosts = async () => {
+  const getAllPosts = async (token) => {
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
+      url += `role=${role}&`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
-      console.log(url);
+
       // Add other query parameters conditionally based on state variables
       // if (status !== "") url += `&status=${status}`;
       // if (packageExpired !== "") url += `&packageExpired=${packageExpired}`;
       // if (type !== "") url += `&type=${type}`;
       // if (planId !== "") url += `&planId=${planId}`;
       // if (packageId !== "") url += `&packageId=${packageId}`;
-      // if (agentId !== "") url += `&agentId=${agentId}`;
+      // if (userId !== "") url += `&userId=${userId}`;
       // if (doctorId !== "") url += `&doctorId=${doctorId}`;
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -59,8 +67,11 @@ const AllPostAgent = () => {
   };
 
   useEffect(() => {
-    getAllPosts();
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    getAllPosts(token);
   }, [sortOrder, sortBy, limit, page, like]);
+
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
     if (
@@ -79,6 +90,7 @@ const AllPostAgent = () => {
     return () =>
       containerM.removeEventListener("scroll", handleScrollPostResult);
   }, [isFetching, hasMore]);
+
   const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
   const handelOldOrNewPostDropdown = () => {
     setOldOrNewPostDropdown(!oldOrNewPostDropdown);
@@ -98,7 +110,7 @@ const AllPostAgent = () => {
 
   const myId = user?._id;
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/like`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -124,7 +136,7 @@ const AllPostAgent = () => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/${id}/unlike`;
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);
@@ -154,7 +166,7 @@ const AllPostAgent = () => {
     <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
-          <div className="">
+          <div>
             {loading && (
               <div>
                 <PostLodaing />
@@ -170,6 +182,7 @@ const AllPostAgent = () => {
                 {allPosts?.map((item, i) => {
                   const {
                     role,
+                    userId,
                     agentId,
                     createdAt,
                     location,
@@ -179,7 +192,10 @@ const AllPostAgent = () => {
                     comment,
                     likedBy,
                   } = item;
-                  const hasId = likedBy.some((id) => id === myId);
+
+                  const userinfo = role === "agent" ? agentId : userId;
+                  const hasId = likedBy.some((user) => user._id === myId);
+
                   const formatDate = (isoString) => {
                     const date = new Date(isoString);
 
@@ -225,7 +241,7 @@ const AllPostAgent = () => {
                                     width={40}
                                     height={40}
                                     alt="img"
-                                    src={agentId?.image}
+                                    src={userinfo?.image}
                                     className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full"
                                   />
                                 </div>
@@ -244,12 +260,20 @@ const AllPostAgent = () => {
                               <div className=" -mb-[20px] md:-mb-4 ">
                                 <div className="flex gap-x-[8px] items-center">
                                   {item.role === "buyer" ? (
-                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
-                                    </p>
+                                    <>
+                                      {userinfo?._id === myId ? (
+                                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                          {userinfo?.fullName}
+                                        </p>
+                                      ) : (
+                                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                                          Hidden Name{" "}
+                                        </p>
+                                      )}
+                                    </>
                                   ) : (
                                     <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                                      {agentId?.fullName}
+                                      {userinfo?.fullName}
                                     </p>
                                   )}
                                   <div className="mb-[5px]">
@@ -262,7 +286,7 @@ const AllPostAgent = () => {
                                   </div>
                                   <div className="flex items-center gap-x-[5px] mt-[5px]">
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                      {agentId?.avgrating}
+                                      {userinfo?.avgrating}
                                     </p>
                                     <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                       <GoStarFill />
@@ -275,12 +299,12 @@ const AllPostAgent = () => {
                                   Buyer From{" "}
                                   <span className="text-[#E6533C]">
                                     {" "}
-                                    {agentId?.country}
+                                    {userinfo?.country}
                                   </span>
                                 </p>
                               ) : (
                                 <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                                  Rapid Properties
+                                  {userinfo?.companyName}
                                 </p>
                               )}
                               <div className="flex flex-wrap items-center mt-[2px] ">
@@ -333,13 +357,7 @@ const AllPostAgent = () => {
                             {item?.description?.length > 132 ? (
                               <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal leading-[20px]">
                                 {item?.description.slice(0, 133)}...
-                                <Link
-                                  href={`${
-                                    role === "agent"
-                                      ? "/user/agent-post-details"
-                                      : "/user/buyer-post-details"
-                                  }/${_id}`}
-                                >
+                                <Link href={`${"/user/post-details"}/${_id}`}>
                                   <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
                                     see more
                                   </span>
@@ -348,13 +366,7 @@ const AllPostAgent = () => {
                             ) : (
                               <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
                                 {item?.description}...
-                                <Link
-                                  href={`${
-                                    role === "agent"
-                                      ? "/user/agent-post-details"
-                                      : "/user/buyer-post-details"
-                                  }/${_id}`}
-                                >
+                                <Link href={`${"/user/post-details"}/${_id}`}>
                                   <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
                                     see more
                                   </span>
@@ -501,6 +513,7 @@ const AllPostAgent = () => {
                 })}
               </div>
             )}
+
             {isFetching && (
               <div className="mb-[20px] mt-[40px] text-center">
                 <p>Loading more Post...</p>

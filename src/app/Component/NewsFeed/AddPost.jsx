@@ -151,179 +151,181 @@ const AddPost = ({
         />
       </div>
       <div>
-        <div
-          className="mt-10 p-10 flex justify-start items-center gap-2 overflow-x-auto scrollbar scrollbar-thumb-blue-500 scrollbar-track-blue-200"
-          ref={elementRef}
-        >
-          {sortedFiles.map((file, index) => (
-            <div key={index} className="relative flex-shrink-0">
-              {file.type === "image" && (
-                <div className="relative flex-shrink-0">
-                  <Image
-                    width={1000}
-                    height={120}
-                    className="w-auto h-[80px] rounded-"
-                    src={file.url}
-                    alt={`Uploaded ${index}`}
-                  />
-                  <CgClose
-                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
-                    onClick={() => handleFileDelete(file._id)}
-                  />
-                  {imageUploading !== null && (
-                    <div class="absolute inset-0 flex items-center justify-center">
-                      <div class="relative size-5">
-                        <svg
-                          class="size-full"
-                          width="36"
-                          height="36"
-                          viewBox="0 0 36 36"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="18"
-                            cy="18"
-                            r="16"
-                            fill="none"
-                            class="stroke-current text-gray-200 dark:text-neutral-700"
-                            stroke-width="2"
-                          ></circle>
-                          <g class="origin-center -rotate-90 transform">
+        {sortedFiles.length > 0 && (
+          <div
+            className="mt-[10px] p-[10px] flex justify-start items-center gap-2 overflow-x-auto scrollbar scrollbar-thumb-blue-500 scrollbar-track-blue-200"
+            ref={elementRef}
+          >
+            {sortedFiles.map((file, index) => (
+              <div key={index} className="relative flex-shrink-0">
+                {file.type === "image" && (
+                  <div className="relative flex-shrink-0">
+                    <Image
+                      width={1000}
+                      height={120}
+                      className="w-auto h-[80px] rounded-"
+                      src={file.url}
+                      alt={`Uploaded ${index}`}
+                    />
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                      onClick={() => handleFileDelete(file._id)}
+                    />
+                    {imageUploading !== null && (
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="relative size-5">
+                          <svg
+                            class="size-full"
+                            width="36"
+                            height="36"
+                            viewBox="0 0 36 36"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
                             <circle
                               cx="18"
                               cy="18"
                               r="16"
                               fill="none"
-                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              class="stroke-current text-gray-200 dark:text-neutral-700"
                               stroke-width="2"
-                              stroke-dasharray="100"
-                              stroke-dashoffset="75"
                             ></circle>
-                          </g>
-                        </svg>
-                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
-                            {imageUploading}%
-                          </span>
+                            <g class="origin-center -rotate-90 transform">
+                              <circle
+                                cx="18"
+                                cy="18"
+                                r="16"
+                                fill="none"
+                                class="stroke-current text-blue-600 dark:text-blue-500"
+                                stroke-width="2"
+                                stroke-dasharray="100"
+                                stroke-dashoffset="75"
+                              ></circle>
+                            </g>
+                          </svg>
+                          <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                            <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                              {imageUploading}%
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              {file.type === "video" && (
-                <div className="relative flex-shrink-0">
-                  <video
-                    width="200"
-                    className="rounded-md cursor-pointer w-auto h-[80px]"
-                    ref={(el) => (videoRefs.current[index] = el)}
-                    onClick={() => handleVideoClick(index)}
-                  >
-                    <source src={file.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  <CgClose
-                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
-                    onClick={() => handleFileDelete(file._id)}
-                  />
-                  {videoUploading !== null && (
-                    <div class="absolute inset-0 flex items-center justify-center">
-                      <div class="relative size-5">
-                        <svg
-                          class="size-full"
-                          width="36"
-                          height="36"
-                          viewBox="0 0 36 36"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="18"
-                            cy="18"
-                            r="16"
-                            fill="none"
-                            class="stroke-current text-gray-200 dark:text-neutral-700"
-                            stroke-width="2"
-                          ></circle>
-                          <g class="origin-center -rotate-90 transform">
+                    )}
+                  </div>
+                )}
+                {file.type === "video" && (
+                  <div className="relative flex-shrink-0">
+                    <video
+                      width="200"
+                      className="rounded-md cursor-pointer w-auto h-[80px]"
+                      ref={(el) => (videoRefs.current[index] = el)}
+                      onClick={() => handleVideoClick(index)}
+                    >
+                      <source src={file.url} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                      onClick={() => handleFileDelete(file._id)}
+                    />
+                    {videoUploading !== null && (
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="relative size-5">
+                          <svg
+                            class="size-full"
+                            width="36"
+                            height="36"
+                            viewBox="0 0 36 36"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
                             <circle
                               cx="18"
                               cy="18"
                               r="16"
                               fill="none"
-                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              class="stroke-current text-gray-200 dark:text-neutral-700"
                               stroke-width="2"
-                              stroke-dasharray="100"
-                              strokeDashoffset={100 - videoUploading}
                             ></circle>
-                          </g>
-                        </svg>
-                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
-                            {videoUploading}%
-                          </span>
+                            <g class="origin-center -rotate-90 transform">
+                              <circle
+                                cx="18"
+                                cy="18"
+                                r="16"
+                                fill="none"
+                                class="stroke-current text-blue-600 dark:text-blue-500"
+                                stroke-width="2"
+                                stroke-dasharray="100"
+                                strokeDashoffset={100 - videoUploading}
+                              ></circle>
+                            </g>
+                          </svg>
+                          <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                            <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                              {videoUploading}%
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              {file.type === "pdf" && (
-                <div className="relative flex-shrink-0">
-                  <iframe
-                    width={100}
-                    height={80}
-                    src={file.url}
-                    title={`PDF Viewer ${index}`}
-                    className="scroll-mr-0 rounded-md w-[110px] h-[80px]"
-                  ></iframe>
-                  <CgClose
-                    className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
-                    onClick={() => handleFileDelete(file._id)}
-                  />
-                  {pdfUploading !== null && (
-                    <div class="absolute inset-0 flex items-center justify-center">
-                      <div class="relative size-5">
-                        <svg
-                          class="size-full"
-                          width="36"
-                          height="36"
-                          viewBox="0 0 36 36"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="18"
-                            cy="18"
-                            r="16"
-                            fill="none"
-                            class="stroke-current text-gray-200 dark:text-neutral-700"
-                            stroke-width="2"
-                          ></circle>
-                          <g class="origin-center -rotate-90 transform">
+                    )}
+                  </div>
+                )}
+                {file.type === "pdf" && (
+                  <div className="relative flex-shrink-0">
+                    <iframe
+                      width={100}
+                      height={80}
+                      src={file.url}
+                      title={`PDF Viewer ${index}`}
+                      className="scroll-mr-0 rounded-md w-[110px] h-[80px]"
+                    ></iframe>
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute -top-1 -left-1 cursor-pointer"
+                      onClick={() => handleFileDelete(file._id)}
+                    />
+                    {pdfUploading !== null && (
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="relative size-5">
+                          <svg
+                            class="size-full"
+                            width="36"
+                            height="36"
+                            viewBox="0 0 36 36"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
                             <circle
                               cx="18"
                               cy="18"
                               r="16"
                               fill="none"
-                              class="stroke-current text-blue-600 dark:text-blue-500"
+                              class="stroke-current text-gray-200 dark:text-neutral-700"
                               stroke-width="2"
-                              stroke-dasharray="100"
-                              stroke-dashoffset="75"
                             ></circle>
-                          </g>
-                        </svg>
-                        <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                          <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
-                            {pdfUploading}%
-                          </span>
+                            <g class="origin-center -rotate-90 transform">
+                              <circle
+                                cx="18"
+                                cy="18"
+                                r="16"
+                                fill="none"
+                                class="stroke-current text-blue-600 dark:text-blue-500"
+                                stroke-width="2"
+                                stroke-dasharray="100"
+                                stroke-dashoffset="75"
+                              ></circle>
+                            </g>
+                          </svg>
+                          <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                            <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                              {pdfUploading}%
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-7">
         <div className="col-span-2 grid grid-cols-2 gap-3">

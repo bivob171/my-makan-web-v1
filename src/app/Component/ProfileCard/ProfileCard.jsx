@@ -2,20 +2,68 @@
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosStar, IoMdTimer } from "react-icons/io";
-import { FaCheckCircle, FaUser } from "react-icons/fa";
+import { FaCheckCircle, FaStar, FaUser } from "react-icons/fa";
 import { FaLocationDot, FaStarHalfStroke } from "react-icons/fa6";
 import { MdNavigateNext } from "react-icons/md";
+import { AiOutlineStar } from "react-icons/ai";
 export const ProfileCard = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
+
+  const [totalPoset, setTotalPost] = useState();
+  console.log(totalPoset);
   const dateStr = user?.createdAt;
 
   const dateObj = new Date(dateStr);
 
   const options = { year: "numeric", month: "short" };
   const formattedDate = dateObj.toLocaleDateString("en-US", options);
+
+  const ratingStar = Array.from({ length: 5 }, (e, i) => {
+    return (
+      <span key={i}>
+        {user?.avgrating > i ? (
+          <span className="flex gap-x-[3px] -mb-0 mt-[5px] text-[#F5B849]">
+            <FaStar />
+          </span>
+        ) : (
+          <span className="flex gap-x-[3px] -mb-0 mt-[5px] text-[#F5B849]">
+            <AiOutlineStar />
+          </span>
+        )}
+      </span>
+    );
+  });
+
+  const getAllPosts = async (token) => {
+    try {
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/my-post-length`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const allPostsList = await response.json();
+      setTotalPost(allPostsList);
+    } catch (error) {
+      console.error("Error fetching:", error);
+    }
+  };
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    getAllPosts(token);
+  }, []);
+
   return (
     <div className="mb-[20px]">
       <div className="widget widget-author max-w-[380px]">
@@ -89,22 +137,21 @@ export const ProfileCard = () => {
               : "flex justify-center -mt-[27px] "
           }`}
         >
-          <span className="flex gap-x-[3px] -mb-0 mt-[5px] text-[#F5B849]">
-            <IoIosStar />
-            <IoIosStar />
-            <IoIosStar />
-            <IoIosStar />
-            <FaStarHalfStroke />
-          </span>
+          <>{ratingStar}</>
           <p className=" text-[12px] text-[#F5B849]  font-medium ml-[5px]">
-            4.7{" "}
-            <span className="text-[#F5B849] font-normal ">( 300 reviews )</span>
+            {user?.avgrating}
+            <span className="text-[#F5B849] font-normal  ml-[5px]">
+              ( {user?.totalrating} reviews )
+            </span>
           </p>
         </div>
-        <ul className="author-statistics flex mt-[15px]">
+        <ul className="author-statistics flex justify-between mt-[15px] mb-[4px]">
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold ">30</span>{" "}
+              <span className="item-numbe text-[#525252] font-bold ">
+                {totalPoset.totalPosts}
+              </span>{" "}
+              <br />
               <span className="item-tex text-[#9e9faf] font-semibold text-[11px]">
                 Posts
               </span>
@@ -113,6 +160,7 @@ export const ProfileCard = () => {
           <li>
             <a href="#">
               <span className="item-numbe text-[#525252] font-bold ">2.4k</span>{" "}
+              <br />
               <span className="item-tex text-[#9e9faf] font-semibold text-[11px]">
                 Matched
               </span>
@@ -120,7 +168,11 @@ export const ProfileCard = () => {
           </li>
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold">12</span>{" "}
+              <span className="item-numbe text-[#525252] font-bold">
+                {" "}
+                {totalPoset.sponsoredPosts}
+              </span>
+
               <br />
               <span className=" whitespace-nowrap text-[#9e9faf] font-semibold text-[11px]">
                 Ads Posts
@@ -129,7 +181,7 @@ export const ProfileCard = () => {
           </li>
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold">1,125</span>{" "}
+              <span className="item-numbe text-[#525252] font-bold">1,125</span>
               <br />
               <span className="whitespace-nowrap text-[#9e9faf] font-semibold text-[11px]">
                 My Connect
@@ -179,9 +231,17 @@ export const ProfileCard = () => {
               </div>
               <div>
                 {" "}
-                <p className="-mb-0 text-[14px] text-[#323232CC] text-opacity-80 font-semibold">
-                  {user?.country}
-                </p>
+                {user?.country === null ? (
+                  <Link href="/user/profile/about">
+                    <p className="-mb-0 text-[14px] text-blue-500 text-opacity-80 font-semibold">
+                      Add country
+                    </p>
+                  </Link>
+                ) : (
+                  <p className="-mb-0 text-[14px] text-[#323232CC] text-opacity-80 font-semibold">
+                    {user?.country}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex justify-between items-center mb-[10px]">
