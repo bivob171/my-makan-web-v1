@@ -19,6 +19,7 @@ const nextConfig = {
       "platform-lookaside.fbsbx.com",
       "mymakan-image.s3.eu-north-1.amazonaws.com",
       "md-bayzid2.imgbb.com",
+      "mymakan-image.s3.amazonaws.com",
     ],
   },
   async redirects() {

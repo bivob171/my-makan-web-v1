@@ -8,6 +8,7 @@ import { createContext, useEffect, useState } from "react";
 const PrivateRouteContext = () => {
   const router = useRouter();
   const [render, setRender] = useState(false);
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

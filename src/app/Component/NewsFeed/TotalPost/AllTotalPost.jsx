@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -8,8 +8,10 @@ import Image from "next/image";
 import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "../PostLodaing/PostLodaing";
+import { PostLocationValueContext } from "@/Context/postValueContext";
 
 export const AllTotalPost = () => {
+  const { newsFeedRender } = useContext(PostLocationValueContext);
   const { user } = PrivateRouteContext();
   const myRole = user?.role;
   const [allPosts, setAllPosts] = useState([]);
@@ -30,7 +32,7 @@ export const AllTotalPost = () => {
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
-
+      console.log(url);
       // Add other query parameters conditionally based on state variables
       // if (status !== "") url += `&status=${status}`;
       // if (packageExpired !== "") url += `&packageExpired=${packageExpired}`;
@@ -68,7 +70,7 @@ export const AllTotalPost = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like]);
+  }, [sortOrder, sortBy, limit, page, like, newsFeedRender]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;

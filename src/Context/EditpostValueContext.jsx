@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export const PostLocationValueContext = createContext();
+export const EditPostLocationValueContext = createContext();
 
-const PostLocationValueProvider = ({ children }) => {
+const EditPostLocationValueProvider = ({ children }) => {
   const [lata, setLata] = useState("");
   const [lon, setLon] = useState("");
   const [formatted_address, setFormatted_address] = useState("");
@@ -28,9 +28,6 @@ const PostLocationValueProvider = ({ children }) => {
   const [propertyType, setPropertyType] = useState("Property Type");
   const [propertyTypeError, setPropertyTypeError] = useState("");
   const [parking, setParking] = useState("Parking");
-  const [image, setImage] = useState([]);
-  const [video, setVideo] = useState([]);
-  const [propertyDocument, setPropertyDocument] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagsError, setTagsError] = useState("");
   const [locationError, setLocationError] = useState("");
@@ -38,8 +35,37 @@ const PostLocationValueProvider = ({ children }) => {
   const [media, setmedia] = useState([]);
   const [files, setFiles] = useState([]);
   const [newsFeedRender, setNewsFeedRender] = useState(false);
+
+  // get the edit post
+
+  const [postId, setPostId] = useState();
+
+  useEffect(() => {
+    setSelectedType(postId?.type);
+    setTitle(postId?.title);
+    setDescription(postId?.description);
+    setPrice(postId?.price);
+    setSqft(postId?.sqft);
+    setPostType(postId?.postType);
+    setForPost(postId?.for);
+    setLata(postId?.location?.lat);
+    setLon(postId?.location?.lng);
+    setFormatted_address(postId?.location?.formatted_address);
+    setCountry(postId?.location?.country);
+    setState(postId?.location?.state);
+    setCity(postId?.location?.city);
+    setTowersorBuildingName(postId?.location?.towersorBuildingName);
+    setPropertyCategory(postId?.propertyCategory);
+    setPropertyType(postId?.propertyType);
+    setParking(postId?.parking);
+    setSellType(postId?.sellType);
+    setTags(postId?.tags);
+    setmedia(postId?.media);
+    setFiles(postId?.media);
+  }, [postId]);
+
   return (
-    <PostLocationValueContext.Provider
+    <EditPostLocationValueContext.Provider
       value={{
         media,
         setmedia,
@@ -89,12 +115,6 @@ const PostLocationValueProvider = ({ children }) => {
         setPropertyTypeError,
         parking,
         setParking,
-        image,
-        setImage,
-        video,
-        setVideo,
-        propertyDocument,
-        setPropertyDocument,
         tags,
         setTags,
         locationError,
@@ -107,11 +127,13 @@ const PostLocationValueProvider = ({ children }) => {
         setNewsFeedRender,
         files,
         setFiles,
+        setPostId,
+        postId,
       }}
     >
       {children}
-    </PostLocationValueContext.Provider>
+    </EditPostLocationValueContext.Provider>
   );
 };
 
-export default PostLocationValueProvider;
+export default EditPostLocationValueProvider;

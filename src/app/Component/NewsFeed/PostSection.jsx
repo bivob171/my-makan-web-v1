@@ -23,8 +23,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const PostSection = ({ isOpen, setIsOpen }) => {
-  const { isAuthenticated, loading, user, setRender, render, logOut } =
-    PrivateRouteContext();
+  const { user } = PrivateRouteContext();
   const {
     lata,
     setLata,
@@ -80,6 +79,10 @@ const PostSection = ({ isOpen, setIsOpen }) => {
     setLocationError,
     sellType,
     setSellType,
+    newsFeedRender,
+    setNewsFeedRender,
+    files,
+    setFiles,
   } = useContext(PostLocationValueContext);
   const [imageUploading, setImageUploading] = useState(null);
   const [currentPanel, setCurrentPanel] = useState(1);
@@ -117,7 +120,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
     propertyCategory,
     propertyType,
   ]);
-
   // post data
   const handleSubmit = async (event) => {
     try {
@@ -134,7 +136,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         setDescriptionError("Description is required.");
         hasError = true;
       } else {
-        setDescription("");
+        setDescriptionError("");
       }
       if (towersorBuildingName === "") {
         setTowersorBuildingNameError("Towers or Building Name is required.");
@@ -219,9 +221,10 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
-        router.push("/profile/posts");
+        router.push("/user/profile/posts");
         toast.success("Post submitted successfully!");
         setIsOpen(false);
+        setNewsFeedRender(!newsFeedRender);
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -349,6 +352,8 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                       propertyTypeName={propertyType}
                       media={media}
                       setmedia={setmedia}
+                      files={files}
+                      setFiles={setFiles}
                       tags={tags}
                       setTags={setTags}
                       setSellType={setSellType}

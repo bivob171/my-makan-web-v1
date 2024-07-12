@@ -1,5 +1,13 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  ArchiveBoxXMarkIcon,
+  ChevronDownIcon,
+  PencilIcon,
+  Square2StackIcon,
+  TrashIcon,
+} from "@heroicons/react/16/solid";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -8,9 +16,16 @@ import Image from "next/image";
 import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
+import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
+import { PostLocationValueContext } from "@/Context/postValueContext";
+import { EditPostSection } from "../PostEdit/EditPostSection";
+import { PostHiddenModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostHidden";
+import { PostDeleteModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostDeleteMOdal";
 
 const AgentMyRequiredPosts = () => {
   const { user } = PrivateRouteContext();
+  const { setPostId } = useContext(EditPostLocationValueContext);
+  const { newsFeedRender } = useContext(PostLocationValueContext);
   const myRole = user?.role;
   const myId = user?._id;
   const [allPosts, setAllPosts] = useState([]);
@@ -74,7 +89,7 @@ const AgentMyRequiredPosts = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token, myId);
-  }, [sortOrder, sortBy, limit, page, like, myId]);
+  }, [sortOrder, sortBy, limit, page, like, myId, newsFeedRender]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -165,10 +180,35 @@ const AgentMyRequiredPosts = () => {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  function open(id) {
+    setIsOpen(true);
+    setPostId(id);
+  }
+  const [isOpenHideen, setIsOpenHidden] = useState(false);
+  function openHiden(id) {
+    setIsOpenHidden(true);
+    setPostId(id);
+  }
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  function openDelete(id) {
+    setIsOpenDelete(true);
+    setPostId(id);
+  }
+
   return (
     <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="container">
+          <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
+          <PostHiddenModal
+            visible={isOpenHideen}
+            closePopUp={setIsOpenHidden}
+          />
+          <PostDeleteModal
+            visible={isOpenDelete}
+            closePopUp={setIsOpenDelete}
+          />
           <div>
             {loading && (
               <div>
@@ -342,7 +382,56 @@ const AgentMyRequiredPosts = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="text-end">
+                          <div className="text-end relative ">
+                            <div className="absolute -top-[20px] right-0">
+                              <div className=" text-right">
+                                <Menu>
+                                  <MenuButton className=" ">
+                                    <Image
+                                      width={20}
+                                      height={5}
+                                      src="/more.png"
+                                    />
+                                  </MenuButton>
+
+                                  <MenuItems
+                                    transition
+                                    anchor="bottom end"
+                                    className="w-[200px] origin-top-right rounded-xl border border-white/5 bg-white p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                                  >
+                                    <MenuItem>
+                                      <button
+                                        onClick={() => open(item)}
+                                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
+                                      >
+                                        <PencilIcon className="size-4 fill-black" />
+                                        Edit
+                                      </button>
+                                    </MenuItem>
+
+                                    <MenuItem>
+                                      <button
+                                        onClick={() => openHiden(item)}
+                                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-black/10"
+                                      >
+                                        <ArchiveBoxXMarkIcon className="size-4 fill-black" />
+                                        Hide
+                                      </button>
+                                    </MenuItem>
+                                    <MenuItem>
+                                      <button
+                                        onClick={() => openDelete(item)}
+                                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-black/10"
+                                      >
+                                        <TrashIcon className="size-4 fill-black" />
+                                        Delete
+                                      </button>
+                                    </MenuItem>
+                                  </MenuItems>
+                                </Menu>
+                              </div>
+                            </div>
+
                             <p className="leading-normal text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px]">
                               {item?.postType}
                             </p>

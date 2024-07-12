@@ -8,6 +8,7 @@ import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import PostLocationValueProvider from "@/Context/postValueContext";
 import { Nunito } from "next/font/google";
+import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -35,8 +36,11 @@ export default function Layout({ children }) {
             <div>
               <HeaderLeft />{" "}
             </div>
+
             <PostLocationValueProvider>
-              <div className={nunito.className}>{children}</div>
+              <EditPostLocationValueProvider>
+                <div className={nunito.className}>{children}</div>
+              </EditPostLocationValueProvider>
             </PostLocationValueProvider>
             <div>
               {" "}

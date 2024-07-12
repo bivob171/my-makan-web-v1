@@ -59,7 +59,9 @@ export const SocialLogin = ({ setError }) => {
 
   const fetchUserProfile = async () => {
     const userId = localStorage.getItem(`${role}Id`);
-    if (!userId) return; // Exit if userId is not available
+    if (!userId) return;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
     const endpoint =
       role === "buyer"
         ? `https://q4m0gph5-4000.asse.devtunnels.ms/user/${userId}`
@@ -68,6 +70,7 @@ export const SocialLogin = ({ setError }) => {
       const response = await fetch(endpoint, {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

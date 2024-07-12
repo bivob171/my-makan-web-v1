@@ -53,8 +53,9 @@ const AddPost = ({
   tagsError,
   media,
   setmedia,
+  files,
+  setFiles,
 }) => {
-  const [files, setFiles] = useState([]);
   const elementRef = useRef(null);
   const videoRefs = useRef([]);
   const [imageUploading, setImageUploading] = useState(null);
@@ -65,6 +66,9 @@ const AddPost = ({
     ...files.filter((file) => file.type === "video"),
     ...files.filter((file) => file.type === "pdf"),
   ];
+  console.log(sortedFiles);
+  console.log(media);
+  console.log(files);
 
   const handleVideoClick = (index) => {
     if (videoRefs.current[index]) {
