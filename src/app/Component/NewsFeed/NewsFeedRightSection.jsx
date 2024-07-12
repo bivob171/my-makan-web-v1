@@ -1,8 +1,13 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { ProfileCard } from "../ProfileCard/ProfileCard";
+import { TopAgent } from "./TopNewPopulerAgent/TopAgent";
+import { NewAgents } from "./TopNewPopulerAgent/NewAgents";
+import { PopulerAgents } from "./TopNewPopulerAgent/PopulerAgents";
 
 const NewsFeedRightSection = () => {
+  const [activeTab, setActiveTab] = useState("topAgents");
   return (
     <>
       <div className="col-lg-4 widget-block widget-break-lg">
@@ -37,337 +42,48 @@ const NewsFeedRightSection = () => {
           <ul className="nav nav-tabs" role="tablist">
             <li className="nav-item">
               <a
-                className="nav-link active"
+                className={`nav-link ${
+                  activeTab === "topAgents" ? "active" : ""
+                }`}
                 data-toggle="tab"
-                href="#newest-member"
+                onClick={() => setActiveTab("topAgents")}
                 role="tab"
-                aria-selected="true"
+                aria-selected={activeTab === "topAgents" && "true"}
               >
                 Top Agents
               </a>
             </li>
             <li className="nav-item">
               <a
-                className="nav-link"
+                className={`nav-link ${
+                  activeTab === "newAgents" ? "active" : ""
+                }`}
                 data-toggle="tab"
-                href="#popular-member"
+                onClick={() => setActiveTab("newAgents")}
                 role="tab"
-                aria-selected="false"
+                aria-selected={activeTab === "newAgents" && "true"}
               >
                 NEWEST
               </a>
             </li>
             <li className="nav-item">
               <a
-                className="nav-link"
+                className={`nav-link ${
+                  activeTab === "populerAgents" ? "active" : ""
+                }`}
                 data-toggle="tab"
-                href="#active-member"
+                onClick={() => setActiveTab("populerAgents")}
                 role="tab"
-                aria-selected="false"
+                aria-selected={activeTab === "populerAgents" && "true"}
               >
                 POPULAR
               </a>
             </li>
           </ul>
-          <div className="tab-content">
-            <div
-              className="tab-pane fade show active"
-              id="newest-member"
-              role="tabpanel"
-            >
-              <div className="members-list">
-                <div className="media grid grid-cols-5 !items-center">
-                  <div className="item-img col-span-1">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-full h-full"
-                        src="/media/figure/chat_1.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body col-span-4 !w-full">
-                    <h4 className="item-title">
-                      <a href="#">Aahat Akter</a>
-                    </h4>
-                    <div className="item-username">
-                      <a href="#">
-                        <b>Rapid Properties</b>
-                      </a>{" "}
-                    </div>
-                    <div className="member-status online">
-                      <i className="icofont-speech-comments" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media grid grid-cols-5 !items-center">
-                  <div className="item-img col-span-1">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_2.jpg"
-                        alt="Chat"
-                      />
-                      <span className="chat-status online" />
-                    </a>
-                  </div>
-                  <div className="media-body col-span-4 !w-full">
-                    <h4 className="item-title">
-                      <a href="#">Kazi Rahman</a>
-                    </h4>
-                    <span className="chat-status online" />
-                    <div className="item-username">
-                      <a href="#">
-                        <b>Fam Properties</b>
-                      </a>
-                    </div>
-                    <div className="member-status online">
-                      <i className="icofont-speech-comments" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media grid grid-cols-5 !items-center">
-                  <div className="item-img col-span-1">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_3.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body col-span-4 !w-full">
-                    <h4 className="item-title">
-                      <a href="#">Alia Karon</a>
-                    </h4>
-                    <div className="item-username">
-                      <a href="#">
-                        <b>Fam Properties</b>
-                      </a>
-                    </div>
-                    <div className="member-status online">
-                      <i className="icofont-speech-comments" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media grid grid-cols-5 !items-center">
-                  <div className="item-img col-span-1">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_4.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body col-span-4 !w-full">
-                    <h4 className="item-title">
-                      <a href="#">Masterero</a>
-                    </h4>
-                    <div className="item-username">
-                      <a href="#">
-                        <b>Fam Properties</b>
-                      </a>
-                    </div>
-                    <div className="member-status offline">
-                      <i className="icofont-speech-comments" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="tab-pane fade" id="popular-member" role="tabpanel">
-              <div className="members-list">
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_1.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Aahat Akter</a>
-                    </h4>
-                    <div className="item-username">@Aahat </div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_2.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Kazi Rahman</a>
-                    </h4>
-                    <div className="item-username">@Rahman</div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_3.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Alia Karon</a>
-                    </h4>
-                    <div className="item-username">@Alia</div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_4.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Masterero</a>
-                    </h4>
-                    <div className="item-username">@Master</div>
-                    <div className="member-status offline">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="tab-pane fade" id="active-member" role="tabpanel">
-              <div className="members-list">
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_1.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Aahat Akter</a>
-                    </h4>
-                    <div className="item-username">@Aahat </div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_2.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Kazi Rahman</a>
-                    </h4>
-                    <div className="item-username">@Rahman</div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_3.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Alia Karon</a>
-                    </h4>
-                    <div className="item-username">@Alia</div>
-                    <div className="member-status online">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-                <div className="media">
-                  <div className="item-img">
-                    <a href="#">
-                      <Image
-                        width={1000}
-                        height={100}
-                        className="w-auto h-auto"
-                        src="/media/figure/chat_4.jpg"
-                        alt="Chat"
-                      />
-                    </a>
-                  </div>
-                  <div className="media-body">
-                    <h4 className="item-title">
-                      <a href="#">Masterero</a>
-                    </h4>
-                    <div className="item-username">@Master</div>
-                    <div className="member-status offline">
-                      <i className="icofont-check" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="">
+            {activeTab === "topAgents" && <TopAgent />}
+            {activeTab === "newAgents" && <NewAgents />}
+            {activeTab === "populerAgents" && <PopulerAgents />}
           </div>
         </div>
         <div className="widget widget-groups">
