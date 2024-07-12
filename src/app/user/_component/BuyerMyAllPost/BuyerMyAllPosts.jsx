@@ -385,6 +385,7 @@ const BuyerMyAllPosts = () => {
                                 <Menu>
                                   <MenuButton className=" ">
                                     <Image
+                                      alt=""
                                       width={20}
                                       height={5}
                                       src="/more.png"

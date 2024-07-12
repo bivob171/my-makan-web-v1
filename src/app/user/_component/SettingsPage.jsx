@@ -466,7 +466,7 @@ export const SettingsPage = () => {
                                               onClick={() => handlePdfView(img)}
                                             ></iframe>
                                           ) : (
-                                            <img
+                                            <Image
                                               alt=""
                                               className="object-cover w-[80px] h-[80px] rounded-sm"
                                               width="70"

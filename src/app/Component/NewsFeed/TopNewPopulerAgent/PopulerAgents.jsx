@@ -83,7 +83,7 @@ export const PopulerAgents = () => {
               <div>
                 {[1, 2, 3].map((i) => {
                   return (
-                    <div class="h-14  rounded-md w-60">
+                    <div key={i} class="h-14  rounded-md w-60">
                       <div class="flex flex-row items-center justify-cente h-full space-x-5 animate ">
                         <div class="w-10 h-10 bg-gray-300 rounded-full "></div>
                         <div class="flex flex-col space-y-3 mt-1">
@@ -105,7 +105,10 @@ export const PopulerAgents = () => {
               <div>
                 {allPosts?.map((agent, i) => {
                   return (
-                    <div className="media grid grid-cols-5 !items-center  pl-[6px]  mt-[6px]">
+                    <div
+                      key={i}
+                      className="media grid grid-cols-5 !items-center  pl-[6px]  mt-[6px]"
+                    >
                       <div className="item-img col-span-1">
                         <a href="#">
                           <Image
