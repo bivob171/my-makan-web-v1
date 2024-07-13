@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import AppleProvider from "next-auth/providers/apple";
+import generateAppleClientSecret from "@/utils/generateAppleClientSecret ";
 
 const handeler = NextAuth({
   providers: [
@@ -15,7 +16,7 @@ const handeler = NextAuth({
     }),
     AppleProvider({
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_APPLE_CLIENT_SE,
+      clientSecret: generateAppleClientSecret,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
