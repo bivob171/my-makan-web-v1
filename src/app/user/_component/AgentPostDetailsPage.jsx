@@ -3,10 +3,18 @@
 import Image from "next/image";
 import React from "react";
 import AgentComment from "./AgentComment";
+import GallerySection from "./GallerySection";
+import VideoSection from "./VideoSection";
+import File from "./File";
+import GoogleMap from "./GoogleMap";
+import TagsSection from "./TagsSection";
+import SellTypeSection from "./SellTypeSection";
+import PropertyInformation from "./PropertyInformation";
+import RelatedBlogs from "./RelatedBlogs";
 
 export const AgentPostDetailsPage = () => {
   return (
-    <div className="page-content">
+    <div className="page-content text-[#333]">
       {" "}
       <div className="container">
         <div className="block-box user-single-blog mt-4">
@@ -21,9 +29,15 @@ export const AgentPostDetailsPage = () => {
           </div>
           <div className="blog-content-wrap">
             <div className="blog-entry-header">
-              <div className="entry-category">
-                <a href="#">Community</a>
-                <a href="#">Inspiration</a>
+              <div className="inline-flex items-center font-bold gap-2 mb-3">
+                <div className="">
+                  <span className="text-[16px]">AED</span>{" "}
+                  <span className="text-[22px] ">2,750,000</span>
+                </div>
+                <span className="text-[24px] font-light leading-none">|</span>
+                <span className="text-[16px]">
+                  1,900 <span>sqft</span>
+                </span>
               </div>
               <h2 className="entry-title">
                 Spoke with the developer sety make atype specimen book has
@@ -46,10 +60,10 @@ export const AgentPostDetailsPage = () => {
                       <i className="icofont-calendar" /> 15 October, 2020
                     </li>
                     <li>
-                      <i className="icofont-comment" /> Comments: 05
+                      <i className="icofont-like" /> Like: 505
                     </li>
                     <li>
-                      <i className="icofont-share" /> Share: 02
+                      <i className="icofont-comment" /> Comments: 05
                     </li>
                   </ul>
                 </div>
@@ -84,6 +98,7 @@ export const AgentPostDetailsPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="blog-content">
               <p>
                 Seohen an unknown printer took a galley of type and scrambled it
@@ -115,27 +130,29 @@ export const AgentPostDetailsPage = () => {
                 type specimen book. It has survived not only five centuries, but
                 also the leap into electronic typesetting.{" "}
               </p>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="content-Image">
-                    <Image
-                      src="/media/blog/blog_11.jpg"
-                      alt="Blog"
-                      width={500}
-                      height={500}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="content-Image">
-                    <Image
-                      src="/media/blog/blog_12.jpg"
-                      alt="Blog"
-                      width={500}
-                      height={500}
-                    />
-                  </div>
-                </div>
+              <div className="">
+                <center>
+                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                    Images
+                  </h2>
+                </center>
+                <GallerySection />
+              </div>
+              <div className="">
+                <center>
+                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                    Videos
+                  </h2>
+                </center>
+                <VideoSection />
+              </div>
+              <div className="">
+                <center>
+                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                    File
+                  </h2>
+                </center>
+                <File />
               </div>
               <h3 className="item-title">What’s In Your Mind?</h3>
               <p>
@@ -148,6 +165,18 @@ export const AgentPostDetailsPage = () => {
                 was popularised in the 1960s with the release of Letraset shee
                 Ipsum passages, and more recently with desktop publishing.
               </p>
+            </div>
+            {/* Property Information */}
+            <div>
+              <PropertyInformation />
+            </div>
+            <div className="">
+              <center>
+                <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                  Location
+                </h2>
+              </center>
+              <GoogleMap />
             </div>
             <div className="blog-footer">
               <div className="item-label">
@@ -213,210 +242,14 @@ export const AgentPostDetailsPage = () => {
             <AgentComment />
           </div>
         </div>
-        <div className="realated-blog">
-          <div className="block-box blog-heading">
-            <h3 className="heading-title">Related Blog Posts</h3>
-          </div>
-          <div className="row">
-            <div className="col-lg-4">
-              <div className="block-box user-blog ">
-                <div className="blog-Image">
-                  <a href="#" className="w-full">
-                    <Image
-                      width={1000}
-                      height={500}
-                      className="!w-full !h-full"
-                      src="/media/blog/blog_4.jpg"
-                      alt="Blog"
-                    />
-                  </a>
-                </div>
-                <div className="blog-content">
-                  <div className="blog-category">
-                    <a href="#">Community</a>
-                    <a href="#">Inspiration</a>
-                  </div>
-                  <h3 className="blog-title">
-                    <a href="#">
-                      Spoke with the developer sety 2020 Gaming Area
-                    </a>
-                  </h3>
-                  <div className="blog-date">
-                    <i className="icofont-calendar" /> 15 October, 2020
-                  </div>
-                  <p>
-                    when ann unknown printer took galley type and scrambled it
-                    to make aretype specimen book has survived not only.
-                  </p>
-                </div>
-                <div className="blog-meta">
-                  <ul>
-                    <li className="blog-reaction">
-                      <div className="reaction-icon !flex justify-start">
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_1.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_2.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_3.png"
-                          alt="icon"
-                        />
-                      </div>
-                      <div className="meta-text">+ 15 others</div>
-                    </li>
-                    <li>
-                      <i className="icofont-comment" /> 05
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4">
-              <div className="block-box user-blog">
-                <div className="blog-Image ">
-                  <a href="#" className="w-full">
-                    <Image
-                      width={500}
-                      height={500}
-                      className="w-full h-auto"
-                      src="/media/blog/blog_5.jpg"
-                      alt="Blog"
-                    />
-                  </a>
-                </div>
-                <div className="blog-content">
-                  <div className="blog-category">
-                    <a href="#">Sporty</a>
-                  </div>
-                  <h3 className="blog-title">
-                    <a href="#">
-                      Spoke with the developer sety 2020 Gaming Area
-                    </a>
-                  </h3>
-                  <div className="blog-date">
-                    <i className="icofont-calendar" /> 15 October, 2020
-                  </div>
-                  <p>
-                    when ann unknown printer took galley type and scrambled it
-                    to make aretype specimen book has survived not only.
-                  </p>
-                </div>
-                <div className="blog-meta">
-                  <ul>
-                    <li className="blog-reaction">
-                      <div className="reaction-icon !flex justify-start">
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_1.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_2.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_3.png"
-                          alt="icon"
-                        />
-                      </div>
-                      <div className="meta-text">+ 15 others</div>
-                    </li>
-                    <li>
-                      <i className="icofont-comment" /> 05
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4">
-              <div className="block-box user-blog">
-                <div className="blog-Image ">
-                  <a href="#" className="w-full">
-                    <Image
-                      width={500}
-                      height={500}
-                      className="w-full h-auto"
-                      src="/media/blog/blog_6.jpg"
-                      alt="Blog"
-                    />
-                  </a>
-                </div>
-                <div className="blog-content">
-                  <div className="blog-category">
-                    <a href="#">Community</a>
-                    <a href="#">Inspiration</a>
-                  </div>
-                  <h3 className="blog-title">
-                    <a href="#">
-                      Spoke with the developer sety 2020 Gaming Area
-                    </a>
-                  </h3>
-                  <div className="blog-date">
-                    <i className="icofont-calendar" /> 15 October, 2020
-                  </div>
-                  <p>
-                    when ann unknown printer took galley type and scrambled it
-                    to make aretype specimen book has survived not only.
-                  </p>
-                </div>
-                <div className="blog-meta">
-                  <ul>
-                    <li className="blog-reaction">
-                      <div className="reaction-icon !flex justify-start">
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_1.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_2.png"
-                          alt="icon"
-                        />
-                        <Image
-                          width={500}
-                          height={500}
-                          className="w-auto h-auto"
-                          src="/media/figure/reaction_3.png"
-                          alt="icon"
-                        />
-                      </div>
-                      <div className="meta-text">+ 15 others</div>
-                    </li>
-                    <li>
-                      <i className="icofont-comment" /> 05
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* blogs  */}
+        <RelatedBlogs />
+        <div className="mb-[20px]">
+          {/* sell type  */}
+          <SellTypeSection />
         </div>
+        {/* tags  */}
+        <TagsSection />
       </div>
     </div>
   );

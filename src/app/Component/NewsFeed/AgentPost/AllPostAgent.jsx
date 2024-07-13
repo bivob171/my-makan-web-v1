@@ -242,14 +242,18 @@ const AllPostAgent = () => {
                             </div>
                             <div>
                               <div className=" -mb-[20px] md:-mb-4 ">
-                                <div className="flex gap-x-[8px] items-center">
+                                <div className="flex justify-start items-center">
                                   {item.role === "buyer" ? (
-                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
+                                    <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mb-2 md:mb-2 mr-2">
+                                      Buyer From{" "}
+                                      <span className="text-[#E6533C]">
+                                        {" "}
+                                        {agentId?.country}
+                                      </span>
                                     </p>
                                   ) : (
-                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                                      {agentId?.fullName}
+                                    <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mb-2 md:mb-2 mr-2">
+                                      Rapid Properties
                                     </p>
                                   )}
                                   <div className="mb-[5px]">
@@ -270,19 +274,7 @@ const AllPostAgent = () => {
                                   </div>
                                 </div>
                               </div>
-                              {item.role === "buyer" ? (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                                  Buyer From{" "}
-                                  <span className="text-[#E6533C]">
-                                    {" "}
-                                    {agentId?.country}
-                                  </span>
-                                </p>
-                              ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                                  Rapid Properties
-                                </p>
-                              )}
+
                               <div className="flex flex-wrap items-center mt-[2px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem] md:text-[0.8rem]">
@@ -290,7 +282,7 @@ const AllPostAgent = () => {
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium">
+                                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium ml-1">
                                     {location?.city}
                                   </p>
                                 </div>

@@ -21,7 +21,7 @@ export default function Layout({ children }) {
         ></iframe>
       </div>
     );
-  } else if (isAuthenticated === true) {
+  } else if (isAuthenticated === false) {
     return (
       <div className="bg-[#EFF4FB]">
         <div>

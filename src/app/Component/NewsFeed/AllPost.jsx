@@ -243,16 +243,22 @@ const AllPost = () => {
                             </div>
                             <div>
                               <div className=" -mb-[20px] ">
-                                <div className="flex gap-x-[8px] items-center">
-                                  {item.role === "buyer" ? (
-                                    <p className="text-[0.875rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
-                                    </p>
-                                  ) : (
-                                    <p className="text-[0.875rem] text-[#333335] font-semibold">
-                                      Jamshed Rony{" "}
-                                    </p>
-                                  )}
+                                <div className="!flex justify-start gap-x-[8px] items-center">
+                                  <div>
+                                    {item.role === "buyer" ? (
+                                      <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                        Buyer From{" "}
+                                        <span className="text-[#E6533C]">
+                                          {" "}
+                                          {userId?.country}
+                                        </span>
+                                      </p>
+                                    ) : (
+                                      <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                                        Rapid Properties
+                                      </p>
+                                    )}
+                                  </div>
                                   <div className="mb-[5px]">
                                     <Image
                                       width={15}
@@ -271,19 +277,7 @@ const AllPost = () => {
                                   </div>
                                 </div>
                               </div>
-                              {item.role === "buyer" ? (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Buyer From{" "}
-                                  <span className="text-[#E6533C]">
-                                    {" "}
-                                    {userId?.country}
-                                  </span>
-                                </p>
-                              ) : (
-                                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
-                                  Rapid Properties
-                                </p>
-                              )}
+
                               <div className="flex flex-wrap items-center mt-[2px] ">
                                 <div>
                                   <p className="text-[#8C9097] text-[0.625rem]">
