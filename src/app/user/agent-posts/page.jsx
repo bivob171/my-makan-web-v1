@@ -10,8 +10,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 export default function AgentPosts() {
-  const { isAuthenticated, loading, user, setRender, render, logOut } =
-    PrivateRouteContext();
+  const { user } = PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
   const [verifyPopup, setVerifyPopup] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

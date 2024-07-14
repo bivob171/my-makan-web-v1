@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import AllPost from "./AllPost";
 import NewsFeedRightSection from "./NewsFeedRightSection";
 import ChatModal from "./ChatModal";
 import PostSection from "./PostSection";
