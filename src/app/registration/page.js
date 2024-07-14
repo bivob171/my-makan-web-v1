@@ -25,7 +25,7 @@ import { Button } from "../Component/ui/button";
 export default function Registration() {
   const router = useRouter();
   const handleBack = () => {
-    router.back();
+    router.push("/login");
   };
   return (
     <div className="bg-[#2682d5] h-auto 2xl:px-[350px] xl:px-60 xl:py-12 ">

@@ -39,16 +39,16 @@ export const SocialLogin = ({ setError }) => {
 
       if (!response.ok) {
         throw new Error(response.status);
+      } else {
+        const data = await response.json();
+        localStorage.setItem(`${role}AccessToken`, data.access_token);
+        localStorage.setItem(`${role}RefreshToken`, data.refresh_token);
+        localStorage.setItem(`${role}TokenExpires_in`, data.expires_in);
+        localStorage.setItem(`${role}Id`, data.userId);
+        localStorage.setItem("role", data.role);
+
+        fetchUserProfile();
       }
-
-      const data = await response.json();
-      localStorage.setItem(`${role}AccessToken`, data.access_token);
-      localStorage.setItem(`${role}RefreshToken`, data.refresh_token);
-      localStorage.setItem(`${role}TokenExpires_in`, data.expires_in);
-      localStorage.setItem(`${role}Id`, data.userId);
-      localStorage.setItem("role", data.role);
-
-      fetchUserProfile();
     } catch (error) {
       console.error(error);
       setError(error.message);

@@ -19,7 +19,7 @@ import { LoginForm } from "../Component/Login/loginForm";
 export default function Login() {
   const router = useRouter();
   const handleBack = () => {
-    router.back();
+    router.push("/");
   };
   return (
     <div className="bg-[#2682d5] h-auto 2xl:px-[350px] xl:px-60 xl:py-12 ">

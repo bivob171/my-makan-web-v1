@@ -201,18 +201,18 @@ export const SignupForm = () => {
       if (!response.ok) {
         console.error(` ${response.status}`);
         setError(` ${response.status}`);
+      } else {
+        const data = await response.json();
+        localStorage.setItem("buyerAccessToken", data.access_token);
+        localStorage.setItem("buyerRefreshToken", data.refresh_token);
+        localStorage.setItem("buyerTokenExpires_in", data.expires_in);
+        localStorage.setItem("buyerId", data.userId);
+        localStorage.setItem("role", data.role);
+        // setloginSuccessPopUp(true);
+        toast.success("Successfully login your account");
+        router.push("/user/newsfeed");
+        setRender((prev) => !prev);
       }
-      const data = await response.json();
-      console.log(data);
-      localStorage.setItem("buyerAccessToken", data.access_token);
-      localStorage.setItem("buyerRefreshToken", data.refresh_token);
-      localStorage.setItem("buyerTokenExpires_in", data.expires_in);
-      localStorage.setItem("buyerId", data.userId);
-      localStorage.setItem("role", data.role);
-      // setloginSuccessPopUp(true);
-      toast.success("Successfully login your account");
-      router.push("/user/newsfeed");
-      setRender((prev) => !prev);
     } catch (error) {
       console.error("", error);
       setError(` ${error}`);
@@ -313,22 +313,21 @@ export const SignupForm = () => {
           body: JSON.stringify(agentCreateData),
         }
       );
-      console.log(response);
       if (!response.ok) {
         console.error(` ${response.status}`);
         setError(` ${response.status}`);
+      } else {
+        const data = await response.json();
+        localStorage.setItem("agentAccessToken", data.access_token);
+        localStorage.setItem("agentRefreshToken", data.refresh_token);
+        localStorage.setItem("agentTokenExpires_in", data.expires_in);
+        localStorage.setItem("agentId", data.userId);
+        localStorage.setItem("role", data.role);
+        // setloginSuccessPopUp(true);
+        toast.success("Successfully login your account");
+        router.push("/user/newsfeed");
+        setRender((prev) => !prev);
       }
-      const data = await response.json();
-      console.log(data);
-      localStorage.setItem("agentAccessToken", data.access_token);
-      localStorage.setItem("agentRefreshToken", data.refresh_token);
-      localStorage.setItem("agentTokenExpires_in", data.expires_in);
-      localStorage.setItem("agentId", data.userId);
-      localStorage.setItem("role", data.role);
-      // setloginSuccessPopUp(true);
-      toast.success("Successfully login your account");
-      router.push("/user/newsfeed");
-      setRender((prev) => !prev);
     } catch (error) {
       console.error("", error);
       setError(` ${error}`);
@@ -626,7 +625,7 @@ export const SignupForm = () => {
             <Checkbox id="terms" />
             <label
               htmlFor="terms"
-              className="text-sm mt-[8px] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm mt-[2px] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Remember me
             </label>

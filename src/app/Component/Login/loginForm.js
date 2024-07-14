@@ -67,19 +67,19 @@ export const LoginForm = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         toast.error(data.message);
+      } else {
+        localStorage.setItem("buyerAccessToken", data.access_token);
+        localStorage.setItem("buyerRefreshToken", data.refresh_token);
+        localStorage.setItem("buyerTokenExpires_in", data.expires_in);
+        localStorage.setItem("buyerId", data.userId);
+        localStorage.setItem("role", data.role);
+        // setloginSuccessPopUp(true);
+        toast.success("Successfully logged in to your account");
+        router.push("/user/newsfeed");
+        setRender((prev) => !prev);
       }
-      localStorage.setItem("buyerAccessToken", data.access_token);
-      localStorage.setItem("buyerRefreshToken", data.refresh_token);
-      localStorage.setItem("buyerTokenExpires_in", data.expires_in);
-      localStorage.setItem("buyerId", data.userId);
-      localStorage.setItem("role", data.role);
-      // setloginSuccessPopUp(true);
-      toast.success("Successfully logged in to your account");
-      router.push("/user/newsfeed");
-      setRender((prev) => !prev);
     } catch (error) {
       setError(error.message || "Login failed");
       toast.error(data.message);
@@ -117,19 +117,20 @@ export const LoginForm = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
+
       if (!response.ok) {
         toast.error(data.message);
+      } else {
+        localStorage.setItem("agentAccessToken", data.access_token);
+        localStorage.setItem("agentRefreshToken", data.refresh_token);
+        localStorage.setItem("agentTokenExpires_in", data.expires_in);
+        localStorage.setItem("agentId", data.userId);
+        localStorage.setItem("role", data.role);
+        // setloginSuccessPopUp(true);
+        toast.success("Successfully login your account");
+        router.push("/user/newsfeed");
+        setRender((prev) => !prev);
       }
-      localStorage.setItem("agentAccessToken", data.access_token);
-      localStorage.setItem("agentRefreshToken", data.refresh_token);
-      localStorage.setItem("agentTokenExpires_in", data.expires_in);
-      localStorage.setItem("agentId", data.userId);
-      localStorage.setItem("role", data.role);
-      // setloginSuccessPopUp(true);
-      toast.success("Successfully login your account");
-      router.push("/user/newsfeed");
-      setRender((prev) => !prev);
     } catch (error) {
       setError(error.message || "Login failed");
       toast.error(data.message);
@@ -221,13 +222,13 @@ export const LoginForm = () => {
             )}
           </div>
           {email === "" || password === "" ? (
-            <></>
+            <p className="leading-[5px]"></p>
           ) : (
             <div>
               {error && <p className="text-red-500 mt-[5px]">{error}</p>}
             </div>
           )}
-          <div></div>
+
           <div className="flex items-center space-x-2">
             <Checkbox id="terms" />
             <label
