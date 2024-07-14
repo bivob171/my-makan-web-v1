@@ -83,7 +83,7 @@ export const NewsFeedPage = () => {
           <div>
             <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
-          <VideoPdf />
+          {/* <VideoPdf /> */}
           {/* post nav section  */}
           {user?.role === "agent" ? (
             <div className="row">

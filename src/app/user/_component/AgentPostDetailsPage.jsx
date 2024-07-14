@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import AgentComment from "./AgentComment";
 import GallerySection from "./GallerySection";
 import VideoSection from "./VideoSection";
@@ -11,8 +11,28 @@ import TagsSection from "./TagsSection";
 import SellTypeSection from "./SellTypeSection";
 import PropertyInformation from "./PropertyInformation";
 import RelatedBlogs from "./RelatedBlogs";
+import { BsHeartFill } from "react-icons/bs";
+import { CiShare1 } from "react-icons/ci";
+import { Description, Dialog } from "@headlessui/react";
+import { Title } from "@mui/icons-material";
+import ShareModal from "./ShareModal";
 
 export const AgentPostDetailsPage = () => {
+  const [isHeartRed, setIsHeartRed] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleSaveClick = () => {
+    setIsHeartRed(!isHeartRed);
+  };
+
+  function open() {
+    setIsOpen(true);
+  }
+
+  function close() {
+    setIsOpen(false);
+  }
+
   return (
     <div className="page-content text-[#333]">
       {" "}
@@ -29,15 +49,38 @@ export const AgentPostDetailsPage = () => {
           </div>
           <div className="blog-content-wrap">
             <div className="blog-entry-header">
-              <div className="inline-flex items-center font-bold gap-2 mb-3">
-                <div className="">
-                  <span className="text-[16px]">AED</span>{" "}
-                  <span className="text-[22px] ">2,750,000</span>
+              <div className="flex justify-between items-center">
+                <div className="inline-flex items-center font-bold gap-2 mb-3">
+                  <div className="">
+                    <span className="text-[16px]">AED</span>{" "}
+                    <span className="text-[22px] ">2,750,000</span>
+                  </div>
+                  <span className="text-[24px] font-light leading-none">|</span>
+                  <span className="text-[16px]">
+                    1,900 <span>sqft</span>
+                  </span>
                 </div>
-                <span className="text-[24px] font-light leading-none">|</span>
-                <span className="text-[16px]">
-                  1,900 <span>sqft</span>
-                </span>
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <button
+                    className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
+                      isHeartRed ? "bg-[#625dfa]" : ""
+                    }`}
+                    onClick={handleSaveClick}
+                  >
+                    <BsHeartFill
+                      className={`w-5 h-5 ${isHeartRed ? "text-[red]" : ""}`}
+                    />{" "}
+                    Save
+                  </button>
+                  <button
+                    className="px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <CiShare1 className="w-5 h-5" />
+                    Share
+                  </button>
+                </div>
+                <ShareModal setIsOpen={setIsOpen} isOpen={isOpen} />
               </div>
               <h2 className="entry-title">
                 Spoke with the developer sety make atype specimen book has
