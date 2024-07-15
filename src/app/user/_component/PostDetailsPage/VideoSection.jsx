@@ -1,35 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 
-const VideoSection = () => {
+const VideoSection = ({ videos }) => {
   const videoRefs = useRef([]);
   const [currentVideo, setCurrentVideo] = useState(0);
-
-  const videos = [
-    {
-      id: 1,
-      url: "https://raw.githubusercontent.com/juanpablocs/react-vplayer/master/demo/video/720p.mp4",
-      type: "video/mp4",
-      quality: 720,
-    },
-    {
-      id: 2,
-      url: "https://raw.githubusercontent.com/juanpablocs/react-vplayer/master/demo/video/1080p.mp4",
-      type: "video/mp4",
-      quality: 1080,
-    },
-    {
-      id: 3,
-      url: "https://raw.githubusercontent.com/juanpablocs/react-vplayer/master/demo/video/480p.mp4",
-      type: "video/mp4",
-      quality: 480,
-    },
-    {
-      id: 4,
-      url: "https://raw.githubusercontent.com/juanpablocs/react-vplayer/master/demo/video/360p.mp4",
-      type: "video/mp4",
-      quality: 360,
-    },
-  ];
 
   const handleVideoEnd = () => {
     const nextVideo = (currentVideo + 1) % videos.length;
@@ -51,33 +24,33 @@ const VideoSection = () => {
   return (
     <div className="video-section">
       <div className="video-slider">
-        {videos.map(({ id, url }) => (
+        {videos?.map((video, index) => (
           <div
-            key={id}
-            className={`video-slide ${currentVideo === id - 1 ? "active" : ""}`}
+            key={video?._id}
+            className={`video-slide ${currentVideo === index ? "active" : ""}`}
           >
             <video
-              src={url}
+              src={video?.url}
               width="640"
               height="360"
               muted
               controls
               className="rounded-md w-full"
-              ref={(el) => (videoRefs.current[id - 1] = el)}
+              ref={(el) => (videoRefs.current[index] = el)}
               onEnded={handleVideoEnd}
             />
           </div>
         ))}
       </div>
       <div className="video-navigation">
-        {videos.map(({ id, url }) => (
+        {videos?.map((video, index) => (
           <button
-            key={id}
-            className={`nav-button ${currentVideo === id - 1 ? "active" : ""}`}
-            onClick={() => setCurrentVideo(id - 1)}
+            key={video?._id}
+            className={`nav-button ${currentVideo === index ? "active" : ""}`}
+            onClick={() => setCurrentVideo(index)}
           >
             <video
-              src={url}
+              src={video?.url}
               width="200"
               className="rounded-md cursor-pointer w-full h-[80px]"
             />

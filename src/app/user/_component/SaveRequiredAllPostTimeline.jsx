@@ -35,15 +35,6 @@ export const SaveRequiredAllPostTimeline = () => {
       url += `page=${page}&`;
       url += `limit=${limit}`;
 
-      // Add other query parameters conditionally based on state variables
-      // if (status !== "") url += `&status=${status}`;
-      // if (packageExpired !== "") url += `&packageExpired=${packageExpired}`;
-      // if (type !== "") url += `&type=${type}`;
-      // if (planId !== "") url += `&planId=${planId}`;
-      // if (packageId !== "") url += `&packageId=${packageId}`;
-      // if (agentId !== "") url += `&agentId=${agentId}`;
-      // if (doctorId !== "") url += `&doctorId=${doctorId}`;
-
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -93,58 +84,6 @@ export const SaveRequiredAllPostTimeline = () => {
       containerM.removeEventListener("scroll", handleScrollPostResult);
   }, [isFetching, hasMore]);
 
-  const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
-    const tokenKey = `${user?.role}AccessToken`;
-    const token = localStorage.getItem(tokenKey);
-    console.log(url, token);
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-
-      const data = await response.json();
-      setlike(!like);
-      console.log("Like successful", data);
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
-    }
-  };
-  const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
-    const tokenKey = `${user?.role}AccessToken`;
-    const token = localStorage.getItem(tokenKey);
-    console.log(url, token);
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-
-      const data = await response.json();
-      setlike(!like);
-      console.log("unLike successful", data);
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
-    }
-  };
   return (
     <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       {loading && (
@@ -168,8 +107,8 @@ export const SaveRequiredAllPostTimeline = () => {
                 item={item}
                 key={i}
                 myId={myId}
-                giveLike={giveLike}
-                giveUnLike={giveUnLike}
+                setlike={setlike}
+                like={like}
               />
             );
           })}

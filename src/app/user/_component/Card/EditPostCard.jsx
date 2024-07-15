@@ -12,8 +12,18 @@ import {
   Square2StackIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
+import { format, formatDistanceToNow } from "date-fns";
 
-const EditPostCard = ({ item, myId, open, openHiden, openDelete }) => {
+import { useEffect } from "react";
+const EditPostCard = ({
+  item,
+  myId,
+  open,
+  openHiden,
+  openDelete,
+  setlike,
+  like,
+}) => {
   const {
     role,
     userId,
@@ -28,10 +38,15 @@ const EditPostCard = ({ item, myId, open, openHiden, openDelete }) => {
   } = item;
 
   const userinfo = role === "agent" ? agentId : userId;
-  const hasId = likedBy.some((user) => user._id === myId);
-
+  const [hasId, setHasId] = useState(false);
+  useEffect(() => {
+    const userHasId = likedBy?.some((user) => user._id === myId);
+    setHasId(userHasId);
+  }, [likedBy, myId]);
   const formatDate = (isoString) => {
     const date = new Date(isoString);
+    const now = new Date();
+    const timeDifference = now - date;
 
     const options = {
       day: "numeric",
@@ -42,7 +57,13 @@ const EditPostCard = ({ item, myId, open, openHiden, openDelete }) => {
       hour12: true,
     };
 
-    return date.toLocaleDateString("en-GB", options);
+    // If the time difference is less than 24 hours, show relative time
+    if (timeDifference < 24 * 60 * 60 * 1000) {
+      return formatDistanceToNow(date, { addSuffix: true });
+    }
+
+    // Otherwise, show the formatted date
+    return format(date, "d MMMM yyyy h:mm a");
   };
 
   const getTagStyles = (index) => {
@@ -58,6 +79,60 @@ const EditPostCard = ({ item, myId, open, openHiden, openDelete }) => {
     const styleIndex = index % styles.length;
 
     return styles[styleIndex];
+  };
+
+  const giveLike = async (id) => {
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+
+    try {
+      setHasId(true);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+
+      const data = await response.json();
+      setlike(!like);
+      console.log("Like successful", data);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
+  const giveUnLike = async (id) => {
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    console.log(url, token);
+
+    try {
+      setHasId(false);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+
+      const data = await response.json();
+      setlike(!like);
+      console.log("unLike successful", data);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
   };
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">

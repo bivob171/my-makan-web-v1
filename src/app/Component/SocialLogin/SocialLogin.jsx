@@ -17,11 +17,10 @@ export const SocialLogin = ({ setError }) => {
 
   const role = signupType ? "buyer" : "agent";
 
-  const createAccountWithGoogle = async (endpoint) => {
-    if (isCreatingAccount) return; // Prevent duplicate calls
-
-    setIsCreatingAccount(true); // Set flag to indicate account creation in progress
-
+  const createAccountWithGoogle = async (apiUrl) => {
+    console.log(apiUrl);
+    if (isCreatingAccount) return;
+    setIsCreatingAccount(true);
     try {
       const userData = {
         fullName: session?.user?.name,
@@ -31,7 +30,7 @@ export const SocialLogin = ({ setError }) => {
         device: "web",
       };
 
-      const response = await fetch(endpoint, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -98,13 +97,14 @@ export const SocialLogin = ({ setError }) => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      const endpoint =
+      const apiUrl =
         role === "buyer"
           ? `https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp-with-Google`
           : `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp-with-gmail`;
-      createAccountWithGoogle(endpoint);
+      createAccountWithGoogle(apiUrl);
     }
   }, [status, session, role]);
+  console.log(session, status);
 
   return (
     <div className="flex gap-3 justify-center">
