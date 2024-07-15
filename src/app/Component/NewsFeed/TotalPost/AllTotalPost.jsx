@@ -86,7 +86,7 @@ export const AllTotalPost = () => {
   const myId = user?._id;
 
   return (
-    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
+    <div ref={containerRefPost} className="pb-2">
       <div className="">
         <div className="">
           <div>

@@ -7,6 +7,7 @@ import { GoStarFill } from "react-icons/go";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
 import { format, formatDistanceToNow } from "date-fns";
+import { SiImessage } from "react-icons/si";
 
 import { useEffect, useState } from "react";
 const PackageCard = ({ item, myId, setlike, like }) => {
@@ -125,7 +126,7 @@ const PackageCard = ({ item, myId, setlike, like }) => {
         <div className="flex justify-between px-[15px] ">
           <div className="flex gap-x-[15px] items-center h-[45px] ">
             <div className="mb-[17px]">
-              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
+              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full border-[1px] border-[#aaa7ffd2] shadow-sm">
                 <div>
                   <Image
                     width={40}
@@ -135,7 +136,7 @@ const PackageCard = ({ item, myId, setlike, like }) => {
                     className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full"
                   />
                 </div>
-                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center">
+                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center ">
                   <Image
                     width={8}
                     height={8}
@@ -307,11 +308,8 @@ const PackageCard = ({ item, myId, setlike, like }) => {
             })}
           </div>
           <div>
-            <button className="bg-[#F2EEFC] p-[13px] rounded flex items-center">
-              <p className="text-[15px] font-medium font-inter text-[#26BF94] -mb-[1px]">
-                {" "}
-                <FaRegComment className="w-4 h-4 md:w-5 md:h-5" />
-              </p>
+            <button className="">
+              <SiImessage className="text-[#1DFF00] w-8 h-8" />
             </button>
           </div>
         </div>
