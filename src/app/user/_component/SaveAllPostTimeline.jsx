@@ -27,6 +27,7 @@ export const SaveAllPostTimeline = () => {
 
   const getAllPosts = async (token) => {
     try {
+      setIsFetching(true);
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/my-save-post?`;
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
@@ -114,8 +115,8 @@ export const SaveAllPostTimeline = () => {
         </div>
       )}
       {isFetching && (
-        <div className="mb-[20px] mt-[40px] text-center">
-          <p>Loading more Post...</p>
+        <div className="mb-[20px] mt-[20px] text-center">
+          <PostLodaing />
         </div>
       )}
       {!hasMore && allPosts.length !== 0 && (

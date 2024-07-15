@@ -120,7 +120,7 @@ export const NewsFeedPage = () => {
                         ) : (
                           <>
                             <button className="cursor-pointer" onClick={open}>
-                              <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                              <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
                                 <span className="text-[16px] font-mono font-medium">
                                   what are you looking for, {userName}?
                                 </span>
@@ -131,7 +131,7 @@ export const NewsFeedPage = () => {
                       </>
                     ) : (
                       <button className="cursor-pointer" onClick={open}>
-                        <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
+                        <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
                           <span className="text-[16px] font-mono font-medium">
                             what are you looking for, {userName}?
                           </span>

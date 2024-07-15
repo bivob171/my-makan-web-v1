@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/16/solid";
 import { format, formatDistanceToNow } from "date-fns";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const EditPostCard = ({
   item,
   myId,

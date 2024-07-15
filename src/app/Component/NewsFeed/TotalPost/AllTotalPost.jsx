@@ -27,6 +27,7 @@ export const AllTotalPost = () => {
   const [like, setlike] = useState(true);
   const getAllPosts = async (token) => {
     try {
+      setIsFetching(true);
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
@@ -86,7 +87,7 @@ export const AllTotalPost = () => {
   const myId = user?._id;
 
   return (
-    <div ref={containerRefPost} className="pb-2">
+    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
       <div className="">
         <div className="">
           <div>
@@ -117,8 +118,8 @@ export const AllTotalPost = () => {
             )}
 
             {isFetching && (
-              <div className="mb-[20px] mt-[40px] text-center">
-                <p>Loading more Post...</p>
+              <div className="mb-[20px] mt-[20px] text-center">
+                <PostLodaing />
               </div>
             )}
             {!hasMore && allPosts.length !== 0 && (

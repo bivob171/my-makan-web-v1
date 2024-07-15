@@ -43,6 +43,7 @@ const BuyerMyRequiredPosts = () => {
   const [postType, setPostType] = useState("Required");
   const getAllPosts = async (token, myId) => {
     try {
+      setIsFetching(true);
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `userId=${myId}&`;
@@ -241,8 +242,8 @@ const BuyerMyRequiredPosts = () => {
             )}
 
             {isFetching && (
-              <div className="mb-[20px] mt-[40px] text-center">
-                <p>Loading more Post...</p>
+              <div className="mb-[20px] mt-[20px] text-center">
+                <PostLodaing />
               </div>
             )}
             {!hasMore && allPosts.length !== 0 && (
