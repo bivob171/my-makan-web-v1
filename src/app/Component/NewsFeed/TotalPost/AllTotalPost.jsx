@@ -92,22 +92,6 @@ export const AllTotalPost = () => {
       containerM.removeEventListener("scroll", handleScrollPostResult);
   }, [isFetching, hasMore]);
 
-  const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
-  const handelOldOrNewPostDropdown = () => {
-    setOldOrNewPostDropdown(!oldOrNewPostDropdown);
-  };
-  const handelOldPosts = () => {
-    setSortOrder("asc");
-    setOldOrNewPostDropdown(false);
-  };
-  const handelNewPosts = () => {
-    setSortOrder("desc");
-    setOldOrNewPostDropdown(false);
-  };
-  const handleLoadMore = () => {
-    // setPage((prevPage) => prevPage + 1);
-    setLimit((prevLimit) => prevLimit + 100);
-  };
 
   const myId = user?._id;
   const giveLike = async (id) => {
@@ -164,7 +148,7 @@ export const AllTotalPost = () => {
   };
 
   return (
-    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
+    <div ref={containerRefPost} className="pb-2">
       <div className="">
         <div className="">
           <div>

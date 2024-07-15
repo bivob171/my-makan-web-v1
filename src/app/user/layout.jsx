@@ -1,6 +1,5 @@
 "use client";
 
-import { Footer } from "../Component/Footer/Footer";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { redirect } from "next/navigation";
 import { HeaderTop } from "./_component/HeaderTop";
@@ -9,6 +8,7 @@ import { HeaderRight } from "./_component/HeaderRight";
 import PostLocationValueProvider from "@/Context/postValueContext";
 import { Nunito } from "next/font/google";
 import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
+
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -47,9 +47,9 @@ export default function Layout({ children }) {
               <HeaderRight />{" "}
             </div>
           </div>
-          <div className="mt-[40px]">
+          {/* <div className="mt-[40px]">
             <Footer />
-          </div>
+          </div> */}
         </div>
       </div>
     );

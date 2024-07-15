@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import React, { useState } from "react";
 import { ProfileCard } from "../ProfileCard/ProfileCard";
@@ -8,22 +7,24 @@ import { PopulerAgents } from "./TopNewPopulerAgent/PopulerAgents";
 
 const NewsFeedRightSection = () => {
   const [activeTab, setActiveTab] = useState("topAgents");
+
   return (
-    <>
-      <div className="col-lg-4 widget-block widget-break-lg">
+    <div className="!sticky top-[110px]">
+      <div className="h-[100vh] overflow-y-scroll">
         <div>
           <ProfileCard />
         </div>
-        <div className="widget widget-memebers">
-          <div className="widget-heading">
+        <div className="widget widget-memebers !p-3 !pb-0">
+          <div className="widget-heading !mb-2">
             <h3 className="widget-title">Agents</h3>
             <div className="dropdown">
               <button
                 className="dropdown-toggle"
                 type="button"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
+                {" "}
                 ...
               </button>
               <div className="dropdown-menu dropdown-menu-right">
@@ -63,7 +64,7 @@ const NewsFeedRightSection = () => {
                 role="tab"
                 aria-selected={activeTab === "newAgents" && "true"}
               >
-                NEWEST
+                Newest
               </a>
             </li>
             <li className="nav-item">
@@ -76,7 +77,7 @@ const NewsFeedRightSection = () => {
                 role="tab"
                 aria-selected={activeTab === "populerAgents" && "true"}
               >
-                POPULAR
+                Populer
               </a>
             </li>
           </ul>
@@ -86,7 +87,7 @@ const NewsFeedRightSection = () => {
             {activeTab === "populerAgents" && <PopulerAgents />}
           </div>
         </div>
-        <div className="widget widget-groups">
+        <div className="widget widget-groups !p-3">
           <div className="widget-heading">
             <h3 className="widget-title">Categories</h3>
             <div className="dropdown">
@@ -442,7 +443,7 @@ const NewsFeedRightSection = () => {
             />
           </div>
         </div>
-        <div className="widget widget-memebers widget-activity">
+        <div className="widget widget-memebers widget-activity !p-3">
           <div className="widget-heading">
             <h3 className="widget-title">My Connect Activity</h3>
             <div className="dropdown">
@@ -469,109 +470,177 @@ const NewsFeedRightSection = () => {
           </div>
           <div className="activity-list">
             <div className="media grid grid-cols-5">
-              <div className="item-img col-span-1">
-                <a href="#">
+              <div className="col-span-1">
+                <a
+                  href="#"
+                  className="w-full h-full relative flex justify-center items-center group"
+                >
                   <Image
                     width={1000}
                     height={100}
-                    className="!w-full !h-full"
+                    className="w-[90%] h-[90%] object-cover rounded-full"
                     src="/media/figure/chat_10.jpg"
                     alt="Chat"
                   />
-                </a>
-              </div>
-              <div className="media-body col-span-4">
-                <h4 className="item-title">
-                  <a href="#" className="author-name">
-                    Aahat Akter
-                  </a>
-                  commented on Destroy Dex&apos;&s
-                  <a href="#" className="activity-link">
-                    Photo
-                  </a>
-                </h4>
-                <div className="activity-time">20 minutes ago</div>
-              </div>
-            </div>
-            <div className="media grid grid-cols-5">
-              <div className="item-img col-span-1">
-                <a href="#">
                   <Image
                     width={1000}
                     height={100}
-                    className="w-auto h-auto"
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:hidden"
+                    src="/media/figure/chat_round_shape.png"
+                    alt="Chat"
+                  />
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden group-hover:block hover:-rotate-12 transition duration-100 ease-in-out"
+                    src="/media/figure/chat_round_shape2.png"
+                    alt="Chat"
+                  />
+                </a>
+              </div>
+              <div className="media-body col-span-4 ml-3">
+                <div className="item-title !w-full mb-0">
+                  <a href="#" className="author-name mr-1">
+                    <span>Aahat Akter</span>
+                  </a>
+                  <span>commented on Destroy Dex&apos;&s</span>
+                  <a href="#" className="activity-link ml-1">
+                    <span> Photo</span>
+                  </a>
+                </div>
+                <span className="activity-time">20 minutes ago</span>
+              </div>
+            </div>
+            <div className="media grid grid-cols-5">
+              <div className="col-span-1">
+                <a
+                  href="#"
+                  className="w-full h-full relative flex justify-center items-center group"
+                >
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="w-[90%] h-[90%] object-cover rounded-full"
                     src="/media/figure/chat_8.jpg"
                     alt="Chat"
                   />
-                </a>
-              </div>
-              <div className="media-body col-span-4">
-                <h4 className="item-title">
-                  <a href="#" className="author-name">
-                    Neko Bebop
-                  </a>
-                  liked Marina
-                  <a href="#" className="activity-link">
-                    Status
-                  </a>
-                </h4>
-                <div className="activity-time">15 minutes ago</div>
-              </div>
-            </div>
-            <div className="media grid grid-cols-5">
-              <div className="item-img item-img col-span-1">
-                <a href="#">
                   <Image
                     width={1000}
                     height={100}
-                    className="w-auto h-auto"
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:hidden"
+                    src="/media/figure/chat_round_shape.png"
+                    alt="Chat"
+                  />
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden group-hover:block hover:-rotate-12 transition duration-100 ease-in-out"
+                    src="/media/figure/chat_round_shape2.png"
+                    alt="Chat"
+                  />
+                </a>
+              </div>
+              <div className="media-body col-span-4 ml-3">
+                <div className="item-title !w-full mb-0">
+                  <a href="#" className="author-name mr-1">
+                    <span>Aahat Akter</span>
+                  </a>
+                  <span>commented on Destroy Dex&apos;&s</span>
+                  <a href="#" className="activity-link ml-1">
+                    <span> Photo</span>
+                  </a>
+                </div>
+                <span className="activity-time">20 minutes ago</span>
+              </div>
+            </div>
+            <div className="media grid grid-cols-5">
+              <div className="col-span-1">
+                <a
+                  href="#"
+                  className="w-full h-full relative flex justify-center items-center group"
+                >
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="w-[90%] h-[90%] object-cover rounded-full"
                     src="/media/figure/chat_1.jpg"
                     alt="Chat"
                   />
-                </a>
-              </div>
-              <div className="media-body col-span-4">
-                <h4 className="item-title">
-                  <a href="#" className="author-name">
-                    Neko Bebop
-                  </a>
-                  commented on Destroy Dex&apos;s
-                  <a href="#" className="activity-link">
-                    Photo
-                  </a>
-                </h4>
-                <div className="activity-time">20 minutes ago</div>
-              </div>
-            </div>
-            <div className="media grid grid-cols-5">
-              <div className="item-img item-img col-span-1">
-                <a href="#">
                   <Image
                     width={1000}
                     height={100}
-                    className="w-auto h-auto"
-                    src="/media/figure/chat_6.jpg"
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:hidden"
+                    src="/media/figure/chat_round_shape.png"
+                    alt="Chat"
+                  />
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden group-hover:block hover:-rotate-12 transition duration-100 ease-in-out"
+                    src="/media/figure/chat_round_shape2.png"
                     alt="Chat"
                   />
                 </a>
               </div>
-              <div className="media-body col-span-4">
-                <h4 className="item-title">
-                  <a href="#" className="author-name">
-                    Neko Bebop
+              <div className="media-body col-span-4 ml-3">
+                <div className="item-title !w-full mb-0">
+                  <a href="#" className="author-name mr-1">
+                    <span>Aahat Akter</span>
                   </a>
-                  commented on Destroy Dex&apos;s
-                  <a href="#" className="activity-link">
-                    Photo
+                  <span>commented on Destroy Dex&apos;&s</span>
+                  <a href="#" className="activity-link ml-1">
+                    <span> Photo</span>
                   </a>
-                </h4>
-                <div className="activity-time">20 minutes ago</div>
+                </div>
+                <span className="activity-time">20 minutes ago</span>
+              </div>
+            </div>
+            <div className="media grid grid-cols-5">
+              <div className="col-span-1">
+                <a
+                  href="#"
+                  className="w-full h-full relative flex justify-center items-center group"
+                >
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="w-[90%] h-[90%] object-cover rounded-full"
+                    src="/media/figure/chat_6.jpg"
+                    alt="Chat"
+                  />
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:hidden"
+                    src="/media/figure/chat_round_shape.png"
+                    alt="Chat"
+                  />
+                  <Image
+                    width={1000}
+                    height={100}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden group-hover:block hover:-rotate-12 transition duration-100 ease-in-out"
+                    src="/media/figure/chat_round_shape2.png"
+                    alt="Chat"
+                  />
+                </a>
+              </div>
+              <div className="media-body col-span-4 ml-3">
+                <div className="item-title !w-full mb-0">
+                  <a href="#" className="author-name mr-1">
+                    <span>Aahat Akter</span>
+                  </a>
+                  <span>commented on Destroy Dex&apos;&s</span>
+                  <a href="#" className="activity-link ml-1">
+                    <span> Photo</span>
+                  </a>
+                </div>
+                <span className="activity-time">20 minutes ago</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

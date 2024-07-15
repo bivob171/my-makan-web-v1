@@ -26,7 +26,7 @@
 
 
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 0px;
 }
 
 /* Track */
@@ -10945,7 +10945,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
   border-radius: 50%;
   position: absolute;
   top: 7px;
-  left: -2px;
+  left: 2px;
   z-index: -1;
   -webkit-transform: scale(0);
   -ms-transform: scale(0);
@@ -11032,13 +11032,13 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
   font-family: IcoFont;
   font-size: 20px;
   color: #ffffff;
-  height: 30px;
-  width: 30px;
+  height: 20px;
+  width: 20px;
   line-height: 30px;
   background-color: #17dd17;
   border-radius: 50%;
   position: absolute;
-  bottom: -9px;
+  bottom: 4px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -22362,13 +22362,14 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 .widget-heading .dropdown-toggle:before {
   content: "";
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   background-color: #5edfff;
   border-radius: 50%;
   position: absolute;
-  top: 7px;
-  left: -2px;
+  top: 34%;
+  left: -5%;
+  transform: translateX(-50%) translateY(-50%);
   z-index: -1;
   -webkit-transform: scale(0);
   -ms-transform: scale(0);
@@ -22428,7 +22429,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .widget-author .profile-img {
-  margin-bottom: 26px;
+  margin-bottom: 15px;
 }
 
 .widget-author .profile-img a {
@@ -22453,15 +22454,18 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .widget-author .profile-img a:after {
   content: "\eed8";
   font-family: IcoFont;
-  font-size: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #ffffff;
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
   line-height: 30px;
   background-color: #17dd17;
   border-radius: 50%;
   position: absolute;
-  bottom: -9px;
+  bottom: -14px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -22482,7 +22486,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .widget-author .author-location {
-  font-size: 14px;
+  font-size: 12px;
   color: #9e9faf;
   margin-bottom: 24px;
 }
@@ -22578,11 +22582,11 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 .widget-memebers .nav-tabs {
   border-bottom: none;
-  margin-bottom: 26px;
+  margin-bottom: 15px;
 }
 
 .widget-memebers .nav-tabs .nav-item {
-  margin-right: 10px;
+ 
   margin-bottom: 0;
 }
 
@@ -23178,6 +23182,3 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .custom-next-button {
   right: 10px; /* Adjust as needed */
 }
-
-
-
