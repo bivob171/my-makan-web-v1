@@ -6,8 +6,11 @@ import { FaRegComment } from "react-icons/fa6";
 import { GoStarFill } from "react-icons/go";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
+import { format, formatDistanceToNow } from "date-fns";
+import { SiImessage } from "react-icons/si";
 
-const PackageCard = ({ item, myId }) => {
+import { useEffect, useState } from "react";
+const PackageCard = ({ item, myId, setlike, like }) => {
   const {
     role,
     userId,
@@ -22,10 +25,16 @@ const PackageCard = ({ item, myId }) => {
   } = item;
 
   const userinfo = role === "agent" ? agentId : userId;
-  const hasId = likedBy.some((user) => user._id === myId);
+  const [hasId, setHasId] = useState(false);
+  useEffect(() => {
+    const userHasId = likedBy?.some((user) => user._id === myId);
+    setHasId(userHasId);
+  }, [likedBy, myId]);
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
+    const now = new Date();
+    const timeDifference = now - date;
 
     const options = {
       day: "numeric",
@@ -36,7 +45,13 @@ const PackageCard = ({ item, myId }) => {
       hour12: true,
     };
 
-    return date.toLocaleDateString("en-GB", options);
+    // If the time difference is less than 24 hours, show relative time
+    if (timeDifference < 24 * 60 * 60 * 1000) {
+      return formatDistanceToNow(date, { addSuffix: true });
+    }
+
+    // Otherwise, show the formatted date
+    return format(date, "d MMMM yyyy h:mm a");
   };
 
   const getTagStyles = (index) => {
@@ -53,13 +68,65 @@ const PackageCard = ({ item, myId }) => {
 
     return styles[styleIndex];
   };
+  const giveLike = async (id) => {
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+
+    try {
+      setHasId(true);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+
+      const data = await response.json();
+      setlike(!like);
+      console.log("Like successful", data);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
+  const giveUnLike = async (id) => {
+    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+
+    try {
+      setHasId(false);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+
+      const data = await response.json();
+      setlike(!like);
+      console.log("unLike successful", data);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">
       <div className="pt-2">
         <div className="flex justify-between px-[15px] ">
           <div className="flex gap-x-[15px] items-center h-[45px] ">
             <div className="mb-[17px]">
-              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
+              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full border-[1px] border-[#aaa7ffd2] shadow-sm">
                 <div>
                   <Image
                     width={40}
@@ -69,7 +136,7 @@ const PackageCard = ({ item, myId }) => {
                     className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full"
                   />
                 </div>
-                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center">
+                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center ">
                   <Image
                     width={8}
                     height={8}
@@ -241,11 +308,8 @@ const PackageCard = ({ item, myId }) => {
             })}
           </div>
           <div>
-            <button className="bg-[#F2EEFC] p-[13px] rounded flex items-center">
-              <p className="text-[15px] font-medium font-inter text-[#26BF94] -mb-[1px]">
-                {" "}
-                <FaRegComment className="w-4 h-4 md:w-5 md:h-5" />
-              </p>
+            <button className="">
+              <SiImessage className="text-[#1DFF00] w-8 h-8" />
             </button>
           </div>
         </div>
@@ -297,7 +361,7 @@ const PackageCard = ({ item, myId }) => {
             <div className="flex items-center">
               {hasId === true ? (
                 <p
-                  onClick={() => giveUnLike(item._id)}
+                  onClick={() => giveUnLike(item?._id)}
                   className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
                 >
                   {" "}
@@ -305,7 +369,7 @@ const PackageCard = ({ item, myId }) => {
                 </p>
               ) : (
                 <p
-                  onClick={() => giveLike(item._id)}
+                  onClick={() => giveLike(item?._id)}
                   className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
                 >
                   {" "}
@@ -313,7 +377,7 @@ const PackageCard = ({ item, myId }) => {
                 </p>
               )}
               <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0">
-                {item.likeCount === 0 ? "00" : item.likeCount}
+                {item?.likeCount === 0 ? "00" : item?.likeCount}
               </p>
             </div>
             <div className="flex items-center">
@@ -328,17 +392,17 @@ const PackageCard = ({ item, myId }) => {
             <div>
               {item.type === "Urgent" ? (
                 <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold">
-                  {item.type}
+                  {item?.type}
                 </button>
-              ) : item.type === "Sponsored" ? (
+              ) : item?.type === "Sponsored" ? (
                 <button className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold">
-                  <span>{item.type}</span>
+                  <span>{item?.type}</span>
                   <GoStarFill className="text-[#F5B849] text-[12px] md:text-[12px] font-semibold" />
                 </button>
               ) : (
                 <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center">
                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[12px] font-semibold">
-                    {item.type}
+                    {item?.type}
                   </p>
                 </button>
               )}

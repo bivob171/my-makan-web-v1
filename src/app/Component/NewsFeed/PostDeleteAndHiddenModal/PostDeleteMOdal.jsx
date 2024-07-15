@@ -16,9 +16,6 @@ export const PostDeleteModal = ({ visible, closePopUp }) => {
   const handleSubmit = async (postId) => {
     try {
       const id = postId?._id;
-      const postData = {
-        hidden: true,
-      };
 
       let token;
       if (user.role === "agent") {
@@ -34,7 +31,6 @@ export const PostDeleteModal = ({ visible, closePopUp }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
-        body: JSON.stringify(postData),
       });
 
       if (!response.ok) {

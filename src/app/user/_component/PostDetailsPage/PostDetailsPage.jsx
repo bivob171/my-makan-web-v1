@@ -16,17 +16,18 @@ import { Description, Dialog } from "@headlessui/react";
 import { Title } from "@mui/icons-material";
 import File from "./File";
 import Image from "next/image";
+import Link from "next/link";
+import { BiSolidLike } from "react-icons/bi";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export const PostDetailsPage = ({ postid }) => {
   const { user } = PrivateRouteContext();
   const myId = user?._id;
   const [isHeartRed, setIsHeartRed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleSaveClick = () => {
-    setIsHeartRed(!isHeartRed);
-  };
-
+  const [saveloading, setSaveLoading] = useState(true);
+  const [error, setError] = useState(null);
   function open() {
     setIsOpen(true);
   }
@@ -35,11 +36,10 @@ export const PostDetailsPage = ({ postid }) => {
     setIsOpen(false);
   }
 
-  const [allPosts, setAllPosts] = useState([]);
+  const [item, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [like, setlike] = useState(true);
-  console.log(allPosts);
 
   const getAllPosts = async (token) => {
     try {
@@ -71,6 +71,142 @@ export const PostDetailsPage = ({ postid }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
   }, [like]);
+  const {
+    role,
+    userId,
+    agentId,
+    createdAt,
+    location,
+    tags,
+    sellType,
+    _id,
+    likeCount,
+    comment,
+    likedBy,
+    title,
+    media,
+    price,
+    sqft,
+  } = item;
+  const userinfo = role === "agent" ? agentId : userId;
+  const [hasId, setHasId] = useState(false);
+  useEffect(() => {
+    const userHasId = likedBy?.some((user) => user._id === myId);
+    setHasId(userHasId);
+  }, [likedBy, myId]);
+  const savePostId = _id;
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+
+    const options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+
+    return date.toLocaleDateString("en-GB", options);
+  };
+
+  // Ensure media is an array
+  const mediaArray = Array.isArray(media) ? media : [];
+
+  const data = mediaArray.filter((file) => file.type === "image");
+  const videos = mediaArray.filter((file) => file.type === "video");
+  const files = mediaArray.filter((file) => file.type === "pdf");
+
+  // save post
+
+  const [saveRerander, setSaveRerander] = useState(false);
+
+  const handleSaveClick = async () => {
+    try {
+      setIsHeartRed(true);
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Post saved on your timeline");
+        setSaveRerander(!saveRerander);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+  const handleUnSaveClick = async (_id) => {
+    try {
+      setIsHeartRed(false);
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Post UnSave successfully!");
+        setSaveRerander(!saveRerander);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const checkSavePost = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/save-post-exist/${savePostId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include your JWT token if needed
+            },
+            params: {
+              userId,
+              role,
+            },
+          }
+        );
+        setIsHeartRed(response.data);
+        console.log(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setSaveLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkSavePost(token);
+  }, [savePostId, saveRerander]);
+
+  // post like unlike
 
   const giveLike = async (id) => {
     const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
@@ -78,6 +214,7 @@ export const PostDetailsPage = ({ postid }) => {
     const token = localStorage.getItem(tokenKey);
 
     try {
+      setHasId(true);
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -101,8 +238,10 @@ export const PostDetailsPage = ({ postid }) => {
     const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
+    console.log(url, token);
 
     try {
+      setHasId(false);
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -141,26 +280,48 @@ export const PostDetailsPage = ({ postid }) => {
               <div className="flex justify-between items-center">
                 <div className="inline-flex items-center font-bold gap-2 mb-3">
                   <div className="">
-                    <span className="text-[16px]">AED</span>{" "}
-                    <span className="text-[22px] ">2,750,000</span>
+                    {price !== null && (
+                      <>
+                        {" "}
+                        <span className="text-[16px]">AED</span>{" "}
+                        <span className="text-[22px] ">{price}</span>
+                      </>
+                    )}
                   </div>
-                  <span className="text-[24px] font-light leading-none">|</span>
-                  <span className="text-[16px]">
-                    1,900 <span>sqft</span>
-                  </span>
+                  {sqft !== null && (
+                    <>
+                      <span className="text-[24px] font-light leading-none">
+                        |
+                      </span>
+                      <span className="text-[16px]">
+                        {sqft} <span>sqft</span>
+                      </span>
+                    </>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-3 mb-3">
-                  <button
-                    className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
-                      isHeartRed ? "bg-[#625dfa]" : ""
-                    }`}
-                    onClick={handleSaveClick}
-                  >
-                    <BsHeartFill
-                      className={`w-5 h-5 ${isHeartRed ? "text-[red]" : ""}`}
-                    />{" "}
-                    Save
-                  </button>
+                  {isHeartRed === true ? (
+                    <button
+                      className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
+                        isHeartRed === true ? "bg-[#625dfa]" : ""
+                      }`}
+                      onClick={() => handleUnSaveClick(_id)}
+                    >
+                      <BsHeartFill
+                        className={`w-5 h-5 ${
+                          isHeartRed === true ? "text-[red]" : ""
+                        }`}
+                      />{" "}
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 `}
+                      onClick={handleSaveClick}
+                    >
+                      <BsHeartFill className={`w-5 h-5 `} /> Save
+                    </button>
+                  )}
                   <button
                     className="px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2"
                     onClick={() => setIsOpen(true)}
@@ -171,10 +332,7 @@ export const PostDetailsPage = ({ postid }) => {
                 </div>
                 <ShareModal setIsOpen={setIsOpen} isOpen={isOpen} />
               </div>
-              <h2 className="entry-title">
-                Spoke with the developer sety make atype specimen book has
-                survived not only five centuries
-              </h2>
+              <h2 className="entry-title">{title}</h2>
               <div className="row align-items-center">
                 <div className="col-lg-8">
                   <ul className="entry-meta">
@@ -186,16 +344,29 @@ export const PostDetailsPage = ({ postid }) => {
                         height={500}
                         className="w-10 h-auto"
                       />
-                      By <a href="#">Fahim Rahman</a>
+                      By{" "}
+                      {item.role === "buyer" ? (
+                        <>
+                          {userinfo?._id === myId ? (
+                            <Link href="#">{userinfo?.fullName}</Link>
+                          ) : (
+                            <Link href="#"> Hidden Name </Link>
+                          )}
+                        </>
+                      ) : (
+                        <Link href="#">{userinfo?.fullName}</Link>
+                      )}
                     </li>
                     <li>
-                      <i className="icofont-calendar" /> 15 October, 2020
+                      <i className="icofont-calendar" /> {formatDate(createdAt)}{" "}
                     </li>
                     <li>
-                      <i className="icofont-like" /> Like: 505
+                      <i className="icofont-like" /> Like:{" "}
+                      {item.likeCount === 0 ? "00" : item.likeCount}
                     </li>
                     <li>
-                      <i className="icofont-comment" /> Comments: 05
+                      <i className="icofont-comment" /> Comments:{" "}
+                      {item.comment?.length === 0 ? "00" : item.comment?.length}{" "}
                     </li>
                   </ul>
                 </div>
@@ -232,71 +403,39 @@ export const PostDetailsPage = ({ postid }) => {
             </div>
 
             <div className="blog-content">
-              <p>
-                Seohen an unknown printer took a galley of type and scrambled it
-                to make a type specimen book. It has survived not only five
-                centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged. It was popularised in the 1960s
-                with the release of Letraset sheets strickcontainingwhen an
-                unknown printer took a galley of type and scrambled it to make a
-                type specimen book. It has survived not only five centuries, but
-                also the leap into electronic typesetting.{" "}
-              </p>
               <blockquote>
-                <p>
-                  Blog estibulum diam metus, varius quis eleifend eget,
-                  tincidunt sit amet ante. Etiam quisaccu msan vamus
-                  efeliselconvallis, ultrices commodo nisety ncidunt odio, ut
-                  varius mi justo. Blog estibulum diam metuultrices commodo
-                  erisque et orci convallis, ultrices commodo nisety ncidunt
-                  odio, ut varius mi ex quis justo.{" "}
-                </p>
+                <p>{item?.description}</p>
               </blockquote>
-              <p>
-                Seohen an unknown printer took a galley of type and scrambled it
-                to make a type specimen book. It has survived not only five
-                centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged. It was popularised in the 1960s
-                with the release of Letraset sheets strickcontainingwhen an
-                unknown printer took a galley of type and scrambled it to make a
-                type specimen book. It has survived not only five centuries, but
-                also the leap into electronic typesetting.{" "}
-              </p>
-              <div className="">
-                <center>
-                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                    Images
-                  </h2>
-                </center>
-                <GallerySection />
-              </div>
-              <div className="">
-                <center>
-                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                    Videos
-                  </h2>
-                </center>
-                <VideoSection />
-              </div>
-              <div className="">
-                <center>
-                  <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                    File
-                  </h2>
-                </center>
-                <File />
-              </div>
-              <h3 className="item-title">What’s In Your Mind?</h3>
-              <p>
-                Seohen an unknown printer tok a galley of type and scrambled it
-                to maketypspecimen book. It has survived not only five
-                centuries, but also the leapremaining essentially
-                unchanged.ook.Seohen an unknown printer tok a galley of type and
-                scrambled it to maketypspecimen bs survive but also the leap
-                into electronic typesetting, remaining essentially unchanged. It
-                was popularised in the 1960s with the release of Letraset shee
-                Ipsum passages, and more recently with desktop publishing.
-              </p>
+              {data?.length > 0 && (
+                <div className="">
+                  <center>
+                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                      Images
+                    </h2>
+                  </center>
+                  <GallerySection data={data} />
+                </div>
+              )}
+              {videos?.length > 0 && (
+                <div className="">
+                  <center>
+                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                      Videos
+                    </h2>
+                  </center>
+                  <VideoSection videos={videos} />
+                </div>
+              )}
+              {files?.length > 0 && (
+                <div className="">
+                  <center>
+                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                      File
+                    </h2>
+                  </center>
+                  <File files={files} />
+                </div>
+              )}
             </div>
             {/* Property Information */}
             <div>
@@ -308,13 +447,30 @@ export const PostDetailsPage = ({ postid }) => {
                   Location
                 </h2>
               </center>
-              <MyGoogleMap />
+              <MyGoogleMap location={location} />
             </div>
-            <div className="blog-footer">
+            {/* <div className="blog-footer">
               <div className="item-label">
                 Choose your <span>Reaction!</span>
               </div>
               <div className="reaction-icon">
+                {hasId === true ? (
+                  <p
+                    onClick={() => giveUnLike(item?._id)}
+                    className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px] text-center"
+                  >
+                    {" "}
+                    <BiSolidLike />
+                  </p>
+                ) : (
+                  <p
+                    onClick={() => giveLike(item?._id)}
+                    className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px] text-center"
+                  >
+                    {" "}
+                    <BiSolidLike />
+                  </p>
+                )}
                 <a href="#">
                   <Image
                     width={500}
@@ -324,64 +480,22 @@ export const PostDetailsPage = ({ postid }) => {
                     alt="Like"
                   />
                 </a>
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_6.png"
-                    alt="Like"
-                  />
-                </a>
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_2.png"
-                    alt="Like"
-                  />
-                </a>
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_7.png"
-                    alt="Like"
-                  />
-                </a>
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_3.png"
-                    alt="Like"
-                  />
-                </a>
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_5.png"
-                    alt="Like"
-                  />
-                </a>
               </div>
+            </div> */}
+            <div className="mt-[45px]">
+              <hr className="mb-[20px]" />
+              <AgentComment _id={_id} />
             </div>
-            <AgentComment />
           </div>
         </div>
         {/* blogs  */}
         <RelatedBlogs />
         <div className="mb-[20px]">
           {/* sell type  */}
-          <SellTypeSection />
+          <SellTypeSection sellType={sellType} />
         </div>
         {/* tags  */}
-        <TagsSection />
+        <TagsSection tags={tags} />
       </div>
     </div>
   );

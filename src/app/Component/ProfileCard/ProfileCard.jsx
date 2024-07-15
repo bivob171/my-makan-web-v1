@@ -22,7 +22,7 @@ export const ProfileCard = () => {
 
   const ratingStar = Array.from({ length: 5 }, (e, i) => {
     return (
-      <span key={i}>
+      <>
         {user?.avgrating > i ? (
           <span className="flex gap-x-[3px] -mb-0 mt-[5px] text-[#F5B849]">
             <FaStar />
@@ -32,7 +32,7 @@ export const ProfileCard = () => {
             <AiOutlineStar />
           </span>
         )}
-      </span>
+      </>
     );
   });
 
@@ -65,13 +65,13 @@ export const ProfileCard = () => {
 
   return (
     <div className="mb-[20px]">
-      <div className="widget widget-author max-w-[380px]">
+      <div className="widget widget-author !pb-2 !pl-2 !pr-2">
         <div className="author-heading">
           <div className="cover-img">
             <Image
               width={1000}
-              height={100}
-              className="w-auto h-auto"
+              height={200}
+              className=""
               src="/media/figure/shape_12.jpg"
               alt="cover"
             />
@@ -144,45 +144,45 @@ export const ProfileCard = () => {
             </span>
           </p>
         </div>
-        <ul className="author-statistics flex justify-between mt-[15px] mb-[4px]">
+        <ul className="author-statistics flex justify-center my-[5px]">
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold ">
+              <span className="text-[12px] text-[#525252] font-bold ">
                 {totalPoset?.totalPosts}
               </span>{" "}
               <br />
-              <span className="item-tex text-[#9e9faf] font-semibold text-[11px]">
+              <span className=" text-[#9e9faf] font-semibold text-[10px]">
                 Posts
               </span>
             </a>
           </li>
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold ">2.4k</span>{" "}
+              <span className="text-[12px] text-[#525252] font-bold ">2.4k</span>{" "}
               <br />
-              <span className="item-tex text-[#9e9faf] font-semibold text-[11px]">
+              <span className=" text-[#9e9faf] font-semibold text-[10px]">
                 Matched
               </span>
             </a>
           </li>
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold">
+              <span className="text-[12px] text-[#525252] font-bold">
                 {" "}
                 {totalPoset?.sponsoredPosts}
               </span>
 
               <br />
-              <span className=" whitespace-nowrap text-[#9e9faf] font-semibold text-[11px]">
+              <span className=" whitespace-nowrap text-[#9e9faf] font-semibold text-[10px]">
                 Ads Posts
               </span>
             </a>
           </li>
           <li>
             <a href="#">
-              <span className="item-numbe text-[#525252] font-bold">1,125</span>
+              <span className="text-[12px] text-[#525252] font-bold">1,125</span>
               <br />
-              <span className="whitespace-nowrap text-[#9e9faf] font-semibold text-[11px]">
+              <span className="whitespace-nowrap text-[#9e9faf] font-semibold text-[10px]">
                 My Connect
               </span>
             </a>
@@ -190,14 +190,14 @@ export const ProfileCard = () => {
         </ul>
         {user?.role === "agent" ? (
           <div className="mt-[1px] mb-[12px]">
-            <div className="h-[1px] w-full bg-[#5EDFFF] "></div>
+            <div className="h-[0.5px] w-full bg-[#5EDFFF] "></div>
             <div className="mt-[8px] px-[10px]">
               <p className="-mb-0 text-start text-[13px] text-[#323232CC] text-opacity-80 font-semibold leading-[20px]">
                 Verified By My-Makan in
               </p>
               <div className="flex gap-x-2 items-center mt-[5px] ">
                 <div>
-                  <p className="-mb-0 text-[11px] text-black">
+                  <p className="-mb-0 text-[11px] text-[#5EDFFF]">
                     <FaCheckCircle />
                   </p>
                 </div>
@@ -213,12 +213,12 @@ export const ProfileCard = () => {
           <></>
         )}
         <div className="">
-          <div className="h-[1px] w-full bg-[#5EDFFF] "></div>
+          <div className="h-[0.5px] w-full bg-[#5EDFFF] "></div>
           <div className="mt-[15px] px-[10px]">
             <div className="flex justify-between items-center mb-[10px]">
               <div className="flex gap-x-2 items-center">
                 <div>
-                  <p className="-mb-0 text-[14px] text-black">
+                  <p className="-mb-0 text-[14px] text-[#5EDFFF]">
                     <FaLocationDot />
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export const ProfileCard = () => {
             <div className="flex justify-between items-center mb-[10px]">
               <div className="flex gap-x-2 items-center">
                 <div>
-                  <p className="-mb-0 text-[14px] text-black">
+                  <p className="-mb-0 text-[14px] text-[#5EDFFF]">
                     <FaUser />
                   </p>
                 </div>
@@ -266,7 +266,7 @@ export const ProfileCard = () => {
             <div className="flex justify-between items-center">
               <div className="flex gap-x-2 items-center">
                 <div>
-                  <p className="-mb-0 text-[14px] text-black">
+                  <p className="-mb-0 text-[14px] text-[#5EDFFF]">
                     <IoMdTimer />
                   </p>
                 </div>
