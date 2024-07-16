@@ -10,6 +10,7 @@ import { AccountVerifyModal } from "./AccountVerifyModal";
 import { AllTotalPost } from "./TotalPost/AllTotalPost";
 import { AvailableTotalPost } from "./TotalPost/AvailableTotalPost";
 import { RequiredTotalPost } from "./TotalPost/RequiredTotalPost";
+import NewsFeedLeftSection from "./NewsFeedLeftSection";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -87,7 +88,11 @@ export const NewsFeedPage = () => {
           {/* post nav section  */}
           <div className="row">
             <div className="col-lg-3 widget-block widget-break-lg ">
-              <NewsFeedRightSection />
+              <div className="!sticky top-[110px]">
+                <div className="h-[100vh] overflow-y-scroll">
+                  <NewsFeedLeftSection />
+                </div>
+              </div>
             </div>
             <div className="col-lg-6">
               <div className="newsfeed-search">
