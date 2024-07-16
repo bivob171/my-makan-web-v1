@@ -10,7 +10,7 @@ export const AgentPostDetailsPage = () => {
   return (
     <div className="page-content">
       <div className="container">
-        <div className="row">
+        <div className="row ">
           <div className="col-lg-3 widget-block widget-break-lg">
             <div className="!sticky top-[110px]">
               <div className="h-[100vh] overflow-y-scroll">
@@ -79,13 +79,12 @@ export const AgentPostDetailsPage = () => {
                               <i className="icofont-twitter" />
                             </a>
                           </li>
-                        
+
                           <li>
                             <a href="#" className="bg-youtube">
                               <i className="icofont-youtube" />
                             </a>
                           </li>
-                          
                         </ul>
                       </div>
                     </div>

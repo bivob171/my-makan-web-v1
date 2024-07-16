@@ -15,6 +15,7 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 
 import { useEffect, useState } from "react";
+import { BookmarkIcon } from "@heroicons/react/20/solid";
 const EditPostCard = ({
   item,
   myId,

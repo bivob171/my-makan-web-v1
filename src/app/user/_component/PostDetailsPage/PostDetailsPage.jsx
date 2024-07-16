@@ -20,6 +20,8 @@ import Link from "next/link";
 import { BiSolidLike } from "react-icons/bi";
 import toast from "react-hot-toast";
 import axios from "axios";
+import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
+import PropertyCard2 from "@/app/Component/NewsFeed/PropertyCard2";
 
 export const PostDetailsPage = ({ postid }) => {
   const { user } = PrivateRouteContext();
@@ -262,194 +264,210 @@ export const PostDetailsPage = ({ postid }) => {
     }
   };
   return (
-    <div className="page-content text-[#333]">
+    <div className="page-content text-[#333] ">
       {" "}
       <div className="container">
-        <div className="block-box user-single-blog mt-4">
-          <div className="blog-thumbnail">
-            <Image
-              src="/media/blog/blog_10.jpg"
-              width={1000}
-              height={1000}
-              alt="Blog"
-              className="w-full"
-            />
+        <div className="row">
+          <div className="col-lg-3 widget-block widget-break-lg">
+            <div className="!sticky top-[110px]">
+              <div className="h-[100vh] overflow-y-scroll">
+                <NewsFeedLeftSection />
+                <PropertyCard2 />
+                <PropertyCard2 />
+                <PropertyCard2 />
+              </div>
+            </div>
           </div>
-          <div className="blog-content-wrap">
-            <div className="blog-entry-header">
-              <div className="flex justify-between items-center">
-                <div className="inline-flex items-center font-bold gap-2 mb-3">
-                  <div className="">
-                    {price !== null && (
-                      <>
-                        {" "}
-                        <span className="text-[16px]">AED</span>{" "}
-                        <span className="text-[22px] ">{price}</span>
-                      </>
+          <div className="col-lg-9">
+            <div>
+              <div className="block-box user-single-blog ">
+                <div className="blog-thumbnail">
+                  <Image
+                    src="/media/blog/blog_10.jpg"
+                    width={1000}
+                    height={1000}
+                    alt="Blog"
+                    className="w-full"
+                  />
+                </div>
+                <div className="blog-content-wrap">
+                  <div className="blog-entry-header">
+                    <div className="flex justify-between items-center">
+                      <div className="inline-flex items-center font-bold gap-2 mb-3">
+                        <div className="">
+                          {price !== null && (
+                            <>
+                              {" "}
+                              <span className="text-[16px]">AED</span>{" "}
+                              <span className="text-[22px] ">{price}</span>
+                            </>
+                          )}
+                        </div>
+                        {sqft !== null && (
+                          <>
+                            <span className="text-[24px] font-light leading-none">
+                              |
+                            </span>
+                            <span className="text-[16px]">
+                              {sqft} <span>sqft</span>
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        {isHeartRed === true ? (
+                          <button
+                            className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
+                              isHeartRed === true ? "bg-[#625dfa]" : ""
+                            }`}
+                            onClick={() => handleUnSaveClick(_id)}
+                          >
+                            <BsHeartFill
+                              className={`w-5 h-5 ${
+                                isHeartRed === true ? "text-[red]" : ""
+                              }`}
+                            />{" "}
+                            Save
+                          </button>
+                        ) : (
+                          <button
+                            className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 `}
+                            onClick={handleSaveClick}
+                          >
+                            <BsHeartFill className={`w-5 h-5 `} /> Save
+                          </button>
+                        )}
+                        <button
+                          className="px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2"
+                          onClick={() => setIsOpen(true)}
+                        >
+                          <CiShare1 className="w-5 h-5" />
+                          Share
+                        </button>
+                      </div>
+                      <ShareModal setIsOpen={setIsOpen} isOpen={isOpen} />
+                    </div>
+                    <h2 className="entry-title">{title}</h2>
+                    <div className="row align-items-center">
+                      <div className="col-lg-8">
+                        <ul className="entry-meta">
+                          <li>
+                            <Image
+                              src="/media/figure/chat_7.jpg"
+                              alt="Chat"
+                              width={500}
+                              height={500}
+                              className="w-10 h-auto"
+                            />
+                            By{" "}
+                            {item.role === "buyer" ? (
+                              <>
+                                {userinfo?._id === myId ? (
+                                  <Link href="#">{userinfo?.fullName}</Link>
+                                ) : (
+                                  <Link href="#"> Hidden Name </Link>
+                                )}
+                              </>
+                            ) : (
+                              <Link href="#">{userinfo?.fullName}</Link>
+                            )}
+                          </li>
+                          <li>
+                            <i className="icofont-calendar" />{" "}
+                            {formatDate(createdAt)}{" "}
+                          </li>
+                          <li>
+                            <i className="icofont-like" /> Like:{" "}
+                            {item.likeCount === 0 ? "00" : item.likeCount}
+                          </li>
+                          <li>
+                            <i className="icofont-comment" /> Comments:{" "}
+                            {item.comment?.length === 0
+                              ? "00"
+                              : item.comment?.length}{" "}
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="col-lg-4">
+                        <ul className="blog-share">
+                          <li>
+                            <a href="#" className="bg-fb">
+                              <i className="icofont-facebook" />
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" className="bg-twitter">
+                              <i className="icofont-twitter" />
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" className="bg-dribble">
+                              <i className="icofont-dribbble" />
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" className="bg-youtube">
+                              <i className="icofont-youtube" />
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" className="bg-behance">
+                              <i className="icofont-behance" />
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="blog-content">
+                    <blockquote>
+                      <p>{item?.description}</p>
+                    </blockquote>
+                    {data?.length > 0 && (
+                      <div className="">
+                        <center>
+                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                            Images
+                          </h2>
+                        </center>
+                        <GallerySection data={data} />
+                      </div>
+                    )}
+                    {videos?.length > 0 && (
+                      <div className="">
+                        <center>
+                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                            Videos
+                          </h2>
+                        </center>
+                        <VideoSection videos={videos} />
+                      </div>
+                    )}
+                    {files?.length > 0 && (
+                      <div className="">
+                        <center>
+                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                            File
+                          </h2>
+                        </center>
+                        <File files={files} />
+                      </div>
                     )}
                   </div>
-                  {sqft !== null && (
-                    <>
-                      <span className="text-[24px] font-light leading-none">
-                        |
-                      </span>
-                      <span className="text-[16px]">
-                        {sqft} <span>sqft</span>
-                      </span>
-                    </>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  {isHeartRed === true ? (
-                    <button
-                      className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
-                        isHeartRed === true ? "bg-[#625dfa]" : ""
-                      }`}
-                      onClick={() => handleUnSaveClick(_id)}
-                    >
-                      <BsHeartFill
-                        className={`w-5 h-5 ${
-                          isHeartRed === true ? "text-[red]" : ""
-                        }`}
-                      />{" "}
-                      Save
-                    </button>
-                  ) : (
-                    <button
-                      className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 `}
-                      onClick={handleSaveClick}
-                    >
-                      <BsHeartFill className={`w-5 h-5 `} /> Save
-                    </button>
-                  )}
-                  <button
-                    className="px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2"
-                    onClick={() => setIsOpen(true)}
-                  >
-                    <CiShare1 className="w-5 h-5" />
-                    Share
-                  </button>
-                </div>
-                <ShareModal setIsOpen={setIsOpen} isOpen={isOpen} />
-              </div>
-              <h2 className="entry-title">{title}</h2>
-              <div className="row align-items-center">
-                <div className="col-lg-8">
-                  <ul className="entry-meta">
-                    <li>
-                      <Image
-                        src="/media/figure/chat_7.jpg"
-                        alt="Chat"
-                        width={500}
-                        height={500}
-                        className="w-10 h-auto"
-                      />
-                      By{" "}
-                      {item.role === "buyer" ? (
-                        <>
-                          {userinfo?._id === myId ? (
-                            <Link href="#">{userinfo?.fullName}</Link>
-                          ) : (
-                            <Link href="#"> Hidden Name </Link>
-                          )}
-                        </>
-                      ) : (
-                        <Link href="#">{userinfo?.fullName}</Link>
-                      )}
-                    </li>
-                    <li>
-                      <i className="icofont-calendar" /> {formatDate(createdAt)}{" "}
-                    </li>
-                    <li>
-                      <i className="icofont-like" /> Like:{" "}
-                      {item.likeCount === 0 ? "00" : item.likeCount}
-                    </li>
-                    <li>
-                      <i className="icofont-comment" /> Comments:{" "}
-                      {item.comment?.length === 0 ? "00" : item.comment?.length}{" "}
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-lg-4">
-                  <ul className="blog-share">
-                    <li>
-                      <a href="#" className="bg-fb">
-                        <i className="icofont-facebook" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-twitter">
-                        <i className="icofont-twitter" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-dribble">
-                        <i className="icofont-dribbble" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-youtube">
-                        <i className="icofont-youtube" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-behance">
-                        <i className="icofont-behance" />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="blog-content">
-              <blockquote>
-                <p>{item?.description}</p>
-              </blockquote>
-              {data?.length > 0 && (
-                <div className="">
-                  <center>
-                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                      Images
-                    </h2>
-                  </center>
-                  <GallerySection data={data} />
-                </div>
-              )}
-              {videos?.length > 0 && (
-                <div className="">
-                  <center>
-                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                      Videos
-                    </h2>
-                  </center>
-                  <VideoSection videos={videos} />
-                </div>
-              )}
-              {files?.length > 0 && (
-                <div className="">
-                  <center>
-                    <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                      File
-                    </h2>
-                  </center>
-                  <File files={files} />
-                </div>
-              )}
-            </div>
-            {/* Property Information */}
-            <div>
-              <PropertyInformation />
-            </div>
-            <div className="">
-              <center>
-                <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
-                  Location
-                </h2>
-              </center>
-              <MyGoogleMap location={location} />
-            </div>
-            {/* <div className="blog-footer">
+                  {/* Property Information */}
+                  <div>
+                    <PropertyInformation />
+                  </div>
+                  <div className="">
+                    <center>
+                      <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                        Location
+                      </h2>
+                    </center>
+                    <MyGoogleMap location={location} />
+                  </div>
+                  {/* <div className="blog-footer">
               <div className="item-label">
                 Choose your <span>Reaction!</span>
               </div>
@@ -482,20 +500,23 @@ export const PostDetailsPage = ({ postid }) => {
                 </a>
               </div>
             </div> */}
-            <div className="mt-[45px]">
-              <hr className="mb-[20px]" />
-              <AgentComment _id={_id} />
+                  <div className="mt-[45px]">
+                    <hr className="mb-[20px]" />
+                    <AgentComment _id={_id} />
+                  </div>
+                </div>
+              </div>
+              {/* blogs  */}
+              <RelatedBlogs />
+              <div className="mb-[20px]">
+                {/* sell type  */}
+                <SellTypeSection sellType={sellType} />
+              </div>
+              {/* tags  */}
+              <TagsSection tags={tags} />
             </div>
           </div>
         </div>
-        {/* blogs  */}
-        <RelatedBlogs />
-        <div className="mb-[20px]">
-          {/* sell type  */}
-          <SellTypeSection sellType={sellType} />
-        </div>
-        {/* tags  */}
-        <TagsSection tags={tags} />
       </div>
     </div>
   );

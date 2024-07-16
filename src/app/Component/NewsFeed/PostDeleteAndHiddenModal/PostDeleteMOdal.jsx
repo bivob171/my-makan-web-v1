@@ -53,7 +53,7 @@ export const PostDeleteModal = ({ visible, closePopUp }) => {
             <div class="bg-white px-4 pt-[15px]">
               <div class="flex ">
                 <div class="mx-auto mt-[10px] flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                  <Image width={24} height={24} src="/delete.png" />
+                  <Image alt="" width={24} height={24} src="/delete.png" />
                 </div>
                 <div class="mt-3  sm:ml-4 sm:mt-0 sm:text-left">
                   <h3
