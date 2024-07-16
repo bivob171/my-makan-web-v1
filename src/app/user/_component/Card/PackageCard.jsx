@@ -10,7 +10,15 @@ import { format, formatDistanceToNow } from "date-fns";
 import { SiImessage } from "react-icons/si";
 
 import { useEffect, useState } from "react";
-const PackageCard = ({ item, myId, setlike, like }) => {
+import toast from "react-hot-toast";
+const PackageCard = ({
+  item,
+  myId,
+  setlike,
+  like,
+  setSaveRerander,
+  saveRerander,
+}) => {
   const {
     role,
     userId,
@@ -23,7 +31,10 @@ const PackageCard = ({ item, myId, setlike, like }) => {
     comment,
     likedBy,
   } = item;
-
+  const savePostId = _id;
+  const [isHeartRed, setIsHeartRed] = useState(false);
+  const [saveloading, setSaveLoading] = useState(true);
+  const [error, setError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
   const [hasId, setHasId] = useState(false);
   useEffect(() => {
@@ -120,6 +131,91 @@ const PackageCard = ({ item, myId, setlike, like }) => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
+  const handleSaveClick = async () => {
+    try {
+      setIsHeartRed(true);
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Post saved on your timeline");
+        setSaveRerander(!saveRerander);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+  const handleUnSaveClick = async (_id) => {
+    try {
+      setIsHeartRed(false);
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Post UnSave successfully!");
+        setSaveRerander(!saveRerander);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const checkSavePost = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/save-post-exist/${savePostId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include your JWT token if needed
+            },
+            params: {
+              userId,
+              role,
+            },
+          }
+        );
+        setIsHeartRed(response.data);
+        console.log(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setSaveLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkSavePost(token);
+  }, [savePostId, saveRerander]);
+
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">
       <div className="pt-2">
@@ -239,13 +335,23 @@ const PackageCard = ({ item, myId, setlike, like }) => {
                     className="w-[200px] origin-top-right rounded-xl border border-white/5 bg-white p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                   >
                     <MenuItem>
-                      <button
-                        // onClick={}
-                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
-                      >
-                        <BookmarkIcon className="size-4 fill-black" />
-                        Save
-                      </button>
+                      {isHeartRed === true ? (
+                        <button
+                          onClick={() => handleUnSaveClick(_id)}
+                          className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
+                        >
+                          <BookmarkIcon className="size-4 fill-black" />
+                          unSave
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleSaveClick}
+                          className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
+                        >
+                          <BookmarkIcon className="size-4 fill-black" />
+                          Save
+                        </button>
+                      )}
                     </MenuItem>
                   </MenuItems>
                 </Menu>

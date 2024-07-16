@@ -1,19 +1,7 @@
 "use client";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import {
-  ArchiveBoxXMarkIcon,
-  ChevronDownIcon,
-  PencilIcon,
-  Square2StackIcon,
-  TrashIcon,
-} from "@heroicons/react/16/solid";
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
-import { GoStarFill } from "react-icons/go";
-import Image from "next/image";
-import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
@@ -41,6 +29,7 @@ const BuyerMyRequiredPosts = () => {
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const [postType, setPostType] = useState("Required");
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token, myId) => {
     try {
       setIsFetching(true);
@@ -91,7 +80,16 @@ const BuyerMyRequiredPosts = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token, myId);
-  }, [sortOrder, sortBy, limit, page, like, myId, newsFeedRender]);
+  }, [
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    like,
+    myId,
+    newsFeedRender,
+    saveRerander,
+  ]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -111,76 +109,6 @@ const BuyerMyRequiredPosts = () => {
     return () =>
       containerM.removeEventListener("scroll", handleScrollPostResult);
   }, [isFetching, hasMore]);
-
-  const [oldOrNewPostDropdown, setOldOrNewPostDropdown] = useState(false);
-  const handelOldOrNewPostDropdown = () => {
-    setOldOrNewPostDropdown(!oldOrNewPostDropdown);
-  };
-  const handelOldPosts = () => {
-    setSortOrder("asc");
-    setOldOrNewPostDropdown(false);
-  };
-  const handelNewPosts = () => {
-    setSortOrder("desc");
-    setOldOrNewPostDropdown(false);
-  };
-  const handleLoadMore = () => {
-    // setPage((prevPage) => prevPage + 1);
-    setLimit((prevLimit) => prevLimit + 100);
-  };
-
-  const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
-    const tokenKey = `${user?.role}AccessToken`;
-    const token = localStorage.getItem(tokenKey);
-    console.log(url, token);
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-
-      const data = await response.json();
-      setlike(!like);
-      console.log("Like successful", data);
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
-    }
-  };
-  const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
-    const tokenKey = `${user?.role}AccessToken`;
-    const token = localStorage.getItem(tokenKey);
-    console.log(url, token);
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-
-      const data = await response.json();
-      setlike(!like);
-      console.log("unLike successful", data);
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
-    }
-  };
 
   const [isOpen, setIsOpen] = useState(false);
   function open(id) {
@@ -230,11 +158,11 @@ const BuyerMyRequiredPosts = () => {
                       item={item}
                       key={i}
                       myId={myId}
-                      giveLike={giveLike}
-                      giveUnLike={giveUnLike}
                       open={open}
                       openHiden={openHiden}
                       openDelete={openDelete}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}

@@ -40,6 +40,7 @@ const AgentMyAllPosts = () => {
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token, myId) => {
     try {
       setIsFetching(true);
@@ -80,7 +81,16 @@ const AgentMyAllPosts = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token, myId);
-  }, [sortOrder, sortBy, limit, page, like, myId, newsFeedRender]);
+  }, [
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    like,
+    myId,
+    newsFeedRender,
+    saveRerander,
+  ]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -153,6 +163,8 @@ const AgentMyAllPosts = () => {
                       open={open}
                       openHiden={openHiden}
                       openDelete={openDelete}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}

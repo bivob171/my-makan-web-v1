@@ -1,19 +1,7 @@
 "use client";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import {
-  ArchiveBoxXMarkIcon,
-  ChevronDownIcon,
-  PencilIcon,
-  Square2StackIcon,
-  TrashIcon,
-} from "@heroicons/react/16/solid";
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
-import { GoStarFill } from "react-icons/go";
-import Image from "next/image";
-import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
@@ -41,6 +29,7 @@ const AgentMyRequiredPosts = () => {
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const [postType, setPostType] = useState("Required");
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token, myId) => {
     try {
       setIsFetching(true);
@@ -82,7 +71,16 @@ const AgentMyRequiredPosts = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token, myId);
-  }, [sortOrder, sortBy, limit, page, like, myId, newsFeedRender]);
+  }, [
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    like,
+    myId,
+    newsFeedRender,
+    saveRerander,
+  ]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -156,6 +154,8 @@ const AgentMyRequiredPosts = () => {
                       open={open}
                       openHiden={openHiden}
                       openDelete={openDelete}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}
