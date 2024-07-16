@@ -25,6 +25,7 @@ export const AllTotalPost = () => {
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
@@ -47,6 +48,7 @@ export const AllTotalPost = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allPostsList = await response.json();
+      console.log(allPostsList);
       setHasMore(allPostsList.length === limit);
       setAllPosts((prevPost) =>
         page === 1 ? allPostsList : [...prevPost, ...allPostsList]
@@ -63,7 +65,7 @@ export const AllTotalPost = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, newsFeedRender]);
+  }, [sortOrder, sortBy, limit, page, like, newsFeedRender, saveRerander]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -111,6 +113,8 @@ export const AllTotalPost = () => {
                       myId={myId}
                       setlike={setlike}
                       like={like}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}

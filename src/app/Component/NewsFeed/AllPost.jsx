@@ -25,6 +25,7 @@ const AllPost = () => {
   const [isFetching, setIsFetching] = useState(false);
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
@@ -64,7 +65,7 @@ const AllPost = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like]);
+  }, [sortOrder, sortBy, limit, page, like, saveRerander]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -110,6 +111,8 @@ const AllPost = () => {
                       myId={myId}
                       setlike={setlike}
                       like={like}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}

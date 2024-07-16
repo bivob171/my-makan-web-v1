@@ -25,6 +25,7 @@ const RequiredPosts = () => {
   const [like, setlike] = useState(true);
   const [postType, setPostType] = useState("Required");
   const [role, setRole] = useState("buyer");
+  const [saveRerander, setSaveRerander] = useState(false);
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
@@ -65,7 +66,7 @@ const RequiredPosts = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like]);
+  }, [sortOrder, sortBy, limit, page, like, saveRerander]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -113,6 +114,8 @@ const RequiredPosts = () => {
                       myId={myId}
                       setlike={setlike}
                       like={like}
+                      saveRerander={saveRerander}
+                      setSaveRerander={setSaveRerander}
                     />
                   );
                 })}

@@ -7,7 +7,10 @@ const SellTypeSection = ({ sellType }) => {
       <div className="flex justify-start items-center gap-2">
         {sellType?.map((data, i) => {
           return (
-            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+            <span
+              key={i}
+              class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+            >
               {data}
             </span>
           );
