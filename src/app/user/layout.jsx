@@ -3,11 +3,11 @@
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { redirect } from "next/navigation";
 import { HeaderTop } from "./_component/HeaderTop";
-import { HeaderLeft } from "./_component/HeaderLeft";
-import { HeaderRight } from "./_component/HeaderRight";
 import PostLocationValueProvider from "@/Context/postValueContext";
 import { Nunito } from "next/font/google";
 import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
+import { HeaderLeft } from "./_component/HeaderLeft";
+import { HeaderRight } from "./_component/HeaderRight";
 
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
