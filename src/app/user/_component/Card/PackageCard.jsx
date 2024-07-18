@@ -11,6 +11,7 @@ import { SiImessage } from "react-icons/si";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 const PackageCard = ({
   item,
   myId,
@@ -340,8 +341,8 @@ const PackageCard = ({
                           onClick={() => handleUnSaveClick(_id)}
                           className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
                         >
-                          <BookmarkIcon className="size-4 fill-black" />
-                          unSave
+                          <BookmarkSlashIcon className="size-4 fill-black" />
+                          Unsave
                         </button>
                       ) : (
                         <button

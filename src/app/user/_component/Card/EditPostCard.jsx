@@ -15,7 +15,8 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 
 import { useEffect, useState } from "react";
-import { BookmarkIcon } from "@heroicons/react/20/solid";
+import { BookmarkIcon, BookmarkSlashIcon } from "@heroicons/react/20/solid";
+import toast from "react-hot-toast";
 const EditPostCard = ({
   item,
   myId,
@@ -348,8 +349,8 @@ const EditPostCard = ({
                         onClick={() => handleUnSaveClick(_id)}
                         className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
                       >
-                        <BookmarkIcon className="size-4 fill-black" />
-                        unSave
+                        <BookmarkSlashIcon className="size-4 fill-black" />
+                        Unsave
                       </button>
                     ) : (
                       <button
