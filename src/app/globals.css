@@ -2923,7 +2923,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .fixed-sidebar .sidebar-toggle {
   background-color: #5854ef;
   text-align: center;
-  height: 89px;
+  /* height: 89px; */
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -14606,7 +14606,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .fixed-sidebar .sidebar-toggle {
   background-color: #5854ef;
   text-align: center;
-  height: 89px;
+  /* height: 100px; */
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -21959,7 +21959,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .user-single-blog .blog-content-wrap {
-  padding: 40px 70px 65px;
+  padding: 30px 30px 65px;
 }
 
 @media only screen and (max-width: 1199px) {

@@ -15,7 +15,9 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 
 import { useEffect, useState } from "react";
-import { BookmarkIcon } from "@heroicons/react/20/solid";
+import { BookmarkIcon, BookmarkSlashIcon } from "@heroicons/react/20/solid";
+import toast from "react-hot-toast";
+import { SiImessage } from "react-icons/si";
 const EditPostCard = ({
   item,
   myId,
@@ -258,19 +260,29 @@ const EditPostCard = ({
                   {item.role === "buyer" ? (
                     <>
                       {userinfo?._id === myId ? (
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                          {userinfo?.fullName}
-                        </p>
+                        <Link
+                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                        >
+                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                            {userinfo?.fullName}
+                          </p>
+                        </Link>
                       ) : (
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                          Hidden Name{" "}
-                        </p>
+                        <Link
+                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                        >
+                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                            Hidden Name{" "}
+                          </p>
+                        </Link>
                       )}
                     </>
                   ) : (
-                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
-                      {userinfo?.fullName}
-                    </p>
+                    <Link href={`${"/user/agent-profile"}/${userinfo?._id}`}>
+                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                        {userinfo?.fullName}
+                      </p>
+                    </Link>
                   )}
                   <div className="mb-[5px] mr-2">
                     <Image
@@ -348,8 +360,8 @@ const EditPostCard = ({
                         onClick={() => handleUnSaveClick(_id)}
                         className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
                       >
-                        <BookmarkIcon className="size-4 fill-black" />
-                        unSave
+                        <BookmarkSlashIcon className="size-4 fill-black" />
+                        Unsave
                       </button>
                     ) : (
                       <button
@@ -361,6 +373,15 @@ const EditPostCard = ({
                       </button>
                     )}
 
+                    <MenuItem>
+                      <button
+                        onClick={() => open(item)}
+                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-black/10"
+                      >
+                        <ArchiveBoxXMarkIcon className="size-4 fill-black" />
+                        Edit
+                      </button>
+                    </MenuItem>
                     <MenuItem>
                       <button
                         onClick={() => openHiden(item)}
@@ -440,11 +461,8 @@ const EditPostCard = ({
             })}
           </div>
           <div>
-            <button className="bg-[#F2EEFC] p-[13px] rounded flex items-center">
-              <p className="text-[15px] font-medium font-inter text-[#26BF94] -mb-[1px]">
-                {" "}
-                <FaRegComment className="w-4 h-4 md:w-5 md:h-5" />
-              </p>
+            <button className="">
+              <SiImessage className="text-[#1DFF00] w-8 h-8" />
             </button>
           </div>
         </div>

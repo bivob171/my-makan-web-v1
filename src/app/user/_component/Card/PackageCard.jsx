@@ -11,6 +11,7 @@ import { SiImessage } from "react-icons/si";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 const PackageCard = ({
   item,
   myId,
@@ -249,19 +250,29 @@ const PackageCard = ({
                   {item.role === "buyer" ? (
                     <>
                       {userinfo?._id === myId ? (
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                          {userinfo?.fullName}
-                        </p>
+                        <Link
+                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                        >
+                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                            {userinfo?.fullName}
+                          </p>
+                        </Link>
                       ) : (
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                          Hidden Name{" "}
-                        </p>
+                        <Link
+                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                        >
+                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                            Hidden Name{" "}
+                          </p>
+                        </Link>
                       )}
                     </>
                   ) : (
-                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
-                      {userinfo?.fullName}
-                    </p>
+                    <Link href={`${"/user/agent-profile"}/${userinfo?._id}`}>
+                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                        {userinfo?.fullName}
+                      </p>
+                    </Link>
                   )}
                   <div className="mb-[5px] mr-2">
                     <Image
@@ -340,8 +351,8 @@ const PackageCard = ({
                           onClick={() => handleUnSaveClick(_id)}
                           className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
                         >
-                          <BookmarkIcon className="size-4 fill-black" />
-                          unSave
+                          <BookmarkSlashIcon className="size-4 fill-black" />
+                          Unsave
                         </button>
                       ) : (
                         <button

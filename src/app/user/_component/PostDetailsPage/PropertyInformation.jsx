@@ -1,32 +1,26 @@
 import React from "react";
 
-const PropertyInformation = () => {
+const PropertyInformation = ({ item }) => {
   return (
     <div className="my-10">
       <h2>Property Information</h2>
-      <table class="table-auto w-[80%]">
+      <table class="table-auto w-[90%]">
         <tbody className="">
           <tr className="border-b !h-[50px]">
             <td className="">Type</td>
-            <td className="font-semibold">Townhouse</td>
-            <td>Furnishing</td>
-            <td className="font-semibold">Unfurnished</td>
+            <td className="">Post Type</td>
+            <td className="font-semibold">For</td>
+            <td>Property Category </td>
+            <td className="font-semibold">Property Type</td>
+            <td className="font-semibold">parking</td>
           </tr>
           <tr className="border-b !h-[50px]">
-            <td>Purpose</td>
-            <td className="font-semibold">For Sale</td>
-            <td>Tru Check TM on</td>
-            <td className="font-semibold">11 July 2024</td>
-          </tr>
-          <tr className="border-b !h-[50px]">
-            <td>Reference no.</td>
-            <td className="font-semibold">Bayut - H4L-3606217</td>
-            <td>Added on</td>
-            <td className="font-semibold">4 July 2024</td>
-          </tr>
-          <tr className="border-b !h-[50px]">
-            <td>Completion</td>
-            <td className="font-semibold">Off-Plan</td>
+            <td>{item?.type}</td>
+            <td>{item?.postType}</td>
+            <td className="font-semibold">For {item?.for}</td>
+            <td>{item?.propertyCategory}</td>
+            <td className="font-semibold">{item?.propertyType}</td>
+            <td className="font-semibold">{item?.parking}</td>
           </tr>
         </tbody>
       </table>

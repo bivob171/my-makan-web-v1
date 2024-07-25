@@ -145,7 +145,7 @@ const AgentComment = ({ _id }) => {
   return (
     <div className="blog-comment-form">
       <div className="grid grid-cols-3">
-        <h3 className="item-title">Leave a Comment</h3>
+        <h3 className="item-title whitespace-nowrap">Leave a Comment</h3>
         <div className="w-full col-span-2">
           <button
             className="w-full text-end mt-4"
