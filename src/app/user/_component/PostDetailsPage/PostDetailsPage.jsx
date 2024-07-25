@@ -90,6 +90,7 @@ export const PostDetailsPage = ({ postid }) => {
     price,
     sqft,
   } = item;
+  console.log(item);
   const userinfo = role === "agent" ? agentId : userId;
   const [hasId, setHasId] = useState(false);
   useEffect(() => {
@@ -349,7 +350,7 @@ export const PostDetailsPage = ({ postid }) => {
                     </div>
                     <h2 className="entry-title">{title}</h2>
                     <div className="row align-items-center">
-                      <div className="col-lg-8">
+                      <div className="col-lg-9">
                         <ul className="entry-meta">
                           <li>
                             <Image
@@ -372,6 +373,8 @@ export const PostDetailsPage = ({ postid }) => {
                               <Link href="#">{userinfo?.fullName}</Link>
                             )}
                           </li>
+                        </ul>
+                        <ul className="entry-meta ml-[50px] -mt-[10px]">
                           <li>
                             <i className="icofont-calendar" />{" "}
                             {formatDate(createdAt)}{" "}
@@ -388,7 +391,7 @@ export const PostDetailsPage = ({ postid }) => {
                           </li>
                         </ul>
                       </div>
-                      <div className="col-lg-4">
+                      <div className="col-lg-3">
                         <ul className="blog-share">
                           <li>
                             <a href="#" className="bg-fb">
@@ -398,21 +401,6 @@ export const PostDetailsPage = ({ postid }) => {
                           <li>
                             <a href="#" className="bg-twitter">
                               <i className="icofont-twitter" />
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="bg-dribble">
-                              <i className="icofont-dribbble" />
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="bg-youtube">
-                              <i className="icofont-youtube" />
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="bg-behance">
-                              <i className="icofont-behance" />
                             </a>
                           </li>
                         </ul>
@@ -457,7 +445,7 @@ export const PostDetailsPage = ({ postid }) => {
                   </div>
                   {/* Property Information */}
                   <div>
-                    <PropertyInformation />
+                    <PropertyInformation item={item} />
                   </div>
                   <div className="">
                     <center>

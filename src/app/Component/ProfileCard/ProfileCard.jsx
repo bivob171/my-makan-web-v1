@@ -62,7 +62,7 @@ export const ProfileCard = () => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
   }, []);
-
+  const totalAdsPost = user?.totalSponsoredPost + user?.totalUrgentPost;
   return (
     <div className="mb-[20px]">
       <div className="widget widget-author !pb-2 !pl-2 !pr-2">
@@ -148,7 +148,7 @@ export const ProfileCard = () => {
           <li>
             <a href="#">
               <span className="text-[12px] text-[#525252] font-bold ">
-                {totalPoset?.totalPosts}
+                {totalPoset?.totalPost}
               </span>{" "}
               <br />
               <span className=" text-[#9e9faf] font-semibold text-[10px]">
@@ -158,7 +158,9 @@ export const ProfileCard = () => {
           </li>
           <li>
             <a href="#">
-              <span className="text-[12px] text-[#525252] font-bold ">2.4k</span>{" "}
+              <span className="text-[12px] text-[#525252] font-bold ">
+                2.4k
+              </span>{" "}
               <br />
               <span className=" text-[#9e9faf] font-semibold text-[10px]">
                 Matched
@@ -169,7 +171,7 @@ export const ProfileCard = () => {
             <a href="#">
               <span className="text-[12px] text-[#525252] font-bold">
                 {" "}
-                {totalPoset?.sponsoredPosts}
+                {totalAdsPost}
               </span>
 
               <br />
@@ -180,7 +182,9 @@ export const ProfileCard = () => {
           </li>
           <li>
             <a href="#">
-              <span className="text-[12px] text-[#525252] font-bold">1,125</span>
+              <span className="text-[12px] text-[#525252] font-bold">
+                1,125
+              </span>
               <br />
               <span className="whitespace-nowrap text-[#9e9faf] font-semibold text-[10px]">
                 My Connect
