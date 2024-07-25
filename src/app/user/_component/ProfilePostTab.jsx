@@ -476,11 +476,10 @@ const ProfilePostTab = ({ profileId, profile }) => {
             <div className="grid grid-cols-1 gap-4 ">
               {allPosts?.map((item, i) => {
                 return (
-                  <div>
+                  <div key={i}>
                     {profileId === myId ? (
                       <EditPostCard
                         item={item}
-                        key={i}
                         myId={myId}
                         setlike={setlike}
                         like={like}
@@ -493,7 +492,6 @@ const ProfilePostTab = ({ profileId, profile }) => {
                     ) : (
                       <PackageCard
                         item={item}
-                        key={i}
                         myId={myId}
                         setlike={setlike}
                         like={like}

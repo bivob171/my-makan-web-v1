@@ -8,7 +8,7 @@ import ProfilePostTab from "../../_component/ProfilePostTab";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 
-export default function buyerProfile() {
+export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
     PostLocationValueContext
