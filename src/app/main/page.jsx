@@ -48,7 +48,7 @@ export default function HomePage() {
     const loadSal = async () => {
       try {
         await loadScript("/dependencies/sal.js/sal.js");
-        sal(); // Initialize sal.js
+        sal();
       } catch (error) {
         console.error("Error loading sal.js: ", error);
       }

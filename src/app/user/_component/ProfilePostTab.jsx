@@ -42,7 +42,6 @@ const ProfilePostTab = ({ profileId, profile }) => {
     try {
       setIsFetching(true);
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
-      // Constructing the URL with query parameters based on state variables
       if (profileRole === "agent") {
         url += `agentId=${profileId}&`;
       } else {
@@ -129,8 +128,6 @@ const ProfilePostTab = ({ profileId, profile }) => {
     setIsOpenDelete(true);
     setPostId(id);
   }
-
-  // profile card
 
   const dateStr = profile?.createdAt;
 
@@ -451,7 +448,7 @@ const ProfilePostTab = ({ profileId, profile }) => {
         {/* news feed card  */}
         <div
           ref={containerRefPost}
-          className="overflow-y-auto h-screen pb-[50px] -mt-[25px]"
+          className="h-screen pb-[50px] -mt-[25px]"
         >
           <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           <PostHiddenModal

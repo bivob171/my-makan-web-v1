@@ -13,6 +13,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 
 import { Keyboard, FreeMode, Autoplay } from "swiper/modules";
+import { SiImessage } from "react-icons/si";
 
 export default function HouseCard() {
   const [openModalIndex, setOpenModalIndex] = useState(null);
@@ -23,11 +24,12 @@ export default function HouseCard() {
   };
 
   const handleClickOutside = (event) => {
-    modalRefs.current.forEach((ref, index) => {
-      if (ref && !ref.contains(event.target)) {
+    if (openModalIndex !== null) {
+      const modalRef = modalRefs.current[openModalIndex];
+      if (modalRef && !modalRef.contains(event.target)) {
         setOpenModalIndex(null);
       }
-    });
+    }
   };
 
   useEffect(() => {
@@ -82,13 +84,13 @@ export default function HouseCard() {
                     <div className="flex gap-x-[15px] items-center h-[45px] ">
                       <div className="mb-[17px]">
                         <div className=" relative w-[40px] h-[40px]">
-                          <div>
+                          <div className="cursor-pointer overflow-hidden rounded-full">
                             <Image
                               width={40}
                               height={40}
                               alt="img"
                               src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                              className="w-[40px] h-[40px] rounded-full"
+                              className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full transform transition duration-500 hover:scale-110"
                             />
                           </div>
                           <div className="absolute bottom-[2px] right-0 bg-white w-[10px] h-[10px] rounded-full flex items-center justify-center">
@@ -226,16 +228,13 @@ export default function HouseCard() {
                         </p>
                       </button>
                     </div>
-                    <div className="relative">
+                    <div className="relative inline-flex">
                       {/* handle comment button  */}
                       <button
-                        className="bg-[#ebebeb] h-[30px] w-[35px] rounded flex justify-center items-center"
+                        className=""
                         onClick={() => handleCommentBtnClick(index)}
                       >
-                        <p className="text-[15px] font-medium font-inter h-[17px]  text-[#252525] -mb-[1px]">
-                          {" "}
-                          <FaRegComment />
-                        </p>
+                        <SiImessage className="text-[#1DFF00] w-8 h-8" />
                       </button>
                       {/* modal  */}
                       {openModalIndex === index && (
