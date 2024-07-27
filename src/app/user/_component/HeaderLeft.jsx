@@ -33,7 +33,7 @@ export const HeaderLeft = () => {
   }, [isVisible]);
   return (
     <div className="">
-      <div className="fixed-sidebar">
+      <div className="fixed-sidebar !z-50">
         <div className="fixed-sidebar-left small-sidebar ">
           <div className="sidebar-toggle h-[100px]">
             <button

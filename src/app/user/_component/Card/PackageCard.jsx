@@ -254,12 +254,12 @@ const PackageCard = ({
         <div className="flex justify-between px-[15px]">
           <div className="flex gap-x-[15px] items-center h-[45px]">
             <div className="mb-[17px]">
-              <div className="">
-                <div
-                  className="cursor-pointer !w-[46px] !h-[46px] md:!w-[66px] md:!h-[66px] border-4 p-[2px] hover:border-[#0033ffd4] rounded-full relative"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                >
+              <div
+                className="relative"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <div className="cursor-pointer !w-[46px] !h-[46px] md:!w-[66px] md:!h-[66px] border-4 p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                   <Image
                     width={40}
                     height={40}
@@ -277,120 +277,123 @@ const PackageCard = ({
                     />
                   </div>
                 </div>
+                {/* hover dropdown  */}
                 {isHovered && (
-                  <div className="absolute left-1/2 transform -translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-0">
-                    <div className="flex gap-2">
-                      <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#0033ffd4] rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          alt="img"
-                          src={userinfo?.image}
-                          className="w-full h-full rounded-full"
-                        />
-                      </div>
-                      <div>
-                        <div className=" -mb-[20px] md:-mb-[15px]">
-                          <div className="flex justify-start items-center">
-                            {item.role === "buyer" ? (
-                              <>
-                                {userinfo?._id === myId ? (
-                                  <Link
-                                    href={`${"/user/buyer-profile"}/${
-                                      userinfo?._id
-                                    }`}
-                                  >
-                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                                      {userinfo?.fullName}
-                                    </p>
-                                  </Link>
-                                ) : (
-                                  <Link
-                                    href={`${"/user/buyer-profile"}/${
-                                      userinfo?._id
-                                    }`}
-                                  >
-                                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                                      Hidden Name{" "}
-                                    </p>
-                                  </Link>
-                                )}
-                              </>
-                            ) : (
-                              <Link
-                                href={`${"/user/agent-profile"}/${
-                                  userinfo?._id
-                                }`}
-                              >
-                                <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
-                                  {userinfo?.fullName}
+                  <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
+                    <div className="!w-96">
+                      <div className="flex gap-2">
+                        <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#0033ffd4] rounded-full">
+                          <Image
+                            width={40}
+                            height={40}
+                            alt="img"
+                            src={userinfo?.image}
+                            className="w-full h-full rounded-full"
+                          />
+                        </div>
+                        <div>
+                          <div className=" -mb-[20px] md:-mb-[15px]">
+                            <div className="flex justify-start items-center">
+                              {item.role === "buyer" ? (
+                                <>
+                                  {userinfo?._id === myId ? (
+                                    <Link
+                                      href={`${"/user/buyer-profile"}/${
+                                        userinfo?._id
+                                      }`}
+                                    >
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                        {userinfo?.fullName}
+                                      </p>
+                                    </Link>
+                                  ) : (
+                                    <Link
+                                      href={`${"/user/buyer-profile"}/${
+                                        userinfo?._id
+                                      }`}
+                                    >
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                                        Hidden Name{" "}
+                                      </p>
+                                    </Link>
+                                  )}
+                                </>
+                              ) : (
+                                <Link
+                                  href={`${"/user/agent-profile"}/${
+                                    userinfo?._id
+                                  }`}
+                                >
+                                  <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                                    {userinfo?.fullName}
+                                  </p>
+                                </Link>
+                              )}
+                              <div className="mb-[5px] mr-2">
+                                <Image
+                                  width={15}
+                                  height={15}
+                                  alt=""
+                                  src="/homeCard/verified.png"
+                                />
+                              </div>
+                              <div className="flex items-center gap-x-[5px] mt-[5px]">
+                                <p className="text-[#F5B849] text-[0.875rem] font-semibold">
+                                  {userinfo?.avgrating}
                                 </p>
-                              </Link>
-                            )}
-                            <div className="mb-[5px] mr-2">
+                                <p className="text-[#F5B849] text-[0.875rem] font-semibold">
+                                  <GoStarFill />
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          {item.role === "buyer" ? (
+                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                              Buyer From{" "}
+                              <span className="text-[#E6533C]">
+                                {userinfo?.state}
+                                {userinfo?.country !== null && ", "}
+                                {userinfo?.country}
+                              </span>
+                            </p>
+                          ) : (
+                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                              {userinfo?.companyName}
+                            </p>
+                          )}
+                          <div>
+                            <p className="text-[#8C9097] text-[10px] md:text-[0.8rem] mb-0">
+                              {formatDate(createdAt)}
+                            </p>
+                          </div>
+                          <div className="flex gap-1 items-start leading-none">
+                            <div className="w-full max-w-[14px] h-auto mb-[16px] ml-[4px]">
                               <Image
-                                width={15}
-                                height={15}
+                                width={40}
+                                height={2}
                                 alt=""
-                                src="/homeCard/verified.png"
+                                className=""
+                                src="/homeCard/location.png"
                               />
                             </div>
-                            <div className="flex items-center gap-x-[5px] mt-[5px]">
-                              <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                {userinfo?.avgrating}
-                              </p>
-                              <p className="text-[#F5B849] text-[0.875rem] font-semibold">
-                                <GoStarFill />
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        {item.role === "buyer" ? (
-                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                            Buyer From{" "}
-                            <span className="text-[#E6533C]">
-                              {userinfo?.state}
-                              {userinfo?.country !== null && ", "}
-                              {userinfo?.country}
-                            </span>
-                          </p>
-                        ) : (
-                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                            {userinfo?.companyName}
-                          </p>
-                        )}
-                        <div>
-                          <p className="text-[#8C9097] text-[10px] md:text-[0.8rem] mb-0">
-                            {formatDate(createdAt)}
-                          </p>
-                        </div>
-                        <div className="flex gap-1 items-start leading-none">
-                          <div className="w-full max-w-[14px] h-auto mb-[16px] ml-[4px]">
-                            <Image
-                              width={40}
-                              height={2}
-                              alt=""
-                              className=""
-                              src="/homeCard/location.png"
-                            />
-                          </div>
-                          <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium">
-                            {location?.city}
+                            <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium">
+                              {location?.city}
 
-                            {location?.country !== null && ", "}
-                            {location?.country}
-                          </p>
+                              {location?.country !== null && ", "}
+                              {location?.country}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex justify-between gap-3 mt-2">
-                      <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
-                        <BsJournalBookmarkFill className="w-5 h-5" /> Follow
-                      </button>
-                      <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
-                        {" "}
-                        <MdFavorite className="w-5 h-5" /> Save
-                      </button>
+                      <div className="flex justify-between gap-3 mt-2">
+                        <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                          <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                        </button>
+                        <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                          {" "}
+                          <MdFavorite className="w-5 h-5" /> Save
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}

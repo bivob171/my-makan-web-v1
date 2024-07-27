@@ -271,7 +271,7 @@ export const PostDetailsPage = ({ postid }) => {
         <div className="row">
           <div className="col-lg-3 widget-block widget-break-lg">
             <div className="!sticky top-[110px]">
-              <div className="h-[100vh] overflow-y-scroll">
+              <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
                 <PropertyCard2 />
                 <PropertyCard2 />

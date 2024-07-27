@@ -89,131 +89,133 @@ export const NewsFeedPage = () => {
           <div className="row">
             <div className="col-lg-3 widget-block widget-break-lg ">
               <div className="!sticky top-[110px]">
-                <div className="h-[100vh] overflow-y-scroll">
+                <div className="h-[86vh] overflow-y-scroll">
                   <NewsFeedLeftSection />
                 </div>
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="newsfeed-search">
-                <ul className="member-list gap-2">
-                  <li className="active-member">
-                    <Image
-                      width={40}
-                      height={40}
-                      alt="img"
-                      src={user?.image}
-                      className="w-[45px] h-[45px] rounded-full border-2"
-                    />
-                  </li>
-                  <li>
-                    {user?.role === "agent" ? (
-                      <>
-                        {user?.verified === false ? (
-                          <>
-                            <button
-                              className="cursor-pointer"
-                              onClick={() => setVerifyPopup(true)}
-                            >
-                              <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                                <span className="text-[16px] font-mono font-medium">
-                                  what are you looking for, {userName}?
-                                </span>
-                              </div>
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button className="cursor-pointer" onClick={open}>
-                              <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                                <span className="text-[16px] font-mono font-medium">
-                                  what are you looking for, {userName}?
-                                </span>
-                              </div>
-                            </button>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <button className="cursor-pointer" onClick={open}>
-                        <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                          <span className="text-[16px] font-mono font-medium">
-                            what are you looking for, {userName}?
-                          </span>
-                        </div>
+              <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+                <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none">
+                  <ul className="member-list gap-2 ">
+                    <li className="active-member">
+                      <Image
+                        width={40}
+                        height={40}
+                        alt="img"
+                        src={user?.image}
+                        className="w-[45px] h-[45px] rounded-full border-2"
+                      />
+                    </li>
+                    <li>
+                      {user?.role === "agent" ? (
+                        <>
+                          {user?.verified === false ? (
+                            <>
+                              <button
+                                className="cursor-pointer"
+                                onClick={() => setVerifyPopup(true)}
+                              >
+                                <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                                  <span className="text-[16px] font-mono font-medium">
+                                    what are you looking for, {userName}?
+                                  </span>
+                                </div>
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button className="cursor-pointer" onClick={open}>
+                                <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                                  <span className="text-[16px] font-mono font-medium">
+                                    what are you looking for, {userName}?
+                                  </span>
+                                </div>
+                              </button>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <button className="cursor-pointer" onClick={open}>
+                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                            <span className="text-[16px] font-mono font-medium">
+                              what are you looking for, {userName}?
+                            </span>
+                          </div>
+                        </button>
+                      )}
+                    </li>
+                  </ul>
+                  <ul className="search-list">
+                    <li className="search-filter">
+                      <button className="drop-btn" type="button">
+                        <i className="icofont-abacus-alt" />
                       </button>
-                    )}
-                  </li>
-                </ul>
-                <ul className="search-list">
-                  <li className="search-filter">
-                    <button className="drop-btn" type="button">
-                      <i className="icofont-abacus-alt" />
-                    </button>
-                    <div className="drop-menu"></div>
-                  </li>
-                </ul>
-              </div>
-              <div className="block-box post-input-tab">
-                <ul className="nav nav-tabs" role="tablist">
-                  <li
-                    className="nav-item"
-                    role="presentation"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="STATUS"
-                  >
-                    <a
-                      className={`nav-link ${
-                        activeTab === "allPosts" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("allPosts")}
-                      role="tab"
-                      aria-selected={activeTab === "allPosts"}
+                      <div className="drop-menu"></div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="block-box post-input-tab !rounded-none border-t">
+                  <ul className="nav nav-tabs" role="tablist">
+                    <li
+                      className="nav-item"
+                      role="presentation"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="STATUS"
                     >
-                      <i className="icofont-copy" />
-                      All Posts
-                    </a>
-                  </li>
-                  <li
-                    className="nav-item"
-                    role="presentation"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="MEDIA"
-                  >
-                    <a
-                      className={`nav-link ${
-                        activeTab === "availablePosts" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("availablePosts")}
-                      role="tab"
-                      aria-selected={activeTab === "availablePosts"}
+                      <a
+                        className={`nav-link ${
+                          activeTab === "allPosts" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("allPosts")}
+                        role="tab"
+                        aria-selected={activeTab === "allPosts"}
+                      >
+                        <i className="icofont-copy" />
+                        All Posts
+                      </a>
+                    </li>
+                    <li
+                      className="nav-item"
+                      role="presentation"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="MEDIA"
                     >
-                      <i className="icofont-image" />
-                      Available Posts
-                    </a>
-                  </li>
-                  <li
-                    className="nav-item"
-                    role="presentation"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="BLOG"
-                  >
-                    <a
-                      className={`nav-link ${
-                        activeTab === "required" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("required")}
-                      role="tab"
-                      aria-selected={activeTab === "required"}
+                      <a
+                        className={`nav-link ${
+                          activeTab === "availablePosts" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("availablePosts")}
+                        role="tab"
+                        aria-selected={activeTab === "availablePosts"}
+                      >
+                        <i className="icofont-image" />
+                        Available Posts
+                      </a>
+                    </li>
+                    <li
+                      className="nav-item"
+                      role="presentation"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="BLOG"
                     >
-                      <i className="icofont-list" />
-                      Required Posts
-                    </a>
-                  </li>
-                </ul>
+                      <a
+                        className={`nav-link ${
+                          activeTab === "required" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("required")}
+                        role="tab"
+                        aria-selected={activeTab === "required"}
+                      >
+                        <i className="icofont-list" />
+                        Required Posts
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               {activeTab === "allPosts" && <AllTotalPost />}
               {activeTab === "availablePosts" && <AvailableTotalPost />}

@@ -55,7 +55,7 @@ export const HeaderTop = () => {
   const router = useRouter();
   return (
     <div ref={dropdownRef} className="">
-      <header className="fixed-header ">
+      <header className="fixed-header !z-40">
         <div className="header-menu relative">
           <div className="navbar h-[100px]">
             <Link href="/user/newsfeed">

@@ -10,7 +10,7 @@ const NewsFeedRightSection = () => {
 
   return (
     <div className="!sticky top-[110px]">
-      <div className="h-[100vh] overflow-y-scroll">
+      <div className="h-[86vh] overflow-y-scroll">
         <div>
           <ProfileCard />
         </div>
@@ -417,7 +417,10 @@ const NewsFeedRightSection = () => {
         <div className="widget widget-banner">
           <h3 className="item-title">Most Popular</h3>
           <div className="item-subtitle">MyMakan Application</div>
-          <a href="#" className="item-btn !inline-flex justify-center items-center gap-1">
+          <a
+            href="#"
+            className="item-btn !inline-flex justify-center items-center gap-1"
+          >
             <span className="btn-text">Download Now</span>
             <span className="btn-icon">
               <svg

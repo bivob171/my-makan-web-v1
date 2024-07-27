@@ -87,7 +87,7 @@ const AllPost = () => {
   }, [isFetching, hasMore]);
 
   return (
-    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
+    <div ref={containerRefPost} className="overflow-y-scroll h-screen pb-[50px]">
       <div className="">
         <div className="">
           <div>

@@ -38,7 +38,7 @@ export const AgentPostDetailsPage = () => {
         <div className="row ">
           <div className="col-lg-3 widget-block widget-break-lg">
             <div className="!sticky top-[110px]">
-              <div className="h-[100vh] overflow-y-scroll">
+              <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
                 <div className="space-y-5">
                   <PropertyCard2 />

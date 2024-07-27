@@ -42,6 +42,9 @@ const NewsFeedLeftSection = () => {
           </div>
         </div>
         {/* sponsored section  */}
+        <div>
+          <PropertyCard2 />
+        </div>
       </div>
     </div>
   );

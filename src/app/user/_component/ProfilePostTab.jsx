@@ -323,67 +323,68 @@ const ProfilePostTab = ({ profileId, profile }) => {
         {isOpenPost === true && (
           <PostSection isOpen={isOpenPost} setIsOpen={setIsOpenPost} />
         )}
-        <div className="newsfeed-search">
-          <ul className="member-list gap-2">
-            <li className="active-member">
-              <Image
-                width={40}
-                height={40}
-                alt="img"
-                src={user?.image}
-                className="w-[45px] h-[45px] rounded-full border-2"
-              />
-            </li>
-            <li>
-              {user?.role === "agent" ? (
-                <>
-                  {user?.verified === false ? (
-                    <>
-                      <button
-                        className="cursor-pointer"
-                        onClick={() => setVerifyPopup(true)}
-                      >
-                        <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                          <span className="text-[16px] font-mono font-medium">
-                            what are you looking for, {userName}?
-                          </span>
-                        </div>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button className="cursor-pointer" onClick={openPost}>
-                        <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                          <span className="text-[16px] font-mono font-medium">
-                            what are you looking for, {userName}?
-                          </span>
-                        </div>
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : (
-                <button className="cursor-pointer" onClick={openPost}>
-                  <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                    <span className="text-[16px] font-mono font-medium">
-                      what are you looking for, {userName}?
-                    </span>
-                  </div>
+        <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+          <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none">
+            <ul className="member-list gap-2">
+              <li className="active-member">
+                <Image
+                  width={40}
+                  height={40}
+                  alt="img"
+                  src={user?.image}
+                  className="w-[45px] h-[45px] rounded-full border-2"
+                />
+              </li>
+              <li>
+                {user?.role === "agent" ? (
+                  <>
+                    {user?.verified === false ? (
+                      <>
+                        <button
+                          className="cursor-pointer"
+                          onClick={() => setVerifyPopup(true)}
+                        >
+                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                            <span className="text-[16px] font-mono font-medium">
+                              what are you looking for, {userName}?
+                            </span>
+                          </div>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="cursor-pointer" onClick={openPost}>
+                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                            <span className="text-[16px] font-mono font-medium">
+                              what are you looking for, {userName}?
+                            </span>
+                          </div>
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <button className="cursor-pointer" onClick={openPost}>
+                    <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
+                      <span className="text-[16px] font-mono font-medium">
+                        what are you looking for, {userName}?
+                      </span>
+                    </div>
+                  </button>
+                )}
+              </li>
+            </ul>
+            <ul className="search-list">
+              <li className="search-filter">
+                <button className="drop-btn" type="button">
+                  <i className="icofont-abacus-alt" />
                 </button>
-              )}
-            </li>
-          </ul>
-          <ul className="search-list">
-            <li className="search-filter">
-              <button className="drop-btn" type="button">
-                <i className="icofont-abacus-alt" />
-              </button>
-              <div className="drop-menu"></div>
-            </li>
-          </ul>
-        </div>
-        <div className="">
-          <div className="block-box post-input-tab">
+                <div className="drop-menu"></div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="block-box post-input-tab !rounded-none border-t">
             <ul className="nav nav-tabs" role="tablist">
               <li
                 className="nav-item"
@@ -446,10 +447,7 @@ const ProfilePostTab = ({ profileId, profile }) => {
           </div>
         </div>
         {/* news feed card  */}
-        <div
-          ref={containerRefPost}
-          className="h-screen pb-[50px] -mt-[25px]"
-        >
+        <div ref={containerRefPost} className="h-screen pb-[50px] -mt-[25px]">
           <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           <PostHiddenModal
             visible={isOpenHideen}
