@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { MdFavorite } from "react-icons/md";
+import axios from "axios";
 const PackageCard = ({
   item,
   myId,
@@ -20,6 +21,8 @@ const PackageCard = ({
   like,
   setSaveRerander,
   saveRerander,
+  followRerander,
+  setFollowRerander,
 }) => {
   const {
     role,
@@ -36,9 +39,13 @@ const PackageCard = ({
   const savePostId = _id;
   const [isHovered, setIsHovered] = useState(false);
   const [isHeartRed, setIsHeartRed] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
+  const [followloading, setFollowLoading] = useState(true);
   const [saveloading, setSaveLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ferror, setFError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
+  const followingId = userinfo?._id;
   const [hasId, setHasId] = useState(false);
 
   const [openModalIndex, setOpenModalIndex] = useState(null);
@@ -132,7 +139,6 @@ const PackageCard = ({
 
       const data = await response.json();
       setlike(!like);
-      console.log("Like successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -158,7 +164,6 @@ const PackageCard = ({
 
       const data = await response.json();
       setlike(!like);
-      console.log("unLike successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -229,14 +234,9 @@ const PackageCard = ({
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              userId,
-              role,
-            },
           }
         );
         setIsHeartRed(response.data);
-        console.log(response.data);
       } catch (err) {
         setError(err);
       } finally {
@@ -247,6 +247,93 @@ const PackageCard = ({
     const token = localStorage.getItem(`${userRole}AccessToken`);
     checkSavePost(token);
   }, [savePostId, saveRerander]);
+
+  // follow funtion
+
+  const handleFollowClick = async (userinfo) => {
+    try {
+      const _id = userinfo?._id;
+      const role = userinfo?.role;
+      const fullName = userinfo?.fullName;
+      setIsFollow(true);
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful following ${fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(` ${error.message}`);
+    }
+  };
+  const handleUnFollowClick = async (userinfo) => {
+    try {
+      const _id = userinfo?._id;
+      const role = userinfo?.role;
+      const fullName = userinfo?.fullName;
+      setIsFollow(false);
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful Unfollowing ${fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(`${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const checkFollowUser = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-exist/${followingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsFollow(response.data);
+      } catch (err) {
+        setFError(err);
+      } finally {
+        setFollowLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkFollowUser(token);
+  }, [followingId, followRerander]);
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px]">
@@ -282,15 +369,19 @@ const PackageCard = ({
                   <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
                     <div className="!w-96">
                       <div className="flex gap-2">
-                        <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#0033ffd4] rounded-full">
-                          <Image
-                            width={40}
-                            height={40}
-                            alt="img"
-                            src={userinfo?.image}
-                            className="w-full h-full rounded-full"
-                          />
-                        </div>
+                        <Link
+                          href={`${"/user/agent-profile"}/${userinfo?._id}`}
+                        >
+                          <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#0033ffd4] rounded-full">
+                            <Image
+                              width={40}
+                              height={40}
+                              alt="img"
+                              src={userinfo?.image}
+                              className="w-full h-full rounded-full"
+                            />
+                          </div>
+                        </Link>
                         <div>
                           <div className=" -mb-[20px] md:-mb-[15px]">
                             <div className="flex justify-start items-center">
@@ -348,7 +439,7 @@ const PackageCard = ({
                             </div>
                           </div>
                           {item.role === "buyer" ? (
-                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1 leading-[20px] mt-[3px]">
                               Buyer From{" "}
                               <span className="text-[#E6533C]">
                                 {userinfo?.state}
@@ -357,41 +448,58 @@ const PackageCard = ({
                               </span>
                             </p>
                           ) : (
-                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1 leading-[28px]">
                               {userinfo?.companyName}
                             </p>
                           )}
-                          <div>
+                          {/* <div>
                             <p className="text-[#8C9097] text-[10px] md:text-[0.8rem] mb-0">
                               {formatDate(createdAt)}
                             </p>
-                          </div>
-                          <div className="flex gap-1 items-start leading-none">
+                          </div> */}
+                          <div className="flex gap-1 items-start leading-none mt-[10px]">
                             <div className="w-full max-w-[14px] h-auto mb-[16px] ml-[4px]">
-                              <Image
-                                width={40}
-                                height={2}
-                                alt=""
-                                className=""
-                                src="/homeCard/location.png"
-                              />
+                              {userinfo?.country !== null && (
+                                <Image
+                                  width={40}
+                                  height={2}
+                                  alt=""
+                                  className=""
+                                  src="/homeCard/location.png"
+                                />
+                              )}
                             </div>
                             <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium">
-                              {location?.city}
+                              {userinfo?.state}
 
-                              {location?.country !== null && ", "}
-                              {location?.country}
+                              {userinfo?.country !== null && ", "}
+                              {userinfo?.country}
                             </p>
                           </div>
                         </div>
                       </div>
                       <div className="flex justify-between gap-3 mt-2">
-                        <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
-                          <BsJournalBookmarkFill className="w-5 h-5" /> Follow
-                        </button>
+                        {isFollow === true ? (
+                          <button
+                            type="button"
+                            onClick={() => handleUnFollowClick(userinfo)}
+                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                            Unfollow
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleFollowClick(userinfo)}
+                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                          </button>
+                        )}
                         <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
                           {" "}
-                          <MdFavorite className="w-5 h-5" /> Save
+                          <SiImessage className="w-5 h-5" /> Massage
                         </button>
                       </div>
                     </div>
@@ -405,29 +513,19 @@ const PackageCard = ({
                   {item.role === "buyer" ? (
                     <>
                       {userinfo?._id === myId ? (
-                        <Link
-                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
-                        >
-                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
-                            {userinfo?.fullName}
-                          </p>
-                        </Link>
+                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                          {userinfo?.fullName}
+                        </p>
                       ) : (
-                        <Link
-                          href={`${"/user/buyer-profile"}/${userinfo?._id}`}
-                        >
-                          <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
-                            Hidden Name{" "}
-                          </p>
-                        </Link>
+                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                          Hidden Name{" "}
+                        </p>
                       )}
                     </>
                   ) : (
-                    <Link href={`${"/user/agent-profile"}/${userinfo?._id}`}>
-                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
-                        {userinfo?.fullName}
-                      </p>
-                    </Link>
+                    <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                      {userinfo?.fullName}
+                    </p>
                   )}
                   <div className="mb-[5px] mr-2">
                     <Image

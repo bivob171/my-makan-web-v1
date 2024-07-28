@@ -16,7 +16,12 @@ import { PostHiddenModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenMod
 import { PostDeleteModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostDeleteMOdal";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
 
-const ProfilePostTab = ({ profileId, profile }) => {
+const ProfilePostTab = ({
+  profileId,
+  profile,
+  followRerander,
+  setFollowRerander,
+}) => {
   const { user } = PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
   const { setPostId } = useContext(EditPostLocationValueContext);
@@ -37,7 +42,7 @@ const ProfilePostTab = ({ profileId, profile }) => {
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const [saveRerander, setSaveRerander] = useState(false);
-  console.log(postType);
+
   const getAllPosts = async (token, profileId, profileRole) => {
     try {
       setIsFetching(true);
@@ -93,6 +98,7 @@ const ProfilePostTab = ({ profileId, profile }) => {
     saveRerander,
     profileRole,
     postType,
+    followRerander,
   ]);
 
   const handleScrollPostResult = () => {
@@ -490,11 +496,10 @@ const ProfilePostTab = ({ profileId, profile }) => {
                         myId={myId}
                         setlike={setlike}
                         like={like}
-                        // open={open}
-                        // openHiden={openHiden}
-                        // openDelete={openDelete}
                         saveRerander={saveRerander}
                         setSaveRerander={setSaveRerander}
+                        followRerander={followRerander}
+                        setFollowRerander={setFollowRerander}
                       />
                     )}
                   </div>

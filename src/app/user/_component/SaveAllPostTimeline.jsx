@@ -23,6 +23,7 @@ export const SaveAllPostTimeline = () => {
   const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const [saveRerander, setSaveRerander] = useState(false);
+  const [followRerander, setFollowRerander] = useState(false);
   const myId = user?._id;
 
   const getAllPosts = async (token) => {
@@ -63,7 +64,7 @@ export const SaveAllPostTimeline = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, saveRerander]);
+  }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -111,6 +112,8 @@ export const SaveAllPostTimeline = () => {
                 like={like}
                 saveRerander={saveRerander}
                 setSaveRerander={setSaveRerander}
+                followRerander={followRerander}
+                setFollowRerander={setFollowRerander}
               />
             );
           })}

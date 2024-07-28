@@ -62,7 +62,8 @@ export const ProfileCard = () => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
   }, []);
-  const totalAdsPost = user?.totalSponsoredPost + user?.totalUrgentPost;
+  const totalAdsPost = totalPoset?.sponsoredPosts + totalPoset?.urgentPosts;
+  console.log(totalPoset);
   return (
     <div className="mb-[20px]">
       <div className="widget widget-author !pb-2 !pl-2 !pr-2">
@@ -111,7 +112,9 @@ export const ProfileCard = () => {
           </div>
           <div className="profile-name -mt-[8px]">
             <h4 className="author-name">
-              <a href="#">{user?.fullName}</a>
+              <Link href={`${"/user/agent-profile"}/${user?._id}`}>
+                {user?.fullName}
+              </Link>
             </h4>
             {user?.role === "buyer" ? (
               <div className="author-location">
@@ -148,7 +151,7 @@ export const ProfileCard = () => {
           <li>
             <a href="#">
               <span className="text-[12px] text-[#525252] font-bold ">
-                {totalPoset?.totalPost}
+                {totalPoset?.totalPosts}
               </span>{" "}
               <br />
               <span className=" text-[#9e9faf] font-semibold text-[10px]">

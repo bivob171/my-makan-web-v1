@@ -25,6 +25,7 @@ export const SaveRequiredAllPostTimeline = () => {
   const [postType, setPostType] = useState("Required");
   const myId = user?._id;
   const [saveRerander, setSaveRerander] = useState(false);
+  const [followRerander, setFollowRerander] = useState(false);
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
@@ -64,7 +65,7 @@ export const SaveRequiredAllPostTimeline = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, saveRerander]);
+  }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
 
   const handleScrollPostResult = () => {
     const containerM = containerRefPost.current;
@@ -112,6 +113,8 @@ export const SaveRequiredAllPostTimeline = () => {
                 like={like}
                 saveRerander={saveRerander}
                 setSaveRerander={setSaveRerander}
+                followRerander={followRerander}
+                setFollowRerander={setFollowRerander}
               />
             );
           })}

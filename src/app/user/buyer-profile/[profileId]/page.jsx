@@ -7,6 +7,9 @@ import { useParams } from "next/navigation";
 import ProfilePostTab from "../../_component/ProfilePostTab";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
+import { BsJournalBookmarkFill } from "react-icons/bs";
+import { SiImessage } from "react-icons/si";
+import toast from "react-hot-toast";
 
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();
@@ -18,11 +21,18 @@ export default function BuyerProfile() {
   const [activeTab, setActiveTab] = useState("Posts");
   const userId = params.profileId;
   const [profile, setProfile] = useState();
+  const [isFollow, setIsFollow] = useState(false);
+  const [followRerander, setFollowRerander] = useState(false);
   const renderTabContent = () => {
     switch (activeTab) {
       case "Posts":
         return (
-          <ProfilePostTab profileId={params.profileId} profile={profile} />
+          <ProfilePostTab
+            profileId={params.profileId}
+            profile={profile}
+            followRerander={followRerander}
+            setFollowRerander={setFollowRerander}
+          />
         );
       case "About":
         return <div>About Tab</div>;
@@ -61,7 +71,10 @@ export default function BuyerProfile() {
 
   useEffect(() => {
     fetchUserProfile(userId);
-  }, [userId]);
+  }, [userId, followRerander]);
+  useEffect(() => {
+    setIsFollow(profile?.following);
+  }, [profile, followRerander]);
 
   // image update
   const [error, setError] = useState("");
@@ -226,6 +239,68 @@ export default function BuyerProfile() {
     );
   }, [profile]);
 
+  // follow funtion
+
+  const handleFollowClick = async (profile) => {
+    try {
+      const _id = profile?._id;
+      const role = profile?.role;
+      setIsFollow(true);
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful following ${user?.fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(` ${error.message}`);
+    }
+  };
+  const handleUnFollowClick = async (profile) => {
+    try {
+      const _id = profile?._id;
+      const role = profile?.role;
+      setIsFollow(false);
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful Unfollowing ${user?.fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(`${error.message}`);
+    }
+  };
+
   return (
     <div>
       <div className="page-content bg-[white] shadow-sm !pt-[100px]">
@@ -313,6 +388,31 @@ export default function BuyerProfile() {
                     <GoStarFill className="w-5 h-5" />
                   </p>
                 </div>
+                {profile?._id !== myId && (
+                  <div className="flex justify-between gap-3 mt-2">
+                    {isFollow === true ? (
+                      <button
+                        type="button"
+                        onClick={() => handleUnFollowClick(profile)}
+                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                      >
+                        <BsJournalBookmarkFill className="w-5 h-5" /> Unfollow
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleFollowClick(profile)}
+                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                      >
+                        <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                      </button>
+                    )}
+                    <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                      {" "}
+                      <SiImessage className="w-5 h-5" /> Massage
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

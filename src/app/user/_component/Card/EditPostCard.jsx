@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { BookmarkIcon, BookmarkSlashIcon } from "@heroicons/react/20/solid";
 import toast from "react-hot-toast";
 import { SiImessage } from "react-icons/si";
+import axios from "axios";
 const EditPostCard = ({
   item,
   myId,
