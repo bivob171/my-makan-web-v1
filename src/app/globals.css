@@ -3170,7 +3170,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 @media only screen and (max-width: 767px) {
   .fixed-sidebar.right .sidebar-toggle { 
-      height: 87px;
+      height: 100px;
   }
 }
 
@@ -14625,13 +14625,13 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 @media only screen and (max-width: 991px) {
   .fixed-sidebar .sidebar-toggle {
-      height: 87px !important;
+      height: 100px !important;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .fixed-sidebar .sidebar-toggle {
-    height: 87px !important;
+    height: 100px !important;
   }
 }
 

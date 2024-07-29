@@ -160,8 +160,8 @@ const ProfilePostTab = ({ profileId, profile }) => {
       setSaveRerander(!saveRerander);
   }
   return (
-    <div className="grid grid-cols-11 gap-10">
-      <div className="col-span-5">
+    <div className="grid grid-cols-1 lg:grid-cols-11 gap-y-10 lg:gap-10">
+      <div className="lg:col-span-5">
         {" "}
         <div className="widget widget-author !pb-2 !pl-2 !pr-2">
           <div className="author-heading">
@@ -318,21 +318,21 @@ const ProfilePostTab = ({ profileId, profile }) => {
           </div>
         </div>
       </div>
-      <div className="col-span-6">
+      <div className="lg:col-span-6">
         {" "}
         {isOpenPost === true && (
           <PostSection isOpen={isOpenPost} setIsOpen={setIsOpenPost} />
         )}
-        <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
-          <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none">
+        <div className="lg:!sticky top-[100px] bg-[#EFF4FB] z-10">
+          <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none p-1">
             <ul className="member-list gap-2">
-              <li className="active-member">
+              <li className="active-member !pl-0 md:!pl-4 h-[50px]">
                 <Image
                   width={40}
                   height={40}
                   alt="img"
                   src={user?.image}
-                  className="w-[45px] h-[45px] rounded-full border-2"
+                  className="!w-[50px] h-full object-cover rounded-full border-2"
                 />
               </li>
               <li>
@@ -344,8 +344,8 @@ const ProfilePostTab = ({ profileId, profile }) => {
                           className="cursor-pointer"
                           onClick={() => setVerifyPopup(true)}
                         >
-                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                            <span className="text-[16px] font-mono font-medium">
+                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[50px] rounded-full flex justify-start items-center pl-4 pr-4 md:pr-[120px]">
+                            <span className="text-[12px] md:text-[16px] font-mono font-medium text-start leading-none">
                               what are you looking for, {userName}?
                             </span>
                           </div>
@@ -354,8 +354,8 @@ const ProfilePostTab = ({ profileId, profile }) => {
                     ) : (
                       <>
                         <button className="cursor-pointer" onClick={openPost}>
-                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                            <span className="text-[16px] font-mono font-medium">
+                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4  pr-4 md:pr-[120px]">
+                            <span className="text-[14px] md:text-[16px] font-mono font-medium">
                               what are you looking for, {userName}?
                             </span>
                           </div>
@@ -365,8 +365,8 @@ const ProfilePostTab = ({ profileId, profile }) => {
                   </>
                 ) : (
                   <button className="cursor-pointer" onClick={openPost}>
-                    <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                      <span className="text-[16px] font-mono font-medium">
+                    <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4  pr-4 md:pr-[120px]">
+                      <span className="text-[14px] md:text-[16px] font-mono font-medium">
                         what are you looking for, {userName}?
                       </span>
                     </div>
@@ -379,7 +379,6 @@ const ProfilePostTab = ({ profileId, profile }) => {
                 <button className="drop-btn" type="button">
                   <i className="icofont-abacus-alt" />
                 </button>
-                <div className="drop-menu"></div>
               </li>
             </ul>
           </div>

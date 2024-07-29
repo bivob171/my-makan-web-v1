@@ -35,7 +35,7 @@ export const HeaderLeft = () => {
     <div className="">
       <div className="fixed-sidebar !z-50">
         <div className="fixed-sidebar-left small-sidebar ">
-          <div className="sidebar-toggle h-[100px]">
+          <div className="sidebar-toggle !h-[100px] !w-full">
             <button
               onClick={toggleVisibility}
               className="toggle-btn toggler-open focus:outline-none"
@@ -156,19 +156,17 @@ export const HeaderLeft = () => {
             isVisible ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="bg-blue-600 text-center h-[89px] flex items-center justify-between pl-[30px] pr-[18px]">
-            <div className="inline-block mt-[9px]">
+          <div className="bg-blue-600 text-center h-[100px] flex items-center justify-between pl-[30px] pr-[18px]">
               <Link href="/user">
                 <Image
                   src="/media/logo2.png"
                   alt="Logo"
-                  className="w-auto h-auto"
+                  className="w-full h-[40px]"
                   width={1000}
                   height={100}
                 />
               </Link>
-            </div>
-            <div className="sidebar-toggle ">
+            <div className="sidebar-toggle !bg-[#ffffff00]">
               <button
                 onClick={toggleVisibility}
                 className="toggle-btn focus:outline-none"

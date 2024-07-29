@@ -31,13 +31,13 @@ export const HeaderRight = () => {
   return (
     <div>
       <div className="fixed-sidebar !z-50 right">
-        <div className="fixed-sidebar-right small-sidebar ">
+        <div className="fixed-sidebar-right small-sidebar">
           <div
             onClick={() => {
               setOpen(!open);
               setChatOpen(false);
             }}
-            className="sidebar-toggle h-[100px]"
+            className="sidebar-toggle !h-[100px] !w-full"
           >
             <button className="chat-icon focus:outline-none">
               <i className="icofont-speech-comments" />
