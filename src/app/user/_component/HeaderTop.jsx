@@ -66,14 +66,50 @@ export const HeaderTop = () => {
               alt="Mymakan"
             />
           </Link>
-          <div className="nav-item nav-top-menu">
+          <div className="nav-item nav-top-menu ">
             <nav id="dropdown" className="template-main-menu">
-              <ul className="menu-content">
+              <ul className="!w-auto">
                 <li className="header-nav-item">
+                  <Link href="/user/agent" className="menu-link have-sub active">
+                    Agents
+                  </Link>
+                  <ul className="sub-menu">
+                    <li className="header-nav-item">
+                      <Link href="/user/agent" className="menu-link active">
+                        Agents
+                      </Link>
+                    </li>
+                    {user?.role === "agent" ? (
+                      <li className="header-nav-item">
+                        <Link
+                          href="/user/agent-posts"
+                          className="menu-link active"
+                        >
+                          Agent Posts
+                        </Link>
+                      </li>
+                    ) : (
+                      <li className="header-nav-item">
+                        <Link
+                          href="/user/buyer-posts"
+                          className="menu-link active"
+                        >
+                          Buyer Posts
+                        </Link>
+                      </li>
+                    )}
+                  </ul>
+                </li>
+                {/* <li className="header-nav-item">
                   <Link href="/user/agent" className="menu-link active">
                     Agents
                   </Link>
-                </li>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <Link href="/user/agent-posts">Agent Posts</Link>
+                    </li>
+                  </ul>
+                </li> */}
                 <li className="header-nav-item">
                   <Link href="/user/company" className="menu-link active">
                     Company
@@ -85,7 +121,7 @@ export const HeaderTop = () => {
                     Properties
                   </a>
                 </li>
-                {user?.role === "agent" ? (
+                {/* {user?.role === "agent" ? (
                   <li className="header-nav-item">
                     <Link href="/user/agent-posts" className="menu-link active">
                       Agent Posts
@@ -97,7 +133,7 @@ export const HeaderTop = () => {
                       Buyer Posts
                     </Link>
                   </li>
-                )}
+                )} */}
                 <li className="header-nav-item">
                   <a href="#" className="menu-link have-sub">
                     By location
