@@ -30,7 +30,7 @@ export const AllTotalPost = () => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
+      let url = `http://3.28.239.173:4000/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -99,7 +99,7 @@ export const AllTotalPost = () => {
   const myId = user?._id;
 
   return (
-    <div ref={containerRefPost} className="pb-[50px]">
+    <div ref={containerRefPost} className="pb-[50px] ">
       <div className="">
         <div className="">
           <div>
@@ -138,7 +138,7 @@ export const AllTotalPost = () => {
                 <PostLodaing />
               </div>
             )}
-            {!hasMore && allPosts.length !== 0 && (
+            {!hasMore && allPosts?.length !== 0 && (
               <div className="mb-[20px] mt-[40px] text-center">
                 <p>No more Post to load.</p>
               </div>

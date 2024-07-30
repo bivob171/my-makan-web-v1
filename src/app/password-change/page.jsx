@@ -128,7 +128,7 @@ export default function PasswordChange() {
 
     try {
       const response = await axios.post(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/reset-password`,
+        `http://3.28.239.173:4000/auth/reset-password`,
         data
       );
       console.log(response);
@@ -185,7 +185,7 @@ export default function PasswordChange() {
 
     try {
       const response = await axios.post(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/reset-password`,
+        `http://3.28.239.173:4000/auth/agent/reset-password`,
         data
       );
       if (response.status === 200) {
