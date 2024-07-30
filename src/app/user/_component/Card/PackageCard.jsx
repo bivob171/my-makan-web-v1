@@ -336,28 +336,28 @@ const PackageCard = ({
   }, [followingId, followRerander]);
 
   return (
-    <div className="w-full h-auto bg-white rounded-[15px] py-[25px]">
-      <div className="pt-2">
-        <div className="flex justify-between px-[15px]">
-          <div className="flex gap-x-[15px] items-center h-[45px]">
-            <div className="mb-[17px]">
+    <div className="w-full h-auto bg-white rounded-[15px] py-[25px] relative">
+      <div className="pt-1">
+        <div className="flex justify-between items-start px-[12px] md:px-[15px]">
+          <div className="flex gap-x-[15px] items-start w-full">
+            <div className="">
               <div
                 className="relative"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
-                <div className="cursor-pointer !w-[46px] !h-[46px] md:!w-[66px] md:!h-[66px] border-4 p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
+                <div className="cursor-pointer !w-[60px] !h-[60px] md:!w-[90px] md:!h-[90px] border-4 p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                   <Image
-                    width={40}
-                    height={40}
+                    width={400}
+                    height={400}
                     alt="img"
                     src={userinfo?.image}
                     className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
                   />
-                  <div className="absolute bottom-0 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center ">
+                  <div className="absolute bottom-0 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
                     <Image
-                      width={8}
-                      height={8}
+                      width={10}
+                      height={10}
                       alt=""
                       className="pl-[] w-full h-full"
                       src="/homeCard/active.png"
@@ -367,7 +367,7 @@ const PackageCard = ({
                 {/* hover dropdown  */}
                 {isHovered && (
                   <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
-                    <div className="!w-96">
+                    <div className="!w-80 md:!w-96">
                       <div className="flex gap-2">
                         <Link
                           href={`${"/user/agent-profile"}/${userinfo?._id}`}
@@ -544,100 +544,95 @@ const PackageCard = ({
                     </p>
                   </div>
                 </div>
-              </div>
-              {item.role === "buyer" ? (
-                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                  Buyer From{" "}
-                  <span className="text-[#E6533C]">
-                    {userinfo?.state}
-                    {userinfo?.country !== null && ", "}
-                    {userinfo?.country}
-                  </span>
-                </p>
-              ) : (
-                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
-                  {userinfo?.companyName}
-                </p>
-              )}
-              <div className="flex flex-wrap items-center">
-                <div>
-                  <p className="text-[#8C9097] text-[10px] md:text-[0.8rem]">
+                {item.role === "buyer" ? (
+                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                    Buyer From{" "}
+                    <span className="text-[#E6533C]">
+                      {userinfo?.state}
+                      {userinfo?.country !== null && ", "}
+                      {userinfo?.country}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                    {userinfo?.companyName}
+                  </p>
+                )}
+                <div className="leading-3 md:leading-4">
+                  <p className="text-[#8C9097] text-[10px] md:text-[12px] !m-0 pt-[4px]">
                     {formatDate(createdAt)}
                   </p>
-                </div>
-                <div>
-                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium ml-1">
+
+                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium !m-0 md:ml-1 flex justify-start items-center gap-x-1">
                     {location?.city}
 
                     {location?.country !== null && ", "}
                     {location?.country}
+                    <Image
+                      width={40}
+                      height={2}
+                      alt=""
+                      className="w-full max-w-[14px] h-auto"
+                      src="/homeCard/location.png"
+                    />
                   </p>
                 </div>
-                <div className="w-full max-w-[14px] h-auto mb-[16px] ml-[4px]">
-                  <Image
-                    width={40}
-                    height={2}
-                    alt=""
-                    className=""
-                    src="/homeCard/location.png"
-                  />
-                </div>
+              </div>
+              <div className="text-end">
+                <p className="text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px] md:mb-2 leading-3">
+                  {item?.postType}
+                </p>
+                <span className="leading-3 text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end font-medium">
+                  For {""}
+                  {item?.for}
+                </span>
               </div>
             </div>
           </div>
-          <div className="text-end relative">
-            <div className="absolute -top-[20px] right-0">
-              <div className=" text-right">
-                <Menu>
-                  <MenuButton className=" ">
-                    <Image alt="" width={20} height={5} src="/more.png" />
-                  </MenuButton>
+          <div className="absolute top-1 right-4">
+            <div className=" text-right">
+              <Menu>
+                <MenuButton className=" ">
+                  <Image alt="" width={20} height={5} src="/more.png" />
+                </MenuButton>
 
-                  <MenuItems
-                    transition
-                    anchor="bottom end"
-                    className="w-[200px] origin-top-right rounded-xl border border-white/5 bg-white p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
-                  >
-                    <MenuItem>
-                      {isHeartRed === true ? (
-                        <button
-                          onClick={() => handleUnSaveClick(_id)}
-                          className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
-                        >
-                          <BookmarkSlashIcon className="size-4 fill-black" />
-                          Unsave
-                        </button>
-                      ) : (
-                        <button
-                          onClick={handleSaveClick}
-                          className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
-                        >
-                          <BookmarkIcon className="size-4 fill-black" />
-                          Save
-                        </button>
-                      )}
-                    </MenuItem>
-                  </MenuItems>
-                </Menu>
-              </div>
+                <MenuItems
+                  transition
+                  anchor="bottom end"
+                  className="w-[200px] origin-top-right rounded-xl border border-white/5 bg-white p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                >
+                  <MenuItem>
+                    {isHeartRed === true ? (
+                      <button
+                        onClick={() => handleUnSaveClick(_id)}
+                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
+                      >
+                        <BookmarkSlashIcon className="size-4 fill-black" />
+                        Unsave
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSaveClick}
+                        className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
+                      >
+                        <BookmarkIcon className="size-4 fill-black" />
+                        Save
+                      </button>
+                    )}
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
             </div>
-            <p className="leading-normal text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px]">
-              {item?.postType}
-            </p>
-            <span className="leading-normal text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end text-black font-medium">
-              For
-              {item?.for}
-            </span>
           </div>
         </div>
-        <div className="h-[0.5px] w-full bg-[#F0F1F7] mt-[20px]"></div>
-        <div className="px-[15px] mt-[7px]">
+        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-3"></div>
+        <div className="px-[15px]">
           <div>
-            <p className="font-inter text-[0.875rem] md:text-[1.5rem] text-[#333335] font-semibold mb-2 leading-[40px]">
+            <p className="font-inter text-[22px] md:text-[28px] text-[#222] font-semibold mb-2 leading-[40px]">
               {item?.title}
             </p>
             {item?.description?.length > 132 ? (
-              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal leading-[20px]">
+              <p className="font-inter text-[#333] !text-[14px] md:!text-[16px] font-normal leading-[20px]">
                 {item?.description.slice(0, 133)}...
                 <Link href={`${"/user/post-details"}/${_id}`}>
                   <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
@@ -646,7 +641,7 @@ const PackageCard = ({
                 </Link>
               </p>
             ) : (
-              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
+              <p className="font-inter text-[#333] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
                 {item?.description}...
                 <Link href={`${"/user/post-details"}/${_id}`}>
                   <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
@@ -657,8 +652,8 @@ const PackageCard = ({
             )}
           </div>
         </div>
-        <div className="px-[15px] flex items-center justify-between">
-          <div className="flex flex-wrap gap-x-[8px] mt-2">
+        <div className="px-[15px] flex items-start justify-between !mt-4">
+          <div className="flex flex-wrap gap-[8px]">
             {item.tags?.map((tag, index) => {
               const { bgColor, textColor } = getTagStyles(index);
               return (
@@ -680,10 +675,10 @@ const PackageCard = ({
           <div className="relative inline-flex">
             {/* handle comment button  */}
             <button
-              className=""
+              className="hover:shadow-lg"
               onClick={() => handleCommentBtnClick(userinfo?._id)}
             >
-              <SiImessage className="text-[#1DFF00] w-8 h-8" />
+              <SiImessage className="text-[#2ff328] w-8 h-8" />
             </button>
             {/* modal  */}
             {openModalIndex === userinfo?._id && (

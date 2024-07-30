@@ -3,10 +3,9 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IoIosStar, IoMdTimer } from "react-icons/io";
+import { IoMdTimer } from "react-icons/io";
 import { FaCheckCircle, FaStar, FaUser } from "react-icons/fa";
-import { FaLocationDot, FaStarHalfStroke } from "react-icons/fa6";
-import { MdNavigateNext } from "react-icons/md";
+import { FaLocationDot } from "react-icons/fa6";
 import { AiOutlineStar } from "react-icons/ai";
 export const ProfileCard = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -117,13 +116,13 @@ export const ProfileCard = () => {
               </Link>
             </h4>
             {user?.role === "buyer" ? (
-              <div className="author-location">
+              <div className="author-location leading-3">
                 <a href="#">
                   <b className="-mb-0"></b>
                 </a>
               </div>
             ) : (
-              <div className="author-location">
+              <div className="author-location leading-3">
                 <a href="#">
                   <b>{user?.companyName}</b>
                 </a>

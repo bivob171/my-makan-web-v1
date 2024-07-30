@@ -30,27 +30,17 @@ export default function Layout({ children }) {
   } else if (isAuthenticated === true) {
     return (
       <div className="bg-[#EFF4FB]">
-        <div>
-          <HeaderTop></HeaderTop>
-          <div className="">
-            <div>
-              <HeaderLeft />{" "}
-            </div>
-
-            <PostLocationValueProvider>
-              <EditPostLocationValueProvider>
-                <div className={nunito.className}>{children}</div>
-              </EditPostLocationValueProvider>
-            </PostLocationValueProvider>
-            <div>
-              {" "}
-              <HeaderRight />{" "}
-            </div>
-          </div>
-          {/* <div className="mt-[40px]">
+        <HeaderTop />
+        <HeaderLeft />{" "}
+        <PostLocationValueProvider>
+          <EditPostLocationValueProvider>
+            <div className={nunito.className}>{children}</div>
+          </EditPostLocationValueProvider>
+        </PostLocationValueProvider>{" "}
+        <HeaderRight />{" "}
+        {/* <div className="mt-[40px]">
             <Footer />
           </div> */}
-        </div>
       </div>
     );
   } else {

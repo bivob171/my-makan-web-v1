@@ -3097,7 +3097,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .fixed-sidebar .sidebar-menu-wrap .top-menu-mobile .menu-link {
-  padding: 2px 0 2px 32px;
+  padding: 2px 0 2px 26px;
   color: #444444;
   font-size: 14px;
   font-weight: 500;
@@ -3170,7 +3170,7 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 @media only screen and (max-width: 767px) {
   .fixed-sidebar.right .sidebar-toggle { 
-      height: 87px;
+      height: 100px;
   }
 }
 
@@ -14625,13 +14625,13 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 
 @media only screen and (max-width: 991px) {
   .fixed-sidebar .sidebar-toggle {
-      height: 87px !important;
+      height: 100px !important;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .fixed-sidebar .sidebar-toggle {
-    height: 87px !important;
+    height: 100px !important;
   }
 }
 
@@ -14780,10 +14780,10 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 }
 
 .fixed-sidebar .sidebar-menu-wrap .top-menu-mobile .menu-link {
-  padding: 2px 0 2px 32px;
+  padding: 2px 0 2px 26px;
   color: #444444;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .fixed-sidebar .sidebar-menu-wrap .top-menu-mobile .menu-link:hover {

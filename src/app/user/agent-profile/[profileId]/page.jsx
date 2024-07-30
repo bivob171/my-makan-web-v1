@@ -305,8 +305,8 @@ export default function AgentProfile() {
   };
 
   return (
-    <div>
-      <div className="page-content bg-[white] shadow-sm !pt-[100px]">
+    <div className="">
+      <div className="bg-[white] shadow-sm !pt-[100px]">
         <div className="container">
           <input
             id="upload-cover"
@@ -327,7 +327,7 @@ export default function AgentProfile() {
                 width={1000}
                 height={1000}
                 alt="cover image"
-                className="w-full h-[350px] object-cover object-top rounded-b-lg"
+                className="w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg"
               />
               {profile?._id === myId && (
                 <button
@@ -344,8 +344,8 @@ export default function AgentProfile() {
                 </button>
               )}
             </div>
-            <div className="flex justify-start items-end gap-3 -mt-10 px-10">
-              <div className="relative w-[180px] h-[180px] border-4 border-[#dbdbdb] rounded-full">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-10 px-10">
+              <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
                 <Image
                   src={selectedImage}
                   width={1000}
@@ -353,22 +353,20 @@ export default function AgentProfile() {
                   alt="profile image"
                   className="w-full h-full object-cover object-top rounded-full shadow-md"
                 />
-                {profile?._id === myId && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      document.getElementById("upload-profile").click()
-                    }
-                    className="absolute bottom-1 right-0 bg-[#dbdbdb] p-[6px] rounded-full flex justify-center items-center"
-                  >
-                    <MdAddAPhoto className="w-5 h-5" />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("upload-profile").click()
+                  }
+                  className="absolute bottom-1 right-0 bg-[#dbdbdb] p-[6px] rounded-full flex justify-center items-center"
+                >
+                  <MdAddAPhoto className="w-5 h-5" />
+                </button>
               </div>
-              <div>
+              <div className="flex md:block flex-col justify-center items-center">
                 <div className="flex justify-start items-center gap-4">
                   <div className="flex justify-start items-start gap-2">
-                    <h1 className="text-[42px] leading-none">
+                    <h1 className="text-[36px] md:text-[42px] leading-none">
                       {profile?.fullName}
                     </h1>
                     <Image
@@ -379,7 +377,7 @@ export default function AgentProfile() {
                       className="w-5 h-5"
                     />
                   </div>
-                  <p className="text-[#F5B849] text-[18px] font-semibold flex justify-start items-center gap-1 !m-0">
+                  <p className="text-[#F5B849]  md:text-[18px] font-semibold flex justify-start items-center gap-1 !m-0">
                     <span>{profile?.avgrating}</span>
                     <GoStarFill className="w-5 h-5" />
                   </p>
@@ -419,7 +417,7 @@ export default function AgentProfile() {
           </div>
           {/* tab menu  */}
           <div className="h-[60px] mt-4 border-t-[1px] border-b-[1px]">
-            <ul className="flex h-full">
+            <ul className="flex justify-center md:justify-start h-full">
               {["Posts", "About", "Photos", "Videos"].map((tab) => (
                 <li
                   key={tab}
@@ -437,10 +435,8 @@ export default function AgentProfile() {
           </div>
         </div>
       </div>
-      <div className="bg-[#EFF4FB] my-10">
-        <div className="page-content !pt-0">
-          <div className="container">{renderTabContent()}</div>
-        </div>
+      <div className="bg-[#EFF4FB] py-10 px-[5px]">
+        <div className="container">{renderTabContent()}</div>
       </div>
     </div>
   );
