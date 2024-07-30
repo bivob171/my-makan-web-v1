@@ -256,10 +256,10 @@ export default function HomePage() {
                     </li>
                     <li>
                       <div className="media flex items-center">
-                      <div>
-                        <div className="item-icon">
-                          <i className="icofont-users" />
-                        </div>
+                        <div>
+                          <div className="item-icon">
+                            <i className="icofont-users" />
+                          </div>
                         </div>
                         <div className="media-body">
                           <p className="item-title">Forum Discussion</p>
@@ -272,10 +272,10 @@ export default function HomePage() {
                     </li>
                     <li>
                       <div className="media flex items-center">
-                      <div>
-                        <div className="item-icon">
-                          <i className="icofont-paper" />
-                        </div>
+                        <div>
+                          <div className="item-icon">
+                            <i className="icofont-paper" />
+                          </div>
                         </div>
                         <div className="media-body">
                           <p className="item-title">Active Groups</p>

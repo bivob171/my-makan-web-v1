@@ -3,7 +3,6 @@
 import { Nunito } from "next/font/google";
 import { useEffect, useState } from "react";
 import PopupProvider from "@/Context/successPopupContext";
-import Preloader from "./Component/Preloder/Preloader";
 import { Toaster } from "react-hot-toast";
 import GoogleRegisterAuthProvider from "./Component/GoogleRegisterAuthProvider/GoogleRegisterAuthProvider"; // Correct import
 import Head from "next/head";
@@ -25,15 +24,6 @@ const nunito = Nunito({
 // };
 
 export default function RootLayout({ children }) {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <html lang="en">
       <Head>
@@ -44,15 +34,11 @@ export default function RootLayout({ children }) {
       </Head>
       <body className={nunito.className}>
         <div>
-          {loading ? (
-            <Preloader />
-          ) : (
-            <div>
-              <GoogleRegisterAuthProvider>
-                <PopupProvider>{children}</PopupProvider>
-              </GoogleRegisterAuthProvider>
-            </div>
-          )}
+          <div>
+            <GoogleRegisterAuthProvider>
+              <PopupProvider>{children}</PopupProvider>
+            </GoogleRegisterAuthProvider>
+          </div>
         </div>
         <Toaster
           className="w-full whitespace-none"
