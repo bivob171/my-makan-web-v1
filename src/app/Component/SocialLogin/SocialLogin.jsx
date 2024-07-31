@@ -8,14 +8,9 @@ export const SocialLogin = ({ setError }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isCreatingAccount, setIsCreatingAccount] = useState(false); // New state
-  const [signupType, setSignupType] = useState(true);
-
-  useEffect(() => {
-    const storedSignupType = localStorage.getItem("signupType");
-    if (storedSignupType !== null) {
-      setSignupType(storedSignupType === "false" ? false : true);
-    }
-  }, []);
+  const initialSignupType =
+    localStorage.getItem("signupType") === "false" ? false : true;
+  const [signupType, setSignupType] = useState(initialSignupType);
 
   useEffect(() => {
     localStorage.setItem("signupType", signupType);
