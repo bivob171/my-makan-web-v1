@@ -32,7 +32,7 @@ export default function EmailChange() {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
-  console.log(error);
+
   const { responseMessage, setResponseMessage, popupMassage, setPopupMassage } =
     useContext(PopupContext);
   const handleBack = () => {

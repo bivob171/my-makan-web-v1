@@ -70,7 +70,10 @@ export const HeaderTop = () => {
             <nav id="dropdown" className="template-main-menu">
               <ul className="!w-auto">
                 <li className="header-nav-item">
-                  <Link href="/user/agent" className="menu-link have-sub active">
+                  <Link
+                    href="/user/agent"
+                    className="menu-link have-sub active"
+                  >
                     Agents
                   </Link>
                   <ul className="sub-menu">
@@ -79,25 +82,24 @@ export const HeaderTop = () => {
                         Agents
                       </Link>
                     </li>
-                    {user?.role === "agent" ? (
-                      <li className="header-nav-item">
-                        <Link
-                          href="/user/agent-posts"
-                          className="menu-link active"
-                        >
-                          Agent Posts
-                        </Link>
-                      </li>
-                    ) : (
-                      <li className="header-nav-item">
-                        <Link
-                          href="/user/buyer-posts"
-                          className="menu-link active"
-                        >
-                          Buyer Posts
-                        </Link>
-                      </li>
-                    )}
+
+                    <li className="header-nav-item">
+                      <Link
+                        href="/user/agent-posts"
+                        className="menu-link active"
+                      >
+                        Agent Posts
+                      </Link>
+                    </li>
+
+                    <li className="header-nav-item">
+                      <Link
+                        href="/user/buyer-posts"
+                        className="menu-link active"
+                      >
+                        Buyer Posts
+                      </Link>
+                    </li>
                   </ul>
                 </li>
                 {/* <li className="header-nav-item">

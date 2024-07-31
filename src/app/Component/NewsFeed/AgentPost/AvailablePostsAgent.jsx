@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -69,29 +69,25 @@ const AvailablePostsAgent = () => {
     getAllPosts(token);
   }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   const myId = user?._id;
 
   return (
-    <div ref={containerRefPost} className="overflow-y-auto h-screen pb-[50px]">
+    <div className=" pb-[50px]">
       <div className="">
         <div className="container">
           <div>
@@ -109,17 +105,18 @@ const AvailablePostsAgent = () => {
               <div className="grid grid-cols-1 gap-4 ">
                 {allPosts?.map((item, i) => {
                   return (
-                    <PackageCard
-                      item={item}
-                      key={i}
-                      myId={myId}
-                      setlike={setlike}
-                      like={like}
-                      saveRerander={saveRerander}
-                      setSaveRerander={setSaveRerander}
-                      followRerander={followRerander}
-                      setFollowRerander={setFollowRerander}
-                    />
+                    <div ref={lastPostElementRef} key={i}>
+                      <PackageCard
+                        item={item}
+                        myId={myId}
+                        setlike={setlike}
+                        like={like}
+                        saveRerander={saveRerander}
+                        setSaveRerander={setSaveRerander}
+                        followRerander={followRerander}
+                        setFollowRerander={setFollowRerander}
+                      />
+                    </div>
                   );
                 })}
               </div>

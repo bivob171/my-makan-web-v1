@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SiImessage } from "react-icons/si";
 
 export const TopAgent = () => {
@@ -52,27 +52,23 @@ export const TopAgent = () => {
     getAllPosts(token);
   }, [sortOrder, sortBy, limit, page]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   return (
-    <div ref={containerRefPost}>
+    <div>
       <div className="tab-content h-[350px] overflow-y-auto pb-[15px]">
         <div
           className="tab-pane fade show active"
@@ -106,7 +102,11 @@ export const TopAgent = () => {
               <div>
                 {allPosts?.map((agent, i) => {
                   return (
-                    <div key={i} className="media grid grid-cols-7 gap-2 !my-4">
+                    <div
+                      ref={lastPostElementRef}
+                      key={i}
+                      className="media grid grid-cols-7 gap-2 !my-4"
+                    >
                       <div className="col-span-2 flex items-center">
                         <a
                           href="#"

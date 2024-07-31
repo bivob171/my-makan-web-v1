@@ -15,10 +15,15 @@ import { SocialLogin } from "../SocialLogin/SocialLogin";
 export const LoginForm = () => {
   const router = useRouter();
   const { setRender, render } = PrivateRouteContext();
+  const [signupType, setSignupType] = useState(true);
 
-  const initialSignupType =
-    localStorage.getItem("signupType") === "false" ? false : true;
-  const [signupType, setSignupType] = useState(initialSignupType);
+  useEffect(() => {
+    const storedSignupType = localStorage.getItem("signupType");
+    if (storedSignupType !== null) {
+      setSignupType(storedSignupType === "false" ? false : true);
+    }
+  }, []);
+
   useEffect(() => {
     localStorage.setItem("signupType", signupType);
   }, [signupType]);
@@ -133,8 +138,6 @@ export const LoginForm = () => {
 
   return (
     <>
-      <div></div>
-
       <div className="">
         <div className="grid w-full items-center gap-4">
           {signupType === true ? (

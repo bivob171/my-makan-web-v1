@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import { FaCheckCircle, FaUser } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
@@ -101,24 +107,21 @@ const ProfilePostTab = ({
     followRerander,
   ]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
   const [isOpen, setIsOpen] = useState(false);
   function open(id) {
     setIsOpen(true);
@@ -454,7 +457,7 @@ const ProfilePostTab = ({
           </div>
         </div>
         {/* news feed card  */}
-        <div ref={containerRefPost} className="h-screen pb-[50px] -mt-[25px]">
+        <div className="h-screen pb-[50px] -mt-[25px]">
           <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           <PostHiddenModal
             visible={isOpenHideen}
@@ -478,7 +481,7 @@ const ProfilePostTab = ({
             <div className="grid grid-cols-1 gap-4 ">
               {allPosts?.map((item, i) => {
                 return (
-                  <div key={i}>
+                  <div ref={lastPostElementRef} key={i}>
                     {profileId === myId ? (
                       <EditPostCard
                         item={item}

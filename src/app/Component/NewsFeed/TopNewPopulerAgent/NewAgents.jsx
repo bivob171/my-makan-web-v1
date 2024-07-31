@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 export const NewAgents = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -52,26 +52,22 @@ export const NewAgents = () => {
     getAllPosts(token);
   }, [sortOrder, sortBy, limit, page]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
   return (
-    <div ref={containerRefPost}>
+    <div>
       <div className="tab-content h-[350px] overflow-y-auto pb-[15px]">
         <div
           className="tab-pane fade show active"
@@ -106,6 +102,7 @@ export const NewAgents = () => {
                 {allPosts?.map((agent, i) => {
                   return (
                     <div
+                      ref={lastPostElementRef}
                       key={i}
                       className="media grid grid-cols-5 !items-center pl-[6px]  mt-[6px]"
                     >

@@ -87,11 +87,7 @@ export const FollowerAgentPage = () => {
     setPage(1);
   };
   return (
-    <div
-      ref={containerRefPost}
-      id="user-view"
-      className="user-grid-view h-screen overflow-y-auto "
-    >
+    <div id="user-view" className="user-grid-view h-screen overflow-y-auto ">
       <div className="block-box user-search-bar">
         <div className="box-item search-box">
           <div className="input-group">

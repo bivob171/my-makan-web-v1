@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import agentData from "@/data/agentData";
 import axios from "axios";
 import { CardLoding } from "../NewsFeed/PostLodaing/CardLoding";
+import Link from "next/link";
 
 export const AgentPage = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -22,9 +23,10 @@ export const AgentPage = () => {
   const [companyNameFind, setCompanyNameFind] = useState("");
   const [isFetchingAgent, setIsFetchingAgent] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const observer = useRef();
   const containerRefAgent = useRef(null);
 
-  const getAllPosts = async () => {
+  const getAllPosts = async (token) => {
     setIsFetchingAgent(true);
     try {
       let url = `https://api.mymakan.ae/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
@@ -32,7 +34,13 @@ export const AgentPage = () => {
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -52,7 +60,9 @@ export const AgentPage = () => {
   };
 
   useEffect(() => {
-    getAllPosts();
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    getAllPosts(token);
   }, [
     sortOrder,
     sortBy,
@@ -63,24 +73,19 @@ export const AgentPage = () => {
     stateNameFind,
   ]);
 
-  const handleScrollAgentResult = () => {
-    const containerM = containerRefAgent.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 5 &&
-      !isFetchingAgent &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefAgent.current;
-    containerM.addEventListener("scroll", handleScrollAgentResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollAgentResult);
-  }, [isFetchingAgent, hasMore]);
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetchingAgent) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingAgent, hasMore]
+  );
 
   const find = (country, stateName, companyName) => {
     setCountryFind(country);
@@ -259,7 +264,7 @@ export const AgentPage = () => {
   );
 
   return (
-    <div ref={containerRefAgent} className="h-screen overflow-auto pb-[30px]">
+    <div className="pb-[30px]">
       <div className="page-content">
         <div className="container">
           <div className="w-auto py-[20px] px-[25px] bg-white grid grid-cols-4 rounded-md items-center gap-6 mb-10">
@@ -493,6 +498,7 @@ export const AgentPage = () => {
                   };
                   return (
                     <div
+                      ref={lastPostElementRef}
                       className="delay-150 duration-200 ease-in-out hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full bg-white rounded-lg relative border-[#E8E8E8] border-[1px] transition shadow-[#615DFA]"
                       key={data._id}
                     >
@@ -542,13 +548,15 @@ export const AgentPage = () => {
                         </div>
                         <hr className="mt-4 mb-2 mx-8" />
                         <center>
-                          <button
-                            type="button"
-                            className="text-center mb-3 text-[#615DFA] hover:text-[#6c67fdf6] font-semibold hover:drop-shadow-2xl hover:font-bold hover:shadow-[#615DFA]"
-                            data-twe-ripple-init
-                          >
-                            View Profile
-                          </button>
+                          <Link href={`${"/user/agent-profile"}/${data._id}`}>
+                            <button
+                              type="button"
+                              className="text-center mb-3 text-[#615DFA] hover:text-[#6c67fdf6] font-semibold hover:drop-shadow-2xl hover:font-bold hover:shadow-[#615DFA]"
+                              data-twe-ripple-init
+                            >
+                              View Profile
+                            </button>
+                          </Link>
                         </center>
                       </div>
                     </div>

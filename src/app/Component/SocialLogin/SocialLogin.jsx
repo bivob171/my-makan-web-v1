@@ -7,9 +7,15 @@ import { useRouter } from "next/navigation";
 export const SocialLogin = ({ setError }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const initialSignupType = localStorage.getItem("signupType") !== "false";
-  const [signupType, setSignupType] = useState(initialSignupType);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false); // New state
+  const [signupType, setSignupType] = useState(true);
+
+  useEffect(() => {
+    const storedSignupType = localStorage.getItem("signupType");
+    if (storedSignupType !== null) {
+      setSignupType(storedSignupType === "false" ? false : true);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("signupType", signupType);

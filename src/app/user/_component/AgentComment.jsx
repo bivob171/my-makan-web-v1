@@ -157,7 +157,6 @@ const AgentComment = ({ _id }) => {
             )}
           </button>
           <div
-            ref={containerRefPost}
             className={`${
               showAllComments === false
                 ? " my-2 flex flex-col-reverse"

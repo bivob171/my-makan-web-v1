@@ -14,10 +14,15 @@ import toast from "react-hot-toast";
 import { SocialLogin } from "../SocialLogin/SocialLogin";
 export const SignupForm = () => {
   const { setRender, render } = PrivateRouteContext();
-  const [country, setCountry] = useState([]);
-  const initialSignupType =
-    localStorage.getItem("signupType") === "false" ? false : true;
-  const [signupType, setSignupType] = useState(initialSignupType);
+  const [signupType, setSignupType] = useState(true);
+
+  useEffect(() => {
+    const storedSignupType = localStorage.getItem("signupType");
+    if (storedSignupType !== null) {
+      setSignupType(storedSignupType === "false" ? false : true);
+    }
+  }, []);
+
   useEffect(() => {
     localStorage.setItem("signupType", signupType);
   }, [signupType]);
@@ -35,7 +40,6 @@ export const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [responseMessage, setResponseMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [fullNameError, setFullNameError] = useState("");
   const [companyNameError, setCompanyNameError] = useState("");
@@ -156,13 +160,6 @@ export const SignupForm = () => {
         setSelectedStateError("");
       }
 
-      // if (!citieName) {
-      //   setCitieNameError("City Name is required.");
-      //   hasError = true;
-      // } else {
-      //   setCitieNameError("");
-      // }
-
       const passwordValidationError = validatePassword(password);
       if (passwordValidationError) {
         setPasswordError(passwordValidationError);
@@ -267,13 +264,6 @@ export const SignupForm = () => {
       } else {
         setSelectedStateError("");
       }
-
-      // if (!citieName) {
-      //   setCitieNameError("City Name is required.");
-      //   hasError = true;
-      // } else {
-      //   setCitieNameError("");
-      // }
 
       const passwordValidationError = validatePassword(password);
       if (passwordValidationError) {
