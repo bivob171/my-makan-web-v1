@@ -208,11 +208,11 @@ export const EditPostSection = ({ isOpen, setIsOpen }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://3.28.239.173:4000/allposts/update/${postId?._id}`;
+      const apiUrl = `https://api.mymakan.ae/allposts/update/${postId?._id}`;
       // if (user.role === "agent") {
-      //   apiUrl = "http://3.28.239.173:4000/post-agent/post";
+      //   apiUrl = "https://api.mymakan.ae/post-agent/post";
       // } else {
-      //   apiUrl = "http://3.28.239.173:4000/post-user/post";
+      //   apiUrl = "https://api.mymakan.ae/post-user/post";
       // }
 
       const response = await fetch(apiUrl, {

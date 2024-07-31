@@ -46,7 +46,7 @@ const BuyerMyAllPosts = () => {
   const getAllPosts = async (token, myId) => {
     try {
       setIsFetching(true);
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `userId=${myId}&`;
       url += `role=${role}&`;

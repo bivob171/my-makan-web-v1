@@ -21,7 +21,7 @@ const AgentComment = ({ _id }) => {
 
   const getAllComment = async (token) => {
     try {
-      let url = `http://3.28.239.173:4000/all-post-comment/${_id}?`;
+      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -118,7 +118,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "http://3.28.239.173:4000/all-post-comment/post";
+      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",

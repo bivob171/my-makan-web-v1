@@ -101,7 +101,7 @@ export const AboutPage = () => {
 
     try {
       const response = await axios.post(
-        `http://3.28.239.173:4000/file-upload/upload`,
+        `https://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {
@@ -138,7 +138,7 @@ export const AboutPage = () => {
       const token = localStorage.getItem("buyerAccessToken");
 
       const response = await fetch(
-        `http://3.28.239.173:4000/user/update-profile`,
+        `https://api.mymakan.ae/user/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -179,7 +179,7 @@ export const AboutPage = () => {
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        `http://3.28.239.173:4000/agent/update-profile`,
+        `https://api.mymakan.ae/agent/update-profile`,
         {
           method: "PATCH",
           headers: {

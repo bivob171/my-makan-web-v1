@@ -56,7 +56,7 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(`http://3.28.239.173:4000/auth/user/login`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,16 +103,13 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(
-        `http://3.28.239.173:4000/auth/agent/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(`https://api.mymakan.ae/auth/agent/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
 
       if (!response.ok) {

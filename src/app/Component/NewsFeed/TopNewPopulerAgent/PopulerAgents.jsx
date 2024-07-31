@@ -15,7 +15,7 @@ export const PopulerAgents = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `http://3.28.239.173:4000/agent/all-get?`;
+      let url = `https://api.mymakan.ae/agent/all-get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

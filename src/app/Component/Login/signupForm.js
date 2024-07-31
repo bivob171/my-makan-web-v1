@@ -187,16 +187,13 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(
-        `http://3.28.239.173:4000/auth/user/signUp`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userCreateData),
-        }
-      );
+      const response = await fetch(`https://api.mymakan.ae/auth/user/signUp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userCreateData),
+      });
 
       if (!response.ok) {
         console.error(` ${response.status}`);
@@ -303,16 +300,13 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(
-        `http://3.28.239.173:4000/auth/agent/signUp`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(agentCreateData),
-        }
-      );
+      const response = await fetch(`https://api.mymakan.ae/auth/agent/signUp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(agentCreateData),
+      });
       if (!response.ok) {
         console.error(` ${response.status}`);
         setError(` ${response.status}`);
@@ -357,7 +351,7 @@ export const SignupForm = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://3.28.239.173:4000/company`, {
+      const response = await axios.get(`https://api.mymakan.ae/company`, {
         params: {
           search,
           page,

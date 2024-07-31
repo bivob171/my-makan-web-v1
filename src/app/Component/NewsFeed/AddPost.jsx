@@ -102,16 +102,13 @@ const AddPost = ({
   const fetchTower = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(
-        `http://3.28.239.173:4000/country/tower`,
-        {
-          params: {
-            search,
-            page,
-            limit,
-          },
-        }
-      );
+      const response = await axios.get(`https://api.mymakan.ae/country/tower`, {
+        params: {
+          search,
+          page,
+          limit,
+        },
+      });
       const newTower = response.data;
       setHasMore(newTower.length === limit);
       setFilteredSuggestions((prevTower) => {

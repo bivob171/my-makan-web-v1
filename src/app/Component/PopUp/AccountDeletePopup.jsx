@@ -16,8 +16,8 @@ export const AccountDeletePopup = ({ visible, closePopUp, role }) => {
     try {
       const baseUrl =
         role === "buyer"
-          ? `http://3.28.239.173:4000/user/delete`
-          : `http://3.28.239.173:4000/agent/delete`;
+          ? `https://api.mymakan.ae/user/delete`
+          : `https://api.mymakan.ae/agent/delete`;
       const token =
         role === "buyer"
           ? localStorage.getItem("buyerAccessToken")

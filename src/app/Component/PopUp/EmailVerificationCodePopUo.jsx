@@ -39,8 +39,8 @@ export const EmailVerificationCodePopUo = ({
     // Adjust endpoint based on role
     const endpoint =
       role === "buyer"
-        ? `http://3.28.239.173:4000/auth/buyer/email-verify-code-check`
-        : `http://3.28.239.173:4000/auth/agent/email-verify-code-check`;
+        ? `https://api.mymakan.ae/auth/buyer/email-verify-code-check`
+        : `https://api.mymakan.ae/auth/agent/email-verify-code-check`;
 
     event.preventDefault();
     if (otp.some((str) => str === "")) {
@@ -80,8 +80,8 @@ export const EmailVerificationCodePopUo = ({
     // Adjust endpoint based on role
     const endpoint =
       role === "buyer"
-        ? `http://3.28.239.173:4000/auth/buyer/email-verify`
-        : `http://3.28.239.173:4000/auth/agent/email-verify`;
+        ? `https://api.mymakan.ae/auth/buyer/email-verify`
+        : `https://api.mymakan.ae/auth/agent/email-verify`;
 
     try {
       const response = await axios.post(endpoint, {

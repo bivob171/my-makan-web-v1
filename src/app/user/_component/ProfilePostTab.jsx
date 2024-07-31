@@ -46,7 +46,7 @@ const ProfilePostTab = ({
   const getAllPosts = async (token, profileId, profileRole) => {
     try {
       setIsFetching(true);
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       if (profileRole === "agent") {
         url += `agentId=${profileId}&`;
       } else {

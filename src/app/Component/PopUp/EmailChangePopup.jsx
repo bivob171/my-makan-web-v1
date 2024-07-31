@@ -40,8 +40,8 @@ export const EmailChangePopup = ({ visible, closePopUp, role, oldEmail }) => {
     // Adjust endpoint based on role
     const endpoint =
       role === "buyer"
-        ? `http://3.28.239.173:4000/auth/email-change`
-        : `http://3.28.239.173:4000/auth/agent/email-change`;
+        ? `https://api.mymakan.ae/auth/email-change`
+        : `https://api.mymakan.ae/auth/agent/email-change`;
 
     try {
       const response = await axios.post(endpoint, {

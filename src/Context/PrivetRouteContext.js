@@ -38,11 +38,15 @@ const PrivateRouteContext = () => {
       }
     };
 
-    const getStoredToken = (role) => localStorage.getItem(`${role}AccessToken`)?.replace(/"/g, "");
+    const getStoredToken = (role) =>
+      localStorage.getItem(`${role}AccessToken`)?.replace(/"/g, "");
 
     const userRole = localStorage.getItem("role");
-    const endpoint = userRole === "agent" ? "http://3.28.239.173:4000/agent/myProfile" : "http://3.28.239.173:4000/user/myProfile";
-    
+    const endpoint =
+      userRole === "agent"
+        ? "https://api.mymakan.ae/agent/myProfile"
+        : "https://api.mymakan.ae/user/myProfile";
+
     if (endpoint) {
       const token = getStoredToken(userRole);
       if (token) {

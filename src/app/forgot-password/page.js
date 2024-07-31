@@ -52,7 +52,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        `http://3.28.239.173:4000/auth/forgot-password`,
+        `https://api.mymakan.ae/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        `http://3.28.239.173:4000/auth/agent/forgot-password`,
+        `https://api.mymakan.ae/auth/agent/forgot-password`,
         {
           method: "POST",
           headers: {

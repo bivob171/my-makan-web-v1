@@ -32,7 +32,7 @@ export const AllTotalPost = () => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
