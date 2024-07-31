@@ -7,6 +7,8 @@ import AvailablePosts from "../profile/available-post/page";
 import RequiredPosts from "../profile/required-post/page";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
+import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
+import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 
 export default function BuyerPosts() {
   const [activeTab, setActiveTab] = useState("allPosts");
@@ -27,116 +29,84 @@ export default function BuyerPosts() {
 
         <div className="row">
           <div className="col-lg-3 widget-block widget-break-lg ">
-            <NewsFeedRightSection />
+            <div className="!sticky top-[110px]">
+              <div className="h-[86vh] overflow-y-scroll">
+                <NewsFeedLeftSection />
+              </div>
+            </div>
           </div>
           <div className="col-lg-6">
-            <div className="newsfeed-search">
-              <ul className="member-list gap-2">
-                <li className="active-member">
-                  <Image
-                    width={40}
-                    height={40}
-                    alt="img"
-                    src={user?.image}
-                    className="w-[45px] h-[45px] rounded-full border-2"
-                  />
-                </li>
-                <li>
-                  <button className="cursor-pointer" onClick={open}>
-                    <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                      <span className="text-[16px] font-mono font-medium">
-                        what are you looking for, {userName}?
-                      </span>
-                    </div>
-                  </button>
-                </li>
-              </ul>
-              <ul className="search-list">
-                <li className="search-filter">
-                  <button className="drop-btn" type="button">
-                    <i className="icofont-abacus-alt" />
-                  </button>
-                  <div className="drop-menu">
-                    <select className="select2">
-                      <option>--Everything--</option>
-                      <option>Status</option>
-                      <option>Quotes</option>
-                      <option>Photos</option>
-                      <option>Videos</option>
-                      <option>Audios</option>
-                      <option>slideshows</option>
-                      <option>files</option>
-                      <option>Updates</option>
-                      <option>New Members</option>
-                      <option>Posts</option>
-                      <option>New Groups</option>
-                    </select>
-                  </div>
-                </li>
-              </ul>
+            <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+              <PostSearch
+                open={open}
+                user={user}
+                setVerifyPopup={setVerifyPopup}
+                userName={userName}
+              />
+
+              <div className="block-box post-input-tab !rounded-none border-t">
+                <ul className="nav nav-tabs" role="tablist">
+                  <li
+                    className="nav-item"
+                    role="presentation"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="STATUS"
+                  >
+                    <a
+                      className={`nav-link ${
+                        activeTab === "allPosts" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("allPosts")}
+                      role="tab"
+                      aria-selected={activeTab === "allPosts"}
+                    >
+                      <i className="icofont-copy" />
+                      All Posts
+                    </a>
+                  </li>
+                  <li
+                    className="nav-item"
+                    role="presentation"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="MEDIA"
+                  >
+                    <a
+                      className={`nav-link ${
+                        activeTab === "availablePosts" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("availablePosts")}
+                      role="tab"
+                      aria-selected={activeTab === "availablePosts"}
+                    >
+                      <i className="icofont-image" />
+                      Available Posts
+                    </a>
+                  </li>
+                  <li
+                    className="nav-item"
+                    role="presentation"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="BLOG"
+                  >
+                    <a
+                      className={`nav-link ${
+                        activeTab === "required" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("required")}
+                      role="tab"
+                      aria-selected={activeTab === "required"}
+                    >
+                      <i className="icofont-list" />
+                      Required Posts
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            <div className="block-box post-input-tab">
-              <ul className="nav nav-tabs" role="tablist">
-                <li
-                  className="nav-item"
-                  role="presentation"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="STATUS"
-                >
-                  <a
-                    className={`nav-link ${
-                      activeTab === "allPosts" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("allPosts")}
-                    role="tab"
-                    aria-selected={activeTab === "allPosts"}
-                  >
-                    <i className="icofont-copy" />
-                    All Posts
-                  </a>
-                </li>
-                <li
-                  className="nav-item"
-                  role="presentation"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="MEDIA"
-                >
-                  <a
-                    className={`nav-link ${
-                      activeTab === "availablePosts" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("availablePosts")}
-                    role="tab"
-                    aria-selected={activeTab === "availablePosts"}
-                  >
-                    <i className="icofont-image" />
-                    Available Posts
-                  </a>
-                </li>
-                <li
-                  className="nav-item"
-                  role="presentation"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="BLOG"
-                >
-                  <a
-                    className={`nav-link ${
-                      activeTab === "required" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("required")}
-                    role="tab"
-                    aria-selected={activeTab === "required"}
-                  >
-                    <i className="icofont-list" />
-                    Required Posts
-                  </a>
-                </li>
-              </ul>
-            </div>
             {activeTab === "allPosts" && <AllPost />}
             {activeTab === "availablePosts" && <AvailablePosts />}
             {activeTab === "required" && <RequiredPosts />}

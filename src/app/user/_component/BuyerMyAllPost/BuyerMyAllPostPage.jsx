@@ -5,6 +5,7 @@ import BuyerMyRequiredPosts from "./BuyerMyRequiredPosts";
 import BuyerMyAvailablePosts from "./BuyerMyAvailablePosts";
 import Image from "next/image";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
+import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 
 export const BuyerMyAllPostPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -20,55 +21,14 @@ export const BuyerMyAllPostPage = () => {
   return (
     <div className="container">
       <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className="newsfeed-search">
-        <ul className="member-list gap-2">
-          <li className="active-member">
-            <Image
-              width={40}
-              height={40}
-              alt="img"
-              src={user?.image}
-              className="w-[45px] h-[45px] rounded-full border-2"
-            />
-          </li>
-          <li>
-            <>
-              <button className="cursor-pointer" onClick={open}>
-                <div className="w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center px-3">
-                  <span className="text-[16px] font-mono font-medium">
-                    what are you looking for, {userName}?
-                  </span>
-                </div>
-              </button>
-            </>
-          </li>
-        </ul>
-        <ul className="search-list">
-          <li className="search-filter">
-            <button className="drop-btn" type="button">
-              <i className="icofont-abacus-alt" />
-            </button>
-            <div className="drop-menu">
-              <select className="select2">
-                <option>--Everything--</option>
-                <option>Status</option>
-                <option>Quotes</option>
-                <option>Photos</option>
-                <option>Videos</option>
-                <option>Audios</option>
-                <option>slideshows</option>
-                <option>files</option>
-                <option>Updates</option>
-                <option>New Members</option>
-                <option>Posts</option>
-                <option>New Groups</option>
-              </select>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div className="">
-        <div className="block-box post-input-tab">
+      <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+        <PostSearch
+          open={open}
+          user={user}
+          setVerifyPopup={setVerifyPopup}
+          userName={userName}
+        />
+        <div className="block-box post-input-tab !rounded-none border-t">
           <ul className="nav nav-tabs" role="tablist">
             <li
               className="nav-item"
@@ -129,6 +89,8 @@ export const BuyerMyAllPostPage = () => {
             </li>
           </ul>
         </div>
+      </div>
+      <div className="">
         {activeTab === "allPosts" && <BuyerMyAllPosts />}
         {activeTab === "availablePosts" && <BuyerMyAvailablePosts />}
         {activeTab === "required" && <BuyerMyRequiredPosts />}

@@ -11,6 +11,7 @@ import { AllTotalPost } from "./TotalPost/AllTotalPost";
 import { AvailableTotalPost } from "./TotalPost/AvailableTotalPost";
 import { RequiredTotalPost } from "./TotalPost/RequiredTotalPost";
 import NewsFeedLeftSection from "./NewsFeedLeftSection";
+import { PostSearch } from "./PostSearch/PostSearch";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -94,69 +95,13 @@ export const NewsFeedPage = () => {
             </div>
             <div className="col-lg-6">
               <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
-                <div className="bg-white mb-0 !rounded-t-md !rounded-b-none !grid !grid-cols-12 gap-2 py-2">
-                  <div className="col-span-2 flex justify-center items-center w-full">
-                    <Image
-                      width={40}
-                      height={40}
-                      alt="img"
-                      src={user?.image}
-                      className="w-[55px] h-[55px] object-cover rounded-full border-2"
-                    />
-                  </div>
-                  <ul className="member-list col-span-8  flex justify-center items-center">
-                    <li className="!w-full">
-                      {user?.role === "agent" ? (
-                        <>
-                          {user?.verified === false ? (
-                            <>
-                              <button
-                                className="cursor-pointer !w-full"
-                                onClick={() => setVerifyPopup(true)}
-                              >
-                                <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
-                                  <span className="text-[16px] text-start font-mono font-medium">
-                                    what are you looking for, {userName}?
-                                  </span>
-                                </div>
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                className="cursor-pointer w-full"
-                                onClick={open}
-                              >
-                                <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
-                                  <span className="text-[16px] text-start font-mono font-medium">
-                                    what are you looking for, {userName}?
-                                  </span>
-                                </div>
-                              </button>
-                            </>
-                          )}
-                        </>
-                      ) : (
-                        <button
-                          className="cursor-pointer !w-full"
-                          onClick={open}
-                        >
-                          <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
-                            <span className="text-[16px] text-start font-mono font-medium">
-                              what are you looking for, {userName}?
-                            </span>
-                          </div>
-                        </button>
-                      )}
-                    </li>
-                  </ul>
-                  <button
-                    className="col-span-2  flex justify-center items-center"
-                    type="button"
-                  >
-                    <i className="icofont-abacus-alt" />
-                  </button>
-                </div>
+                <PostSearch
+                  open={open}
+                  user={user}
+                  setVerifyPopup={setVerifyPopup}
+                  userName={userName}
+                />
+
                 <div className="block-box post-input-tab !rounded-none border-t">
                   <ul className="nav nav-tabs" role="tablist">
                     <li

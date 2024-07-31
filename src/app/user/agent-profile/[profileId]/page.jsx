@@ -83,6 +83,7 @@ export default function AgentProfile() {
   const [error, setError] = useState("");
   console.log(error);
   const [uploading, setUploading] = useState(false);
+  const [uploadingP, setUploadingP] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedCoverImage, setSelectedCoverImage] = useState("");
 
@@ -96,7 +97,7 @@ export default function AgentProfile() {
   };
 
   const handleUpload = async (files) => {
-    setUploading(true);
+    setUploadingP(true);
     const formData = new FormData();
     for (let file of files) {
       formData.append("files", file);
@@ -119,7 +120,7 @@ export default function AgentProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploading(false); // Reset uploading state after upload attempt (whether success or failure)
+      setUploadingP(false); // Reset uploading state after upload attempt (whether success or failure)
     }
   };
   const handleUploadCover = async (files) => {
@@ -321,17 +322,23 @@ export default function AgentProfile() {
           />
           <div className="relative">
             <div className="relative">
-              {uploading === true ? (
-                <div class="flex items-center justify-center w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg bg-gray-300  dark:bg-gray-700">
+              {selectedCoverImage === undefined || uploading === true ? (
+                <div
+                  class="flex w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
+                  aria-hidden="true"
+                >
                   <svg
-                    class="w-10 h-10 text-gray-200 dark:text-gray-600"
-                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
                     fill="currentColor"
-                    viewBox="0 0 16 20"
+                    aria-hidden="true"
+                    class="size-12 fill-slate-700/10 dark:fill-slate-300/10"
                   >
-                    <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z" />
-                    <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 5.25A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25v9.5A2.25 2.25 0 0 1 16.75 17H3.25A2.25 2.25 0 0 1 1 14.75v-9.5Zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-2.69l-2.22-2.219a.75.75 0 0 0-1.06 0l-1.91 1.909.47.47a.75.75 0 1 1-1.06 1.06L6.53 8.091a.75.75 0 0 0-1.06 0l-2.97 2.97ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </div>
               ) : (
@@ -361,14 +368,35 @@ export default function AgentProfile() {
             </div>
             <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
               <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
-                <Image
-                  src={selectedImage}
-                  width={1000}
-                  height={1000}
-                  alt="profile image"
-                  loading="lazy"
-                  className="w-full h-full object-cover object-top rounded-full shadow-md"
-                />
+                {selectedImage === undefined || uploadingP === true ? (
+                  <div
+                    class="flex w-full h-full object-cover object-top rounded-full shadow-md items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="size-12 fill-slate-700/10 dark:fill-slate-300/10"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1 5.25A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25v9.5A2.25 2.25 0 0 1 16.75 17H3.25A2.25 2.25 0 0 1 1 14.75v-9.5Zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-2.69l-2.22-2.219a.75.75 0 0 0-1.06 0l-1.91 1.909.47.47a.75.75 0 1 1-1.06 1.06L6.53 8.091a.75.75 0 0 0-1.06 0l-2.97 2.97ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  <Image
+                    src={selectedImage}
+                    width={1000}
+                    height={1000}
+                    alt="profile image"
+                    loading="lazy"
+                    className="w-full h-full object-cover object-top rounded-full shadow-md"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={() =>

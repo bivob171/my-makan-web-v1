@@ -10,6 +10,7 @@ import { PostLocationValueContext } from "@/Context/postValueContext";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { SiImessage } from "react-icons/si";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();
@@ -79,6 +80,7 @@ export default function BuyerProfile() {
   // image update
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadingP, setUploadingP] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedCoverImage, setSelectedCoverImage] = useState("");
 
@@ -92,7 +94,7 @@ export default function BuyerProfile() {
   };
 
   const handleUpload = async (files) => {
-    setUploading(true);
+    setUploadingP(true);
     const formData = new FormData();
     for (let file of files) {
       formData.append("files", file);
@@ -115,7 +117,7 @@ export default function BuyerProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploading(false); // Reset uploading state after upload attempt (whether success or failure)
+      setUploadingP(false); // Reset uploading state after upload attempt (whether success or failure)
     }
   };
   const handleUploadCover = async (files) => {
@@ -319,13 +321,35 @@ export default function BuyerProfile() {
           />
           <div className="relative">
             <div className="relative">
-              <Image
-                src={selectedCoverImage}
-                width={1000}
-                height={1000}
-                alt="cover image"
-                className="w-full h-[350px] object-cover object-top rounded-b-lg"
-              />
+              {selectedCoverImage === undefined || uploading === true ? (
+                <div
+                  class="flex w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
+                  aria-hidden="true"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="size-12 fill-slate-700/10 dark:fill-slate-300/10"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 5.25A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25v9.5A2.25 2.25 0 0 1 16.75 17H3.25A2.25 2.25 0 0 1 1 14.75v-9.5Zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-2.69l-2.22-2.219a.75.75 0 0 0-1.06 0l-1.91 1.909.47.47a.75.75 0 1 1-1.06 1.06L6.53 8.091a.75.75 0 0 0-1.06 0l-2.97 2.97ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                <Image
+                  src={selectedCoverImage}
+                  width={1000}
+                  height={1000}
+                  alt="cover image"
+                  loading="lazy"
+                  className="w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg"
+                />
+              )}
               {profile?._id === myId && (
                 <button
                   type="button"
@@ -343,13 +367,35 @@ export default function BuyerProfile() {
             </div>
             <div className="flex justify-start items-end gap-3 -mt-10 px-10">
               <div className="relative w-[180px] h-[180px] border-4 border-[#dbdbdb] rounded-full">
-                <Image
-                  src={selectedImage}
-                  width={1000}
-                  height={1000}
-                  alt="cover image"
-                  className="w-full h-full object-cover object-top rounded-full shadow-md"
-                />
+                {selectedImage === undefined || uploadingP === true ? (
+                  <div
+                    class="flex w-full h-full object-cover object-top rounded-full shadow-md items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="size-12 fill-slate-700/10 dark:fill-slate-300/10"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1 5.25A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25v9.5A2.25 2.25 0 0 1 16.75 17H3.25A2.25 2.25 0 0 1 1 14.75v-9.5Zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-2.69l-2.22-2.219a.75.75 0 0 0-1.06 0l-1.91 1.909.47.47a.75.75 0 1 1-1.06 1.06L6.53 8.091a.75.75 0 0 0-1.06 0l-2.97 2.97ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  <Image
+                    src={selectedImage}
+                    width={1000}
+                    height={1000}
+                    alt="profile image"
+                    loading="lazy"
+                    className="w-full h-full object-cover object-top rounded-full shadow-md"
+                  />
+                )}
                 {profile?._id === myId && (
                   <button
                     type="button"

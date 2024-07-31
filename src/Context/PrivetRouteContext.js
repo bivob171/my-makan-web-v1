@@ -10,12 +10,13 @@ const PrivateRouteContext = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [render, setRender] = useState(false);
   const logOut = useCallback(() => {
     setLoading(true);
     setUser(null);
     localStorage.clear();
     router.push("/");
+    setRender(!render);
     signOut({ callbackUrl: "/" });
   }, [router]);
 
@@ -59,9 +60,9 @@ const PrivateRouteContext = () => {
       setIsAuthenticated(false);
       setLoading(false);
     }
-  }, []);
+  }, [render]);
 
-  return { isAuthenticated, user, loading, logOut };
+  return { isAuthenticated, user, loading, setRender, render, logOut };
 };
 
 export default PrivateRouteContext;

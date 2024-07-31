@@ -89,7 +89,7 @@ const AvailablePostsAgent = () => {
   return (
     <div className=" pb-[50px]">
       <div className="">
-        <div className="container">
+        <div className="">
           <div>
             {loading && (
               <div>
