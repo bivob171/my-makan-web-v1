@@ -15,12 +15,13 @@ import { SocialLogin } from "../SocialLogin/SocialLogin";
 export const LoginForm = () => {
   const router = useRouter();
   const { setRender, render } = PrivateRouteContext();
-  const [signupType, setSignupType] = useState(true);
+  const [signupType, setSignupType] = useState(storedSignupType);
 
   useEffect(() => {
     const storedSignupType = localStorage.getItem("signupType");
     if (storedSignupType !== null) {
       setSignupType(storedSignupType === "false" ? false : true);
+      return storedSignupType;
     }
   }, []);
 

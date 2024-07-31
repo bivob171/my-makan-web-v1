@@ -38,13 +38,14 @@ const PackageCard = ({
   const savePostId = _id;
   const [isHovered, setIsHovered] = useState(false);
   const [isHeartRed, setIsHeartRed] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
+  const [followloading, setFollowLoading] = useState(true);
   const [saveloading, setSaveLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ferror, setFError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
-  const followingId = userinfo._id;
-
+  const followingId = userinfo?._id;
   const [hasId, setHasId] = useState(false);
-  const [isFollow, setIsFollow] = useState(false);
 
   const [openModalIndex, setOpenModalIndex] = useState(null);
   const modalRefs = useRef([]);
@@ -137,7 +138,6 @@ const PackageCard = ({
 
       const data = await response.json();
       setlike(!like);
-      console.log("Like successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -163,7 +163,6 @@ const PackageCard = ({
 
       const data = await response.json();
       setlike(!like);
-      console.log("unLike successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -234,14 +233,9 @@ const PackageCard = ({
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              userId,
-              role,
-            },
           }
         );
         setIsHeartRed(response.data);
-        console.log(response.data);
       } catch (err) {
         setError(err);
       } finally {
@@ -288,7 +282,6 @@ const PackageCard = ({
       toast.error(` ${error.message}`);
     }
   };
-
   const handleUnFollowClick = async (userinfo) => {
     try {
       const _id = userinfo?._id;
@@ -478,30 +471,33 @@ const PackageCard = ({
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between gap-3 mt-2">
-                        {isFollow === true ? (
-                          <button
-                            type="button"
-                            onClick={() => handleUnFollowClick(userinfo)}
-                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
-                          >
-                            <BsJournalBookmarkFill className="w-5 h-5" />{" "}
-                            Unfollow
+                      {myId === userinfo?._id ? null : (
+                        <div className="flex justify-between gap-3 mt-2">
+                          {isFollow === true ? (
+                            <button
+                              type="button"
+                              onClick={() => handleUnFollowClick(userinfo)}
+                              className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                            >
+                              <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                              Unfollow
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleFollowClick(userinfo)}
+                              className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                            >
+                              <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                              Follow
+                            </button>
+                          )}
+                          <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                            {" "}
+                            <SiImessage className="w-5 h-5" /> Massage
                           </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => handleFollowClick(userinfo)}
-                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
-                          >
-                            <BsJournalBookmarkFill className="w-5 h-5" /> Follow
-                          </button>
-                        )}
-                        <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
-                          {" "}
-                          <SiImessage className="w-5 h-5" /> Massage
-                        </button>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
