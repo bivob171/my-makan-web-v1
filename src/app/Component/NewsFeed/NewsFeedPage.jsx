@@ -35,8 +35,7 @@ export const NewsFeedPage = () => {
     <>
       <div className="page-content">
         <div className="container">
-          {/* Banner Area Start */}
-          <div className="newsfeed-banner">
+          <div className="newsfeed-banner !mb-0">
             <div className="media  gap-x-5 items-center flex">
               <div className="flex gap-x-5 mb-2">
                 <Image
@@ -85,7 +84,6 @@ export const NewsFeedPage = () => {
           <div>
             <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
-          {/* post nav section  */}
           <div className="row">
             <div className="col-lg-3 widget-block widget-break-lg ">
               <div className="!sticky top-[110px]">
@@ -96,39 +94,42 @@ export const NewsFeedPage = () => {
             </div>
             <div className="col-lg-6">
               <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
-                <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none">
-                  <ul className="member-list gap-2 ">
-                    <li className="active-member">
-                      <Image
-                        width={40}
-                        height={40}
-                        alt="img"
-                        src={user?.image}
-                        className="w-[45px] h-[45px] rounded-full border-2"
-                      />
-                    </li>
-                    <li>
+                <div className="bg-white mb-0 !rounded-t-md !rounded-b-none !grid !grid-cols-12 gap-2 py-2">
+                  <div className="col-span-2 flex justify-center items-center w-full">
+                    <Image
+                      width={40}
+                      height={40}
+                      alt="img"
+                      src={user?.image}
+                      className="w-[55px] h-[55px] object-cover rounded-full border-2"
+                    />
+                  </div>
+                  <ul className="member-list col-span-8  flex justify-center items-center">
+                    <li className="!w-full">
                       {user?.role === "agent" ? (
                         <>
                           {user?.verified === false ? (
                             <>
                               <button
-                                className="cursor-pointer"
+                                className="cursor-pointer !w-full"
                                 onClick={() => setVerifyPopup(true)}
                               >
-                                <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                                  <span className="text-[16px] font-mono font-medium">
-                                    what are you looking for, {userName}?
+                                <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                                  <span className="text-[16px] text-start font-mono font-medium">
+                                    what are you looking for, {userName}?
                                   </span>
                                 </div>
                               </button>
                             </>
                           ) : (
                             <>
-                              <button className="cursor-pointer" onClick={open}>
-                                <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                                  <span className="text-[16px] font-mono font-medium">
-                                    what are you looking for, {userName}?
+                              <button
+                                className="cursor-pointer w-full"
+                                onClick={open}
+                              >
+                                <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                                  <span className="text-[16px] text-start font-mono font-medium">
+                                    what are you looking for, {userName}?
                                   </span>
                                 </div>
                               </button>
@@ -136,24 +137,25 @@ export const NewsFeedPage = () => {
                           )}
                         </>
                       ) : (
-                        <button className="cursor-pointer" onClick={open}>
-                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4 pr-[120px]">
-                            <span className="text-[16px] font-mono font-medium">
-                              what are you looking for, {userName}?
+                        <button
+                          className="cursor-pointer !w-full"
+                          onClick={open}
+                        >
+                          <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                            <span className="text-[16px] text-start font-mono font-medium">
+                              what are you looking for, {userName}?
                             </span>
                           </div>
                         </button>
                       )}
                     </li>
                   </ul>
-                  <ul className="search-list">
-                    <li className="search-filter">
-                      <button className="drop-btn" type="button">
-                        <i className="icofont-abacus-alt" />
-                      </button>
-                      <div className="drop-menu"></div>
-                    </li>
-                  </ul>
+                  <button
+                    className="col-span-2  flex justify-center items-center"
+                    type="button"
+                  >
+                    <i className="icofont-abacus-alt" />
+                  </button>
                 </div>
                 <div className="block-box post-input-tab !rounded-none border-t">
                   <ul className="nav nav-tabs" role="tablist">

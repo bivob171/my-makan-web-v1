@@ -238,7 +238,7 @@ export const ProfileCard = () => {
                 {" "}
                 {user?.country === null ? (
                   <Link href="/user/profile/about">
-                    <p className="-mb-0 text-[14px] text-blue-500 text-opacity-80 font-semibold">
+                    <p className="-mb-0 text-[14px] text-[#615DFA] text-opacity-80 font-semibold">
                       Add Country
                     </p>
                   </Link>

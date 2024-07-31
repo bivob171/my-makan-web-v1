@@ -1,15 +1,16 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
-import { GoStarFill } from "react-icons/go";
-import Image from "next/image";
-import Link from "next/link";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import { PostLodaing } from "../PostLodaing/PostLodaing";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import PackageCard from "@/app/user/_component/Card/PackageCard";
+import { PostLodaing } from "../PostLodaing/PostLodaing";
 
 export const AllTotalPost = () => {
   const { newsFeedRender } = useContext(PostLocationValueContext);
@@ -23,15 +24,15 @@ export const AllTotalPost = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const containerRefPost = useRef(null);
   const [like, setlike] = useState(true);
   const [saveRerander, setSaveRerander] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
+  const observer = useRef();
+
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
       let url = `http://3.28.239.173:4000/allposts/get?`;
-      // Constructing the URL with query parameters based on state variables
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -77,29 +78,24 @@ export const AllTotalPost = () => {
     followRerander,
   ]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   const myId = user?._id;
 
   return (
-    <div ref={containerRefPost} className="pb-[50px] ">
+    <div className="pb-[50px] ">
       <div className="">
         <div className="">
           <div>
@@ -116,19 +112,36 @@ export const AllTotalPost = () => {
             {!loading && allPosts.length > 0 && (
               <div className="grid grid-cols-1 gap-4 ">
                 {allPosts?.map((item, i) => {
-                  return (
-                    <PackageCard
-                      item={item}
-                      key={i}
-                      myId={myId}
-                      setlike={setlike}
-                      like={like}
-                      saveRerander={saveRerander}
-                      setSaveRerander={setSaveRerander}
-                      followRerander={followRerander}
-                      setFollowRerander={setFollowRerander}
-                    />
-                  );
+                  if (allPosts.length === i + 1) {
+                    return (
+                      <div ref={lastPostElementRef} key={i}>
+                        <PackageCard
+                          item={item}
+                          myId={myId}
+                          setlike={setlike}
+                          like={like}
+                          saveRerander={saveRerander}
+                          setSaveRerander={setSaveRerander}
+                          followRerander={followRerander}
+                          setFollowRerander={setFollowRerander}
+                        />
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <PackageCard
+                        item={item}
+                        key={i}
+                        myId={myId}
+                        setlike={setlike}
+                        like={like}
+                        saveRerander={saveRerander}
+                        setSaveRerander={setSaveRerander}
+                        followRerander={followRerander}
+                        setFollowRerander={setFollowRerander}
+                      />
+                    );
+                  }
                 })}
               </div>
             )}

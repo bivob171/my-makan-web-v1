@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { MdAddAPhoto } from "react-icons/md";
@@ -18,13 +19,13 @@ export default function AgentProfile() {
     PostLocationValueContext
   );
   const myId = user?._id;
-
   const params = useParams();
   const [activeTab, setActiveTab] = useState("Posts");
   const userId = params.profileId;
   const [profile, setProfile] = useState();
   const [isFollow, setIsFollow] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "Posts":
@@ -343,8 +344,9 @@ export default function AgentProfile() {
                   </span>
                 </button>
               )}
+              
             </div>
-            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-10 px-10">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
               <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
                 <Image
                   src={selectedImage}
@@ -366,7 +368,7 @@ export default function AgentProfile() {
               <div className="flex md:block flex-col justify-center items-center">
                 <div className="flex justify-start items-center gap-4">
                   <div className="flex justify-start items-start gap-2">
-                    <h1 className="text-[36px] md:text-[42px] leading-none">
+                    <h1 className="text-[36px] md:text-[38px] leading-none">
                       {profile?.fullName}
                     </h1>
                     <Image
@@ -383,17 +385,17 @@ export default function AgentProfile() {
                   </p>
                 </div>
                 {profile?.role === "agent" && (
-                  <h1 className="text-[28px] font-semibold leading-none hover:underline underline-offset-4 text-[#8920AD] uppercase">
+                  <h1 className="text-[26px] font-semibold leading-none hover:underline underline-offset-4 text-[#8920AD] uppercase">
                     {profile?.companyName}
                   </h1>
                 )}
                 {profile?._id !== myId && (
-                  <div className="flex justify-between gap-3 mt-2">
+                  <div className="flex justify-start items-center gap-3 mt-2">
                     {isFollow === true ? (
                       <button
                         type="button"
                         onClick={() => handleUnFollowClick(profile)}
-                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                        className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                       >
                         <BsJournalBookmarkFill className="w-5 h-5" /> Unfollow
                       </button>
@@ -401,12 +403,12 @@ export default function AgentProfile() {
                       <button
                         type="button"
                         onClick={() => handleFollowClick(profile)}
-                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                        className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                       >
                         <BsJournalBookmarkFill className="w-5 h-5" /> Follow
                       </button>
                     )}
-                    <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                    <button className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2">
                       {" "}
                       <SiImessage className="w-5 h-5" /> Massage
                     </button>

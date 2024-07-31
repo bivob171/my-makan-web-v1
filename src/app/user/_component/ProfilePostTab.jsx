@@ -330,39 +330,42 @@ const ProfilePostTab = ({
           <PostSection isOpen={isOpenPost} setIsOpen={setIsOpenPost} />
         )}
         <div className="lg:!sticky top-[100px] bg-[#EFF4FB] z-10">
-          <div className="newsfeed-search mb-0 !rounded-t-md !rounded-b-none p-1">
-            <ul className="member-list gap-2">
-              <li className="active-member !pl-0 md:!pl-4 h-[50px]">
-                <Image
-                  width={40}
-                  height={40}
-                  alt="img"
-                  src={user?.image}
-                  className="!w-[50px] h-full object-cover rounded-full border-2"
-                />
-              </li>
-              <li>
+          <div className="bg-white mb-0 !rounded-t-md !rounded-b-none !grid !grid-cols-12 gap-2 py-2">
+            <div className="col-span-2 flex justify-center items-center w-full">
+              <Image
+                width={40}
+                height={40}
+                alt="img"
+                src={user?.image}
+                className="w-[55px] h-[55px] object-cover rounded-full border-2"
+              />
+            </div>
+            <ul className="member-list col-span-8  flex justify-center items-center">
+              <li className="!w-full">
                 {user?.role === "agent" ? (
                   <>
                     {user?.verified === false ? (
                       <>
                         <button
-                          className="cursor-pointer"
+                          className="cursor-pointer !w-full"
                           onClick={() => setVerifyPopup(true)}
                         >
-                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[50px] rounded-full flex justify-start items-center pl-4 pr-4 md:pr-[120px]">
-                            <span className="text-[12px] md:text-[16px] font-mono font-medium text-start leading-none">
-                              what are you looking for, {userName}?
+                          <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                            <span className="text-[16px] text-start font-mono font-medium">
+                              what are you looking for, {userName}?
                             </span>
                           </div>
                         </button>
                       </>
                     ) : (
                       <>
-                        <button className="cursor-pointer" onClick={openPost}>
-                          <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4  pr-4 md:pr-[120px]">
-                            <span className="text-[14px] md:text-[16px] font-mono font-medium">
-                              what are you looking for, {userName}?
+                        <button
+                          className="cursor-pointer w-full"
+                          onClick={open}
+                        >
+                          <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                            <span className="text-[16px] text-start font-mono font-medium">
+                              what are you looking for, {userName}?
                             </span>
                           </div>
                         </button>
@@ -370,23 +373,22 @@ const ProfilePostTab = ({
                     )}
                   </>
                 ) : (
-                  <button className="cursor-pointer" onClick={openPost}>
-                    <div className="!w-full !max-w-[500px] bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4  pr-4 md:pr-[120px]">
-                      <span className="text-[14px] md:text-[16px] font-mono font-medium">
-                        what are you looking for, {userName}?
+                  <button className="cursor-pointer !w-full" onClick={open}>
+                    <div className="!w-full bg-[#EEF3FA] border-[1px] h-[45px] rounded-full flex justify-start items-center pl-4">
+                      <span className="text-[16px] text-start font-mono font-medium">
+                        what are you looking for, {userName}?
                       </span>
                     </div>
                   </button>
                 )}
               </li>
             </ul>
-            <ul className="search-list">
-              <li className="search-filter">
-                <button className="drop-btn" type="button">
-                  <i className="icofont-abacus-alt" />
-                </button>
-              </li>
-            </ul>
+            <button
+              className="col-span-2  flex justify-center items-center"
+              type="button"
+            >
+              <i className="icofont-abacus-alt" />
+            </button>
           </div>
 
           <div className="block-box post-input-tab !rounded-none border-t">
