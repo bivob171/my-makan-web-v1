@@ -20,6 +20,8 @@ const PackageCard = ({
   like,
   setSaveRerander,
   saveRerander,
+  followRerander,
+  setFollowRerander,
 }) => {
   const {
     role,
@@ -39,7 +41,10 @@ const PackageCard = ({
   const [saveloading, setSaveLoading] = useState(true);
   const [error, setError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
+  const followingId = userinfo._id;
+
   const [hasId, setHasId] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
 
   const [openModalIndex, setOpenModalIndex] = useState(null);
   const modalRefs = useRef([]);
@@ -248,6 +253,94 @@ const PackageCard = ({
     checkSavePost(token);
   }, [savePostId, saveRerander]);
 
+  // follow funtion
+
+  const handleFollowClick = async (userinfo) => {
+    try {
+      const _id = userinfo?._id;
+      const role = userinfo?.role;
+      const fullName = userinfo?.fullName;
+      setIsFollow(true);
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful following ${fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(` ${error.message}`);
+    }
+  };
+
+  const handleUnFollowClick = async (userinfo) => {
+    try {
+      const _id = userinfo?._id;
+      const role = userinfo?.role;
+      const fullName = userinfo?.fullName;
+      setIsFollow(false);
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`${response.status}`);
+      } else {
+        toast.success(`Successful Unfollowing ${fullName}`);
+        setFollowRerander(!followRerander);
+      }
+    } catch (error) {
+      toast.error(`${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const checkFollowUser = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-exist/${followingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsFollow(response.data);
+      } catch (err) {
+        setFError(err);
+      } finally {
+        setFollowLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkFollowUser(token);
+  }, [followingId, followRerander]);
+
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">
@@ -386,12 +479,27 @@ const PackageCard = ({
                         </div>
                       </div>
                       <div className="flex justify-between gap-3 mt-2">
-                        <button className="bg-[#615DFA] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#615DFA]/70 flex justify-center items-center gap-2">
-                          <BsJournalBookmarkFill className="w-5 h-5" /> Follow
-                        </button>
-                        <button className="bg-[#615DFA] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#615DFA]/70 flex justify-center items-center gap-2">
+                        {isFollow === true ? (
+                          <button
+                            type="button"
+                            onClick={() => handleUnFollowClick(userinfo)}
+                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                            Unfollow
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleFollowClick(userinfo)}
+                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                          </button>
+                        )}
+                        <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
                           {" "}
-                          <MdFavorite className="w-5 h-5" /> Save
+                          <SiImessage className="w-5 h-5" /> Massage
                         </button>
                       </div>
                     </div>
