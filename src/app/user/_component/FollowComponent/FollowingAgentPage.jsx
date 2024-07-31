@@ -1,6 +1,6 @@
 "use client";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FollowAgentCard } from "../Card/FollowAgenCard";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -62,25 +62,21 @@ export const FollowingAgentPage = () => {
     getAllPosts(token);
   }, [sortOrder, sortBy, limit, page, searchName]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () => {
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-    };
-  }, [isFetching, hasMore]);
   const handleSearchInputChange = (event) => {
     setSearchName(event.target.value);
     setPage(1);
@@ -181,7 +177,11 @@ export const FollowingAgentPage = () => {
       {!loading && allPosts.length > 0 && (
         <div className="row gutters-20">
           {allPosts?.map((item, i) => {
-            return <FollowAgentCard key={i} item={item} />;
+            return (
+              <div ref={lastPostElementRef} key={i}>
+                <FollowAgentCard item={item} />
+              </div>
+            );
           })}
         </div>
       )}
