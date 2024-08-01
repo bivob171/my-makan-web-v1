@@ -79,7 +79,6 @@ export default function AgentProfile() {
   useEffect(() => {
     setIsFollow(profile?.following);
   }, [profile, followRerander]);
-  // image update
   const [error, setError] = useState("");
   console.log(error);
   const [uploading, setUploading] = useState(false);
@@ -120,7 +119,7 @@ export default function AgentProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploadingP(false); // Reset uploading state after upload attempt (whether success or failure)
+      setUploadingP(false); 
     }
   };
   const handleUploadCover = async (files) => {
@@ -147,7 +146,7 @@ export default function AgentProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploading(false); // Reset uploading state after upload attempt (whether success or failure)
+      setUploading(false); 
     }
   };
 
@@ -305,7 +304,7 @@ export default function AgentProfile() {
   };
 
   return (
-    <div className="">
+    <div className="bg-[#EFF4FB]">
       <div className="bg-[white] shadow-sm !pt-[100px]">
         <div className="container">
           <input
@@ -348,10 +347,9 @@ export default function AgentProfile() {
                   height={1000}
                   alt="cover image"
                   loading="lazy"
-                  className="w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg"
+                  className="w-full h-[180px] md:h-[380px] object-cover object-top rounded-b-lg"
                 />
               )}
-              {profile?._id === myId && (
                 <button
                   type="button"
                   onClick={() =>
@@ -364,9 +362,9 @@ export default function AgentProfile() {
                     Edit Cover Photo
                   </span>
                 </button>
-              )}
+           
             </div>
-            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
+            <div className="flex !flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
               <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
                 {selectedImage === undefined || uploadingP === true ? (
                   <div
