@@ -304,8 +304,8 @@ export default function BuyerProfile() {
   };
 
   return (
-    <div>
-      <div className="page-content bg-[white] shadow-sm !pt-[100px]">
+    <div className="bg-[#EFF4FB]">
+      <div className="bg-[white] shadow-sm !pt-[100px]">
         <div className="container">
           <input
             id="upload-cover"
@@ -323,7 +323,7 @@ export default function BuyerProfile() {
             <div className="relative">
               {selectedCoverImage === undefined || uploading === true ? (
                 <div
-                  class="flex w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
+                  class="flex w-full h-[180px] md:h-[380px] object-cover object-top rounded-b-lg items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
                   aria-hidden="true"
                 >
                   <svg
@@ -350,7 +350,6 @@ export default function BuyerProfile() {
                   className="w-full h-[180px] md:h-[350px] object-cover object-top rounded-b-lg"
                 />
               )}
-              {profile?._id === myId && (
                 <button
                   type="button"
                   onClick={() =>
@@ -363,10 +362,10 @@ export default function BuyerProfile() {
                     Edit Cover Photo
                   </span>
                 </button>
-              )}
+          
             </div>
-            <div className="flex justify-start items-end gap-3 -mt-10 px-10">
-              <div className="relative w-[180px] h-[180px] border-4 border-[#dbdbdb] rounded-full">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
+              <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
                 {selectedImage === undefined || uploadingP === true ? (
                   <div
                     class="flex w-full h-full object-cover object-top rounded-full shadow-md items-center justify-center bg-slate-100 motion-safe:animate-pulse dark:bg-slate-800"
@@ -396,7 +395,6 @@ export default function BuyerProfile() {
                     className="w-full h-full object-cover object-top rounded-full shadow-md"
                   />
                 )}
-                {profile?._id === myId && (
                   <button
                     type="button"
                     onClick={() =>
@@ -406,7 +404,7 @@ export default function BuyerProfile() {
                   >
                     <MdAddAPhoto className="w-5 h-5" />
                   </button>
-                )}
+            
               </div>
               <div>
                 <div className="flex justify-start items-center gap-4">
@@ -482,10 +480,8 @@ export default function BuyerProfile() {
           </div>
         </div>
       </div>
-      <div className="bg-[#EFF4FB] my-10">
-        <div className="page-content !pt-0">
-          <div className="container">{renderTabContent()}</div>
-        </div>
+      <div className="bg-[#EFF4FB] py-10 px-[5px]">
+        <div className="container">{renderTabContent()}</div>
       </div>
     </div>
   );

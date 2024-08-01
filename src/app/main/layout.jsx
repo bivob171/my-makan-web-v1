@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic"; // Import dynamic from next/dynamic
+import dynamic from "next/dynamic";
 
 const Footer = dynamic(() => import("../Component/Footer/Footer"), {
   ssr: false,

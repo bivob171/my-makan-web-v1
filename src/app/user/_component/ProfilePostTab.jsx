@@ -171,7 +171,7 @@ const ProfilePostTab = ({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-11 gap-y-10 lg:gap-10">
+    <div className="grid grid-cols-1 lg:grid-cols-11 gap-y-10 lg:gap-10 ">
       <div className="lg:col-span-5">
         {" "}
         <div className="widget widget-author !pb-2 !pl-2 !pr-2">
@@ -405,7 +405,7 @@ const ProfilePostTab = ({
           </div>
         </div>
         {/* news feed card  */}
-        <div className="h-screen pb-[50px] -mt-[25px]">
+        <div className="pb-[50px]">
           <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           <PostHiddenModal
             visible={isOpenHideen}
@@ -426,7 +426,7 @@ const ProfilePostTab = ({
             </div>
           )}
           {!loading && allPosts.length > 0 && (
-            <div className="grid grid-cols-1 gap-4 ">
+            <div className="grid grid-cols-1 gap-4">
               {allPosts?.map((item, i) => {
                 return (
                   <div ref={lastPostElementRef} key={i}>
