@@ -4,9 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import Link from "next/link";
-import { FaComments, FaMinus } from "react-icons/fa";
 import Icofont from "react-icofont";
-import { useRouter } from "next/navigation";
 import HTopNotification from "./HTopNotification";
 
 export const HeaderTop = () => {
@@ -52,7 +50,6 @@ export const HeaderTop = () => {
     setMatchOpen(false);
   };
 
-  const router = useRouter();
   return (
     <header ref={dropdownRef} className="fixed-header !z-40">
       <div className="header-menu relative">
@@ -102,16 +99,6 @@ export const HeaderTop = () => {
                     </li>
                   </ul>
                 </li>
-                {/* <li className="header-nav-item">
-                  <Link href="/user/agent" className="menu-link active">
-                    Agents
-                  </Link>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link href="/user/agent-posts">Agent Posts</Link>
-                    </li>
-                  </ul>
-                </li> */}
                 <li className="header-nav-item">
                   <Link href="/user/company" className="menu-link active">
                     Company
@@ -123,19 +110,6 @@ export const HeaderTop = () => {
                     Properties
                   </a>
                 </li>
-                {/* {user?.role === "agent" ? (
-                  <li className="header-nav-item">
-                    <Link href="/user/agent-posts" className="menu-link active">
-                      Agent Posts
-                    </Link>
-                  </li>
-                ) : (
-                  <li className="header-nav-item">
-                    <Link href="/user/buyer-posts" className="menu-link active">
-                      Buyer Posts
-                    </Link>
-                  </li>
-                )} */}
                 <li className="header-nav-item">
                   <a href="#" className="menu-link have-sub">
                     By location

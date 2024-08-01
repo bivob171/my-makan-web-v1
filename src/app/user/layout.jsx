@@ -15,8 +15,7 @@ const nunito = Nunito({
   display: "swap",
 });
 export default function Layout({ children }) {
-  const { isAuthenticated, loading, user, setRender, render, logOut } =
-    PrivateRouteContext();
+  const { isAuthenticated, loading } = PrivateRouteContext();
 
   if (loading === true) {
     return (

@@ -50,7 +50,6 @@ export const AllTotalPost = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allPostsList = await response.json();
-      console.log(allPostsList);
       setHasMore(allPostsList.length === limit);
       setAllPosts((prevPost) =>
         page === 1 ? allPostsList : [...prevPost, ...allPostsList]

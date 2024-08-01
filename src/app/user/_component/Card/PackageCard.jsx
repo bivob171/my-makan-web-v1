@@ -324,7 +324,6 @@ const PackageCard = ({
           }
         );
         setIsFollow(response.data);
-        console.log("fff", response.data);
       } catch (err) {
         setFError(err);
       } finally {
