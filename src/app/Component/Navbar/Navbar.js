@@ -8,7 +8,7 @@ import Menu from "./Menu";
 import { useRouter } from "next/navigation";
 import { CgCloseR } from "react-icons/cg";
 
-export const Navbar = () => {
+export default function Navbar() {
   const { isAuthenticated, loading, user } = PrivateRouteContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -286,4 +286,4 @@ export const Navbar = () => {
       )}
     </div>
   );
-};
+}

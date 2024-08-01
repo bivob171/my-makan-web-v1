@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const Footer = () => {
+export default function Footer() {
   return (
     <>
       <a href="#wrapper" data-type="section-switch" className="scrollup">
@@ -126,4 +126,4 @@ export const Footer = () => {
       </div>
     </>
   );
-};
+}

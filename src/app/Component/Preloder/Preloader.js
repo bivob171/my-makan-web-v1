@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-const Preloader = () => {
+export default function Preloader() {
   return (
     <div
       className={`preloader bg-[#5F5EFA] w-full h-screen flex items-center justify-center`}
@@ -17,6 +17,4 @@ const Preloader = () => {
       />
     </div>
   );
-};
-
-export default Preloader;
+}

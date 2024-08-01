@@ -16,7 +16,21 @@ const Preloader = dynamic(() => import("../Component/Preloder/Preloader"), {
 export default function Layout({ children }) {
   const [isSticky, setIsSticky] = useState(false);
   const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0.8) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
 
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
