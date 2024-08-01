@@ -2,6 +2,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import HouseCard from "../HouseCard/HouseCard";
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
@@ -22,25 +23,7 @@ export default function Home() {
     const loadSlickCarousel = async () => {
       try {
         await loadScript("https://code.jquery.com/jquery-3.6.0.min.js");
-        await loadScript("dependencies/popper.js/js/popper.min.js");
-        await loadScript("dependencies/bootstrap/js/bootstrap.min.js");
-        await loadScript(
-          "dependencies/imagesloaded/js/imagesloaded.pkgd.min.js"
-        );
-        await loadScript("dependencies/isotope-layout/js/isotope.pkgd.min.js");
         await loadScript("dependencies/slick-carousel/js/slick.min.js");
-        await loadScript("dependencies/sal.js/sal.js");
-        await loadScript(
-          "dependencies/magnific-popup/js/jquery.magnific-popup.min.js"
-        );
-        await loadScript(
-          "dependencies/bootstrap-validator/js/validator.min.js"
-        );
-        await loadScript("dependencies/select2/js/select2.min.js");
-        await loadScript(
-          "https://maps.googleapis.com/maps/api/js?key=AIzaSyBtmXSwv4YmAKtcZyyad9W7D4AC08z0Rb4"
-        );
-        await loadScript("/assets/js/app.js");
 
         $(document).ready(() => {
           $(".slick-slider").slick({
@@ -62,17 +45,25 @@ export default function Home() {
         console.error("Error loading scripts: ", error);
       }
     };
+    const loadSal = async () => {
+      try {
+        await loadScript("/dependencies/sal.js/sal.js");
+        sal();
+      } catch (error) {
+        console.error("Error loading sal.js: ", error);
+      }
+    };
 
-    if (isClient) {
-      loadSlickCarousel();
-    }
-  }, [isClient]);
+    loadSlickCarousel();
+    loadSal();
+  }, []);
 
   return (
     <>
       <a href="#wrapper" data-type="section-switch" className="scrollup">
         <i className="icofont-bubble-up" />
       </a>
+
       <div id="wrapper" className="wrapper overflow-hidden ">
         <section className="hero-banner">
           <div className="container">
@@ -81,7 +72,7 @@ export default function Home() {
               data-sal="zoom-out"
               data-sal-duration={1000}
             >
-              <h1 className="item-title">My Makan Community</h1>
+              <h1 className="item-title">MY Makan Community</h1>
               <p>
                 Having real social contacts can sometimes be difficult FUN,
                 everything becomes much simpler!
@@ -115,8 +106,8 @@ export default function Home() {
               data-sal-delay={100}
             >
               <Image
-                width={400}
-                height={400}
+                width={700}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/people_1.png"
                 alt="People"
@@ -129,8 +120,8 @@ export default function Home() {
               data-sal-delay={700}
             >
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/shape_1.png"
                 alt="shape"
@@ -139,8 +130,8 @@ export default function Home() {
           </div>
           <div className="map-line">
             <Image
-              width={400}
-              height={400}
+              width={1000}
+              height={100}
               className="w-auto h-auto"
               src="/media/banner/map_line.png"
               alt="map"
@@ -155,8 +146,8 @@ export default function Home() {
                 data-sal-delay={1000}
               >
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={10}
                   className="w-auto h-auto"
                   src="/media/banner/marker_1.png"
                   alt="marker"
@@ -168,8 +159,8 @@ export default function Home() {
                 data-sal-delay={1000}
               >
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/banner/marker_2.png"
                   alt="marker"
@@ -181,8 +172,8 @@ export default function Home() {
                 data-sal-delay={1000}
               >
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/banner/marker_3.png"
                   alt="marker"
@@ -194,8 +185,8 @@ export default function Home() {
                 data-sal-delay={1000}
               >
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/banner/marker_4.png"
                   alt="marker"
@@ -204,13 +195,15 @@ export default function Home() {
             </ul>
           </div>
         </section>
-        {/*=====================================*/}
-        {/*=         Why Choose Start       	=*/}
-        {/*=====================================*/}
+
+        <section>
+          <HouseCard />
+        </section>
+
         <section className="why-choose-us">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-6">
+          <div className="px-4 md:!px-24 lg:px-8 mx-auto sm:max-w-full md:max-w-full lg:max-w-screen-xl">
+            <div className="grid lg:grid-cols-2 gap-10 justify-center items-center">
+              <div className="">
                 <div className="why-choose-box">
                   <div className="item-subtitle">What We Do</div>
                   <h2 className="item-title">
@@ -242,15 +235,17 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div className="">
                 <div className="why-choose-box">
                   <ul className="features-list">
                     <li>
-                      <div className="/media">
-                        <div className="item-icon">
-                          <i className="icofont-wechat" />
+                      <div className="media flex items-center">
+                        <div>
+                          <div className="item-icon ">
+                            <i className="icofont-wechat" />
+                          </div>
                         </div>
-                        <div className="/media-body">
+                        <div className="media-body">
                           <p className="item-title">Meet Great People</p>
                           <p>
                             when an unknown printer took a galley of scrambled
@@ -260,11 +255,13 @@ export default function Home() {
                       </div>
                     </li>
                     <li>
-                      <div className="/media">
-                        <div className="item-icon">
-                          <i className="icofont-users" />
+                      <div className="media flex items-center">
+                        <div>
+                          <div className="item-icon">
+                            <i className="icofont-users" />
+                          </div>
                         </div>
-                        <div className="/media-body">
+                        <div className="media-body">
                           <p className="item-title">Forum Discussion</p>
                           <p>
                             when an unknown printer took a galley of scrambled
@@ -274,11 +271,13 @@ export default function Home() {
                       </div>
                     </li>
                     <li>
-                      <div className="/media">
-                        <div className="item-icon">
-                          <i className="icofont-paper" />
+                      <div className="media flex items-center">
+                        <div>
+                          <div className="item-icon">
+                            <i className="icofont-paper" />
+                          </div>
                         </div>
-                        <div className="/media-body">
+                        <div className="media-body">
                           <p className="item-title">Active Groups</p>
                           <p>
                             when an unknown printer took a galley of scrambled
@@ -300,8 +299,8 @@ export default function Home() {
           <ul className="map-marker">
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/marker_1.png"
                 alt="marker"
@@ -309,8 +308,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/marker_2.png"
                 alt="marker"
@@ -318,8 +317,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/marker_3.png"
                 alt="marker"
@@ -327,8 +326,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/marker_4.png"
                 alt="marker"
@@ -336,8 +335,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/banner/marker_5.png"
                 alt="marker"
@@ -369,8 +368,8 @@ export default function Home() {
             data-sal-delay={500}
           >
             <Image
-              width={400}
-              height={400}
+              width={1000}
+              height={100}
               className="w-auto h-auto"
               src="/media/figure/shape_7.png"
               alt="bg"
@@ -403,8 +402,8 @@ export default function Home() {
                           aria-selected="true"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_1.jpg"
                             alt="team"
@@ -420,8 +419,8 @@ export default function Home() {
                           aria-selected="false"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_5.jpg"
                             alt="team"
@@ -437,8 +436,8 @@ export default function Home() {
                           aria-selected="false"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_6.jpg"
                             alt="team"
@@ -458,8 +457,8 @@ export default function Home() {
                           aria-selected="false"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_3.jpg"
                             alt="team"
@@ -475,8 +474,8 @@ export default function Home() {
                           aria-selected="false"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_4.jpg"
                             alt="team"
@@ -492,8 +491,8 @@ export default function Home() {
                           aria-selected="false"
                         >
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/team/team_7.jpg"
                             alt="team"
@@ -512,8 +511,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_1.jpg"
                               alt="team"
@@ -533,8 +532,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_5.jpg"
                               alt="team"
@@ -554,8 +553,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_6.jpg"
                               alt="team"
@@ -575,8 +574,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_3.jpg"
                               alt="team"
@@ -596,8 +595,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_4.jpg"
                               alt="team"
@@ -617,8 +616,8 @@ export default function Home() {
                         <div className="team-box">
                           <div className="item-img">
                             <Image
-                              width={400}
-                              height={400}
+                              width={1000}
+                              height={100}
                               className="w-auto h-auto"
                               src="/media/team/team_7.jpg"
                               alt="team"
@@ -640,8 +639,8 @@ export default function Home() {
                 <ul className="shape-wrap">
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/figure/shape_9.png"
                       alt="shape"
@@ -649,8 +648,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_1.png"
                       alt="shape"
@@ -658,8 +657,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_2.png"
                       alt="shape"
@@ -667,8 +666,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_circle_1.png"
                       alt="shape"
@@ -676,8 +675,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_circle_2.png"
                       alt="shape"
@@ -685,8 +684,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_circle_3.png"
                       alt="shape"
@@ -694,8 +693,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_3.png"
                       alt="shape"
@@ -703,8 +702,8 @@ export default function Home() {
                   </li>
                   <li>
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/team/shape_4.png"
                       alt="shape"
@@ -775,8 +774,8 @@ export default function Home() {
                 <div className="why-choose-img">
                   <div className="image-box">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/figure/why_choose_1.jpg"
                       alt="image"
@@ -805,8 +804,8 @@ export default function Home() {
                   <div className="item-img">
                     <a href="user-friends.html">
                       <Image
-                        width={400}
-                        height={400}
+                        width={1000}
+                        height={100}
                         className="w-auto h-auto"
                         src="/media/location/location_1.jpg"
                         alt="Newyork City"
@@ -827,8 +826,8 @@ export default function Home() {
                       <div className="item-img">
                         <a href="user-friends.html">
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/location/location_2.jpg"
                             alt="Newyork City"
@@ -845,8 +844,8 @@ export default function Home() {
                       <div className="item-img">
                         <a href="user-friends.html">
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/location/location_3.jpg"
                             alt="Newyork City"
@@ -865,8 +864,8 @@ export default function Home() {
                       <div className="item-img">
                         <a href="user-friends.html">
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/location/location_2.jpg"
                             alt="Newyork City"
@@ -883,8 +882,8 @@ export default function Home() {
                       <div className="item-img">
                         <a href="user-friends.html">
                           <Image
-                            width={400}
-                            height={400}
+                            width={1000}
+                            height={100}
                             className="w-auto h-auto"
                             src="/media/location/location_4.jpg"
                             alt="Newyork City"
@@ -945,8 +944,8 @@ export default function Home() {
                 <div className="banner-img">
                   <div className="apps-view">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/banner/apps.png"
                       alt="Apps"
@@ -974,8 +973,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_1.jpg"
                       alt="Groups"
@@ -993,8 +992,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_2.jpg"
                       alt="Groups"
@@ -1012,8 +1011,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_3.jpg"
                       alt="Groups"
@@ -1031,8 +1030,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_4.jpg"
                       alt="Groups"
@@ -1050,8 +1049,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_5.jpg"
                       alt="Groups"
@@ -1069,8 +1068,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_6.jpg"
                       alt="Groups"
@@ -1088,8 +1087,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_7.jpg"
                       alt="Groups"
@@ -1107,8 +1106,8 @@ export default function Home() {
                 <div className="groups-box">
                   <div className="item-img">
                     <Image
-                      width={400}
-                      height={400}
+                      width={1000}
+                      height={100}
                       className="w-auto h-auto"
                       src="/media/groups/groups_8.jpg"
                       alt="Groups"
@@ -1164,7 +1163,7 @@ export default function Home() {
                             Lorem ipsum dolor sit amet, consectetur adipisicing
                             elitsed do eiusmod tempor utlabore et dolore magna
                             aliqua enim miniectetur adipisicing eliteiusmod
-                            dolore magna aliqua Ut enim ad minim veniam
+                            dolore magna aliqua Ut enim ad minim veniam.
                           </p>
                         </div>
                       </div>
@@ -1178,7 +1177,7 @@ export default function Home() {
                             Lorem ipsum dolor sit amet, consectetur adipisicing
                             elitsed do eiusmod tempor utlabore et dolore magna
                             aliqua enim miniectetur adipisicing eliteiusmod
-                            dolore magna aliqua Ut enim ad minim veniam
+                            dolore magna aliqua Ut enim ad minim veniam.
                           </p>
                         </div>
                       </div>
@@ -1192,7 +1191,7 @@ export default function Home() {
                             Lorem ipsum dolor sit amet, consectetur adipisicing
                             elitsed do eiusmod tempor utlabore et dolore magna
                             aliqua enim miniectetur adipisicing eliteiusmod
-                            dolore magna aliqua Ut enim ad minim veniam
+                            dolore magna aliqua Ut enim ad minim veniam.
                           </p>
                         </div>
                       </div>
@@ -1214,8 +1213,8 @@ export default function Home() {
                     <div className="slick-nav slick-carousel">
                       <div className="nav-item">
                         <Image
-                          width={400}
-                          height={400}
+                          width={1000}
+                          height={100}
                           className="w-auto h-auto"
                           src="/media/testimonial/nav_1.jpg"
                           alt="Product"
@@ -1223,8 +1222,8 @@ export default function Home() {
                       </div>
                       <div className="nav-item">
                         <Image
-                          width={400}
-                          height={400}
+                          width={1000}
+                          height={100}
                           className="w-auto h-auto"
                           src="/media/testimonial/nav_2.jpg"
                           alt="Product"
@@ -1232,8 +1231,8 @@ export default function Home() {
                       </div>
                       <div className="nav-item">
                         <Image
-                          width={400}
-                          height={400}
+                          width={1000}
+                          height={100}
                           className="w-auto h-auto"
                           src="/media/testimonial/nav_3.jpg"
                           alt="Product"
@@ -1241,8 +1240,8 @@ export default function Home() {
                       </div>
                       <div className="nav-item">
                         <Image
-                          width={400}
-                          height={400}
+                          width={1000}
+                          height={100}
                           className="w-auto h-auto"
                           src="/media/testimonial/nav_1.jpg"
                           alt="Product"
@@ -1256,8 +1255,8 @@ export default function Home() {
             <ul className="shape-wrap">
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_4.png"
                   alt="shape"
@@ -1265,8 +1264,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_8.png"
                   alt="shape"
@@ -1274,8 +1273,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_2.png"
                   alt="shape"
@@ -1283,8 +1282,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_9.png"
                   alt="shape"
@@ -1292,8 +1291,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_10.png"
                   alt="shape"
@@ -1301,8 +1300,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_11.png"
                   alt="shape"
@@ -1310,8 +1309,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_8.png"
                   alt="shape"
@@ -1348,8 +1347,8 @@ export default function Home() {
                   <div className="blog-img">
                     <a href="single-blog.html">
                       <Image
-                        width={400}
-                        height={400}
+                        width={1000}
+                        height={100}
                         className="w-auto h-auto"
                         src="/media/blog/blog_1.jpg"
                         alt="Blog"
@@ -1385,8 +1384,8 @@ export default function Home() {
                   <div className="blog-img">
                     <a href="single-blog.html">
                       <Image
-                        width={400}
-                        height={400}
+                        width={1000}
+                        height={100}
                         className="w-auto h-auto"
                         src="/media/blog/blog_2.jpg"
                         alt="Blog"
@@ -1422,8 +1421,8 @@ export default function Home() {
                   <div className="blog-img">
                     <a href="single-blog.html">
                       <Image
-                        width={400}
-                        height={400}
+                        width={1000}
+                        height={100}
                         className="w-auto h-auto"
                         src="/media/blog/blog_3.jpg"
                         alt="Blog"
@@ -1464,8 +1463,8 @@ export default function Home() {
           <ul className="section-cloud">
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/figure/cloud_1.png"
                 alt="shape"
@@ -1473,8 +1472,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/figure/cloud_2.png"
                 alt="shape"
@@ -1482,8 +1481,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/figure/cloud_2.png"
                 alt="shape"
@@ -1491,8 +1490,8 @@ export default function Home() {
             </li>
             <li>
               <Image
-                width={400}
-                height={400}
+                width={1000}
+                height={100}
                 className="w-auto h-auto"
                 src="/media/figure/cloud_1.png"
                 alt="shape"
@@ -1503,8 +1502,8 @@ export default function Home() {
             <ul className="section-shape">
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_1.png"
                   alt="shape"
@@ -1512,8 +1511,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_2.png"
                   alt="shape"
@@ -1521,8 +1520,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_3.png"
                   alt="shape"
@@ -1530,8 +1529,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_4.png"
                   alt="shape"
@@ -1539,8 +1538,8 @@ export default function Home() {
               </li>
               <li>
                 <Image
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={100}
                   className="w-auto h-auto"
                   src="/media/figure/shape_5.png"
                   alt="shape"

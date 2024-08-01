@@ -8,12 +8,13 @@ export const SocialLogin = ({ setError }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isCreatingAccount, setIsCreatingAccount] = useState(false); // New state
-  const initialSignupType =
-    localStorage.getItem("signupType") === "false" ? false : true;
-  const [signupType, setSignupType] = useState(initialSignupType);
+
+  const [signupType, setSignupType] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("signupType", signupType);
+    const initialSignupType =
+      localStorage.getItem("signupType") === "false" ? false : true;
+    setSignupType(initialSignupType);
   }, [signupType]);
 
   const role = signupType ? "buyer" : "agent";

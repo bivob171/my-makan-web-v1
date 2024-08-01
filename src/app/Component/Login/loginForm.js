@@ -15,12 +15,18 @@ import { SocialLogin } from "../SocialLogin/SocialLogin";
 export const LoginForm = () => {
   const router = useRouter();
   const { setRender, render } = PrivateRouteContext();
-  const initialSignupType =
-    localStorage.getItem("signupType") === "false" ? false : true;
-  const [signupType, setSignupType] = useState(initialSignupType);
+
+  const [signupType, setSignupType] = useState(true);
+
+  function setItem(signupType) {
+    localStorage.setItem("signupType", signupType);
+    setSignupType(signupType);
+  }
 
   useEffect(() => {
-    localStorage.setItem("signupType", signupType);
+    const initialSignupType =
+      localStorage.getItem("signupType") === "false" ? false : true;
+    setSignupType(initialSignupType);
   }, [signupType]);
 
   const [email, setEmail] = useState("");
@@ -139,7 +145,7 @@ export const LoginForm = () => {
             <div className="w-full mb-2">
               <Button className="w-1/2 rounded-r-none text-white">Buyer</Button>
               <Button
-                onClick={() => setSignupType(false)}
+                onClick={() => setItem(false)}
                 className="w-1/2 rounded-l-none border  border-[#2682d5] bg-white  hover:bg-[#1b6cb313] text-[#2682d5]"
               >
                 Agents
@@ -149,7 +155,7 @@ export const LoginForm = () => {
             <div className="w-full mb-2">
               <Button
                 className="w-1/2 rounded-r-none border border-[#2682d5] bg-white  hover:bg-[#1b6cb313] text-[#2682d5]"
-                onClick={() => setSignupType(true)}
+                onClick={() => setItem(true)}
               >
                 Buyer
               </Button>

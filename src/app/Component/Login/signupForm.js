@@ -14,12 +14,12 @@ import toast from "react-hot-toast";
 import { SocialLogin } from "../SocialLogin/SocialLogin";
 export const SignupForm = () => {
   const { setRender, render } = PrivateRouteContext();
-  const initialSignupType =
-    localStorage.getItem("signupType") === "false" ? false : true;
-  const [signupType, setSignupType] = useState(initialSignupType);
+  const [signupType, setSignupType] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("signupType", signupType);
+    const initialSignupType =
+      localStorage.getItem("signupType") === "false" ? false : true;
+    setSignupType(initialSignupType);
   }, [signupType]);
 
   const role = signupType ? "buyer" : "agent";
