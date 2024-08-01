@@ -275,6 +275,10 @@ export const SettingsPage = () => {
 
   const [selectedFiles, setSelectedFiles] = useState([]);
   const handleFileChange = (e) => {
+    if (identity.length >= 8) {
+      e.preventDefault(); // Prevent the file input from opening
+      return alert("The number of identities exceeds 5!");
+    }
     setSelectedFiles([...e.target.files]);
   };
 
@@ -296,7 +300,7 @@ export const SettingsPage = () => {
         }
       );
       const links = response.data.map((item) => item.Location);
-      setIdentity(links);
+      setIdentity((prevIdentity) => [...prevIdentity, ...links]);
       setSelectedFiles([]);
     } catch (error) {
       console.error("Upload failed:", error);
@@ -451,7 +455,7 @@ export const SettingsPage = () => {
                                     />
                                   </div>
                                 ) : (
-                                  <div>
+                                  <div className="flex flex-wrap gap-2">
                                     {identity?.map((img, i) => {
                                       const isPdf = img.endsWith(".pdf");
 
@@ -490,23 +494,13 @@ export const SettingsPage = () => {
                               </div>
                             </div>
                           </div>
-                          {role === "buyer" ? (
-                            <button
-                              type="button"
-                              onClick={updateUserAccountIdentity}
-                              class="mt-1 rounded-lg flex justify-end outline-none bg-blue-600 px-4 py-2 focus:none text-white"
-                            >
-                              Submit Identity
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={updateAgentAccountIdentity}
-                              class="mt-1 rounded-lg flex justify-end bg-blue-600 px-4 focus:none py-2 text-white"
-                            >
-                              Submit Identity
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={updateAgentAccountIdentity}
+                            class="mt-1 rounded-lg flex justify-end bg-blue-600 px-4 focus:none py-2 text-white"
+                          >
+                            Submit Identity
+                          </button>
                         </div>
                       ) : (
                         <div>
@@ -571,18 +565,30 @@ export const SettingsPage = () => {
                                     />
                                   </div>
                                 ) : (
-                                  <div>
+                                  <div className="flex flex-wrap gap-2">
                                     {identity?.map((img, i) => {
+                                      const isPdf = img.endsWith(".pdf");
+
                                       return (
                                         <div key={i} className="relative">
-                                          <iframe
-                                            alt=""
-                                            className="object-cover w-[80px] h-[80px] rounded-sm"
-                                            width="70"
-                                            height="70"
-                                            src={img}
-                                            onClick={() => handlePdfView(img)}
-                                          ></iframe>
+                                          {isPdf ? (
+                                            <iframe
+                                              className="object-cover w-[80px] h-[80px] rounded-sm"
+                                              width="70"
+                                              height="70"
+                                              src={img}
+                                              onClick={() => handlePdfView(img)}
+                                            ></iframe>
+                                          ) : (
+                                            <Image
+                                              alt=""
+                                              className="object-cover w-[80px] h-[80px] rounded-sm"
+                                              width="70"
+                                              height="70"
+                                              src={img}
+                                              onClick={() => handlePdfView(img)}
+                                            />
+                                          )}
                                           <button
                                             type="button"
                                             className="text-[10px] absolute top-0 right-0 p-1 bg-red-600 rounded-full text-white"
@@ -598,23 +604,13 @@ export const SettingsPage = () => {
                               </div>
                             </div>
                           </div>
-                          {role === "buyer" ? (
-                            <button
-                              type="button"
-                              onClick={updateUserAccountIdentity}
-                              class="mt-1 rounded-lg flex justify-end outline-none bg-blue-600 px-4 py-2 focus:none text-white"
-                            >
-                              Submit Identity
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={updateAgentAccountIdentity}
-                              class="mt-1 rounded-lg flex justify-end bg-blue-600 px-4 focus:none py-2 text-white"
-                            >
-                              Submit Identity
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={updateAgentAccountIdentity}
+                            class="mt-1 rounded-lg flex justify-end bg-blue-600 px-4 focus:none py-2 text-white"
+                          >
+                            Submit Identity
+                          </button>
                         </div>
                       )}
                     </div>
