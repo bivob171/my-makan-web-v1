@@ -1,29 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Footer } from "../Component/Footer/Footer";
-import { Navbar } from "../Component/Navbar/Navbar";
-import Preloader from "../Component/Preloder/Preloader";
+import dynamic from "next/dynamic"; // Import dynamic from next/dynamic
+
+const Footer = dynamic(() => import("../Component/Footer/Footer"), {
+  ssr: false,
+});
+const Navbar = dynamic(() => import("../Component/Navbar/Navbar"), {
+  ssr: false,
+});
+const Preloader = dynamic(() => import("../Component/Preloder/Preloader"), {
+  ssr: false,
+});
 
 export default function Layout({ children }) {
   const [isSticky, setIsSticky] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0.8) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

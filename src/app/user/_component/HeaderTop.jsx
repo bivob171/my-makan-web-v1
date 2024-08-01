@@ -4,8 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import Link from "next/link";
-import Icofont from "react-icofont";
-import HTopNotification from "./HTopNotification";
+import { FaComments, FaMinus } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const Icofont = dynamic(() => import("react-icofont"), { ssr: false });
+const HTopNotification = dynamic(() => import("./HTopNotification"), {
+  ssr: false,
+});
 
 export const HeaderTop = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
@@ -50,6 +56,7 @@ export const HeaderTop = () => {
     setMatchOpen(false);
   };
 
+  const router = useRouter();
   return (
     <header ref={dropdownRef} className="fixed-header !z-40">
       <div className="header-menu relative">
@@ -99,6 +106,7 @@ export const HeaderTop = () => {
                     </li>
                   </ul>
                 </li>
+
                 <li className="header-nav-item">
                   <Link href="/user/company" className="menu-link active">
                     Company
@@ -110,6 +118,7 @@ export const HeaderTop = () => {
                     Properties
                   </a>
                 </li>
+
                 <li className="header-nav-item">
                   <a href="#" className="menu-link have-sub">
                     By location

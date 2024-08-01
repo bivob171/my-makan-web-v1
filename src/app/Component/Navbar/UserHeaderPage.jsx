@@ -9,7 +9,7 @@ export const UserHeaderPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const pathName = usePathname();
-
+  const totalAdsPost = user?.totalUrgentPost + user?.totalSponsoredPost;
   return (
     <div>
       <div className="">
@@ -17,78 +17,59 @@ export const UserHeaderPage = () => {
           <div className="banner-user">
             <div className="banner-content">
               <div className="media">
-                <div className="item-img">
-                  {isAuthenticated ? (
-                    <Link href="">
-                      {user?.image ? (
-                        <Image
-                          width={113}
-                          height={113}
-                          className="w-[113px] h-[113px] rounded-full"
-                          src={user?.image}
-                          alt="User"
-                        />
-                      ) : (
-                        <Image
-                          width={110}
-                          height={110}
-                          className="w-[110px] h-[110px] rounded-full"
-                          src="https://i.ibb.co/7298VDJ/user.png"
-                          alt="User"
-                        />
-                      )}
-                    </Link>
-                  ) : (
-                    <Image
-                      width={110}
-                      height={110}
-                      className="w-[110px] h-[110px] rounded-full"
-                      src="https://i.ibb.co/7298VDJ/user.png"
-                      alt="User"
-                    />
-                  )}
+                <div className="flex gap-x-[10px] items-center">
+                  <div className="item-img">
+                    {isAuthenticated ? (
+                      <Link href="">
+                        {user?.image ? (
+                          <Image
+                            width={113}
+                            height={113}
+                            className="w-[113px] h-[113px] rounded-full"
+                            src={user?.image}
+                            alt="User"
+                          />
+                        ) : (
+                          <Image
+                            width={110}
+                            height={110}
+                            className="w-[110px] h-[110px] rounded-full"
+                            src="https://i.ibb.co/7298VDJ/user.png"
+                            alt="User"
+                          />
+                        )}
+                      </Link>
+                    ) : (
+                      <Image
+                        width={110}
+                        height={110}
+                        className="w-[110px] h-[110px] rounded-full"
+                        src="https://i.ibb.co/7298VDJ/user.png"
+                        alt="User"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="item-title">{user?.fullName}</h3>
+                    <p className="text-white">
+                      {user?.state}
+                      {user?.country && ","}
+                      {user?.country}
+                    </p>
+                    {user?.role === "agent" ? (
+                      <p className="text-white leading-[12px]">
+                        {user?.companyName}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
                 <div className="media-body">
-                  <h3 className="item-title">{user?.fullName}</h3>
-                  <div className="item-subtitle">
-                    {user?.state},{user?.country}
-                  </div>
-                  <ul className="item-social">
-                    <li>
-                      <a href="#" className="bg-fb">
-                        <i className="icofont-facebook" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-twitter">
-                        <i className="icofont-twitter" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-dribble">
-                        <i className="icofont-dribbble" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-youtube">
-                        <i className="icofont-brand-youtube" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="bg-behance">
-                        <i className="icofont-behance" />
-                      </a>
-                    </li>
-                  </ul>
                   <ul className="user-meta">
                     <li>
-                      Posts: <span>30</span>
+                      Total Posts: <span>{user?.totalPost}</span>
                     </li>
                     <li>
-                      Comments: <span>12</span>
-                    </li>
-                    <li>
-                      Views: <span>1.2k</span>
+                      Ads Posts: <span>{totalAdsPost}</span>
                     </li>
                   </ul>
                 </div>

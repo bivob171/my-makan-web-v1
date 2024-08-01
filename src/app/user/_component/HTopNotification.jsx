@@ -15,7 +15,7 @@ const HTopNotification = ({
   return (
     <>
       <div
-        className={`transition-all duration-300 ease-in-out transform w-[230px] h-[260px] rounded-md shadow-lg bg-white z-50 pt-[10px] absolute 2xl:ml-[350px] xl:ml-[350px] lg:ml-[350px] md:ml-[270px] sm:ml-[10px] ml-[10px] 2xl:top-[72px] xl:top-[74px] lg:top-[78px] md:top-[62px] sm:top-[57px] top-[57px]  ${
+        className={`transition-all duration-300 ease-in-out transform w-[230px] h-[260px] rounded-md shadow-lg bg-white z-50 pt-[10px] absolute 2xl:ml-[300px] xl:ml-[300px] lg:ml-[300px] md:ml-[270px] sm:ml-[10px] ml-[10px] 2xl:top-[75px] xl:top-[77px] lg:top-[81px] md:top-[62px] sm:top-[57px] top-[57px]  ${
           isVisible
             ? "translate-y-0 opacity-100 visible"
             : "translate-y-4 opacity-0 invisible"
@@ -35,13 +35,13 @@ const HTopNotification = ({
           <hr />
           <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
             <div className="bg-[#71728C] w-[6.5px] h-[6px] rounded-full ml-[25px]"></div>
-            <a
-              href="#"
+            <Link
+              href="/user/profile/settings"
               className="pr-4  text-sm text-gray-700 text-opacity-70 hover:text-[#69E1FF]"
               role="menuitem"
             >
               Profile Settings
-            </a>
+            </Link>
           </div>
           <hr />
           <div className="flex gap-x-[30px] mt-[10px] mb-[10px] items-center">
@@ -70,7 +70,7 @@ const HTopNotification = ({
         </div>
       </div>
       <div
-        className={`absolute  -ml-[5px]  2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] transition-all duration-300 ease-in-out transform ${
+        className={`absolute  -ml-[5px]  2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] transition-all duration-300 ease-in-out transform ${
           matchOpen
             ? "translate-y-0 opacity-100 visible"
             : "translate-y-4 opacity-0 invisible"
@@ -217,7 +217,7 @@ const HTopNotification = ({
         </div>
       </div>
       <div
-        className={`absolute  2xl:ml-[33px] xl:ml-[33px] lg:ml-[33px] md:ml-[33px] ml-[0px] 2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
+        className={`absolute  2xl:ml-[33px] xl:ml-[33px] lg:ml-[33px] md:ml-[33px] ml-[0px] 2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
           messageOpen
             ? "translate-y-0 opacity-100 visible"
             : "translate-y-4 opacity-0 invisible"
@@ -333,7 +333,7 @@ const HTopNotification = ({
       </div>
       <div></div>
       <div
-        className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[67px] xl:top-[67px] lg:top-[70px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
+        className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
           notificationOpen === true
             ? "translate-y-0 opacity-100 visible"
             : "translate-y-4 opacity-0 invisible"
