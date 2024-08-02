@@ -57,10 +57,11 @@ export const PostDetailsPage = ({ postid }) => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const allPostsList = await response.json();
+        setAllPosts(allPostsList);
+        setLoading(false);
       }
-      const allPostsList = await response.json();
-      setAllPosts(allPostsList);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {

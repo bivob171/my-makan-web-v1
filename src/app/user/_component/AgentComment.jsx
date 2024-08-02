@@ -1,5 +1,5 @@
 import { Tooltip } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BsEmojiSunglasses } from "react-icons/bs";
 import { TbPhotoHexagon } from "react-icons/tb";
 import { VscSend } from "react-icons/vsc";
@@ -57,25 +57,20 @@ const AgentComment = ({ _id }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
   }, [sortOrder, sortBy, limit, page, _id, commentRerander]);
-  const containerRefPost = useRef(null);
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   const [showAllComments, setShowAllComments] = useState(false);
 
@@ -205,6 +200,7 @@ const AgentComment = ({ _id }) => {
                   };
                   return (
                     <div
+                      ref={lastPostElementRef}
                       key={comment?._id}
                       className={`flex ${
                         comonUser?._id === user?._id
