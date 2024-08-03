@@ -4,7 +4,7 @@ import React from "react";
 export const AccountVerifyModal = ({ visible, closePopUp }) => {
   if (!visible) return null;
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-40 backdrop-blur-[10px]">
+    <div className="fixed inset-0 bg-[#000000b0] bg-opacity-90 flex justify-center items-center z-50 backdrop-blur-[2px]">
       <div className="">
         <div class="flex min-h-full items-end justify-center p-4  sm:items-center sm:p-0">
           <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">

@@ -30,7 +30,7 @@ export const HeaderRight = () => {
   }, [chatOpen]);
   return (
     <div>
-      <div className="fixed-sidebar !z-50 right">
+      <div className="fixed-sidebar !z-40 right">
         <div className="fixed-sidebar-right small-sidebar">
           <div
             onClick={() => {

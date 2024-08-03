@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { FaRegComment } from "react-icons/fa";
 import { GoStarFill } from "react-icons/go";
 import { BiCommentDetail, BiMessageDetail, BiSolidLike } from "react-icons/bi";
 import Image from "next/image";
@@ -14,6 +13,8 @@ import "swiper/css/free-mode";
 
 import { Keyboard, FreeMode, Autoplay } from "swiper/modules";
 import { SiImessage } from "react-icons/si";
+import Link from "next/link";
+import { BsJournalBookmarkFill } from "react-icons/bs";
 
 export default function HouseCard() {
   const [openModalIndex, setOpenModalIndex] = useState(null);
@@ -79,40 +80,41 @@ export default function HouseCard() {
           {houseData.map((item, index) => {
             return (
               <SwiperSlide key={index}>
-                <div className="w-auto lg:max-w-full h-auto border-[1px] border-[#F5B849] rounded-[15px] py-[25px] mb-4">
-                  <div className="flex justify-between px-[15px]">
-                    <div className="flex gap-x-[15px] items-center h-[45px] ">
-                      <div className="mb-[17px]">
-                        <div className=" relative w-[40px] h-[40px]">
-                          <div className="cursor-pointer overflow-hidden rounded-full">
+                <div className="w-auto lg:max-w-full h-auto border-[1px] border-[#F5B849] rounded-[15px] py-[10px] mb-4">
+                  <div className="flex justify-between items-start gap-1 px-[12px] md:px-[10px] pt-1">
+                    <div className="flex gap-x-[10px] justify-start items-start w-full">
+                      <div className="">
+                        <div className="relative">
+                          <div className="cursor-pointer !w-[40px] !h-[40px] md:!w-[60px] md:!h-[60px] border-[3px] p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                             <Image
-                              width={40}
-                              height={40}
+                              width={400}
+                              height={400}
                               alt="img"
                               src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                              className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full transform transition duration-500 hover:scale-110"
+                              className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
                             />
-                          </div>
-                          <div className="absolute bottom-[2px] right-0 bg-white w-[10px] h-[10px] rounded-full flex items-center justify-center">
-                            <Image
-                              width={8}
-                              height={8}
-                              alt=""
-                              className="pl-[]"
-                              src="/homeCard/active.png"
-                            />
+                            <div className="absolute -bottom-1 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
+                              <Image
+                                width={10}
+                                height={10}
+                                alt=""
+                                className="pl-[] w-full h-full"
+                                src="/homeCard/active.png"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
+
                       <div>
-                        <div className=" -mb-[20px] ">
+                        <div className=" ">
                           <div className="flex gap-x-[8px] items-center">
                             {item.rol === "Buyer" ? (
-                              <p className="text-[0.875rem] text-[#8F8F8F] font-semibold">
+                              <p className="text-[14px] leading-3 m-0 text-[#8F8F8F] font-semibold">
                                 Hidden Name{" "}
                               </p>
                             ) : (
-                              <p className="text-[0.875rem] text-[#333335] font-semibold">
+                              <p className="text-[14px] leading-3 m-0 text-[#333335] font-semibold">
                                 Jamshed Rony{" "}
                               </p>
                             )}
@@ -124,23 +126,23 @@ export default function HouseCard() {
                                 src="/homeCard/verified.png"
                               />
                             </div>
-                            <div className="flex items-center gap-x-[5px] mt-[5px]">
-                              <p className="text-[#F5B849] text-[0.875rem] font-semibold">
+                            <div className="flex items-center gap-x-[5px]">
+                              <p className="text-[#F5B849] text-[14px] font-semibold leading-3 m-0">
                                 4.8
                               </p>
-                              <p className="text-[#F5B849] text-[0.875rem] font-semibold">
+                              <p className="text-[#F5B849] text-[14px] font-semibold">
                                 <GoStarFill />
                               </p>
                             </div>
                           </div>
                         </div>
                         {item.rol === "Buyer" ? (
-                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[14px] font-medium leading-3 m-0">
                             Buyer From{" "}
                             <span className="text-[#E6533C]">India</span>
                           </p>
                         ) : (
-                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] font-medium -mb-[10px]">
+                          <p className="hover:underline underline-offset-4 text-[#8920AD] text-[12px] font-medium leading-3 m-0">
                             Rapid Properties
                           </p>
                         )}
@@ -177,21 +179,21 @@ export default function HouseCard() {
                       </div>
                     </div>
                     <div>
-                      <p className="leading-normal text-[0.825rem] text-red  ps-4 font-semibold -mb-[1px]">
+                      <p className="leading-normal text-[12px] text-red-500 font-semibold m-0">
                         Required
                       </p>
-                      <span className="leading-normal text-[0.755rem] sm:block align-right text-end text-black font-medium">
+                      <span className="leading-normal text-[12px] sm:block align-right text-end text-black font-medium">
                         For {item.sell}
                       </span>
                     </div>
                   </div>
-                  <div className="h-[0.5px] w-full bg-[#F0F1F7] mt-[20px]"></div>
-                  <div className="px-[15px] mt-[7px]">
+                  <div className="h-[0.5px] w-full bg-[#dbdbdbb4] my-1" />
+                  <div className="px-[15px]">
                     <div>
-                      <p className="font-inter text-[0.875rem] text-[#333335] font-semibold -mb-[0px] leading-[40px]">
+                      <p className="font-inter text-[18px] text-[#666] font-bold mb-[0px] leading-[40px] mt-1">
                         Urgent Required 2BHK For Family.
                       </p>
-                      <p className="font-inter text-[#333335] text-[14px] font-normal  leading-[20px]">
+                      <p className="font-inter text-[#222] text-[14px] font-normal leading-[20px]">
                         Required Two Bedroom Hall open or Close kitchen For Rent
                         in City Tower, Ready to Move, for Family...
                         <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] font-medium cursor-pointer font-inter">
@@ -200,10 +202,10 @@ export default function HouseCard() {
                       </p>
                     </div>
                   </div>
-                  <div className="px-[20px] flex items-center justify-between">
+                  <div className="px-[10px] flex items-start justify-between !mt-4">
                     <div className="flex flex-wrap gap-x-[5px]">
                       <button className="bg-[#F3F6F8] h-[17px] px-[7px] rounded flex items-center">
-                        <p className="text-[10px] font-medium font-inter h-[17px]  text-[#F5B849]">
+                        <p className="text-[10px] font-medium font-inter h-[17px] text-[#F5B849]">
                           {" "}
                           Ajman
                         </p>
@@ -234,7 +236,7 @@ export default function HouseCard() {
                         className=""
                         onClick={() => handleCommentBtnClick(index)}
                       >
-                        <SiImessage className="text-[#1DFF00] w-8 h-8" />
+                        <SiImessage className="text-[rgb(68,164,110)] w-6 h-6" />
                       </button>
                       {/* modal  */}
                       {openModalIndex === index && (
@@ -268,8 +270,8 @@ export default function HouseCard() {
                       )}
                     </div>
                   </div>
-                  <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
-                  <div className=" flex items-center justify-between px-[15px]">
+                  <div className="h-[0.5px] w-full bg-[#dbdbdbb4] my-3" />
+                  <div className=" flex items-center justify-between px-[10px]">
                     <div className="flex flex-wrap items-center gap-x-[10px]">
                       <div className="flex">
                         <Image
@@ -331,14 +333,14 @@ export default function HouseCard() {
                       </div>
                       <div>
                         {item.btn === "Urgent" ? (
-                          <button className="rounded-[5px] w-[45px] h-[23px] hover:bg-[#E6533C] bg-[#FCEDEB] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
-                            <p className="-mb-0 text-[#E6533C] hover:text-white text-[8px] font-semibold">
+                          <button className="rounded-[5px] w-[55px] h-[25px] hover:bg-[#E6533C] bg-[#FCEDEB] mb-[5px] flex justify-center gap-x-[2px] items-center">
+                            <p className="-mb-0 text-[#E6533C] hover:text-white text-[10px] font-semibold">
                               {item.btn}
                             </p>
                           </button>
                         ) : (
-                          <button className="rounded-[5px] w-[70px] h-[23px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] text-[5px] items-center">
-                            <p className="-mb-0 text-[#845ADF] hover:text-white text-[8px] font-semibold">
+                          <button className="rounded-[5px] w-[65px] h-[25px] hover:bg-[#845ADF] bg-[#EEEBF8] mb-[5px] flex justify-center gap-x-[2px] items-center">
+                            <p className="-mb-0 text-[#845ADF] hover:text-white text-[10px] font-semibold">
                               {item.btn}
                             </p>
                             <p className="text-[#F5B849] text-[8px] font-semibold -mb-0">
