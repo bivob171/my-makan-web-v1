@@ -119,7 +119,7 @@ export default function AgentProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploadingP(false); 
+      setUploadingP(false);
     }
   };
   const handleUploadCover = async (files) => {
@@ -146,7 +146,7 @@ export default function AgentProfile() {
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setUploading(false); 
+      setUploading(false);
     }
   };
 
@@ -350,21 +350,16 @@ export default function AgentProfile() {
                   className="w-full h-[180px] md:h-[380px] object-cover object-top rounded-b-lg"
                 />
               )}
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("upload-cover").click()
-                  }
-                  className="bg-[white] hover:bg-[#fefefef1] py-1 px-3 flex justify-center items-center gap-2 absolute bottom-4 right-4 rounded-md shadow-md"
-                >
-                  <MdAddAPhoto className="w-5 h-5" />
-                  <span className="text-[16px] font-bold">
-                    Edit Cover Photo
-                  </span>
-                </button>
-           
+              <button
+                type="button"
+                onClick={() => document.getElementById("upload-cover").click()}
+                className="bg-[white] hover:bg-[#fefefef1] py-1 px-3 flex justify-center items-center gap-2 absolute bottom-4 right-4 rounded-md shadow-md"
+              >
+                <MdAddAPhoto className="w-5 h-5" />
+                <span className="text-[16px] font-bold">Edit Cover Photo</span>
+              </button>
             </div>
-            <div className="flex !flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
               <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
                 {selectedImage === undefined || uploadingP === true ? (
                   <div

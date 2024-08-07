@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { SiImessage } from "react-icons/si";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
+import { usePathname } from "next/navigation";
 const EditPostCard = ({
   item,
   myId,

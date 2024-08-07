@@ -405,7 +405,7 @@ const ProfilePostTab = ({
           </div>
         </div>
         {/* news feed card  */}
-        <div className="pb-[50px]">
+        <div className="pb-[50px] -mt-[30px]">
           <EditPostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           <PostHiddenModal
             visible={isOpenHideen}
