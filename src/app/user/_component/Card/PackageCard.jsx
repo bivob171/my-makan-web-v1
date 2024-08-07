@@ -1,10 +1,7 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
-
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import toast from "react-hot-toast";
-
 import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { BiCommentDetail, BiMessageDetail, BiSolidLike } from "react-icons/bi";
@@ -13,16 +10,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
 import { format, formatDistanceToNow } from "date-fns";
 import { SiImessage } from "react-icons/si";
-
-import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
-import { BsJournalBookmarkFill } from "react-icons/bs";
-import { MdFavorite } from "react-icons/md";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
 import { usePathname } from "next/navigation";
-const PackageCard = ({
+export default function PackageCard({
   item,
   myId,
   setlike,
@@ -31,7 +23,7 @@ const PackageCard = ({
   saveRerander,
   followRerander,
   setFollowRerander,
-}) => {
+}) {
   const {
     role,
     userId,
@@ -793,6 +785,4 @@ const PackageCard = ({
       </div>
     </div>
   );
-};
-
-export default PackageCard;
+}

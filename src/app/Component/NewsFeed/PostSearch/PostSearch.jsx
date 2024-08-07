@@ -85,11 +85,14 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
           />
         </svg>
       </button>
-        {filterVisible && (
-          <div className="absolute top-[65px] right-0 z-40">
-            <Filter />
-          </div>
-        )}
+      {filterVisible && (
+        <div className="absolute top-[65px] right-0 z-40">
+          <Filter
+            filterVisible={filterVisible}
+            setFilterVisible={setFilterVisible}
+          />
+        </div>
+      )}
     </div>
   );
 };

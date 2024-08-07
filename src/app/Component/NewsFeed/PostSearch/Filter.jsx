@@ -5,7 +5,7 @@ import {
   IoIosCloseCircleOutline,
 } from "react-icons/io";
 
-const Filter = () => {
+const Filter = ({ filterVisible, setFilterVisible }) => {
   const [selectedType, setSelectedType] = useState(null);
 
   const handleTypeSelect = (type) => {
@@ -15,7 +15,6 @@ const Filter = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle the filtering logic
-    console.log(filters);
   };
 
   return (
@@ -230,7 +229,11 @@ const Filter = () => {
           </button>
         </footer>
       </form>
-      <button className="absolute top-1 right-1">
+      <button
+        type="button"
+        onClick={() => setFilterVisible(!filterVisible)}
+        className="absolute top-1 right-1"
+      >
         <IoIosCloseCircleOutline className="w-6 h-6 text-[red]" />
       </button>
     </div>

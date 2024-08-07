@@ -21,7 +21,7 @@ import { SiImessage } from "react-icons/si";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
 import { usePathname } from "next/navigation";
-const EditPostCard = ({
+export default function EditPostCard({
   item,
   myId,
   open,
@@ -31,7 +31,7 @@ const EditPostCard = ({
   like,
   setSaveRerander,
   saveRerander,
-}) => {
+}) {
   const {
     role,
     userId,
@@ -537,6 +537,4 @@ const EditPostCard = ({
       </div>
     </div>
   );
-};
-
-export default EditPostCard;
+}
