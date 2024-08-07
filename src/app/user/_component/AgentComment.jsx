@@ -140,6 +140,54 @@ const AgentComment = ({ _id }) => {
   //  reply input
   const [replyInput, setReplyInput] = useState(false);
   const [replyView, setReplyView] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [replyRerander, setReplyRerander] = useState(false);
+  const handleSubmitReply = async (_id) => {
+    try {
+      let hasError = false;
+
+      if (replyText === "") {
+        toast.error("Comment is required.");
+        hasError = true;
+      }
+
+      if (hasError) {
+        return;
+      }
+      const replyData = {
+        postCommentId: _id,
+        reply: replyText,
+      };
+
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+        body: JSON.stringify(replyData),
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Add Reply successfully!");
+        setReplyText("");
+        setReplyRerander(!commentRerander);
+      }
+    } catch (error) {
+      toast.error(`${error.message}`);
+    }
+  };
 
   return (
     <div className="blog-comment-form">
@@ -253,7 +301,11 @@ const AgentComment = ({ _id }) => {
                           {replyView === true ? (
                             <div className="my-[10px]">
                               {" "}
-                              <PostReplySection id={comment?._id} />
+                              <PostReplySection
+                                id={comment?._id}
+                                replyRerander={replyRerander}
+                                setReplyRerander={setReplyRerander}
+                              />
                             </div>
                           ) : null}
                           {/* reply input */}
@@ -270,9 +322,11 @@ const AgentComment = ({ _id }) => {
                               </div>
                               <div class="">
                                 <input
-                                  class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  className=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                   type="text"
                                   placeholder="Reply"
+                                  onChange={(e) => setReplyText(e.target.value)}
+                                  value={replyText}
                                 />
                               </div>
                               <div>
@@ -283,7 +337,9 @@ const AgentComment = ({ _id }) => {
                                 >
                                   <button
                                     type="button"
-                                    onClick={handleSubmit}
+                                    onClick={() =>
+                                      handleSubmitReply(comment?._id)
+                                    }
                                     className="hover:bg-[#fff] p-2 rounded-full"
                                   >
                                     <VscSend className="w-[20px] h-[20px]" />

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-export const PostReplySection = ({ id }) => {
-  const [commentDa, setComments] = useState(false);
-  const [commentRerander, setCommentRerander] = useState(false);
+export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
+  const [commentDa, setReplys] = useState(false);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -35,7 +34,7 @@ export const PostReplySection = ({ id }) => {
       }
       const allCommentsList = await response.json();
       setHasMore(allCommentsList.length === limit);
-      setComments((prevPost) =>
+      setReplys((prevPost) =>
         page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
       );
       setLoading(false);
@@ -50,7 +49,7 @@ export const PostReplySection = ({ id }) => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
-  }, [sortOrder, sortBy, limit, page, id, commentRerander]);
+  }, [sortOrder, sortBy, limit, page, id, replyRerander]);
   const observer = useRef();
   const lastPostElementRef = useCallback(
     (node) => {
@@ -154,7 +153,7 @@ export const PostReplySection = ({ id }) => {
           })}
         </>
       ) : (
-        <h4 className="text-[18px] font-semibold text-[#222] m-0">No Reply</h4>
+        <h4 className="text-[16px] font-semibold text-[#222] m-0">No Reply</h4>
       )}
     </div>
   );
