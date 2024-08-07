@@ -91,7 +91,6 @@ export const PostDetailsPage = ({ postid }) => {
     price,
     sqft,
   } = item;
-  console.log(item);
   const userinfo = role === "agent" ? agentId : userId;
   const [hasId, setHasId] = useState(false);
   useEffect(() => {
@@ -355,7 +354,7 @@ export const PostDetailsPage = ({ postid }) => {
                         <ul className="entry-meta">
                           <li>
                             <Image
-                              src="/media/figure/chat_7.jpg"
+                              src={userinfo?.image}
                               alt="Chat"
                               width={500}
                               height={500}

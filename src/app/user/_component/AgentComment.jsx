@@ -7,6 +7,7 @@ import Image from "next/image";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import toast from "react-hot-toast";
 import { format, formatDistanceToNow } from "date-fns";
+import { PostReplySection } from "./PostReplySection";
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
   const [commentDa, setComments] = useState(false);
@@ -136,6 +137,10 @@ const AgentComment = ({ _id }) => {
     }
   };
 
+  //  reply input
+  const [replyInput, setReplyInput] = useState(false);
+  const [replyView, setReplyView] = useState(false);
+
   return (
     <div className="blog-comment-form">
       <div className="grid grid-cols-3">
@@ -237,7 +242,64 @@ const AgentComment = ({ _id }) => {
                               {formatDate(comment?.createdAt)}
                             </span>
                             <span className="text-[12px] font-bold">Like</span>
-                            <span className="text-[12px] font-bold">Reply</span>
+                            <span
+                              onClick={() => setReplyInput(!replyInput)}
+                              className="text-[12px] font-bold cursor-pointer"
+                            >
+                              Reply
+                            </span>
+                          </div>
+                          {/* reply section */}
+                          {replyView === true ? (
+                            <div className="my-[10px]">
+                              {" "}
+                              <PostReplySection id={comment?._id} />
+                            </div>
+                          ) : null}
+                          {/* reply input */}
+                          {replyInput === true ? (
+                            <div className="flex items-center gap-x-2 my-[10px]">
+                              <div>
+                                <Image
+                                  src={user?.image}
+                                  alt="Chat"
+                                  width={500}
+                                  height={500}
+                                  className="w-7 h-auto rounded-full"
+                                />
+                              </div>
+                              <div class="">
+                                <input
+                                  class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  type="text"
+                                  placeholder="Reply"
+                                />
+                              </div>
+                              <div>
+                                <Tooltip
+                                  title="Submit Reply"
+                                  arrow
+                                  placement="top-start"
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={handleSubmit}
+                                    className="hover:bg-[#fff] p-2 rounded-full"
+                                  >
+                                    <VscSend className="w-[20px] h-[20px]" />
+                                  </button>
+                                </Tooltip>
+                              </div>
+                            </div>
+                          ) : null}
+
+                          <div className="-mt-[7px] flex justify-end">
+                            <span
+                              onClick={() => setReplyView(!replyView)}
+                              className="text-[12px] font-bold cursor-pointer"
+                            >
+                              View Reply
+                            </span>
                           </div>
                         </div>
                       </div>
