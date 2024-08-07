@@ -11,7 +11,7 @@ import { AllTotalPost } from "./TotalPost/AllTotalPost";
 import { AvailableTotalPost } from "./TotalPost/AvailableTotalPost";
 import { RequiredTotalPost } from "./TotalPost/RequiredTotalPost";
 import NewsFeedLeftSection from "./NewsFeedLeftSection";
-import { PostSearch } from "./PostSearch/PostSearch";
+import PostSearch from "./PostSearch/PostSearch";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =

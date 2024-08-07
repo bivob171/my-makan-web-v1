@@ -1,11 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
-import { GoStarFill } from "react-icons/go";
-import Image from "next/image";
-import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "../PostLodaing/PostLodaing";
 import PackageCard from "@/app/user/_component/Card/PackageCard";
@@ -26,6 +21,7 @@ const AllPostAgent = () => {
   const [like, setlike] = useState(true);
   const [saveRerander, setSaveRerander] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
+
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);

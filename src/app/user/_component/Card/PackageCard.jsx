@@ -1,6 +1,12 @@
-import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
+import axios from "axios";
+import Link from "next/link";
+import Image from "next/image";
+import toast from "react-hot-toast";
+
+import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
+import { BsJournalBookmarkFill } from "react-icons/bs";
 import { BiCommentDetail, BiMessageDetail, BiSolidLike } from "react-icons/bi";
 import { GoStarFill } from "react-icons/go";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
@@ -97,12 +103,9 @@ const PackageCard = ({
       hour12: true,
     };
 
-    // If the time difference is less than 24 hours, show relative time
     if (timeDifference < 24 * 60 * 60 * 1000) {
       return formatDistanceToNow(date, { addSuffix: true });
     }
-
-    // Otherwise, show the formatted date
     return format(date, "d MMMM yyyy h:mm a");
   };
 
@@ -115,7 +118,6 @@ const PackageCard = ({
       { bgColor: "#FCEFF1", textColor: "#AAB800" },
     ];
 
-    // Use modulo to cycle through styles if index exceeds predefined styles length
     const styleIndex = index % styles.length;
 
     return styles[styleIndex];
@@ -250,8 +252,6 @@ const PackageCard = ({
     checkSavePost(token);
   }, [savePostId, saveRerander]);
 
-  // follow funtion
-
   const handleFollowClick = async (userinfo) => {
     try {
       const _id = userinfo?._id;
@@ -352,7 +352,7 @@ const PackageCard = ({
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
-                <div className="cursor-pointer !w-[60px] !h-[60px] md:!w-[90px] md:!h-[90px] border-4 p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
+                <div className="cursor-pointer !w-[50px] !h-[50px] md:!w-[70px] md:!h-[70px] border-[3px] p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                   <Image
                     width={400}
                     height={400}
@@ -360,7 +360,7 @@ const PackageCard = ({
                     src={userinfo?.image}
                     className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
                   />
-                  <div className="absolute bottom-0 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
+                  <div className="absolute -bottom-1 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
                     <Image
                       width={10}
                       height={10}
@@ -693,7 +693,7 @@ const PackageCard = ({
               className="hover:shadow-lg"
               onClick={() => handleCommentBtnClick(userinfo?._id)}
             >
-              <SiImessage className="text-[#2ff328] w-8 h-8" />
+              <SiImessage className="text-[rgb(68,164,110)] w-8 h-8" />
             </button>
             {/* modal  */}
             {openModalIndex === userinfo?._id && (
