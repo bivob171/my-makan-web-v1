@@ -533,11 +533,11 @@ export const CompanyPage = () => {
     <div ref={containerRefResult} className="h-screen overflow-auto">
       <div className="page-content">
         <div className="container">
-          <div className="w-auto py-[20px] px-[25px] bg-white lg:flex items-center justify-center gap-6 mb-[30px] rounded-md">
-            <div>
+          <div className="py-[20px] px-[25px] bg-white flex items-center justify-start gap-3 md:gap-6 mb-[30px] rounded-md w-full lg:w-[40%]">
+            <div className="w-full">
               <div className="relative w-[100%]">
                 <input
-                  className="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full !max-w-[350px] py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
+                  className="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
                   id="username"
                   type="text"
                   placeholder="Search Company..."

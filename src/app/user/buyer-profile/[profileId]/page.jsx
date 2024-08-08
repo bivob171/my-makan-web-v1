@@ -4,13 +4,13 @@ import Image from "next/image";
 import { MdAddAPhoto } from "react-icons/md";
 import { GoStarFill } from "react-icons/go";
 import { useParams } from "next/navigation";
-import ProfilePostTab from "../../_component/ProfilePostTab";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { SiImessage } from "react-icons/si";
 import toast from "react-hot-toast";
 import axios from "axios";
+import ProfilePostTab from "../../_component/ProfilePostTab";
 
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();

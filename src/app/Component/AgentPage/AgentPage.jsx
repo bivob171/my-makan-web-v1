@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import agentData from "@/data/agentData";
 import axios from "axios";
 import { CardLoding } from "../NewsFeed/PostLodaing/CardLoding";
 import Link from "next/link";
@@ -24,7 +22,6 @@ export const AgentPage = () => {
   const [isFetchingAgent, setIsFetchingAgent] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
-  const containerRefAgent = useRef(null);
 
   const getAllPosts = async (token) => {
     setIsFetchingAgent(true);
@@ -267,7 +264,7 @@ export const AgentPage = () => {
     <div className="pb-[30px]">
       <div className="page-content">
         <div className="container">
-          <div className="w-auto py-[20px] px-[25px] bg-white grid grid-cols-4 rounded-md items-center gap-6 mb-10">
+          <div className="w-auto py-[20px] px-[25px] bg-white grid lg:grid-cols-4 rounded-md items-center gap-6 mb-10">
             <div>
               <div className="relative">
                 <div className="relative">
@@ -499,14 +496,24 @@ export const AgentPage = () => {
                   return (
                     <div
                       ref={lastPostElementRef}
-                      className="delay-150 duration-200 ease-in-out hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full bg-white rounded-lg relative border-[#E8E8E8] border-[1px] transition shadow-[#615DFA]"
+                      className={`delay-150 duration-200 ease-in-out hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full bg-white rounded-lg relative border-[#E8E8E8] border-[1px] transition shadow-[#615DFA] p-2`}
+                      style={{
+                        backgroundImage: `url(${data?.image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundAttachment: "scroll",
+                        backgroundOrigin: "padding-box",
+                        backgroundClip: "border-box",
+                        backgroundColor: "transparent",
+                      }}
                       key={data._id}
                     >
-                      <div className="rounded-t-lg h-[95px] relative">
+                      {/* <div className="rounded-t-lg h-[140px] relative">
                         <Image
                           width={100}
                           height={100}
-                          className="object-cover object-center w-full h-full rounded-t-lg"
+                          className="object-cover object-top w-full h-full rounded-t-lg"
                           src={data?.image}
                           alt="Mountain"
                         />
@@ -521,37 +528,50 @@ export const AgentPage = () => {
                             />
                           </div>
                         </div>
-                      </div>
-                      <div className="px-6 pt-8">
+                      </div> */}
+                      <div
+                        className={`px-6 pt-8 m-4 backdrop-blur-lg rounded-lg bg-[black]/50`}
+                      >
+                        <div className="absolute -top-4 -right-4">
+                          <div className="mx-auto h-[90px] w-[90px] border-4 border-[#615DFA] relative rounded-full z-30">
+                            <Image
+                              width={100}
+                              height={100}
+                              className="object-cover h-[80px] w-[80px] rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                              src={data?.image}
+                              alt="Woman looking front"
+                            />
+                          </div>
+                        </div>
                         <div className="text-start space-y-[10px]">
-                          <h2 className="font-semibold leading-[15px] text-[20px] text-[#333] !mb-6 font-mono mt-2 uppercase">
+                          <h2 className="font-semibold leading-[15px] text-[20px] !mb-6 font-mono mt-2 uppercase !text-[white]">
                             {data?.fullName}
                           </h2>
-                          <h2 className="font-semibold leading-[17px] text-[15px] text-[#666] ">
+                          <h2 className="font-semibold leading-[17px] text-[15px] !text-[white]">
                             Properties:{" "}
                             <span className="font-normal font-mono">
                               {/* {data.properties} */}
                             </span>
                           </h2>
-                          <h2 className="font-semibold leading-[17px] -mb-0 mt-[5px] text-[15px] text-[#666] ">
+                          <h2 className="font-semibold leading-[17px] -mb-0 mt-[5px] text-[15px] !text-[white]">
                             Spake:{" "}
                             <span className="font-normal font-mono">
                               {formatLanguages(language)}
                             </span>
                           </h2>
-                          <h2 className="font-semibold leading-[17px] mt-[5px] text-[15px] text-[#666] ">
+                          <h2 className="font-semibold leading-[17px] mt-[5px] text-[15px] !text-[white]">
                             Country:{" "}
                             <span className="font-normal font-mono">
                               {data?.country}
                             </span>
                           </h2>
                         </div>
-                        <hr className="mt-4 mb-2 mx-8" />
+                        <hr className="mt-4 mb-2 mx-8 border-white" />
                         <center>
                           <Link href={`${"/user/agent-profile"}/${data._id}`}>
                             <button
                               type="button"
-                              className="text-center mb-3 text-[#615DFA] hover:text-[#6c67fdf6] font-semibold hover:drop-shadow-2xl hover:font-bold hover:shadow-[#615DFA]"
+                              className="text-center mb-3 text-[#ffffff] hover:text-[#fffffff6] font-semibold  hover:font-bold "
                               data-twe-ripple-init
                             >
                               View Profile

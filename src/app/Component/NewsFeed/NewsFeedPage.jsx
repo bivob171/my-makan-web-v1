@@ -34,25 +34,25 @@ export const NewsFeedPage = () => {
 
   return (
     <>
-      <div className="page-content">
+      <div className="page-content mt-6 lg:mt-0">
         <div className="container">
           <div className="newsfeed-banner !mb-0">
-            <div className="media  gap-x-5 items-center flex">
+            <div className="media gap-x-4 items-center flex md:py-4">
               <div className="flex gap-x-5 mb-2">
                 <Image
                   width={1000}
                   height={100}
-                  className="w-[60px] h-auto py-4"
+                  className="w-[45px] md:w-[50px] h-auto"
                   src="/media/favicon.jpg"
                   alt=""
                 />
               </div>
-              <div className="bg-white w-[5px] h-[65px] rounded-b-[10px] rounded-t-[10px]"></div>
-              <div className="media-body">
-                <h3 className="text-white font-iuter  font-extrabold text-[32px] ">
+              <div className="bg-white w-[3px] h-[65px] rounded-b-[10px] rounded-t-[10px]" />
+              <div className="media-body !text-start">
+                <h3 className="text-white font-iuter font-extrabold text-[24px] md:text-[32px]">
                   My Makan Newsfeed
                 </h3>
-                <p className="font-iuter text-white">
+                <p className="font-iuter text-white leading-none">
                   All Realtors and Buyers Latest post
                 </p>
               </div>
@@ -85,16 +85,16 @@ export const NewsFeedPage = () => {
           <div>
             <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
-          <div className="row">
-            <div className="col-lg-3 widget-block widget-break-lg ">
+          <div className="grid lg:grid-cols-12 gap-[24px]">
+            <div className="lg:col-span-3 hidden lg:block">
               <div className="!sticky top-[110px]">
                 <div className="h-[86vh] overflow-y-scroll">
                   <NewsFeedLeftSection />
                 </div>
               </div>
             </div>
-            <div className="col-lg-6">
-              <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+            <div className="lg:col-span-6">
+              <div className="md:!sticky top-[100px] bg-[#EFF4FB] z-10">
                 <PostSearch
                   open={open}
                   user={user}
@@ -168,13 +168,12 @@ export const NewsFeedPage = () => {
               {activeTab === "availablePosts" && <AvailableTotalPost />}
               {activeTab === "required" && <RequiredTotalPost />}
             </div>
-            <div className="col-lg-3 widget-block widget-break-lg">
+            <div className="lg:col-span-3 hidden lg:block ">
               <NewsFeedRightSection />
             </div>
           </div>
         </div>
       </div>
-
       {/* Chat Modal Here */}
       <ChatModal />
       <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />

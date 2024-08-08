@@ -383,7 +383,7 @@ const PackageCard = ({
                                         userinfo?._id
                                       }`}
                                     >
-                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
                                         {userinfo?.fullName}
                                       </p>
                                     </Link>
@@ -393,7 +393,7 @@ const PackageCard = ({
                                         userinfo?._id
                                       }`}
                                     >
-                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#8F8F8F] font-semibold">
                                         Hidden Name{" "}
                                       </p>
                                     </Link>
@@ -405,7 +405,7 @@ const PackageCard = ({
                                     userinfo?._id
                                   }`}
                                 >
-                                  <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                                  <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold mr-[2px]">
                                     {userinfo?.fullName}
                                   </p>
                                 </Link>
@@ -508,7 +508,7 @@ const PackageCard = ({
                           <Link
                             href={`${"/user/buyer-profile"}/${userinfo?._id}`}
                           >
-                            <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
                               {userinfo?.fullName}
                             </p>
                           </Link>
@@ -516,7 +516,7 @@ const PackageCard = ({
                           <Link
                             href={`${"/user/buyer-profile"}/${userinfo?._id}`}
                           >
-                            <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#8F8F8F] font-semibold">
                               Hidden Name{" "}
                             </p>
                           </Link>
@@ -524,7 +524,7 @@ const PackageCard = ({
                       </>
                     ) : (
                       <Link href={`${"/user/agent-profile"}/${userinfo?._id}`}>
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                        <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold mr-[2px]">
                           {userinfo?.fullName}
                         </p>
                       </Link>
