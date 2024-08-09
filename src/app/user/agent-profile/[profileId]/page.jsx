@@ -11,7 +11,8 @@ import axios from "axios";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { SiImessage } from "react-icons/si";
-import { PostTabProfile } from "../../_component/ProfileTab/PostTabProfile";
+import ProfilePostTab from "../../_component/ProfilePostTab";
+
 export default function AgentProfile() {
   const { user, setRender, render } = PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(

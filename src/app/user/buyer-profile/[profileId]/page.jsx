@@ -10,7 +10,7 @@ import { BsJournalBookmarkFill } from "react-icons/bs";
 import { SiImessage } from "react-icons/si";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { PostTabProfile } from "../../_component/ProfileTab/PostTabProfile";
+import ProfilePostTab from "../../_component/ProfilePostTab";
 
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();

@@ -377,7 +377,7 @@ export default function PackageCard({
                           />
                         </div>
                         <div>
-                          <div className=" -mb-[20px] md:-mb-[15px]">
+                          <div className="-mb-[20px] md:-mb-[15px]">
                             <div className="flex justify-start items-center">
                               {item.role === "buyer" ? (
                                 <>
@@ -387,7 +387,7 @@ export default function PackageCard({
                                         userinfo?._id
                                       }`}
                                     >
-                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
                                         {userinfo?.fullName}
                                       </p>
                                     </Link>
@@ -397,7 +397,7 @@ export default function PackageCard({
                                         userinfo?._id
                                       }`}
                                     >
-                                      <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#8F8F8F] font-semibold">
                                         Hidden Name{" "}
                                       </p>
                                     </Link>
@@ -409,12 +409,12 @@ export default function PackageCard({
                                     userinfo?._id
                                   }`}
                                 >
-                                  <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                                  <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold mr-[2px]">
                                     {userinfo?.fullName}
                                   </p>
                                 </Link>
                               )}
-                              <div className="mb-[5px] mr-2">
+                              <div className="mr-2">
                                 <Image
                                   width={15}
                                   height={15}
@@ -422,7 +422,7 @@ export default function PackageCard({
                                   src="/homeCard/verified.png"
                                 />
                               </div>
-                              <div className="flex items-center gap-x-[5px] mt-[5px]">
+                              <div className="flex items-center gap-x-[5px]">
                                 <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                                   {userinfo?.avgrating}
                                 </p>
@@ -512,7 +512,7 @@ export default function PackageCard({
                           <Link
                             href={`${"/user/buyer-profile"}/${userinfo?._id}`}
                           >
-                            <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold">
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
                               {userinfo?.fullName}
                             </p>
                           </Link>
@@ -520,7 +520,7 @@ export default function PackageCard({
                           <Link
                             href={`${"/user/buyer-profile"}/${userinfo?._id}`}
                           >
-                            <p className="text-[0.875rem] md:!text-[1.3rem] text-[#8F8F8F] font-semibold">
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#8F8F8F] font-semibold">
                               Hidden Name{" "}
                             </p>
                           </Link>
@@ -528,7 +528,7 @@ export default function PackageCard({
                       </>
                     ) : (
                       <Link href={`${"/user/agent-profile"}/${userinfo?._id}`}>
-                        <p className="text-[0.875rem] md:!text-[1.3rem] text-[#333335] font-semibold mr-[2px]">
+                        <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold mr-[2px]">
                           {userinfo?.fullName}
                         </p>
                       </Link>
@@ -541,7 +541,7 @@ export default function PackageCard({
                         src="/homeCard/verified.png"
                       />
                     </div>
-                    <div className="flex items-center gap-x-[5px] mt-[5px]">
+                    <div className="flex items-center gap-x-[5px]">
                       <p className="text-[#F5B849] text-[0.875rem] font-semibold">
                         {userinfo?.avgrating}
                       </p>
@@ -552,7 +552,7 @@ export default function PackageCard({
                   </div>
                 </div>
                 {item.role === "buyer" ? (
-                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none">
                     Buyer From{" "}
                     <span className="text-[#E6533C]">
                       {userinfo?.state}
@@ -561,7 +561,7 @@ export default function PackageCard({
                     </span>
                   </p>
                 ) : (
-                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none">
                     {userinfo?.companyName}
                   </p>
                 )}
@@ -632,7 +632,7 @@ export default function PackageCard({
             </div>
           </div>
         </div>
-        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-3"></div>
+        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:my-3"></div>
         <div className="px-[15px]">
           <div>
             <p className="font-inter text-[22px] md:text-[28px] text-[#222] font-semibold mb-2 leading-[40px]">

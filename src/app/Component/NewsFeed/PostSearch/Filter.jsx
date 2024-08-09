@@ -1,32 +1,65 @@
-import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import {
-  IoIosArrowRoundForward,
-  IoIosCloseCircleOutline,
-} from "react-icons/io";
+import React, { useState, useEffect } from "react";
+import { XCircleIcon } from "@heroicons/react/20/solid";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
-const Filter = ({ filterVisible, setFilterVisible }) => {
+const Filter = ({ onClose, setFilterCount }) => {
   const [selectedType, setSelectedType] = useState(null);
+  const [selectedPostTypes, setSelectedPostTypes] = useState([]);
+
+  useEffect(() => {
+    const savedSelectedType = localStorage.getItem("selectedType");
+    const savedSelectedPostTypes = JSON.parse(
+      localStorage.getItem("selectedPostTypes")
+    );
+
+    if (savedSelectedType) setSelectedType(savedSelectedType);
+    if (savedSelectedPostTypes) setSelectedPostTypes(savedSelectedPostTypes);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("selectedType", selectedType);
+    localStorage.setItem(
+      "selectedPostTypes",
+      JSON.stringify(selectedPostTypes)
+    );
+  }, [selectedType, selectedPostTypes]);
 
   const handleTypeSelect = (type) => {
     setSelectedType(type);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle the filtering logic
+  const handlePostTypeToggle = (type) => {
+    setSelectedPostTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
   };
 
+  const handleClear = () => {
+    setSelectedType(null);
+    setSelectedPostTypes([]);
+    setFilterCount(0);
+    localStorage.removeItem("selectedType");
+    localStorage.removeItem("selectedPostTypes");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFilterCount(selectedPostTypes.length + (selectedType ? 1 : 0));
+  };
   return (
     <div className="backdrop-blur-[20px] bg-[#ffffff80] bg-opacity-90 shadow rounded-md w-96 h-auto pt-4 relative">
+      <button onClick={onClose} className="absolute -top-1 -right-1">
+        <XCircleIcon className="w-6 h-6 text-[red]" />
+      </button>
       <form
         onSubmit={handleSubmit}
         className="!text-[#000000] overflow-y-scroll h-[70vh]"
       >
+        {/* single select */}
         <div className="px-4 border-b-[1px] pb-4">
           <p className="text-[14px] font-bold leading-3 m-0 mb-3">Type</p>
           <div className="flex justify-start items-center gap-2">
-            <div
+            <button
               className={`text-[12px] inline-flex px-2 rounded-lg border-[1px] ${
                 selectedType === "Required"
                   ? "border-[#7e7aff] bg-[#7e7aff60]"
@@ -35,8 +68,8 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
               onClick={() => handleTypeSelect("Required")}
             >
               <span>Required</span>
-            </div>
-            <div
+            </button>
+            <button
               className={`text-[12px] inline-flex px-2 rounded-lg border-[1px] ${
                 selectedType === "Available"
                   ? "border-[#7e7aff] bg-[#7e7aff4b]"
@@ -45,22 +78,23 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
               onClick={() => handleTypeSelect("Available")}
             >
               <span>Available</span>
-            </div>
+            </button>
             {selectedType && (
               <>
                 <div className="">
                   <IoIosArrowRoundForward className="w-4 h-4" />
                 </div>
-                <div
+                {/* single select */}
+                <button
                   className={`text-[12px] inline-flex px-2 rounded-lg border-[1px] border-[#afadfa9c] bg-[#7e7aff2a] hover:bg-[#7e7aff4b]`}
                 >
                   <span>Sell</span>
-                </div>
-                <div
+                </button>
+                <button
                   className={`text-[12px] inline-flex px-2 rounded-lg border-[1px] border-[#afadfa9c] bg-[#7e7aff2a] hover:bg-[#7e7aff4b]`}
                 >
                   <span>Rent</span>
-                </div>
+                </button>
               </>
             )}
           </div>
@@ -94,7 +128,7 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
           </div>
         </div>
 
-        {/* Property category */}
+        {/* Property category multiple select */}
         <div className="px-4 border-b-[1px] py-4">
           <p className="text-[14px] font-bold leading-3 m-0 mb-3">
             Property Category
@@ -123,7 +157,7 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
           </div>
         </div>
 
-        {/* Property type */}
+        {/* Property type multiple select */}
         <div className="px-4 border-b-[1px] py-4">
           <p className="text-[14px] font-bold leading-3 m-0 mb-3">
             Property type
@@ -155,7 +189,7 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
             </div>
           </div>
         </div>
-        {/*Parking */}
+        {/*Parking multiple select */}
         <div className="px-4 border-b-[1px] py-4">
           <p className="text-[14px] font-bold leading-3 m-0 mb-3">Parking</p>
           <div className="grid grid-cols-1 items-start gap-2">
@@ -202,40 +236,55 @@ const Filter = ({ filterVisible, setFilterVisible }) => {
             </div>
           </div>
         </div>
-        {/*post type */}
+        {/*post type multiple select */}
         <div className="px-4 py-4 ">
           <p className="text-[14px] font-bold leading-3 m-0 mb-3">Post Type</p>
           <div className="grid grid-cols-1 items-start gap-2">
             <div className="text-[12px] flex justify-start items-center gap-2">
-              <input type="checkbox" className="w-4 h-4 outline-none" />
+              <input
+                type="checkbox"
+                className="w-4 h-4 outline-none"
+                checked={selectedPostTypes.includes("Urgent")}
+                onChange={() => handlePostTypeToggle("Urgent")}
+              />
               <span className="leading-none">Urgent</span>
             </div>
             <div className="text-[12px] flex justify-start items-center gap-2">
-              <input type="checkbox" className="w-4 h-4 outline-none" />
+              <input
+                type="checkbox"
+                className="w-4 h-4 outline-none"
+                checked={selectedPostTypes.includes("Normal")}
+                onChange={() => handlePostTypeToggle("Normal")}
+              />
               <span className="leading-none">Normal</span>
             </div>
             <div className="text-[12px] flex justify-start items-center gap-2">
-              <input type="checkbox" className="w-4 h-4 outline-none" />
+              <input
+                type="checkbox"
+                className="w-4 h-4 outline-none"
+                checked={selectedPostTypes.includes("Sponsored")}
+                onChange={() => handlePostTypeToggle("Sponsored")}
+              />
               <span className="leading-none">Sponsored</span>
             </div>
           </div>
         </div>
         <footer className="flex justify-between gap-3 sticky bottom-0 p-2 bg-white shadow rounded-b-md">
-          <button className="w-[40%] py-[5px] border-[1px] border-[#615DFA] text-[#615DFA] rounded">
+          <button
+            type="button"
+            className="w-[40%] py-[5px] border-[1px] border-[#615DFA] text-[#615DFA] rounded"
+            onClick={handleClear}
+          >
             Clear
           </button>
-          <button className="w-full py-[5px] bg-[#615DFA] text-white rounded">
+          <button
+            type="submit"
+            className="w-full py-[5px] bg-[#615DFA] text-white rounded"
+          >
             Show Results
           </button>
         </footer>
       </form>
-      <button
-        type="button"
-        onClick={() => setFilterVisible(!filterVisible)}
-        className="absolute top-1 right-1"
-      >
-        <IoIosCloseCircleOutline className="w-6 h-6 text-[red]" />
-      </button>
     </div>
   );
 };
