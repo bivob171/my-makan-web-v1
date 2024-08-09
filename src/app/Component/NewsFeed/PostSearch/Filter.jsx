@@ -56,7 +56,11 @@ const Filter = ({
   };
   return (
     <div className="backdrop-blur-[20px] bg-[#ffffff80] bg-opacity-90 shadow rounded-md w-96 h-auto pt-4 relative">
-      <button onClick={onClose} className="absolute -top-1 -right-1">
+      <button
+        type="button"
+        onClick={() => setFilterVisible(!filterVisible)}
+        className="absolute top-1 right-1"
+      >
         <XCircleIcon className="w-6 h-6 text-[red]" />
       </button>
       <form
@@ -293,13 +297,6 @@ const Filter = ({
           </button>
         </footer>
       </form>
-      <button
-        type="button"
-        onClick={() => setFilterVisible(!filterVisible)}
-        className="absolute top-1 right-1"
-      >
-        <IoIosCloseCircleOutline className="w-6 h-6 text-[red]" />
-      </button>
     </div>
   );
 };
