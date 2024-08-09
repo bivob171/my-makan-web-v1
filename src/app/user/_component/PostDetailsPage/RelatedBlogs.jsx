@@ -87,7 +87,7 @@ const RelatedBlogs = () => {
             <div className="">
               <div>
                 {loading && (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-4">
                     {[0, 1, 2, 3].map((i) => {
                       return (
                         <div key={i} className="text-center mb-[12px]">
@@ -114,7 +114,7 @@ const RelatedBlogs = () => {
                   </div>
                 )}
                 {!loading && allPosts.length > 0 && (
-                  <div className="grid grid-cols-2 gap-4 ">
+                  <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-4 ">
                     {allPosts?.map((item, i) => {
                       if (allPosts.length === i + 1) {
                         return (
