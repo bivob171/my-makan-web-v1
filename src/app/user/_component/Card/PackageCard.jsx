@@ -632,7 +632,7 @@ export default function PackageCard({
             </div>
           </div>
         </div>
-        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:my-3"></div>
+        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:!my-3"></div>
         <div className="px-[15px]">
           <div>
             <p className="font-inter text-[22px] md:text-[28px] text-[#222] font-semibold mb-2 leading-[40px]">

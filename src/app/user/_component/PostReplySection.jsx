@@ -86,7 +86,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   }
 
   return (
-    <div className="w-auto h-[300px] bg-slate-400 overflow-y-auto">
+    <div className="w-auto h-auto overflow-y-auto">
       {commentDa?.length > 0 ? (
         <>
           {commentDa?.map((data, i) => {
@@ -123,9 +123,9 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
               <div
                 ref={lastPostElementRef}
                 key={i}
-                className={`flex text-start mb-4`}
+                className={`flex text-start mb-2`}
               >
-                <div className={`flex w-[70%]  gap-[8px]`}>
+                <div className={`flex w-[70%] gap-[8px]`}>
                   <Image
                     width={40}
                     height={40}
@@ -138,9 +138,9 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
                       <h4 className="text-[18px] font-semibold text-[#222] m-0">
                         {comonUser?.fullName}
                       </h4>
-                      <p className="text-[#444] m-0">{data?.reply}</p>
+                      <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">{data?.reply}</p>
                     </div>
-                    <div className="flex justify-around items-center gap-1 mt-1">
+                    <div className="flex justify-start items-center gap-1 mt-1">
                       <span className="text-[12px]">
                         {" "}
                         {formatDate(data?.createdAt)}

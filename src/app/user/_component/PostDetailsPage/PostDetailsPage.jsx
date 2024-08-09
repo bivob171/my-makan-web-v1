@@ -269,7 +269,7 @@ export const PostDetailsPage = ({ postid }) => {
       {" "}
       <div className="container">
         <div className="row">
-          <div className="col-lg-3 widget-block widget-break-lg">
+          <div className="col-lg-3 widget-block widget-break-lg lg:block hidden">
             <div className="!sticky top-[110px]">
               <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
@@ -415,7 +415,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {data?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             Images
                           </h2>
                         </center>
@@ -425,7 +425,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {videos?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             Videos
                           </h2>
                         </center>
@@ -435,7 +435,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {files?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             File
                           </h2>
                         </center>
@@ -449,7 +449,7 @@ export const PostDetailsPage = ({ postid }) => {
                   </div>
                   <div className="">
                     <center>
-                      <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                      <h2 className="mt-3 !mb-6 text-[#444] underline">
                         Location
                       </h2>
                     </center>

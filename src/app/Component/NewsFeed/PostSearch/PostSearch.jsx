@@ -117,6 +117,8 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
           <Filter
             onClose={() => setFilterVisible(false)}
             setFilterCount={setFilterCount}
+            filterVisible={filterVisible}
+            setFilterVisible={setFilterVisible}
           />
         </div>
       )}
