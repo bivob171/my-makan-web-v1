@@ -108,7 +108,7 @@ export default function Home() {
               <Image
                 width={700}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/people_1.png"
                 alt="People"
               />
@@ -122,7 +122,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/shape_1.png"
                 alt="shape"
               />
@@ -132,7 +132,7 @@ export default function Home() {
             <Image
               width={1000}
               height={100}
-              className="w-auto h-auto"
+              className="w-full h-full"
               src="/media/banner/map_line.png"
               alt="map"
               data-sal="slide-up"
@@ -148,7 +148,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={10}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/banner/marker_1.png"
                   alt="marker"
                 />
@@ -161,7 +161,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/banner/marker_2.png"
                   alt="marker"
                 />
@@ -174,7 +174,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/banner/marker_3.png"
                   alt="marker"
                 />
@@ -187,7 +187,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/banner/marker_4.png"
                   alt="marker"
                 />
@@ -301,7 +301,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/marker_1.png"
                 alt="marker"
               />
@@ -310,7 +310,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/marker_2.png"
                 alt="marker"
               />
@@ -319,7 +319,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/marker_3.png"
                 alt="marker"
               />
@@ -328,7 +328,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/marker_4.png"
                 alt="marker"
               />
@@ -337,7 +337,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/banner/marker_5.png"
                 alt="marker"
               />
@@ -370,7 +370,7 @@ export default function Home() {
             <Image
               width={1000}
               height={100}
-              className="w-auto h-auto"
+              className="w-full h-full"
               src="/media/figure/shape_7.png"
               alt="bg"
             />
@@ -404,7 +404,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_1.jpg"
                             alt="team"
                           />
@@ -421,7 +421,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_5.jpg"
                             alt="team"
                           />
@@ -438,7 +438,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_6.jpg"
                             alt="team"
                           />
@@ -459,7 +459,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_3.jpg"
                             alt="team"
                           />
@@ -476,7 +476,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_4.jpg"
                             alt="team"
                           />
@@ -493,7 +493,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/team/team_7.jpg"
                             alt="team"
                           />
@@ -513,7 +513,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_1.jpg"
                               alt="team"
                             />
@@ -534,7 +534,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_5.jpg"
                               alt="team"
                             />
@@ -555,7 +555,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_6.jpg"
                               alt="team"
                             />
@@ -576,7 +576,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_3.jpg"
                               alt="team"
                             />
@@ -597,7 +597,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_4.jpg"
                               alt="team"
                             />
@@ -618,7 +618,7 @@ export default function Home() {
                             <Image
                               width={1000}
                               height={100}
-                              className="w-auto h-auto"
+                              className="w-full h-full"
                               src="/media/team/team_7.jpg"
                               alt="team"
                             />
@@ -641,7 +641,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/figure/shape_9.png"
                       alt="shape"
                     />
@@ -650,7 +650,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_1.png"
                       alt="shape"
                     />
@@ -659,7 +659,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_2.png"
                       alt="shape"
                     />
@@ -668,7 +668,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_circle_1.png"
                       alt="shape"
                     />
@@ -677,7 +677,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_circle_2.png"
                       alt="shape"
                     />
@@ -686,7 +686,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_circle_3.png"
                       alt="shape"
                     />
@@ -695,7 +695,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_3.png"
                       alt="shape"
                     />
@@ -704,7 +704,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/team/shape_4.png"
                       alt="shape"
                     />
@@ -776,7 +776,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/figure/why_choose_1.jpg"
                       alt="image"
                     />
@@ -806,7 +806,7 @@ export default function Home() {
                       <Image
                         width={1000}
                         height={100}
-                        className="w-auto h-auto"
+                        className="w-full h-full"
                         src="/media/location/location_1.jpg"
                         alt="Newyork City"
                       />
@@ -828,7 +828,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/location/location_2.jpg"
                             alt="Newyork City"
                           />
@@ -846,7 +846,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/location/location_3.jpg"
                             alt="Newyork City"
                           />
@@ -866,7 +866,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/location/location_2.jpg"
                             alt="Newyork City"
                           />
@@ -884,7 +884,7 @@ export default function Home() {
                           <Image
                             width={1000}
                             height={100}
-                            className="w-auto h-auto"
+                            className="w-full h-full"
                             src="/media/location/location_4.jpg"
                             alt="Newyork City"
                           />
@@ -946,7 +946,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/banner/apps.png"
                       alt="Apps"
                     />
@@ -975,7 +975,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_1.jpg"
                       alt="Groups"
                     />
@@ -994,7 +994,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_2.jpg"
                       alt="Groups"
                     />
@@ -1013,7 +1013,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_3.jpg"
                       alt="Groups"
                     />
@@ -1032,7 +1032,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_4.jpg"
                       alt="Groups"
                     />
@@ -1051,7 +1051,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_5.jpg"
                       alt="Groups"
                     />
@@ -1070,7 +1070,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_6.jpg"
                       alt="Groups"
                     />
@@ -1089,7 +1089,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_7.jpg"
                       alt="Groups"
                     />
@@ -1108,7 +1108,7 @@ export default function Home() {
                     <Image
                       width={1000}
                       height={100}
-                      className="w-auto h-auto"
+                      className="w-full h-full"
                       src="/media/groups/groups_8.jpg"
                       alt="Groups"
                     />
@@ -1215,7 +1215,7 @@ export default function Home() {
                         <Image
                           width={1000}
                           height={100}
-                          className="w-auto h-auto"
+                          className="w-full h-full"
                           src="/media/testimonial/nav_1.jpg"
                           alt="Product"
                         />
@@ -1224,7 +1224,7 @@ export default function Home() {
                         <Image
                           width={1000}
                           height={100}
-                          className="w-auto h-auto"
+                          className="w-full h-full"
                           src="/media/testimonial/nav_2.jpg"
                           alt="Product"
                         />
@@ -1233,7 +1233,7 @@ export default function Home() {
                         <Image
                           width={1000}
                           height={100}
-                          className="w-auto h-auto"
+                          className="w-full h-full"
                           src="/media/testimonial/nav_3.jpg"
                           alt="Product"
                         />
@@ -1242,7 +1242,7 @@ export default function Home() {
                         <Image
                           width={1000}
                           height={100}
-                          className="w-auto h-auto"
+                          className="w-full h-full"
                           src="/media/testimonial/nav_1.jpg"
                           alt="Product"
                         />
@@ -1257,7 +1257,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_4.png"
                   alt="shape"
                 />
@@ -1266,7 +1266,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_8.png"
                   alt="shape"
                 />
@@ -1275,7 +1275,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_2.png"
                   alt="shape"
                 />
@@ -1284,7 +1284,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_9.png"
                   alt="shape"
                 />
@@ -1293,7 +1293,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_10.png"
                   alt="shape"
                 />
@@ -1302,7 +1302,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_11.png"
                   alt="shape"
                 />
@@ -1311,7 +1311,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_8.png"
                   alt="shape"
                 />
@@ -1349,7 +1349,7 @@ export default function Home() {
                       <Image
                         width={1000}
                         height={100}
-                        className="w-auto h-auto"
+                        className="w-full h-full"
                         src="/media/blog/blog_1.jpg"
                         alt="Blog"
                       />
@@ -1386,7 +1386,7 @@ export default function Home() {
                       <Image
                         width={1000}
                         height={100}
-                        className="w-auto h-auto"
+                        className="w-full h-full"
                         src="/media/blog/blog_2.jpg"
                         alt="Blog"
                       />
@@ -1423,7 +1423,7 @@ export default function Home() {
                       <Image
                         width={1000}
                         height={100}
-                        className="w-auto h-auto"
+                        className="w-full h-full"
                         src="/media/blog/blog_3.jpg"
                         alt="Blog"
                       />
@@ -1465,7 +1465,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/figure/cloud_1.png"
                 alt="shape"
               />
@@ -1474,7 +1474,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/figure/cloud_2.png"
                 alt="shape"
               />
@@ -1483,7 +1483,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/figure/cloud_2.png"
                 alt="shape"
               />
@@ -1492,7 +1492,7 @@ export default function Home() {
               <Image
                 width={1000}
                 height={100}
-                className="w-auto h-auto"
+                className="w-full h-full"
                 src="/media/figure/cloud_1.png"
                 alt="shape"
               />
@@ -1504,7 +1504,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_1.png"
                   alt="shape"
                 />
@@ -1513,7 +1513,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_2.png"
                   alt="shape"
                 />
@@ -1522,7 +1522,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_3.png"
                   alt="shape"
                 />
@@ -1531,7 +1531,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_4.png"
                   alt="shape"
                 />
@@ -1540,7 +1540,7 @@ export default function Home() {
                 <Image
                   width={1000}
                   height={100}
-                  className="w-auto h-auto"
+                  className="w-full h-full"
                   src="/media/figure/shape_5.png"
                   alt="shape"
                 />

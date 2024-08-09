@@ -47,10 +47,10 @@ export default function HouseCard() {
 
   return (
     <div className="m-4">
-      <div className="px-4 mx-auto sm:max-w-full md:max-w-full lg:max-w-screen-2xl">
+      <div className="md:px-4 mx-auto sm:max-w-full md:max-w-full lg:max-w-screen-2xl">
         <Swiper
           slidesPerView={1}
-          spaceBetween={60}
+          spaceBetween={10}
           breakpoints={{
             805: {
               slidesPerView: 2,
