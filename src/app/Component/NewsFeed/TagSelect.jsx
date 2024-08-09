@@ -109,6 +109,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
           onKeyDown={handleTagAdd}
         />
         <button
+          type="button"
           className="absolute top-1/2 right-8 transform -translate-y-1/2 text-[#444]"
           onClick={showAllTags}
         >

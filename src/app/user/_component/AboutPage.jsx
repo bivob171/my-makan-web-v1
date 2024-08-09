@@ -49,6 +49,7 @@ export const AboutPage = () => {
     setSelectedCountry(user?.country);
     setSelectedState(user?.state);
     setBio(user?.bio);
+    setSelectedLanguage(user?.language);
   }, [user, role]);
 
   const handleCountryChange = (value) => {
