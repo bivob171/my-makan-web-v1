@@ -1,16 +1,19 @@
-import { Tooltip } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { BsEmojiSunglasses } from "react-icons/bs";
-import { TbPhotoHexagon } from "react-icons/tb";
-import { VscSend } from "react-icons/vsc";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import toast from "react-hot-toast";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { Tooltip } from "@mui/material";
+import { VscSend } from "react-icons/vsc";
+import { TbPhotoHexagon } from "react-icons/tb";
+import { BsEmojiSunglasses } from "react-icons/bs";
+import { PostReplySection } from "./PostReplySection";
 import { format, formatDistanceToNow } from "date-fns";
+
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
   const [commentDa, setComments] = useState(false);
   const [commentRerander, setCommentRerander] = useState(false);
+  const [showAllComments, setShowAllComments] = useState(false);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -18,6 +21,13 @@ const AgentComment = ({ _id }) => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
+  const [comment, setComment] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [replyInput, setReplyInput] = useState(false);
+  const [replyView, setReplyView] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [replyRerander, setReplyRerander] = useState(false);
+  const replyInputRef = useRef(null);
 
   const getAllComment = async (token) => {
     try {
@@ -57,27 +67,21 @@ const AgentComment = ({ _id }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
   }, [sortOrder, sortBy, limit, page, _id, commentRerander]);
-  const containerRefPost = useRef(null);
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
 
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () =>
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-  }, [isFetching, hasMore]);
-
-  const [showAllComments, setShowAllComments] = useState(false);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   const sortedComments = Array.isArray(commentDa)
     ? commentDa.sort((a, b) => b._id - a._id)
@@ -86,10 +90,6 @@ const AgentComment = ({ _id }) => {
   const displayedComments = showAllComments
     ? sortedComments
     : [sortedComments[0]];
-
-  // add coment
-  const [comment, setComment] = useState("");
-  const [commentError, setCommentError] = useState("");
 
   const handleSubmit = async (event) => {
     try {
@@ -124,7 +124,7 @@ const AgentComment = ({ _id }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(commentData),
       });
@@ -140,6 +140,69 @@ const AgentComment = ({ _id }) => {
       toast.error(`Error: ${error.message}`);
     }
   };
+
+  const handleSubmitReply = async (_id) => {
+    try {
+      let hasError = false;
+
+      if (replyText === "") {
+        toast.error("Comment is required.");
+        hasError = true;
+      }
+
+      if (hasError) {
+        return;
+      }
+      const replyData = {
+        postCommentId: _id,
+        reply: replyText,
+      };
+
+      let token;
+      const userRole = localStorage.getItem("role");
+      if (userRole === "agent") {
+        token = localStorage.getItem("agentAccessToken");
+      } else {
+        token = localStorage.getItem("buyerAccessToken");
+      }
+      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(replyData),
+      });
+
+      if (!response.ok) {
+        toast.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast.success("Add Reply successfully!");
+        setReplyText("");
+        setReplyRerander(!commentRerander);
+      }
+    } catch (error) {
+      toast.error(`${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        replyInputRef.current &&
+        !replyInputRef.current.contains(event.target)
+      ) {
+        setReplyInput(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [replyInputRef]);
 
   return (
     <div className="blog-comment-form">
@@ -186,25 +249,22 @@ const AgentComment = ({ _id }) => {
                     const now = new Date();
                     const timeDifference = now - date;
 
-                    const options = {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
-                      hour12: true,
-                    };
-
-                    // If the time difference is less than 24 hours, show relative time
                     if (timeDifference < 24 * 60 * 60 * 1000) {
-                      return formatDistanceToNow(date, { addSuffix: true });
-                    }
+                      let distance = formatDistanceToNow(date, {
+                        addSuffix: true,
+                      });
+                      distance = distance
+                        .replace("minutes", "mins")
+                        .replace("minute", "min");
 
-                    // Otherwise, show the formatted date
+                      return distance;
+                    }
                     return format(date, "d MMMM yyyy h:mm a");
                   };
+
                   return (
                     <div
+                      ref={lastPostElementRef}
                       key={comment?._id}
                       className={`flex ${
                         comonUser?._id === user?._id
@@ -231,17 +291,86 @@ const AgentComment = ({ _id }) => {
                             <h4 className="text-[18px] font-semibold text-[#222] m-0">
                               {comonUser?.fullName}
                             </h4>
-                            <p className="text-[#444] m-0">
+                            <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">
                               {comment?.comment}
                             </p>
                           </div>
+                          {/* reply click button  */}
                           <div className="flex justify-around items-center gap-1 mt-1">
                             <span className="text-[12px]">
-                              {" "}
                               {formatDate(comment?.createdAt)}
                             </span>
                             <span className="text-[12px] font-bold">Like</span>
-                            <span className="text-[12px] font-bold">Reply</span>
+                            <span
+                              onClick={() => setReplyInput(!replyInput)}
+                              className="text-[12px] font-bold cursor-pointer"
+                            >
+                              Reply
+                            </span>
+                          </div>
+
+                          {/* reply section */}
+                          {replyView === true ? (
+                            <div className="my-[10px]">
+                              <PostReplySection
+                                id={comment?._id}
+                                replyRerander={replyRerander}
+                                setReplyRerander={setReplyRerander}
+                              />
+                            </div>
+                          ) : null}
+
+                          {/* reply input */}
+                          {replyInput === true ? (
+                            <div
+                              ref={replyInputRef}
+                              className="flex items-center gap-x-2 my-[10px]"
+                            >
+                              <div>
+                                <Image
+                                  src={user?.image}
+                                  alt="Chat"
+                                  width={500}
+                                  height={500}
+                                  className="w-7 h-auto rounded-full"
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  type="text"
+                                  placeholder="Reply"
+                                  onChange={(e) => setReplyText(e.target.value)}
+                                  value={replyText}
+                                />
+                              </div>
+                              <div className="flex justify-center items-center">
+                                <Tooltip
+                                  title="Submit Reply"
+                                  arrow
+                                  placement="top-start"
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleSubmitReply(comment?._id)
+                                    }
+                                    className="hover:bg-[#fff] rounded-full"
+                                  >
+                                    <VscSend className="w-[20px] h-[20px]" />
+                                  </button>
+                                </Tooltip>
+                              </div>
+                            </div>
+                          ) : null}
+
+                          <div className="-mt-[7px] flex justify-end">
+                            <span
+                              onClick={() => setReplyView(!replyView)}
+                              className="text-[12px] cursor-pointer hover:underline"
+                            >
+                              View Reply
+                            </span>
                           </div>
                         </div>
                       </div>

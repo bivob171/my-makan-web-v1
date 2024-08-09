@@ -57,10 +57,11 @@ export const PostDetailsPage = ({ postid }) => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const allPostsList = await response.json();
+        setAllPosts(allPostsList);
+        setLoading(false);
       }
-      const allPostsList = await response.json();
-      setAllPosts(allPostsList);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -90,7 +91,6 @@ export const PostDetailsPage = ({ postid }) => {
     price,
     sqft,
   } = item;
-  console.log(item);
   const userinfo = role === "agent" ? agentId : userId;
   const [hasId, setHasId] = useState(false);
   useEffect(() => {
@@ -269,7 +269,7 @@ export const PostDetailsPage = ({ postid }) => {
       {" "}
       <div className="container">
         <div className="row">
-          <div className="col-lg-3 widget-block widget-break-lg">
+          <div className="col-lg-3 widget-block widget-break-lg lg:block hidden">
             <div className="!sticky top-[110px]">
               <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
@@ -354,7 +354,7 @@ export const PostDetailsPage = ({ postid }) => {
                         <ul className="entry-meta">
                           <li>
                             <Image
-                              src="/media/figure/chat_7.jpg"
+                              src={userinfo?.image}
                               alt="Chat"
                               width={500}
                               height={500}
@@ -415,7 +415,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {data?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             Images
                           </h2>
                         </center>
@@ -425,7 +425,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {videos?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             Videos
                           </h2>
                         </center>
@@ -435,7 +435,7 @@ export const PostDetailsPage = ({ postid }) => {
                     {files?.length > 0 && (
                       <div className="">
                         <center>
-                          <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                          <h2 className="mt-3 !mb-6 text-[#444] underline">
                             File
                           </h2>
                         </center>
@@ -449,7 +449,7 @@ export const PostDetailsPage = ({ postid }) => {
                   </div>
                   <div className="">
                     <center>
-                      <h2 className="text-[3vw] mt-3 !mb-6 text-[#444] underline">
+                      <h2 className="mt-3 !mb-6 text-[#444] underline">
                         Location
                       </h2>
                     </center>

@@ -24,7 +24,7 @@ import { EditPost } from "./EditPost";
 import EditMapPost from "./EditPostMap";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 
-export const EditPostSection = ({ isOpen, setIsOpen }) => {
+export default function EditPostSection({ isOpen, setIsOpen }) {
   const { isAuthenticated, user, setRender, render, logOut } =
     PrivateRouteContext();
   const { newsFeedRender, setNewsFeedRender } = useContext(
@@ -431,4 +431,4 @@ export const EditPostSection = ({ isOpen, setIsOpen }) => {
       </Dialog>
     </div>
   );
-};
+}

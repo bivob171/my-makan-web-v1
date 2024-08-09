@@ -1,10 +1,7 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
-
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import toast from "react-hot-toast";
-
 import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { BiCommentDetail, BiMessageDetail, BiSolidLike } from "react-icons/bi";
@@ -13,8 +10,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
 import { format, formatDistanceToNow } from "date-fns";
 import { SiImessage } from "react-icons/si";
-
-const PackageCard = ({
+import toast from "react-hot-toast";
+import axios from "axios";
+import { MatchCardData } from "./MatchCardData";
+import { usePathname } from "next/navigation";
+export default function PackageCard({
   item,
   myId,
   setlike,
@@ -23,7 +23,7 @@ const PackageCard = ({
   saveRerander,
   followRerander,
   setFollowRerander,
-}) => {
+}) {
   const {
     role,
     userId,
@@ -329,6 +329,10 @@ const PackageCard = ({
     checkFollowUser(token);
   }, [followingId, followRerander]);
 
+  // get path name
+  const pathname = usePathname();
+  const basePath = pathname.substring(0, pathname.lastIndexOf("/") + 1);
+
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">
@@ -628,7 +632,7 @@ const PackageCard = ({
             </div>
           </div>
         </div>
-        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:my-3"></div>
+        <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:!my-3"></div>
         <div className="px-[15px]">
           <div>
             <p className="font-inter text-[22px] md:text-[28px] text-[#222] font-semibold mb-2 leading-[40px]">
@@ -717,48 +721,15 @@ const PackageCard = ({
         </div>
         <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
         <div className=" flex items-center justify-between px-[15px]">
-          <div className="flex flex-wrap items-center gap-x-[10px]">
-            <div className="flex">
-              <Image
-                width={18}
-                height={18}
-                src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                alt="..."
-                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow hover:z-50 hover:-mt-[2.5px]"
-              ></Image>
-              <Image
-                width={18}
-                height={18}
-                src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                alt="..."
-                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
-              ></Image>
-              <Image
-                width={18}
-                height={18}
-                src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                alt="..."
-                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 hover:z-50 hover:-mt-[2.5px] shadow -ml-[6px]"
-              ></Image>
-              <Image
-                width={18}
-                height={18}
-                src="https://spruko.com/demo/tailwind/ynex/dist/assets/images/faces/11.jpg"
-                alt="..."
-                className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full border-2 border-blueGray-50 shadow -ml-[6px] hover:z-50 hover:-mt-[2.5px]"
-              ></Image>
-              <div className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-50 hover:-mt-[2.5px] flex items-center justify-center">
-                <p className="text-[8px] -mb-[1px] text-white font-normal">
-                  +2
-                </p>
-              </div>
-            </div>
-            <div>
-              <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-                +65 Matched
-              </p>
-            </div>
-          </div>
+          {/* match post */}
+          {basePath === "/user/matched-post/" ? (
+            <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+              Matched Post
+            </p>
+          ) : (
+            <MatchCardData item={item} />
+          )}
+
           <div className="flex gap-x-[7px] items-center flex-wrap">
             <div className="flex items-center">
               {hasId === true ? (
@@ -814,6 +785,4 @@ const PackageCard = ({
       </div>
     </div>
   );
-};
-
-export default PackageCard;
+}

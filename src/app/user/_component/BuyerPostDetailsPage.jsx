@@ -1,5 +1,5 @@
 import React from "react";
 
 export const BuyerPostDetailsPage = () => {
-  return <div>DETAILS</div>;
+  return <div>DETAILS ho</div>;
 };

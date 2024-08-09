@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { IoIosArrowRoundForward } from "react-icons/io";
+import { IoIosArrowRoundForward, IoIosCloseCircleOutline } from "react-icons/io";
 
-const Filter = ({ onClose, setFilterCount }) => {
+const Filter = ({ onClose, setFilterCount, filterVisible, setFilterVisible }) => {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedPostTypes, setSelectedPostTypes] = useState([]);
 
@@ -280,6 +280,13 @@ const Filter = ({ onClose, setFilterCount }) => {
           </button>
         </footer>
       </form>
+      <button
+        type="button"
+        onClick={() => setFilterVisible(!filterVisible)}
+        className="absolute top-1 right-1"
+      >
+        <IoIosCloseCircleOutline className="w-6 h-6 text-[red]" />
+      </button>
     </div>
   );
 };
