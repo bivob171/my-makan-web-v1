@@ -5,7 +5,7 @@ import BuyerMyRequiredPosts from "./BuyerMyRequiredPosts";
 import BuyerMyAvailablePosts from "./BuyerMyAvailablePosts";
 import Image from "next/image";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
-import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
+import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 
 export const BuyerMyAllPostPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =

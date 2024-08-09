@@ -6,7 +6,7 @@ import AgentMyRequiredPosts from "./AgentMyRequiredPosts";
 import { AccountVerifyModal } from "@/app/Component/NewsFeed/AccountVerifyModal";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
 import Image from "next/image";
-import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
+import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 
 export const AgentMyAllPostPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =

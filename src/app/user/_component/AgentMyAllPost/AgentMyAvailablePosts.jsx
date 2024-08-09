@@ -10,12 +10,12 @@ import React, {
 
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
-import { EditPostSection } from "../PostEdit/EditPostSection";
 import { PostHiddenModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostHidden";
 import { PostDeleteModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostDeleteMOdal";
 import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import EditPostCard from "../Card/EditPostCard";
+import EditPostSection from "../PostEdit/EditPostSection";
 
 const AgentMyAvailablePosts = () => {
   const { user } = PrivateRouteContext();
