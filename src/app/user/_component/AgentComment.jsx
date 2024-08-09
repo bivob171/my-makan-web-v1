@@ -8,6 +8,7 @@ import { TbPhotoHexagon } from "react-icons/tb";
 import { BsEmojiSunglasses } from "react-icons/bs";
 import { PostReplySection } from "./PostReplySection";
 import { format, formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
@@ -23,8 +24,8 @@ const AgentComment = ({ _id }) => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState("");
-  const [replyInput, setReplyInput] = useState(false);
-  const [replyView, setReplyView] = useState(false);
+  const [replyInput, setReplyInput] = useState(null); // Track which comment's reply input is open
+  const [activeReplyView, setActiveReplyView] = useState(null); // Track which comment's replies are visible
   const [replyText, setReplyText] = useState("");
   const [replyRerander, setReplyRerander] = useState(false);
   const replyInputRef = useRef(null);
@@ -261,6 +262,7 @@ const AgentComment = ({ _id }) => {
                     }
                     return format(date, "d MMMM yyyy h:mm a");
                   };
+                  const currentCommentId = comment?._id;
 
                   return (
                     <div
@@ -279,18 +281,34 @@ const AgentComment = ({ _id }) => {
                             : "justify-start"
                         } gap-[8px]`}
                       >
-                        <Image
-                          width={40}
-                          height={40}
-                          alt="img"
-                          src={comonUser?.image}
-                          className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
-                        />
+                        <Link
+                          href={
+                            comonUser?.role === "agent"
+                              ? `/user/agent-profile/${comonUser?._id}`
+                              : `/user/buyer-profile/${comonUser?._id}`
+                          }
+                        >
+                          <Image
+                            width={40}
+                            height={40}
+                            alt="img"
+                            src={comonUser?.image}
+                            className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
+                          />
+                        </Link>
                         <div>
                           <div className="bg-[#EDF2F9] px-3 py-[10px] rounded-[20px]">
-                            <h4 className="text-[18px] font-semibold text-[#222] m-0">
-                              {comonUser?.fullName}
-                            </h4>
+                            <Link
+                              href={
+                                comonUser?.role === "agent"
+                                  ? `/user/agent-profile/${comonUser?._id}`
+                                  : `/user/buyer-profile/${comonUser?._id}`
+                              }
+                            >
+                              <h4 className="text-[18px] font-semibold text-[#222] m-0">
+                                {comonUser?.fullName}
+                              </h4>
+                            </Link>
                             <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">
                               {comment?.comment}
                             </p>
@@ -302,7 +320,13 @@ const AgentComment = ({ _id }) => {
                             </span>
                             <span className="text-[12px] font-bold">Like</span>
                             <span
-                              onClick={() => setReplyInput(!replyInput)}
+                              onClick={() =>
+                                setReplyInput(
+                                  replyInput === comment._id
+                                    ? null
+                                    : comment._id
+                                )
+                              }
                               className="text-[12px] font-bold cursor-pointer"
                             >
                               Reply
@@ -310,7 +334,7 @@ const AgentComment = ({ _id }) => {
                           </div>
 
                           {/* reply section */}
-                          {replyView === true ? (
+                          {activeReplyView === currentCommentId ? (
                             <div className="my-[10px]">
                               <PostReplySection
                                 id={comment?._id}
@@ -321,7 +345,7 @@ const AgentComment = ({ _id }) => {
                           ) : null}
 
                           {/* reply input */}
-                          {replyInput === true ? (
+                          {replyInput === currentCommentId ? (
                             <div
                               ref={replyInputRef}
                               className="flex items-center gap-x-2 my-[10px]"
@@ -332,7 +356,7 @@ const AgentComment = ({ _id }) => {
                                   alt="Chat"
                                   width={500}
                                   height={500}
-                                  className="w-7 h-auto rounded-full"
+                                  className="w-7 h-7 rounded-full"
                                 />
                               </div>
                               <div>
@@ -366,7 +390,13 @@ const AgentComment = ({ _id }) => {
 
                           <div className="-mt-[7px] flex justify-end">
                             <span
-                              onClick={() => setReplyView(!replyView)}
+                              onClick={() =>
+                                setActiveReplyView(
+                                  activeReplyView === comment._id
+                                    ? null
+                                    : comment._id
+                                )
+                              }
                               className="text-[12px] cursor-pointer hover:underline"
                             >
                               View Reply

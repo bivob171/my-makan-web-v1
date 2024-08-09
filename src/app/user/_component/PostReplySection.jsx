@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   const [commentDa, setReplys] = useState(false);
   const [limit, setLimit] = useState(5);
@@ -126,19 +127,37 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
                 className={`flex text-start mb-2`}
               >
                 <div className={`flex w-[70%] gap-[8px]`}>
-                  <Image
-                    width={40}
-                    height={40}
-                    alt="img"
-                    src={comonUser?.image}
-                    className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
-                  />
+                  <Link
+                    href={
+                      comonUser?.role === "agent"
+                        ? `/user/agent-profile/${comonUser?._id}`
+                        : `/user/buyer-profile/${comonUser?._id}`
+                    }
+                  >
+                    <Image
+                      width={40}
+                      height={40}
+                      alt="img"
+                      src={comonUser?.image}
+                      className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
+                    />
+                  </Link>
                   <div>
                     <div className="bg-[#EDF2F9] px-3 py-[10px] rounded-[20px]">
-                      <h4 className="text-[18px] font-semibold text-[#222] m-0">
-                        {comonUser?.fullName}
-                      </h4>
-                      <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">{data?.reply}</p>
+                      <Link
+                        href={
+                          comonUser?.role === "agent"
+                            ? `/user/agent-profile/${comonUser?._id}`
+                            : `/user/buyer-profile/${comonUser?._id}`
+                        }
+                      >
+                        <h4 className="text-[18px] font-semibold text-[#222] m-0">
+                          {comonUser?.fullName}
+                        </h4>
+                      </Link>
+                      <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">
+                        {data?.reply}
+                      </p>
                     </div>
                     <div className="flex justify-start items-center gap-1 mt-1">
                       <span className="text-[12px]">

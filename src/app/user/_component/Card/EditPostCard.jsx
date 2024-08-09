@@ -240,26 +240,32 @@ export default function EditPostCard({
         <div className="flex justify-between px-[15px] ">
           <div className="flex gap-x-[15px] items-center h-[45px] ">
             <div className="mb-[17px]">
-              <div className=" relative w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
-                <div>
+              <Link
+                href={
+                  userinfo?.role === "agent"
+                    ? `/user/agent-profile/${userinfo?._id}`
+                    : `/user/buyer-profile/${userinfo?._id}`
+                }
+              >
+                <div className="cursor-pointer !w-[50px] !h-[50px] md:!w-[70px] md:!h-[70px] border-[3px] p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                   <Image
-                    width={40}
-                    height={40}
+                    width={400}
+                    height={400}
                     alt="img"
                     src={userinfo?.image}
-                    className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full"
+                    className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
                   />
+                  <div className="absolute -bottom-1 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
+                    <Image
+                      width={10}
+                      height={10}
+                      alt=""
+                      className="pl-[] w-full h-full"
+                      src="/homeCard/active.png"
+                    />
+                  </div>
                 </div>
-                <div className="absolute bottom-[2px] md:bottom-1 right-0 bg-white w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full flex items-center justify-center">
-                  <Image
-                    width={8}
-                    height={8}
-                    alt=""
-                    className="pl-[] w-full h-full"
-                    src="/homeCard/active.png"
-                  />
-                </div>
-              </div>
+              </Link>
             </div>
             <div>
               <div className=" -mb-[20px] md:-mb-[15px]">

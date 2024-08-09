@@ -5,6 +5,7 @@ import { data } from "@/app/config/country_name";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { AddLanguage } from "@/app/Component/NewsFeed/AddLanguage";
 export const AboutPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
@@ -20,6 +21,8 @@ export const AboutPage = () => {
   const [phone_Code, setPhoneCode] = useState("971");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState([]);
+  const [LanguageError, setLanguageError] = useState("");
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -134,6 +137,7 @@ export const AboutPage = () => {
         country: selectedCountry,
         state: selectedState,
         bio: bio,
+        language: selectedLanguage,
       };
       const token = localStorage.getItem("buyerAccessToken");
 
@@ -176,6 +180,7 @@ export const AboutPage = () => {
         country: selectedCountry,
         state: selectedState,
         bio: bio,
+        language: selectedLanguage,
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
@@ -398,6 +403,13 @@ export const AboutPage = () => {
                   </div>
                 </label>
               </div>
+            </div>
+            <div>
+              <AddLanguage
+                setSelectedLanguage={setSelectedLanguage}
+                selectedLanguage={selectedLanguage}
+                LanguageError={LanguageError}
+              />
             </div>
             <div className="mb-[22px]">
               <div className="form-group">

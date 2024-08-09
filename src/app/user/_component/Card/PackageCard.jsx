@@ -344,38 +344,54 @@ export default function PackageCard({
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
-                <div className="cursor-pointer !w-[50px] !h-[50px] md:!w-[70px] md:!h-[70px] border-[3px] p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
-                  <Image
-                    width={400}
-                    height={400}
-                    alt="img"
-                    src={userinfo?.image}
-                    className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
-                  />
-                  <div className="absolute -bottom-1 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
+                <Link
+                  href={
+                    userinfo?.role === "agent"
+                      ? `/user/agent-profile/${userinfo?._id}`
+                      : `/user/buyer-profile/${userinfo?._id}`
+                  }
+                >
+                  <div className="cursor-pointer !w-[50px] !h-[50px] md:!w-[70px] md:!h-[70px] border-[3px] p-[2px] hover:border-[#0033ffd4] rounded-full relative ">
                     <Image
-                      width={10}
-                      height={10}
-                      alt=""
-                      className="pl-[] w-full h-full"
-                      src="/homeCard/active.png"
+                      width={400}
+                      height={400}
+                      alt="img"
+                      src={userinfo?.image}
+                      className="w-full h-full rounded-full transform transition duration-500 hover:scale-110 overflow-hidden"
                     />
+                    <div className="absolute -bottom-1 right-0 md:right-2 bg-white w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full flex items-center justify-center ">
+                      <Image
+                        width={10}
+                        height={10}
+                        alt=""
+                        className="pl-[] w-full h-full"
+                        src="/homeCard/active.png"
+                      />
+                    </div>
                   </div>
-                </div>
+                </Link>
                 {/* hover dropdown  */}
                 {isHovered && (
                   <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
                     <div className="!w-80 md:!w-96">
                       <div className="flex gap-2">
-                        <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#615DFAd4] rounded-full">
-                          <Image
-                            width={40}
-                            height={40}
-                            alt="img"
-                            src={userinfo?.image}
-                            className="w-full h-full rounded-full"
-                          />
-                        </div>
+                        <Link
+                          href={
+                            userinfo?.role === "agent"
+                              ? `/user/agent-profile/${userinfo?._id}`
+                              : `/user/buyer-profile/${userinfo?._id}`
+                          }
+                        >
+                          <div className="!w-[60px] !h-[60px] md:!w-[85px] md:!h-[85px] cursor-pointer border-4 p-[2px] hover:border-[#615DFAd4] rounded-full">
+                            <Image
+                              width={40}
+                              height={40}
+                              alt="img"
+                              src={userinfo?.image}
+                              className="w-full h-full rounded-full"
+                            />
+                          </div>
+                        </Link>
                         <div>
                           <div className="-mb-[20px] md:-mb-[15px]">
                             <div className="flex justify-start items-center">

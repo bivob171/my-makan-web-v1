@@ -353,24 +353,57 @@ export const PostDetailsPage = ({ postid }) => {
                       <div className="col-lg-9">
                         <ul className="entry-meta">
                           <li>
-                            <Image
-                              src={userinfo?.image}
-                              alt="Chat"
-                              width={500}
-                              height={500}
-                              className="w-10 h-auto"
-                            />
+                            <Link
+                              href={
+                                userinfo?.role === "agent"
+                                  ? `/user/agent-profile/${userinfo?._id}`
+                                  : `/user/buyer-profile/${userinfo?._id}`
+                              }
+                            >
+                              <Image
+                                src={userinfo?.image}
+                                alt="Chat"
+                                width={500}
+                                height={500}
+                                className="w-10 h-auto"
+                              />
+                            </Link>
                             By{" "}
                             {item.role === "buyer" ? (
                               <>
                                 {userinfo?._id === myId ? (
-                                  <Link href="#">{userinfo?.fullName}</Link>
+                                  <Link
+                                    href={
+                                      userinfo?.role === "agent"
+                                        ? `/user/agent-profile/${userinfo?._id}`
+                                        : `/user/buyer-profile/${userinfo?._id}`
+                                    }
+                                  >
+                                    {userinfo?.fullName}
+                                  </Link>
                                 ) : (
-                                  <Link href="#"> Hidden Name </Link>
+                                  <Link
+                                    href={
+                                      userinfo?.role === "agent"
+                                        ? `/user/agent-profile/${userinfo?._id}`
+                                        : `/user/buyer-profile/${userinfo?._id}`
+                                    }
+                                  >
+                                    {" "}
+                                    Hidden Name{" "}
+                                  </Link>
                                 )}
                               </>
                             ) : (
-                              <Link href="#">{userinfo?.fullName}</Link>
+                              <Link
+                                href={
+                                  userinfo?.role === "agent"
+                                    ? `/user/agent-profile/${userinfo?._id}`
+                                    : `/user/buyer-profile/${userinfo?._id}`
+                                }
+                              >
+                                {userinfo?.fullName}
+                              </Link>
                             )}
                           </li>
                         </ul>
@@ -455,39 +488,6 @@ export const PostDetailsPage = ({ postid }) => {
                     </center>
                     <MyGoogleMap location={location} />
                   </div>
-                  {/* <div className="blog-footer">
-              <div className="item-label">
-                Choose your <span>Reaction!</span>
-              </div>
-              <div className="reaction-icon">
-                {hasId === true ? (
-                  <p
-                    onClick={() => giveUnLike(item?._id)}
-                    className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px] text-center"
-                  >
-                    {" "}
-                    <BiSolidLike />
-                  </p>
-                ) : (
-                  <p
-                    onClick={() => giveLike(item?._id)}
-                    className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px] text-center"
-                  >
-                    {" "}
-                    <BiSolidLike />
-                  </p>
-                )}
-                <a href="#">
-                  <Image
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto"
-                    src="/media/figure/reaction_1.png"
-                    alt="Like"
-                  />
-                </a>
-              </div>
-            </div> */}
                   <div className="mt-[45px]">
                     <hr className="mb-[20px]" />
                     <AgentComment _id={_id} />
