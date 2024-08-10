@@ -131,14 +131,14 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
                     height={40}
                     alt="img"
                     src={comonUser?.image}
-                    className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
+                    className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
                   />
                   <div>
-                    <div className="bg-[#EDF2F9] px-3 py-[10px] rounded-[20px]">
-                      <h4 className="text-[18px] font-semibold text-[#222] m-0">
+                    <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px]">
+                      <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
                         {comonUser?.fullName}
                       </h4>
-                      <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">{data?.reply}</p>
+                      <p className="text-[#444] m-0 leading-4 !text-[17px]">{data?.reply}</p>
                     </div>
                     <div className="flex justify-start items-center gap-1 mt-1">
                       <span className="text-[12px]">

@@ -206,24 +206,28 @@ const AgentComment = ({ _id }) => {
 
   return (
     <div className="blog-comment-form">
-      <div className="grid grid-cols-3">
-        <h3 className="item-title whitespace-nowrap">Leave a Comment</h3>
-        <div className="w-full col-span-2">
-          <button
-            className="w-full text-end mt-4"
-            onClick={() => setShowAllComments(!showAllComments)}
-          >
-            {commentDa.length > 0 && (
-              <p className="text-[14px] font-medium hover:underline">
-                {showAllComments ? "View less comments" : "View more comments"}
-              </p>
-            )}
-          </button>
+      <div className="">
+        <div className="w-full">
+          <div className="flex justify-between items-end">
+            <h3 className="w-full">Leave a Comment</h3>
+            <button
+              className="w-full text-end mt-4"
+              onClick={() => setShowAllComments(!showAllComments)}
+            >
+              {commentDa.length > 0 && (
+                <p className="text-[14px] font-medium hover:underline">
+                  {showAllComments
+                    ? "View less comments"
+                    : "View more comments"}
+                </p>
+              )}
+            </button>
+          </div>
           <div
             className={`${
               showAllComments === false
                 ? " my-2 flex flex-col-reverse"
-                : "overflow-y-auto h-[500px] my-2 flex flex-col-reverse"
+                : "overflow-y-auto h-[600px] my-2 flex flex-col-reverse"
             }`}
           >
             {commentDa?.length === 0 ? (
@@ -241,10 +245,10 @@ const AgentComment = ({ _id }) => {
                       : comment?.userId;
 
                   const formatDate = (isoString) => {
-                    if (!isoString) return "Invalid date";
+                    if (!isoString) return "Invalid";
 
                     const date = new Date(isoString);
-                    if (isNaN(date.getTime())) return "Invalid date";
+                    if (isNaN(date.getTime())) return "Invalid";
 
                     const now = new Date();
                     const timeDifference = now - date;
@@ -253,12 +257,16 @@ const AgentComment = ({ _id }) => {
                       let distance = formatDistanceToNow(date, {
                         addSuffix: true,
                       });
+
+                      // Replace time units with desired format
                       distance = distance
-                        .replace("minutes", "mins")
-                        .replace("minute", "min");
+                        .replace("minute", "m")
+                        .replace("hour", "h")
+                        .replace("second", "s");
 
                       return distance;
                     }
+
                     return format(date, "d MMMM yyyy h:mm a");
                   };
 
@@ -270,10 +278,10 @@ const AgentComment = ({ _id }) => {
                         comonUser?._id === user?._id
                           ? "justify-end"
                           : "justify-start"
-                      } text-start mb-4`}
+                      } text-start mb-4 w-full`}
                     >
                       <div
-                        className={`flex w-[70%] ${
+                        className={`flex ${
                           comonUser?._id === user?._id
                             ? "justify-end"
                             : "justify-start"
@@ -284,26 +292,26 @@ const AgentComment = ({ _id }) => {
                           height={40}
                           alt="img"
                           src={comonUser?.image}
-                          className="w-[55px] h-[55px] rounded-full border-2 border-[#EDF2F9]"
+                          className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
                         />
                         <div>
-                          <div className="bg-[#EDF2F9] px-3 py-[10px] rounded-[20px]">
-                            <h4 className="text-[18px] font-semibold text-[#222] m-0">
+                          <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px]">
+                            <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
                               {comonUser?.fullName}
                             </h4>
-                            <p className="text-[#444] m-0 !pl-2 leading-4 !text-[14px]">
+                            <p className="text-[#444] m-0 leading-4 !text-[17px]">
                               {comment?.comment}
                             </p>
                           </div>
                           {/* reply click button  */}
-                          <div className="flex justify-around items-center gap-1 mt-1">
+                          <div className="flex justify-around items-center gap-1 mt-[1px]">
                             <span className="text-[12px]">
                               {formatDate(comment?.createdAt)}
                             </span>
-                            <span className="text-[12px] font-bold">Like</span>
+                            <span className="text-[10px] font-bold">Like</span>
                             <span
                               onClick={() => setReplyInput(!replyInput)}
-                              className="text-[12px] font-bold cursor-pointer"
+                              className="text-[10px] font-bold cursor-pointer"
                             >
                               Reply
                             </span>
@@ -364,12 +372,29 @@ const AgentComment = ({ _id }) => {
                             </div>
                           ) : null}
 
-                          <div className="-mt-[7px] flex justify-end">
+                          <div className="flex justify-start">
                             <span
                               onClick={() => setReplyView(!replyView)}
-                              className="text-[12px] cursor-pointer hover:underline"
+                              className="text-[12px] cursor-pointer hover:underline leading-3"
                             >
-                              View Reply
+                              <div className="flex justify-start items-center gap-1">
+                                <Image
+                                  width={40}
+                                  height={40}
+                                  alt="img"
+                                  src={comonUser?.image}
+                                  className="w-[20px] h-[20px] rounded-full border-2 border-[#EDF2F9]"
+                                />
+                                <h4 className="text-[14px] font-bold text-[#222] m-0 leading-none">
+                                  {comonUser?.fullName} -
+                                </h4>
+                                <span className="text-[14px] font-bold text-[#777] m-0 leading-none">
+                                  replied
+                                </span>
+                                <span className="text-[10px]">
+                                  {formatDate(comment?.createdAt)}
+                                </span>
+                              </div>
                             </span>
                           </div>
                         </div>
