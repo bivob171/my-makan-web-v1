@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-const RelatedBlogs = () => {
+const RelatedPosts = () => {
   return (
     <div className="realated-blog py-4 rounded-md">
       <div className="">
@@ -187,4 +187,4 @@ const RelatedBlogs = () => {
   );
 };
 
-export default RelatedBlogs;
+export default RelatedPosts;

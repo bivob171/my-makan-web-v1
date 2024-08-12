@@ -13,9 +13,9 @@ import VideoSection from "./VideoSection";
 import File from "./File";
 import PropertyInformation from "./PropertyInformation";
 import MyGoogleMap from "./GoogleMap";
-import RelatedBlogs from "./RelatedBlogs";
 import SellTypeSection from "./SellTypeSection";
 import TagsSection from "./TagsSection";
+import RelatedPosts from "./RelatedBlogs";
 
 export const AgentPostDetailsPage = () => {
   const [isHeartRed, setIsHeartRed] = useState(false);
@@ -284,7 +284,7 @@ export const AgentPostDetailsPage = () => {
                 </div>
               </div>
               {/* blogs  */}
-              <RelatedBlogs />
+              <RelatedPosts />
               <div className="mb-[20px]">
                 {/* sell type  */}
                 <SellTypeSection />

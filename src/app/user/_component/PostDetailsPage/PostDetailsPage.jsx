@@ -7,7 +7,6 @@ import VideoSection from "./VideoSection";
 import PropertyInformation from "./PropertyInformation";
 import MyGoogleMap from "./GoogleMap";
 import AgentComment from "../AgentComment";
-import RelatedBlogs from "./RelatedBlogs";
 import SellTypeSection from "./SellTypeSection";
 import TagsSection from "./TagsSection";
 import { BsHeartFill } from "react-icons/bs";
@@ -22,6 +21,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import PropertyCard2 from "@/app/Component/NewsFeed/PropertyCard2";
+import RelatedPosts from "../RelatedBlogs";
 
 export const PostDetailsPage = ({ postid }) => {
   const { user } = PrivateRouteContext();
@@ -114,14 +114,11 @@ export const PostDetailsPage = ({ postid }) => {
     return date.toLocaleDateString("en-GB", options);
   };
 
-  // Ensure media is an array
   const mediaArray = Array.isArray(media) ? media : [];
 
   const data = mediaArray.filter((file) => file.type === "image");
   const videos = mediaArray.filter((file) => file.type === "video");
   const files = mediaArray.filter((file) => file.type === "pdf");
-
-  // save post
 
   const [saveRerander, setSaveRerander] = useState(false);
 
@@ -141,7 +138,7 @@ export const PostDetailsPage = ({ postid }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -188,7 +185,7 @@ export const PostDetailsPage = ({ postid }) => {
           `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include your JWT token if needed
+              Authorization: `Bearer ${token}`,
             },
             params: {
               userId,
@@ -208,8 +205,6 @@ export const PostDetailsPage = ({ postid }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     checkSavePost(token);
   }, [savePostId, saveRerander]);
-
-  // post like unlike
 
   const giveLike = async (id) => {
     const url = `https://api.mymakan.ae/allposts/${id}/like`;
@@ -264,6 +259,12 @@ export const PostDetailsPage = ({ postid }) => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <div className="page-content text-[#333] ">
       {" "}
@@ -273,9 +274,11 @@ export const PostDetailsPage = ({ postid }) => {
             <div className="!sticky top-[110px]">
               <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
-                <PropertyCard2 />
-                <PropertyCard2 />
-                <PropertyCard2 />
+                <div className="space-y-6 mt-6">
+                  <PropertyCard2 />
+                  <PropertyCard2 />
+                  <PropertyCard2 />
+                </div>
               </div>
             </div>
           </div>
@@ -348,48 +351,60 @@ export const PostDetailsPage = ({ postid }) => {
                       </div>
                       <ShareModal setIsOpen={setIsOpen} isOpen={isOpen} />
                     </div>
-                    <h2 className="entry-title">{title}</h2>
-                    <div className="row align-items-center">
-                      <div className="col-lg-9">
-                        <ul className="entry-meta">
-                          <li>
-                            <Image
-                              src={userinfo?.image}
-                              alt="Chat"
-                              width={500}
-                              height={500}
-                              className="w-10 h-auto"
-                            />
-                            By{" "}
-                            {item.role === "buyer" ? (
-                              <>
-                                {userinfo?._id === myId ? (
-                                  <Link href="#">{userinfo?.fullName}</Link>
-                                ) : (
-                                  <Link href="#"> Hidden Name </Link>
-                                )}
-                              </>
-                            ) : (
-                              <Link href="#">{userinfo?.fullName}</Link>
-                            )}
-                          </li>
-                        </ul>
-                        <ul className="entry-meta ml-[50px] -mt-[10px]">
-                          <li>
-                            <i className="icofont-calendar" />{" "}
-                            {formatDate(createdAt)}{" "}
-                          </li>
-                          <li>
-                            <i className="icofont-like" /> Like:{" "}
-                            {item.likeCount === 0 ? "00" : item.likeCount}
-                          </li>
-                          <li>
-                            <i className="icofont-comment" /> Comments:{" "}
-                            {item.comment?.length === 0
-                              ? "00"
-                              : item.comment?.length}{" "}
-                          </li>
-                        </ul>
+                    <h2 className="entry-title">
+                      {capitalizeFirstLetter(title)}
+                    </h2>
+                    <div className="row align-items-start">
+                      <div className="col-lg-9 flex justify-start ite gap-3">
+                        <Image
+                          src={userinfo?.image}
+                          alt="Chat"
+                          width={500}
+                          height={500}
+                          className="w-[50px] h-auto rounded-full"
+                        />
+                        <div className="mt-1">
+                          <div className="!leading-4 !items-start mb-1">
+                            <span className="!text-[#777] text-[14px] font-bold">
+                              By
+                            </span>{" "}
+                            <span className="!text-[#222]">
+                              {" "}
+                              {item.role === "buyer" ? (
+                                <>
+                                  {userinfo?._id === myId ? (
+                                    <Link href="#">{userinfo?.fullName}</Link>
+                                  ) : (
+                                    <Link href="#"> Hidden Name </Link>
+                                  )}
+                                </>
+                              ) : (
+                                <Link
+                                  href="#"
+                                  className="hover:!text-sky-400 hover:!underline"
+                                >
+                                  {userinfo?.fullName}
+                                </Link>
+                              )}
+                            </span>
+                          </div>
+                          <ul className="entry-meta">
+                            <li>
+                              <i className="icofont-calendar" />{" "}
+                              {formatDate(createdAt)}{" "}
+                            </li>
+                            <li>
+                              <i className="icofont-like" /> Like:{" "}
+                              {item.likeCount === 0 ? "00" : item.likeCount}
+                            </li>
+                            <li>
+                              <i className="icofont-comment" /> Comments:{" "}
+                              {item.comment?.length === 0
+                                ? "00"
+                                : item.comment?.length}{" "}
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                       <div className="col-lg-3">
                         <ul className="blog-share">
@@ -495,7 +510,7 @@ export const PostDetailsPage = ({ postid }) => {
                 </div>
               </div>
               {/* blogs  */}
-              <RelatedBlogs />
+              <RelatedPosts />
               <div className="mb-[20px]">
                 {/* sell type  */}
                 <SellTypeSection sellType={sellType} />
