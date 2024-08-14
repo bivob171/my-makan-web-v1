@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { format, formatDistanceToNow } from "date-fns";
 import Image from "next/image";
+import { format, formatDistanceToNow } from "date-fns";
+
 export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   const [commentDa, setReplys] = useState(false);
   const [limit, setLimit] = useState(5);
@@ -8,16 +9,15 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState("asc"); // Changed to "asc"
   const [sortBy, setSortBy] = useState("createdAt");
-  console.log(commentDa);
 
   const getAllComment = async (token) => {
     try {
       let url = `https://api.mymakan.ae/all-post-comment-reply/${id}?`;
 
       url += `sortBy=${sortBy}&`;
-      url += `sortOrder=${sortOrder}&`;
+      url += `sortOrder=${sortOrder}&`; // Sorting in ascending order
       url += `page=${page}&`;
       url += `limit=${limit}`;
 
@@ -50,6 +50,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
   }, [sortOrder, sortBy, limit, page, id, replyRerander]);
+
   const observer = useRef();
   const lastPostElementRef = useCallback(
     (node) => {
@@ -70,12 +71,12 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
       <div>
         {[1, 2, 3].map((i) => {
           return (
-            <div key={i} class="h-14  rounded-md w-60">
-              <div class="flex flex-row items-center justify-cente h-full space-x-5 animate ">
-                <div class="w-10 h-10 bg-gray-300 rounded-full "></div>
-                <div class="flex flex-col space-y-3 mt-1">
-                  <div class="h-2 bg-gray-300 rounded-md w-36 "></div>
-                  <div class="w-24 h-[6px] bg-gray-300 rounded-md "></div>
+            <div key={i} className="h-14 rounded-md w-60">
+              <div className="flex flex-row items-center justify-center h-full space-x-5 animate ">
+                <div className="w-10 h-10 bg-gray-300 rounded-full "></div>
+                <div className="flex flex-col space-y-3 mt-1">
+                  <div className="h-2 bg-gray-300 rounded-md w-36 "></div>
+                  <div className="w-24 h-[6px] bg-gray-300 rounded-md "></div>
                 </div>
               </div>
             </div>
@@ -102,21 +103,9 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
               const now = new Date();
               const timeDifference = now - date;
 
-              const options = {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              };
-
-              // If the time difference is less than 24 hours, show relative time
               if (timeDifference < 24 * 60 * 60 * 1000) {
                 return formatDistanceToNow(date, { addSuffix: true });
               }
-
-              // Otherwise, show the formatted date
               return format(date, "d MMMM yyyy h:mm a");
             };
             return (
@@ -134,11 +123,13 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
                     className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
                   />
                   <div>
-                    <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px]">
+                    <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px] !max-w-[340px]">
                       <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
                         {comonUser?.fullName}
                       </h4>
-                      <p className="text-[#444] m-0 leading-4 !text-[17px]">{data?.reply}</p>
+                      <p className="text-[#444] m-0 leading-4 !text-[17px]">
+                        {data?.reply}
+                      </p>
                     </div>
                     <div className="flex justify-start items-center gap-1 mt-1">
                       <span className="text-[12px]">
@@ -153,7 +144,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
           })}
         </>
       ) : (
-        <h4 className="text-[16px] font-semibold text-[#222] m-0">No Reply</h4>
+       <div className="hidden" />
       )}
     </div>
   );

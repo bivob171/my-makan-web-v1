@@ -8,10 +8,11 @@ import { TbPhotoHexagon } from "react-icons/tb";
 import { BsEmojiSunglasses } from "react-icons/bs";
 import { PostReplySection } from "./PostReplySection";
 import { format, formatDistanceToNow } from "date-fns";
+import EmojiPicker from "emoji-picker-react";
 
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
-  const [commentDa, setComments] = useState(false);
+  const [commentDa, setComments] = useState([]);
   const [commentRerander, setCommentRerander] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
   const [limit, setLimit] = useState(5);
@@ -21,13 +22,99 @@ const AgentComment = ({ _id }) => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState("");
   const [replyInput, setReplyInput] = useState(false);
   const [replyView, setReplyView] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [replyRerander, setReplyRerander] = useState(false);
   const replyInputRef = useRef(null);
+  const [comment, setComment] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [replies, setReplies] = useState({});
+
+  const fetchReplies = async (commentId) => {
+    try {
+      let url = `https://api.mymakan.ae/all-post-comment-reply/${commentId}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const replyData = await response.json();
+      setReplies((prevReplies) => ({
+        ...prevReplies,
+        [commentId]: replyData,
+      }));
+    } catch (error) {
+      console.error("Error fetching replies:", error);
+    }
+  };
+
+  useEffect(() => {
+    commentDa?.forEach((comment) => fetchReplies(comment._id));
+  }, [commentDa]);
+
+  const handleReplyDisplay = (repliesList) => {
+    if (repliesList.length === 1) {
+      const reply = repliesList[0];
+      return (
+        <div className="reply-details">
+          <button
+            className="flex justify-start"
+            onClick={() => setReplyView(!replyView)}
+          >
+            <span className="text-[12px] hover:underline leading-3">
+              <div className="flex justify-start items-center gap-1">
+                <Image
+                  width={40}
+                  height={40}
+                  alt="img"
+                  src={reply?.image}
+                  className="w-[20px] h-[20px] rounded-full border-2 border-[#EDF2F9]"
+                />
+                <h4 className="text-[14px] font-bold text-[#222] m-0 leading-none">
+                  {reply?.fullName} -
+                </h4>
+                <span className="text-[14px] font-bold text-[#777] m-0 leading-none">
+                  replied
+                </span>
+                <span className="text-[10px]">
+                  {/* {formatDate(comment?.createdAt)} */}
+                </span>
+              </div>
+            </span>
+          </button>
+        </div>
+      );
+    } else if (repliesList?.length > 1) {
+      return (
+        <button
+          className="view-more-replies"
+          onClick={() => setReplyView((prev) => !prev)}
+        >
+          {`View Previous ${repliesList?.length - 1} Replies`}
+        </button>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const onEmojiClick = (emoji) => {
+    setComment((prevComment) => prevComment + emoji.emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const handleEmojiButtonClick = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
 
   const getAllComment = async (token) => {
     try {
@@ -92,8 +179,11 @@ const AgentComment = ({ _id }) => {
     : [sortedComments[0]];
 
   const handleSubmit = async (event) => {
-    try {
+    if (event) {
       event.preventDefault();
+    }
+
+    try {
       let hasError = false;
 
       if (comment === "") {
@@ -106,6 +196,7 @@ const AgentComment = ({ _id }) => {
       if (hasError) {
         return;
       }
+
       const commentData = {
         postId: _id,
         comment: comment,
@@ -135,6 +226,17 @@ const AgentComment = ({ _id }) => {
         toast.success("Add Comment successfully!");
         setComment("");
         setCommentRerander(!commentRerander);
+      }
+// error 
+      if (comment.trim()) {
+        postComment(comment)
+          .then((newComment) => {
+            setComments((prevComments) => [...prevComments, newComment]);
+            setComment("");
+          })
+          .catch((error) => {
+            console.error("Error posting comment:", error);
+          });
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -239,7 +341,7 @@ const AgentComment = ({ _id }) => {
             ) : (
               <>
                 {displayedComments?.map((comment) => {
-                  const comonUser =
+                  const reply =
                     comment?.commentBy === "agent"
                       ? comment?.agentId
                       : comment?.userId;
@@ -275,14 +377,14 @@ const AgentComment = ({ _id }) => {
                       ref={lastPostElementRef}
                       key={comment?._id}
                       className={`flex ${
-                        comonUser?._id === user?._id
+                        reply?._id === user?._id
                           ? "justify-end"
                           : "justify-start"
-                      } text-start mb-4 w-full`}
+                      } text-start mb-1 w-full`}
                     >
                       <div
                         className={`flex ${
-                          comonUser?._id === user?._id
+                          reply?._id === user?._id
                             ? "justify-end"
                             : "justify-start"
                         } gap-[8px]`}
@@ -291,13 +393,13 @@ const AgentComment = ({ _id }) => {
                           width={40}
                           height={40}
                           alt="img"
-                          src={comonUser?.image}
+                          src={reply?.image}
                           className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
                         />
                         <div>
-                          <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px]">
+                          <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px] !max-w-[420px]">
                             <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
-                              {comonUser?.fullName}
+                              {reply?.fullName}
                             </h4>
                             <p className="text-[#444] m-0 leading-4 !text-[17px]">
                               {comment?.comment}
@@ -310,7 +412,7 @@ const AgentComment = ({ _id }) => {
                             </span>
                             <span className="text-[10px] font-bold">Like</span>
                             <span
-                              onClick={() => setReplyInput(!replyInput)}
+                              onClick={() => setReplyInput(comment._id)}
                               className="text-[10px] font-bold cursor-pointer"
                             >
                               Reply
@@ -329,7 +431,7 @@ const AgentComment = ({ _id }) => {
                           ) : null}
 
                           {/* reply input */}
-                          {replyInput === true ? (
+                          {replyInput === comment?._id && (
                             <div
                               ref={replyInputRef}
                               className="flex items-center gap-x-2 my-[10px]"
@@ -370,33 +472,10 @@ const AgentComment = ({ _id }) => {
                                 </Tooltip>
                               </div>
                             </div>
-                          ) : null}
-
-                          <div className="flex justify-start">
-                            <span
-                              onClick={() => setReplyView(!replyView)}
-                              className="text-[12px] cursor-pointer hover:underline leading-3"
-                            >
-                              <div className="flex justify-start items-center gap-1">
-                                <Image
-                                  width={40}
-                                  height={40}
-                                  alt="img"
-                                  src={comonUser?.image}
-                                  className="w-[20px] h-[20px] rounded-full border-2 border-[#EDF2F9]"
-                                />
-                                <h4 className="text-[14px] font-bold text-[#222] m-0 leading-none">
-                                  {comonUser?.fullName} -
-                                </h4>
-                                <span className="text-[14px] font-bold text-[#777] m-0 leading-none">
-                                  replied
-                                </span>
-                                <span className="text-[10px]">
-                                  {formatDate(comment?.createdAt)}
-                                </span>
-                              </div>
-                            </span>
-                          </div>
+                          )}
+                          {/* Replied comment area */}
+                          {replies[comment?._id] &&
+                            handleReplyDisplay(replies[comment._id])}
                         </div>
                       </div>
                     </div>
@@ -412,22 +491,37 @@ const AgentComment = ({ _id }) => {
           <textarea
             type="text"
             className="bg-[#EDF2F9] w-full text-[#666] outline-none rounded-t-2xl p-6 placeholder:text-[20px] text-[20px] resize-none -mb-[10px]"
-            placeholder={
-              commentError === ""
-                ? `Comment add, ${user?.fullName}`
-                : commentError
-            }
+            placeholder={`Comment add, ${user?.fullName}`}
             rows={4}
             onChange={(e) => setComment(e.target.value)}
             value={comment}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
           />
           <div className="flex justify-between items-center w-full px-6 pb-2 bg-[#EDF2F9] rounded-b-2xl">
             <div className="flex">
               <Tooltip title="Emoji" arrow placement="top-start">
-                <button className="hover:bg-[#fff] p-2 rounded-full">
+                <button
+                  type="button"
+                  onClick={handleEmojiButtonClick}
+                  className="hover:bg-[#fff] p-2 rounded-full"
+                >
                   <BsEmojiSunglasses className="w-8 h-8" />
                 </button>
               </Tooltip>
+
+              {showEmojiPicker && (
+                <div className="absolute z-10 mt-2">
+                  <EmojiPicker
+                    onEmojiClick={(event, emoji) => onEmojiClick(emoji)}
+                  />
+                </div>
+              )}
+
               <Tooltip title="Photo and video" arrow placement="top-start">
                 <button className="hover:bg-[#fff] p-2 rounded-full">
                   <TbPhotoHexagon className="w-8 h-8" />
