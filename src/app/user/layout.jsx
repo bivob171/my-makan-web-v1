@@ -8,6 +8,7 @@ import { Nunito } from "next/font/google";
 import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
+import FilterRenderProvider from "@/Context/filterRenderContext";
 
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
@@ -31,11 +32,13 @@ export default function Layout({ children }) {
       <div className="bg-[#EFF4FB]">
         <HeaderTop />
         <HeaderLeft />{" "}
-        <PostLocationValueProvider>
-          <EditPostLocationValueProvider>
-            <div className={nunito.className}>{children}</div>
-          </EditPostLocationValueProvider>
-        </PostLocationValueProvider>{" "}
+        <FilterRenderProvider>
+          <PostLocationValueProvider>
+            <EditPostLocationValueProvider>
+              <div className={nunito.className}>{children}</div>
+            </EditPostLocationValueProvider>
+          </PostLocationValueProvider>{" "}
+        </FilterRenderProvider>
         <HeaderRight />{" "}
         {/* <div className="mt-[40px]">
             <Footer />
