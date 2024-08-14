@@ -4,12 +4,12 @@ import { useParams, usePathname } from "next/navigation";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
-import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 import NewsFeedRightSection from "@/app/Component/NewsFeed/NewsFeedRightSection";
 import ChatModal from "@/app/Component/NewsFeed/ChatModal";
 import { AccountVerifyModal } from "@/app/Component/NewsFeed/AccountVerifyModal";
 import { useRouter } from "next/router";
 import { MachedPostPage } from "../../_component/MachedPostPage/MachedPostPage";
+import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 
 export default function MatchedPost() {
   const params = useParams();

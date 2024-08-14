@@ -1,4 +1,3 @@
-"use client";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import React, { useEffect, useState } from "react";
 import ShareModal from "./ShareModal";

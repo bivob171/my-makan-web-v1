@@ -7,8 +7,8 @@ import AvailablePosts from "../profile/available-post/page";
 import RequiredPosts from "../profile/required-post/page";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
+import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 
 export default function BuyerPosts() {
   const [activeTab, setActiveTab] = useState("allPosts");

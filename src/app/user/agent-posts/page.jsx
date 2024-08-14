@@ -6,7 +6,7 @@ import AvailablePostsAgent from "@/app/Component/NewsFeed/AgentPost/AvailablePos
 import RequiredPostsAgent from "@/app/Component/NewsFeed/AgentPost/RequiredPostsAgent";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import NewsFeedRightSection from "@/app/Component/NewsFeed/NewsFeedRightSection";
-import { PostSearch } from "@/app/Component/NewsFeed/PostSearch/PostSearch";
+import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
 import Image from "next/image";
 import React, { useState } from "react";

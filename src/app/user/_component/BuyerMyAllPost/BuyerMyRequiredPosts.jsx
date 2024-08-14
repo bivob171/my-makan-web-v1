@@ -12,10 +12,10 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
 import { PostLocationValueContext } from "@/Context/postValueContext";
-import { EditPostSection } from "../PostEdit/EditPostSection";
 import { PostHiddenModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostHidden";
 import { PostDeleteModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostDeleteMOdal";
 import EditPostCard from "../Card/EditPostCard";
+import EditPostSection from "../PostEdit/EditPostSection";
 
 const BuyerMyRequiredPosts = () => {
   const { user } = PrivateRouteContext();

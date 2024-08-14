@@ -58,19 +58,25 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
   return (
     <div className="bg-white mb-0 rounded-t-md grid grid-cols-12 md:grid-cols-10 items-center p-2 relative">
       <div className="col-span-2 md:col-span-1 flex justify-start items-center w-full">
-      <Link href="">
         {userImage ? (
-          <Image
-            width={40}
-            height={40}
-            alt="User Image"
-            src={userImage}
-            className="w-full h-full object-cover rounded-full border-2"
-          />
+          <Link
+            href={
+              userRole === "agent"
+                ? `/user/agent-profile/${user?._id}`
+                : `/user/buyer-profile/${user?._id}`
+            }
+          >
+            <Image
+              width={40}
+              height={40}
+              alt="User Image"
+              src={userImage}
+              className="w-[50px] h-[50px] object-cover rounded-full border-2"
+            />
+          </Link>
         ) : (
           <PlaceholderIcon />
         )}
-        </Link>
       </div>
       <ul className="member-list col-span-8 flex justify-center items-center mx-1">
         <li className="w-full">

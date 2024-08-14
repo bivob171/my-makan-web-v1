@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { SiImessage } from "react-icons/si";
 
 export const NewAgents = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -104,31 +106,50 @@ export const NewAgents = () => {
                     <div
                       ref={lastPostElementRef}
                       key={i}
-                      className="media grid grid-cols-5 !items-center pl-[6px]  mt-[6px]"
+                      className="media grid grid-cols-7 gap-2 !my-4"
                     >
-                      <div className="item-img col-span-1">
-                        <a href="#">
+                      <div className="col-span-2 flex items-center">
+                        <Link
+                          href={`${"/user/agent-profile"}/${agent?._id}`}
+                          className="w-full h-full relative flex justify-center items-center group"
+                        >
                           <Image
                             width={1000}
                             height={100}
-                            className="w-full h-full"
+                            className="w-[58px] h-[58px] object-cover rounded-full"
                             src={agent?.image}
                             alt="Chat"
                           />
-                        </a>
+                          <Image
+                            width={1000}
+                            height={100}
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:hidden"
+                            src="/media/figure/chat_round_shape.png"
+                            alt="Chat"
+                          />
+                          <Image
+                            width={1000}
+                            height={100}
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden group-hover:block hover:-rotate-12 transition duration-100 ease-in-out"
+                            src="/media/figure/chat_round_shape2.png"
+                            alt="Chat"
+                          />
+                        </Link>
                       </div>
                       <div className="media-body col-span-4 !w-full">
                         <h4 className="item-title">
-                          <a href="#">{agent?.fullName}</a>
+                          <Link href={`${"/user/agent-profile"}/${agent?._id}`}>
+                            {agent?.fullName}
+                          </Link>
                         </h4>
-                        <div className="item-username">
+                        <div className="item-username -mt-[6px]">
                           <a href="#">
                             <b>{agent?.companyName}</b>
                           </a>{" "}
                         </div>
-                        <div className="member-status online">
-                          <i className="icofont-speech-comments" />
-                        </div>
+                      </div>
+                      <div className="col-span-1">
+                        <SiImessage className="text-[#1DFF00] w-6 h-6" />
                       </div>
                     </div>
                   );

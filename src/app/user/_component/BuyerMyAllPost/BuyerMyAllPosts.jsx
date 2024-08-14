@@ -23,12 +23,12 @@ import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import { EditPostLocationValueContext } from "@/Context/EditpostValueContext";
-import { EditPostSection } from "../PostEdit/EditPostSection";
 import { PostLocationValueContext } from "@/Context/postValueContext";
 import { PostHiddenModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostHidden";
 import { PostDeleteModal } from "@/app/Component/NewsFeed/PostDeleteAndHiddenModal/PostDeleteMOdal";
 import PackageCard from "../Card/PackageCard";
 import EditPostCard from "../Card/EditPostCard";
+import EditPostSection from "../PostEdit/EditPostSection";
 
 const BuyerMyAllPosts = () => {
   const { user } = PrivateRouteContext();

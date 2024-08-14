@@ -349,14 +349,20 @@ export default function AgentProfile() {
                   className="w-full h-[180px] md:h-[380px] object-cover object-top rounded-b-lg"
                 />
               )}
-              <button
-                type="button"
-                onClick={() => document.getElementById("upload-cover").click()}
-                className="bg-[white] hover:bg-[#fefefef1] py-1 px-3 flex justify-center items-center gap-2 absolute bottom-4 right-4 rounded-md shadow-md"
-              >
-                <MdAddAPhoto className="w-5 h-5" />
-                <span className="text-[16px] font-bold">Edit Cover Photo</span>
-              </button>
+              {profile?._id !== myId ? null : (
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("upload-cover").click()
+                  }
+                  className="bg-[white] hover:bg-[#fefefef1] py-1 px-3 flex justify-center items-center gap-2 absolute bottom-4 right-4 rounded-md shadow-md"
+                >
+                  <MdAddAPhoto className="w-5 h-5" />
+                  <span className="text-[16px] font-bold">
+                    Edit Cover Photo
+                  </span>
+                </button>
+              )}
             </div>
             <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-end gap-3 -mt-8 px-10">
               <div className="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px] border-4 border-[#dbdbdb] rounded-full">
@@ -389,15 +395,17 @@ export default function AgentProfile() {
                     className="w-full h-full object-cover object-top rounded-full shadow-md"
                   />
                 )}
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("upload-profile").click()
-                  }
-                  className="absolute bottom-1 right-0 bg-[#dbdbdb] p-[6px] rounded-full flex justify-center items-center"
-                >
-                  <MdAddAPhoto className="w-5 h-5" />
-                </button>
+                {profile?._id !== myId ? null : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      document.getElementById("upload-profile").click()
+                    }
+                    className="absolute bottom-1 right-0 bg-[#dbdbdb] p-[6px] rounded-full flex justify-center items-center"
+                  >
+                    <MdAddAPhoto className="w-5 h-5" />
+                  </button>
+                )}
               </div>
               <div className="flex md:block flex-col justify-center items-center">
                 <div className="flex justify-start items-center gap-4">

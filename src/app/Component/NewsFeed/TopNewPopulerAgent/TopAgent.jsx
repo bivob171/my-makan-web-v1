@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SiImessage } from "react-icons/si";
 
@@ -108,14 +109,14 @@ export const TopAgent = () => {
                       className="media grid grid-cols-7 gap-2 !my-4"
                     >
                       <div className="col-span-2 flex items-center">
-                        <a
-                          href="#"
+                        <Link
+                          href={`${"/user/agent-profile"}/${agent?._id}`}
                           className="w-full h-full relative flex justify-center items-center group"
                         >
                           <Image
                             width={1000}
                             height={100}
-                            className="w-[90%] h-[90%] object-cover rounded-full"
+                            className="w-[58px] h-[58px] object-cover rounded-full"
                             src={agent?.image}
                             alt="Chat"
                           />
@@ -133,13 +134,15 @@ export const TopAgent = () => {
                             src="/media/figure/chat_round_shape2.png"
                             alt="Chat"
                           />
-                        </a>
+                        </Link>
                       </div>
                       <div className="media-body col-span-4 !w-full">
                         <h4 className="item-title">
-                          <a href="#">{agent?.fullName}</a>
+                          <Link href={`${"/user/agent-profile"}/${agent?._id}`}>
+                            {agent?.fullName}
+                          </Link>
                         </h4>
-                        <div className="item-username">
+                        <div className="item-username -mt-[6px]">
                           <a href="#">
                             <b>{agent?.companyName}</b>
                           </a>{" "}

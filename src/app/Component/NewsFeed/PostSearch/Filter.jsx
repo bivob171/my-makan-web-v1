@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { IoIosArrowRoundForward, IoIosCloseCircleOutline } from "react-icons/io";
+import {
+  IoIosArrowRoundForward,
+  IoIosCloseCircleOutline,
+} from "react-icons/io";
 
-const Filter = ({ onClose, setFilterCount, filterVisible, setFilterVisible }) => {
+const Filter = ({
+  onClose,
+  setFilterCount,
+  filterVisible,
+  setFilterVisible,
+}) => {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedPostTypes, setSelectedPostTypes] = useState([]);
 
   useEffect(() => {
     const savedSelectedType = localStorage.getItem("selectedType");
-    const savedSelectedPostTypes = JSON.parse(localStorage.getItem("selectedPostTypes"));
+    const savedSelectedPostTypes = JSON.parse(
+      localStorage.getItem("selectedPostTypes")
+    );
 
     if (savedSelectedType) setSelectedType(savedSelectedType);
     if (savedSelectedPostTypes) setSelectedPostTypes(savedSelectedPostTypes);
@@ -16,7 +26,10 @@ const Filter = ({ onClose, setFilterCount, filterVisible, setFilterVisible }) =>
 
   useEffect(() => {
     localStorage.setItem("selectedType", selectedType);
-    localStorage.setItem("selectedPostTypes", JSON.stringify(selectedPostTypes));
+    localStorage.setItem(
+      "selectedPostTypes",
+      JSON.stringify(selectedPostTypes)
+    );
   }, [selectedType, selectedPostTypes]);
 
   const handleTypeSelect = (type) => {
@@ -43,7 +56,11 @@ const Filter = ({ onClose, setFilterCount, filterVisible, setFilterVisible }) =>
   };
   return (
     <div className="backdrop-blur-[20px] bg-[#ffffff80] bg-opacity-90 shadow rounded-md w-96 h-auto pt-4 relative">
-      <button onClick={onClose} className="absolute -top-1 -right-1">
+      <button
+        type="button"
+        onClick={() => setFilterVisible(!filterVisible)}
+        className="absolute top-1 right-1"
+      >
         <XCircleIcon className="w-6 h-6 text-[red]" />
       </button>
       <form
@@ -280,13 +297,6 @@ const Filter = ({ onClose, setFilterCount, filterVisible, setFilterVisible }) =>
           </button>
         </footer>
       </form>
-      <button
-        type="button"
-        onClick={() => setFilterVisible(!filterVisible)}
-        className="absolute top-1 right-1"
-      >
-        <IoIosCloseCircleOutline className="w-6 h-6 text-[red]" />
-      </button>
     </div>
   );
 };
