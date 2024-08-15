@@ -24,7 +24,7 @@ const AgentComment = ({ _id }) => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [commentError, setCommentError] = useState("");
   const [replyInput, setReplyInput] = useState(false);
-  const [replyView, setReplyView] = useState(false);
+  const [replyView, setReplyView] = useState("");
   const [replyText, setReplyText] = useState("");
   const [replyRerander, setReplyRerander] = useState(false);
   const replyInputRef = useRef(null);
@@ -61,46 +61,59 @@ const AgentComment = ({ _id }) => {
     commentDa?.forEach((comment) => fetchReplies(comment._id));
   }, [commentDa]);
 
-  const handleReplyDisplay = (repliesList) => {
+  const handleReplyDisplay = (repliesList, commentId) => {
     if (repliesList.length === 1) {
       const reply = repliesList[0];
+      const userIn = reply?.role === "agent" ? reply?.agentId : reply?.userId;
+      console.log(commentId);
+
       return (
         <div className="reply-details">
-          <button
-            className="flex justify-start"
-            onClick={() => setReplyView(!replyView)}
-          >
-            <span className="text-[12px] hover:underline leading-3">
-              <div className="flex justify-start items-center gap-1">
-                <Image
-                  width={40}
-                  height={40}
-                  alt="img"
-                  src={reply?.image}
-                  className="w-[20px] h-[20px] rounded-full border-2 border-[#EDF2F9]"
-                />
-                <h4 className="text-[14px] font-bold text-[#222] m-0 leading-none">
-                  {reply?.fullName} -
-                </h4>
-                <span className="text-[14px] font-bold text-[#777] m-0 leading-none">
-                  replied
-                </span>
-                <span className="text-[10px]">
-                  {/* {formatDate(comment?.createdAt)} */}
-                </span>
-              </div>
-            </span>
-          </button>
+          {replyView === commentId ? null : (
+            <button
+              className="flex justify-start"
+              onClick={() =>
+                setReplyView(replyView === commentId ? null : commentId)
+              }
+            >
+              <span className="text-[12px] hover:underline leading-3">
+                <div className="flex justify-start items-center gap-1">
+                  <Image
+                    width={40}
+                    height={40}
+                    alt="img"
+                    src={userIn?.image}
+                    className="w-[20px] h-[20px] rounded-full border-2 border-[#EDF2F9]"
+                  />
+                  <h4 className="text-[14px] font-bold text-[#222] m-0 leading-none">
+                    {userIn?.fullName} -
+                  </h4>
+                  <span className="text-[14px] font-bold text-[#777] m-0 leading-none">
+                    replied
+                  </span>
+                  <span className="text-[10px]">
+                    {/* {formatDate(comment?.createdAt)} */}
+                  </span>
+                </div>
+              </span>
+            </button>
+          )}
         </div>
       );
     } else if (repliesList?.length > 1) {
       return (
-        <button
-          className="view-more-replies"
-          onClick={() => setReplyView((prev) => !prev)}
-        >
-          {`View Previous ${repliesList?.length - 1} Replies`}
-        </button>
+        <>
+          {replyView === commentId ? null : (
+            <button
+              className="view-more-replies"
+              onClick={() =>
+                setReplyView(replyView === commentId ? null : commentId)
+              }
+            >
+              {`View Previous ${repliesList?.length - 1} Replies`}
+            </button>
+          )}
+        </>
       );
     } else {
       return null;
@@ -152,8 +165,9 @@ const AgentComment = ({ _id }) => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
+    console.log("Comment Rerender Triggered");
     getAllComment(token);
-  }, [sortOrder, sortBy, limit, page, _id, commentRerander]);
+  }, [commentRerander, sortOrder, sortBy, limit, page, _id]);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(
@@ -223,20 +237,9 @@ const AgentComment = ({ _id }) => {
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
+        setCommentRerander((prev) => !prev);
         toast.success("Add Comment successfully!");
         setComment("");
-        setCommentRerander(!commentRerander);
-      }
-// error 
-      if (comment.trim()) {
-        postComment(comment)
-          .then((newComment) => {
-            setComments((prevComments) => [...prevComments, newComment]);
-            setComment("");
-          })
-          .catch((error) => {
-            console.error("Error posting comment:", error);
-          });
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -284,6 +287,7 @@ const AgentComment = ({ _id }) => {
         toast.success("Add Reply successfully!");
         setReplyText("");
         setReplyRerander(!commentRerander);
+        setCommentRerander(!replyRerander);
       }
     } catch (error) {
       toast.error(`${error.message}`);
@@ -420,7 +424,7 @@ const AgentComment = ({ _id }) => {
                           </div>
 
                           {/* reply section */}
-                          {replyView === true ? (
+                          {replyView === comment?._id ? (
                             <div className="my-[10px]">
                               <PostReplySection
                                 id={comment?._id}
@@ -452,6 +456,12 @@ const AgentComment = ({ _id }) => {
                                   placeholder="Reply"
                                   onChange={(e) => setReplyText(e.target.value)}
                                   value={replyText}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                      e.preventDefault();
+                                      handleSubmitReply(comment?._id);
+                                    }
+                                  }}
                                 />
                               </div>
                               <div className="flex justify-center items-center">
@@ -475,7 +485,10 @@ const AgentComment = ({ _id }) => {
                           )}
                           {/* Replied comment area */}
                           {replies[comment?._id] &&
-                            handleReplyDisplay(replies[comment._id])}
+                            handleReplyDisplay(
+                              replies[comment._id],
+                              comment?._id
+                            )}
                         </div>
                       </div>
                     </div>

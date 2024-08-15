@@ -144,7 +144,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
           })}
         </>
       ) : (
-       <div className="hidden" />
+        <div className="hidden" />
       )}
     </div>
   );
