@@ -1,5 +1,11 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -9,6 +15,7 @@ import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "./PostLodaing/PostLodaing";
 import PackageCard from "@/app/user/_component/Card/PackageCard";
+import { FilterRenderContext } from "@/Context/filterRenderContext";
 
 const AllPost = () => {
   const { user } = PrivateRouteContext();
@@ -27,9 +34,77 @@ const AllPost = () => {
   const [like, setlike] = useState(true);
   const [saveRerander, setSaveRerander] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
+
+  const [selectedType, setSelectedType] = useState("");
+  const [postType, setPostType] = useState("");
+  const [forPost, setForPost] = useState("");
+  const [towersorBuildingName, setTowersorBuildingName] = useState("");
+  const [propertyCategoryName, setPropertyCategory] = useState("");
+  const [propertyTypeName, setPropertyType] = useState("");
+  const [parking, setParking] = useState("");
+  const [sellType, setSellType] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [filterRender, setfilterRender] = useState(false);
+
+  const { filterRenderBuyerPost, setfilterRenderBuyerPost } =
+    useContext(FilterRenderContext);
+
+  console.log(filterRenderBuyerPost);
+
+  // Load the city value based on the current route
+  useEffect(() => {
+    const buyerPostFilterValue = localStorage.getItem("buyerPostFilterValue");
+    setCity(buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).city : "");
+    setState(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).state : ""
+    );
+    setCountry(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).country : ""
+    );
+    setSelectedType(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).selectedType : ""
+    );
+    setPostType(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).postType : ""
+    );
+    setForPost(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).forPost : ""
+    );
+    setTowersorBuildingName(
+      buyerPostFilterValue
+        ? JSON.parse(buyerPostFilterValue).towersorBuildingName
+        : ""
+    );
+    setPropertyCategory(
+      buyerPostFilterValue
+        ? JSON.parse(buyerPostFilterValue).propertyCategoryName
+        : ""
+    );
+    setPropertyType(
+      buyerPostFilterValue
+        ? JSON.parse(buyerPostFilterValue).propertyTypeName
+        : ""
+    );
+    setParking(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).parking : ""
+    );
+    setSellType(
+      buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).sellType : ""
+    );
+    setTags(buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).tags : "");
+    setfilterRender(
+      buyerPostFilterValue
+        ? JSON.parse(buyerPostFilterValue).filterRender
+        : false
+    );
+  }, [filterRenderBuyerPost]);
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
+      setLoading(true);
       let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${role}&`;
@@ -37,6 +112,26 @@ const AllPost = () => {
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
+      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
+      if (state !== "") url += `&state=${encodeURIComponent(state)}`;
+      if (city !== "") url += `&city=${encodeURIComponent(city)}`;
+      if (country !== "") url += `&country=${encodeURIComponent(country)}`;
+      if (selectedType !== "")
+        url += `&postType=${encodeURIComponent(selectedType)}`;
+      if (postType !== "") url += `&type=${encodeURIComponent(postType)}`;
+      if (propertyCategoryName !== "")
+        url += `&propertyCategory=${encodeURIComponent(propertyCategoryName)}`;
+      if (propertyTypeName !== "")
+        url += `&propertyType=${encodeURIComponent(propertyTypeName)}`;
+      if (towersorBuildingName !== "")
+        url += `&towersorBuildingName=${encodeURIComponent(
+          towersorBuildingName
+        )}`;
+      if (parking !== "") url += `&parking=${encodeURIComponent(parking)}`;
+      if (tags.length !== 0)
+        url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      if (sellType.length !== 0)
+        url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -66,7 +161,27 @@ const AllPost = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
+  }, [
+    filterRender,
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    like,
+    saveRerander,
+    followRerander,
+    selectedType,
+    forPost,
+    state,
+    country,
+    postType,
+    propertyCategoryName,
+    propertyTypeName,
+    towersorBuildingName,
+    parking,
+    sellType,
+    tags,
+  ]);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(

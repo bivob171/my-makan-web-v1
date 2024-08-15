@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Filter from "./Filter";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
   const [filterVisible, setFilterVisible] = useState(false);
@@ -55,6 +56,8 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
     };
   }, [filterRef]);
 
+  const pathname = usePathname();
+
   return (
     <div className="bg-white mb-0 rounded-t-md grid grid-cols-12 md:grid-cols-10 items-center p-2 relative">
       <div className="col-span-2 md:col-span-1 flex justify-start items-center w-full">
@@ -88,41 +91,46 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
         </li>
       </ul>
       {/* filter dropdown button */}
-      <button
-        className="col-span-1 flex justify-center !items-center hover:bg-[#dfdfdf6e] hover:rounded-full p-1 relative"
-        type="button"
-        onClick={() => setFilterVisible(!filterVisible)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6 text-[#615DFA]"
+      {pathname === "/user/newsfeed" ||
+      pathname === "/user/agent-posts" ||
+      pathname === "/user/buyer-posts" ||
+      pathname === "/user" ? (
+        <button
+          className="col-span-1 flex justify-center !items-center hover:bg-[#dfdfdf6e] hover:rounded-full p-1 relative"
+          type="button"
+          onClick={() => setFilterVisible(!filterVisible)}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-          />
-        </svg>
-        {/* select filter number  */}
-        {filterCount > 0 && (
-          <div className="absolute -top-[5px] right-0">
-            <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
-              <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                {filterCount}
-              </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6 text-[#615DFA]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+            />
+          </svg>
+          {/* select filter number  */}
+          {filterCount > 0 && (
+            <div className="absolute -top-[5px] right-0">
+              <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
+                <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  {filterCount}
+                </span>
+              </div>
             </div>
-          </div>
-        )}
-      </button>
+          )}
+        </button>
+      ) : null}
       {filterVisible && (
         <div ref={filterRef} className="absolute top-[65px] right-0 z-40">
           <Filter
-            onClose={() => setFilterVisible(false)}
             setFilterCount={setFilterCount}
+            filterCount={filterCount}
             filterVisible={filterVisible}
             setFilterVisible={setFilterVisible}
           />
