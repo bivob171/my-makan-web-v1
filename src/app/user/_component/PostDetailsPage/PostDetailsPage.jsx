@@ -509,7 +509,7 @@ export const PostDetailsPage = ({ postid }) => {
                 </div>
               </div>
               {/* blogs  */}
-              <RelatedPosts />
+              <RelatedPosts item={item} />
               <div className="mb-[20px]">
                 {/* sell type  */}
                 <SellTypeSection sellType={sellType} />
