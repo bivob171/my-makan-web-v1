@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
 
-export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
-  const [commentDa, setReplys] = useState(false);
+export const PostReplySection = ({
+  id,
+  replyRerander,
+  setReplyRerander,
+  setReplyDatas,
+  replyDatas,
+}) => {
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -34,7 +39,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
       }
       const allCommentsList = await response.json();
       setHasMore(allCommentsList.length === limit);
-      setReplys((prevPost) =>
+      setReplyDatas((prevPost) =>
         page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
       );
       setLoading(false);
@@ -87,10 +92,10 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   }
 
   return (
-    <div className="w-auto h-auto overflow-y-auto">
-      {commentDa?.length > 0 ? (
+    <div className="w-auto max-h-[300px] overflow-y-auto">
+      {replyDatas?.length > 0 ? (
         <>
-          {commentDa?.map((data, i) => {
+          {replyDatas?.map((data, i) => {
             const comonUser =
               data?.role === "agent" ? data?.agentId : data?.userId;
 

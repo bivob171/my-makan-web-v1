@@ -65,7 +65,6 @@ const AgentComment = ({ _id }) => {
     if (repliesList.length === 1) {
       const reply = repliesList[0];
       const userIn = reply?.role === "agent" ? reply?.agentId : reply?.userId;
-      console.log(commentId);
 
       return (
         <div className="reply-details">
@@ -110,7 +109,7 @@ const AgentComment = ({ _id }) => {
                 setReplyView(replyView === commentId ? null : commentId)
               }
             >
-              {`View Previous ${repliesList?.length - 1} Replies`}
+              {`View Previous ${repliesList?.length} Replies`}
             </button>
           )}
         </>
@@ -128,7 +127,6 @@ const AgentComment = ({ _id }) => {
   const handleEmojiButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
   };
-
   const getAllComment = async (token) => {
     try {
       let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
@@ -150,6 +148,7 @@ const AgentComment = ({ _id }) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allCommentsList = await response.json();
+
       setHasMore(allCommentsList.length === limit);
       setComments((prevPost) =>
         page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
@@ -165,7 +164,6 @@ const AgentComment = ({ _id }) => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    console.log("Comment Rerender Triggered");
     getAllComment(token);
   }, [commentRerander, sortOrder, sortBy, limit, page, _id]);
 
@@ -233,11 +231,11 @@ const AgentComment = ({ _id }) => {
         },
         body: JSON.stringify(commentData),
       });
-
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
-        setCommentRerander((prev) => !prev);
+        const responseData = await response.json();
+        setComments((prevPost) => [responseData, ...prevPost]);
         toast.success("Add Comment successfully!");
         setComment("");
       }
@@ -246,7 +244,9 @@ const AgentComment = ({ _id }) => {
     }
   };
 
-  const handleSubmitReply = async (_id) => {
+  const [replyDatas, setReplyDatas] = useState([]);
+
+  const handleSubmitReply = async (comment) => {
     try {
       let hasError = false;
 
@@ -258,7 +258,12 @@ const AgentComment = ({ _id }) => {
       if (hasError) {
         return;
       }
+
+      const _id = comment._id;
+      const postId = comment.postId;
+
       const replyData = {
+        postId: postId,
         postCommentId: _id,
         reply: replyText,
       };
@@ -280,14 +285,17 @@ const AgentComment = ({ _id }) => {
         },
         body: JSON.stringify(replyData),
       });
+      // Parse the JSON response
 
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
         toast.success("Add Reply successfully!");
         setReplyText("");
-        setReplyRerander(!commentRerander);
-        setCommentRerander(!replyRerander);
+        const responseData = await response.json();
+        setReplyDatas((prevPost) => [responseData, ...prevPost]);
+        setReplyRerander(!replyRerander);
+        setCommentRerander(!commentRerander);
       }
     } catch (error) {
       toast.error(`${error.message}`);
@@ -344,156 +352,160 @@ const AgentComment = ({ _id }) => {
               </>
             ) : (
               <>
-                {displayedComments?.map((comment) => {
-                  const reply =
-                    comment?.commentBy === "agent"
-                      ? comment?.agentId
-                      : comment?.userId;
+                {commentDa
+                  ?.slice(0, showAllComments ? commentDa.length : 1)
+                  .map((comment) => {
+                    const reply =
+                      comment?.commentBy === "agent"
+                        ? comment?.agentId
+                        : comment?.userId;
 
-                  const formatDate = (isoString) => {
-                    if (!isoString) return "Invalid";
+                    const formatDate = (isoString) => {
+                      if (!isoString) return "Invalid";
 
-                    const date = new Date(isoString);
-                    if (isNaN(date.getTime())) return "Invalid";
+                      const date = new Date(isoString);
+                      if (isNaN(date.getTime())) return "Invalid";
 
-                    const now = new Date();
-                    const timeDifference = now - date;
+                      const now = new Date();
+                      const timeDifference = now - date;
 
-                    if (timeDifference < 24 * 60 * 60 * 1000) {
-                      let distance = formatDistanceToNow(date, {
-                        addSuffix: true,
-                      });
+                      if (timeDifference < 24 * 60 * 60 * 1000) {
+                        let distance = formatDistanceToNow(date, {
+                          addSuffix: true,
+                        });
 
-                      // Replace time units with desired format
-                      distance = distance
-                        .replace("minute", "m")
-                        .replace("hour", "h")
-                        .replace("second", "s");
+                        // Replace time units with desired format
+                        distance = distance
+                          .replace("minute", "m")
+                          .replace("hour", "h")
+                          .replace("second", "s");
 
-                      return distance;
-                    }
+                        return distance;
+                      }
 
-                    return format(date, "d MMMM yyyy h:mm a");
-                  };
+                      return format(date, "d MMMM yyyy h:mm a");
+                    };
 
-                  return (
-                    <div
-                      ref={lastPostElementRef}
-                      key={comment?._id}
-                      className={`flex ${
-                        reply?._id === user?._id
-                          ? "justify-end"
-                          : "justify-start"
-                      } text-start mb-1 w-full`}
-                    >
+                    return (
                       <div
+                        ref={lastPostElementRef}
+                        key={comment?._id}
                         className={`flex ${
                           reply?._id === user?._id
                             ? "justify-end"
                             : "justify-start"
-                        } gap-[8px]`}
+                        } text-start mb-1 w-full`}
                       >
-                        <Image
-                          width={40}
-                          height={40}
-                          alt="img"
-                          src={reply?.image}
-                          className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
-                        />
-                        <div>
-                          <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px] !max-w-[420px]">
-                            <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
-                              {reply?.fullName}
-                            </h4>
-                            <p className="text-[#444] m-0 leading-4 !text-[17px]">
-                              {comment?.comment}
-                            </p>
-                          </div>
-                          {/* reply click button  */}
-                          <div className="flex justify-around items-center gap-1 mt-[1px]">
-                            <span className="text-[12px]">
-                              {formatDate(comment?.createdAt)}
-                            </span>
-                            <span className="text-[10px] font-bold">Like</span>
-                            <span
-                              onClick={() => setReplyInput(comment._id)}
-                              className="text-[10px] font-bold cursor-pointer"
-                            >
-                              Reply
-                            </span>
-                          </div>
-
-                          {/* reply section */}
-                          {replyView === comment?._id ? (
-                            <div className="my-[10px]">
-                              <PostReplySection
-                                id={comment?._id}
-                                replyRerander={replyRerander}
-                                setReplyRerander={setReplyRerander}
-                              />
+                        <div
+                          className={`flex ${
+                            reply?._id === user?._id
+                              ? "justify-end"
+                              : "justify-start"
+                          } gap-[8px]`}
+                        >
+                          <Image
+                            width={40}
+                            height={40}
+                            alt="img"
+                            src={reply?.image}
+                            className="w-[45px] h-[45px] rounded-full border-2 border-[#EDF2F9]"
+                          />
+                          <div>
+                            <div className="bg-[#EDF2F9] px-3 py-[6px] rounded-[15px] w-full !min-w-[220px] !max-w-[420px]">
+                              <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
+                                {reply?.fullName}
+                              </h4>
+                              <p className="text-[#444] m-0 leading-4 !text-[17px]">
+                                {comment?.comment}
+                              </p>
                             </div>
-                          ) : null}
+                            {/* reply click button  */}
+                            <div className="flex justify-around items-center gap-1 mt-[1px]">
+                              <span className="text-[12px]">
+                                {formatDate(comment?.createdAt)}
+                              </span>
+                              <span className="text-[10px] font-bold">
+                                Like
+                              </span>
+                              <span
+                                onClick={() => setReplyInput(comment._id)}
+                                className="text-[10px] font-bold cursor-pointer"
+                              >
+                                Reply
+                              </span>
+                            </div>
 
-                          {/* reply input */}
-                          {replyInput === comment?._id && (
-                            <div
-                              ref={replyInputRef}
-                              className="flex items-center gap-x-2 my-[10px]"
-                            >
-                              <div>
-                                <Image
-                                  src={user?.image}
-                                  alt="Chat"
-                                  width={500}
-                                  height={500}
-                                  className="w-7 h-auto rounded-full"
+                            {/* reply section */}
+                            {replyView === comment?._id ? (
+                              <div className="my-[10px]">
+                                <PostReplySection
+                                  id={comment?._id}
+                                  replyRerander={replyRerander}
+                                  setReplyRerander={setReplyRerander}
                                 />
                               </div>
-                              <div>
-                                <input
-                                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                  type="text"
-                                  placeholder="Reply"
-                                  onChange={(e) => setReplyText(e.target.value)}
-                                  value={replyText}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter" && !e.shiftKey) {
-                                      e.preventDefault();
-                                      handleSubmitReply(comment?._id);
+                            ) : null}
+
+                            {/* reply input */}
+                            {replyInput === comment?._id && (
+                              <div
+                                ref={replyInputRef}
+                                className="flex items-center gap-x-2 my-[10px]"
+                              >
+                                <div>
+                                  <Image
+                                    src={user?.image}
+                                    alt="Chat"
+                                    width={500}
+                                    height={500}
+                                    className="w-7 h-auto rounded-full"
+                                  />
+                                </div>
+                                <div>
+                                  <input
+                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="text"
+                                    placeholder="Reply"
+                                    onChange={(e) =>
+                                      setReplyText(e.target.value)
                                     }
-                                  }}
-                                />
-                              </div>
-                              <div className="flex justify-center items-center">
-                                <Tooltip
-                                  title="Submit Reply"
-                                  arrow
-                                  placement="top-start"
-                                >
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleSubmitReply(comment?._id)
-                                    }
-                                    className="hover:bg-[#fff] rounded-full"
+                                    value={replyText}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSubmitReply(comment);
+                                      }
+                                    }}
+                                  />
+                                </div>
+                                <div className="flex justify-center items-center">
+                                  <Tooltip
+                                    title="Submit Reply"
+                                    arrow
+                                    placement="top-start"
                                   >
-                                    <VscSend className="w-[20px] h-[20px]" />
-                                  </button>
-                                </Tooltip>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleSubmitReply(comment)}
+                                      className="hover:bg-[#fff] rounded-full"
+                                    >
+                                      <VscSend className="w-[20px] h-[20px]" />
+                                    </button>
+                                  </Tooltip>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {/* Replied comment area */}
-                          {replies[comment?._id] &&
-                            handleReplyDisplay(
-                              replies[comment._id],
-                              comment?._id
                             )}
+                            {/* Replied comment area */}
+                            {replies[comment?._id] &&
+                              handleReplyDisplay(
+                                replies[comment._id],
+                                comment?._id
+                              )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </>
             )}
           </div>

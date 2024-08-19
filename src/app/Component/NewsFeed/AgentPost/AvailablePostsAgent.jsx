@@ -102,7 +102,9 @@ const AvailablePostsAgent = () => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      setLoading(true);
+      if (filterRender) {
+        setLoading(true);
+      }
       let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${role}&`;

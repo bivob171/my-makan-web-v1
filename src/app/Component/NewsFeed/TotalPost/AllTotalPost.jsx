@@ -94,7 +94,9 @@ export const AllTotalPost = () => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      setLoading(true);
+      if (filterRender) {
+        setLoading(true);
+      }
       let url = `https://api.mymakan.ae/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
