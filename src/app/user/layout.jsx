@@ -1,7 +1,7 @@
 "use client";
 
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { HeaderTop } from "./_component/HeaderTop";
 import PostLocationValueProvider from "@/Context/postValueContext";
 import { Nunito } from "next/font/google";
@@ -14,8 +14,10 @@ const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
 });
+
 export default function Layout({ children }) {
   const { isAuthenticated, loading } = PrivateRouteContext();
+  const pathname = usePathname();
 
   if (loading === true) {
     return (
@@ -30,16 +32,13 @@ export default function Layout({ children }) {
     return (
       <div className="bg-[#EFF4FB]">
         <HeaderTop />
-        <HeaderLeft />{" "}
+        {pathname !== "/user/chats" && <HeaderLeft />}
         <PostLocationValueProvider>
           <EditPostLocationValueProvider>
             <div className={nunito.className}>{children}</div>
           </EditPostLocationValueProvider>
-        </PostLocationValueProvider>{" "}
-        <HeaderRight />{" "}
-        {/* <div className="mt-[40px]">
-            <Footer />
-          </div> */}
+        </PostLocationValueProvider>
+        {pathname !== "/user/chats" && <HeaderRight />}
       </div>
     );
   } else {
