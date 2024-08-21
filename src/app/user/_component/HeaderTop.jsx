@@ -58,7 +58,7 @@ export const HeaderTop = () => {
 
   const router = useRouter();
   return (
-    <header ref={dropdownRef} className="fixed-header !z-40">
+    <header ref={dropdownRef} className="fixed-header !z-40 ">
       <div className="header-menu relative">
         <div className="navbar !h-[100px] flex flex-col md:flex-row gap-y-1">
           <Link href="/user/newsfeed" className="">

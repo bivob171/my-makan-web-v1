@@ -374,7 +374,6 @@ const AgentComment = ({ _id }) => {
                           addSuffix: true,
                         });
 
-                        // Replace time units with desired format
                         distance = distance
                           .replace("minute", "m")
                           .replace("hour", "h")
