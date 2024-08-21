@@ -3,7 +3,7 @@ import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://api.mymakan.ae");
 export const PostReplySection = ({
   id,
   replyRerander,

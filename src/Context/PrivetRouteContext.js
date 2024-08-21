@@ -69,7 +69,7 @@ const PrivateRouteContext = () => {
     let socket;
 
     if (user) {
-      socket = io("http://localhost:4000"); // Ensure this matches your backend's URL
+      socket = io("https://api.mymakan.ae"); // Ensure this matches your backend's URL
 
       socket.on("connect", () => {
         console.log("Connected to the server");

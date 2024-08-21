@@ -12,7 +12,7 @@ import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://api.mymakan.ae");
 
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
