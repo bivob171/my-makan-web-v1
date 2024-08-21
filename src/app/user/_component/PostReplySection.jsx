@@ -139,6 +139,7 @@ export const PostReplySection = ({
             return (
               <div
                 ref={lastPostElementRef}
+                id={data._id}
                 key={i}
                 className={`flex text-start mb-2`}
               >

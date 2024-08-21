@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import io from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
 const Footer = dynamic(() => import("../Component/Footer/Footer"), {
@@ -61,6 +62,7 @@ export default function Layout({ children }) {
           <Footer />
         </div>
       )}
+      <ToastContainer position="top-right" />
     </div>
   );
 }

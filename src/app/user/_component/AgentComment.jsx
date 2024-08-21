@@ -11,6 +11,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
+import { useRouter } from "next/navigation";
 
 const socket = io("https://api.mymakan.ae");
 
@@ -182,23 +183,30 @@ const AgentComment = ({ _id }) => {
   }, [commentRerander, sortOrder, sortBy, limit, page, _id]);
 
   useEffect(() => {
-    socket.on("newCommentCreate", (newComment) => {
-      setComments((prevComments) => [newComment, ...prevComments]);
-    });
-    socket.on("commentUpdate", (updatedComment) => {
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment._id === updatedComment._id ? updatedComment : comment
-        )
-      );
-    });
-
-    // Clean up the socket listener when the component unmounts
-    return () => {
-      socket.off("newCommentCreate");
-      socket.off("commentUpdate");
+    const handleNewComment = (newComment) => {
+      if (newComment.postId._id === _id) {
+        setComments((prevComments) => [newComment, ...prevComments]);
+      }
     };
-  }, []);
+
+    const handleUpdatedComment = (updatedComment) => {
+      if (updatedComment.postId._id === _id) {
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment._id === updatedComment._id ? updatedComment : comment
+          )
+        );
+      }
+    };
+
+    socket.on("newCommentCreate", handleNewComment);
+    socket.on("commentUpdate", handleUpdatedComment);
+
+    return () => {
+      socket.off("newCommentCreate", handleNewComment);
+      socket.off("commentUpdate", handleUpdatedComment);
+    };
+  }, [_id, socket]);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(
@@ -297,8 +305,6 @@ const AgentComment = ({ _id }) => {
 
   useEffect(() => {
     const handleNewReplyCreate = (newReply) => {
-      console.log(newReply);
-
       fetchReplies(newReply.postCommentId);
     };
     socket.on("newReplyCreate", handleNewReplyCreate);
@@ -306,7 +312,6 @@ const AgentComment = ({ _id }) => {
     // Clean up the socket listeners when the component unmounts
     return () => {
       socket.off("newReplyCreate");
-      // socket.off("replyUpdate");
     };
   }, []);
 
@@ -539,6 +544,33 @@ const AgentComment = ({ _id }) => {
     }
   };
 
+  // notify routing
+
+  const router = useRouter();
+
+  const { query } = router;
+
+  // Use optional chaining and default values
+  const commentId = query?.commentId || null;
+  const reply = query?.reply || null;
+
+  useEffect(() => {
+    if (commentId) {
+      const commentElement = document.getElementById(commentId);
+      if (commentElement) {
+        commentElement.scrollIntoView({ behavior: "smooth" });
+        commentElement.classList.add("highlight"); // Optionally add a class to highlight the comment
+      }
+    }
+    if (reply) {
+      const replyElement = document.getElementById(reply);
+      if (replyElement) {
+        replyElement.scrollIntoView({ behavior: "smooth" });
+        replyElement.classList.add("highlight"); // Optionally add a class to highlight the reply
+      }
+    }
+  }, [commentId, reply]);
+
   return (
     <div className="blog-comment-form">
       <div className="">
@@ -562,7 +594,7 @@ const AgentComment = ({ _id }) => {
             className={`${
               showAllComments === false
                 ? " my-2 flex flex-col-reverse"
-                : "overflow-y-auto max:h-[600px] my-2 flex flex-col-reverse"
+                : "overflow-y-auto h-[600px] my-2 flex flex-col-reverse"
             }`}
           >
             {commentDa?.length === 0 ? (
@@ -596,6 +628,7 @@ const AgentComment = ({ _id }) => {
                         });
 
                         distance = distance
+                          .replace("about ", "")
                           .replace("minute", "m")
                           .replace("hour", "h")
                           .replace("second", "s");
@@ -610,6 +643,7 @@ const AgentComment = ({ _id }) => {
                       <div
                         ref={lastPostElementRef}
                         key={comment?._id}
+                        id={comment?._id}
                         className={`flex ${
                           reply?._id === user?._id
                             ? "justify-end"
