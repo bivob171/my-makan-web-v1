@@ -9,14 +9,16 @@ import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import FilterRenderProvider from "@/Context/filterRenderContext";
-
+import io from "socket.io-client";
+import { useEffect, useState } from "react";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
   display: "swap",
 });
 export default function Layout({ children }) {
-  const { isAuthenticated, loading } = PrivateRouteContext();
+  const { isAuthenticated, loading, user, setIsConnected, setCustomEventData } =
+    PrivateRouteContext();
 
   if (loading === true) {
     return (

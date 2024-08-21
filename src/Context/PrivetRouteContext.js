@@ -4,6 +4,7 @@ import axios from "axios";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { createContext, useEffect, useState, useCallback } from "react";
+import io from "socket.io-client";
 
 const PrivateRouteContext = () => {
   const router = useRouter();
@@ -11,6 +12,8 @@ const PrivateRouteContext = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [render, setRender] = useState(false);
+  const [isConnected, setIsConnected] = useState(false); // Track connection status
+  const [customEventData, setCustomEventData] = useState(null); // Track custom event data
   const logOut = useCallback(() => {
     setLoading(true);
     setUser(null);
@@ -62,7 +65,50 @@ const PrivateRouteContext = () => {
     }
   }, [render]);
 
-  return { isAuthenticated, user, loading, setRender, render, logOut };
+  useEffect(() => {
+    let socket;
+
+    if (user) {
+      socket = io("http://localhost:4000"); // Ensure this matches your backend's URL
+
+      socket.on("connect", () => {
+        console.log("Connected to the server");
+        socket.emit("userConnected", { userId: user._id });
+        setIsConnected(true);
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Disconnected from the server");
+        // socket.emit("userDisconnected", { userId: user._id });
+        setIsConnected(false);
+      });
+
+      socket.on("customEvent", (data) => {
+        console.log("Custom event received:", data);
+        setCustomEventData(data);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.emit("userDisconnected", { userId: user._id }); // Emit before disconnect
+        socket.disconnect();
+      }
+    };
+  }, [user]);
+
+  return {
+    isAuthenticated,
+    user,
+    loading,
+    setRender,
+    render,
+    logOut,
+    isConnected,
+    setIsConnected,
+    customEventData,
+    setCustomEventData,
+  };
 };
 
 export default PrivateRouteContext;

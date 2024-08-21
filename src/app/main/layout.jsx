@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import io from "socket.io-client";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
 const Footer = dynamic(() => import("../Component/Footer/Footer"), {
   ssr: false,
@@ -14,8 +16,10 @@ const Preloader = dynamic(() => import("../Component/Preloder/Preloader"), {
 });
 
 export default function Layout({ children }) {
+  const { user, setIsConnected, setCustomEventData } = PrivateRouteContext();
   const [isSticky, setIsSticky] = useState(false);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0.8) {

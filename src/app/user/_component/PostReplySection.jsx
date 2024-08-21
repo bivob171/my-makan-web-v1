@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
+import io from "socket.io-client";
 
+const socket = io("http://localhost:4000");
 export const PostReplySection = ({
   id,
   replyRerander,
@@ -55,6 +57,27 @@ export const PostReplySection = ({
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
   }, [sortOrder, sortBy, limit, page, id, replyRerander]);
+
+  useEffect(() => {
+    socket.on("newReplyCreate", (newComment) => {
+      setReplyDatas((prevComments) => [...prevComments, newComment]);
+      setReplyRerander(!replyRerander);
+    });
+    socket.on("replyUpdate", (updatedComment) => {
+      setReplyDatas((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === updatedComment._id ? updatedComment : comment
+        )
+      );
+      setReplyRerander(!replyRerander);
+    });
+
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("newReplyCreate");
+      socket.off("replyUpdate");
+    };
+  }, []);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(
