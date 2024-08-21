@@ -31,6 +31,14 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/socket.io/:path*",
+        destination: "https://api.mymakan.ae/socket.io/:path*", // Proxy to backend
+      },
+    ];
+  },
 };
 
 export default nextConfig;
