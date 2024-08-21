@@ -35,11 +35,13 @@ export default function Layout({ children }) {
       <div className="bg-[#EFF4FB]">
         <HeaderTop />
         {pathname !== "/user/chats" && <HeaderLeft />}
-        <PostLocationValueProvider>
-          <EditPostLocationValueProvider>
-            <div className={nunito.className}>{children}</div>
-          </EditPostLocationValueProvider>
-        </PostLocationValueProvider>
+        <FilterRenderProvider>
+          <PostLocationValueProvider>
+            <EditPostLocationValueProvider>
+              <div className={nunito.className}>{children}</div>
+            </EditPostLocationValueProvider>
+          </PostLocationValueProvider>
+        </FilterRenderProvider>
         {pathname !== "/user/chats" && <HeaderRight />}
       </div>
     );

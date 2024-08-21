@@ -179,7 +179,7 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(`https://api.mymakan.ae/auth/user/signUp`, {
+      const response = await fetch(`http://localhost:4000/auth/user/signUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -285,7 +285,7 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(`https://api.mymakan.ae/auth/agent/signUp`, {
+      const response = await fetch(`http://localhost:4000/auth/agent/signUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -336,7 +336,7 @@ export const SignupForm = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://localhost:4000/company`, {
         params: {
           search,
           page,

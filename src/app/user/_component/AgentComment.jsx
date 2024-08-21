@@ -12,7 +12,7 @@ import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 
-const socket = io("https://api.mymakan.ae");
+const socket = io("http://localhost:4000");
 
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
@@ -47,7 +47,7 @@ const AgentComment = ({ _id }) => {
 
   const fetchReplies = async (commentId) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment-reply/${commentId}`;
+      let url = `http://localhost:4000/all-post-comment-reply/${commentId}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -143,7 +143,7 @@ const AgentComment = ({ _id }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      let url = `http://localhost:4000/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -266,7 +266,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
+      const apiUrl = "http://localhost:4000/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -283,6 +283,10 @@ const AgentComment = ({ _id }) => {
         // setComments((prevPost) => [responseData, ...prevPost]);
         toast.success("Add Comment successfully!");
         setComment("");
+        setMentionAgentId([]);
+        setMentionName([]);
+        setMentionUserId([]);
+        setMentionRole([]);
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -338,10 +342,15 @@ const AgentComment = ({ _id }) => {
           postId: postId._id,
           postCommentId: _id,
           reply: replyText,
+          mention: false,
+          mentionRole: [],
+          mentionAgentId: [],
+          mentionUserId: [],
         };
       }
 
       console.log(replyData);
+      console.log(mentionReplyRole.length);
 
       let token;
       const userRole = localStorage.getItem("role");
@@ -350,7 +359,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+      const apiUrl = "http://localhost:4000/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -371,6 +380,10 @@ const AgentComment = ({ _id }) => {
         // setReplyDatas((prevPost) => [responseData, ...prevPost]);
         // setReplyRerander(!replyRerander);
         // setCommentRerander(!commentRerander);
+        setMentionReplyAgentId([]);
+        setMentionReplyName([]);
+        setMentionReplyUserId([]);
+        setMentionReplyRole([]);
       }
     } catch (error) {
       toast.error(`${error.message}`);
@@ -414,7 +427,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/following-agent?`;
+      let url = `http://localhost:4000/follow/following-agent?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

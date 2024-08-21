@@ -62,7 +62,7 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(`https://api.mymakan.ae/auth/user/login`, {
+      const response = await fetch(`http://localhost:4000/auth/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(`https://api.mymakan.ae/auth/agent/login`, {
+      const response = await fetch(`http://localhost:4000/auth/agent/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

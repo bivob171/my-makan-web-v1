@@ -16,7 +16,7 @@ export const TopAgent = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/agent/all-get?`;
+      let url = `http://localhost:4000/agent/all-get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
