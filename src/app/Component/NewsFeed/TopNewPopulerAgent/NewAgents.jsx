@@ -17,7 +17,7 @@ export const NewAgents = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `http://localhost:4000/agent/all-get?`;
+      let url = `https://api.mymakan.ae/agent/all-get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

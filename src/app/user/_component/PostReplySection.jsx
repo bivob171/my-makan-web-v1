@@ -3,7 +3,7 @@ import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://api.mymakan.ae");
 export const PostReplySection = ({
   id,
   replyRerander,
@@ -21,7 +21,7 @@ export const PostReplySection = ({
 
   const getAllComment = async (token) => {
     try {
-      let url = `http://localhost:4000/all-post-comment-reply/${id}?`;
+      let url = `https://api.mymakan.ae/all-post-comment-reply/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`; // Sorting in ascending order

@@ -35,7 +35,7 @@ const nextConfig = {
     return [
       {
         source: "/socket.io/:path*",
-        destination: "http://localhost:4000/socket.io/:path*", // Proxy to backend
+        destination: "https://api.mymakan.ae/socket.io/:path*", // Proxy to backend
       },
     ];
   },

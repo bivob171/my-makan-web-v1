@@ -101,7 +101,7 @@ export const RequiredTotalPost = () => {
       if (filterRender) {
         setLoading(true);
       }
-      let url = `http://localhost:4000/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;

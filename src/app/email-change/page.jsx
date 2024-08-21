@@ -79,7 +79,7 @@ export default function EmailChange() {
         newEmail: emailNew,
         password: password,
       };
-      const response = await fetch(`http://localhost:4000/auth/email-change`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/email-change`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export default function EmailChange() {
       };
 
       const response = await fetch(
-        `http://localhost:4000/auth/agent/email-change`,
+        `https://api.mymakan.ae/auth/agent/email-change`,
         {
           method: "POST",
           headers: {

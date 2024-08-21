@@ -48,8 +48,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "http://localhost:4000/agent/myProfile"
-        : "http://localhost:4000/user/myProfile";
+        ? "https://api.mymakan.ae/agent/myProfile"
+        : "https://api.mymakan.ae/user/myProfile";
 
     if (endpoint) {
       const token = getStoredToken(userRole);
@@ -69,7 +69,7 @@ const PrivateRouteContext = () => {
     let socket;
 
     if (user) {
-      socket = io("http://localhost:4000"); // Ensure this matches your backend's URL
+      socket = io("https://api.mymakan.ae"); // Ensure this matches your backend's URL
 
       socket.on("connect", () => {
         console.log("Connected to the server");
