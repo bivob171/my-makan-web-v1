@@ -204,7 +204,7 @@ export const LoginForm = () => {
                 password*
               </span>
               <button
-                type="button" 
+                type="button"
                 className="label-text absolute inset-y-0  right-4 top-[5px]"
                 onClick={show}
               >

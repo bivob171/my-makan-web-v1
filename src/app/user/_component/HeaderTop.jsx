@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
 import Link from "next/link";
 import { FaComments, FaMinus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import axios from "axios";
+import toast from "react-hot-toast";
+import io from "socket.io-client";
+import { formatDistanceToNow, format, formatDate } from "date-fns"; // Ensure you have these imports
+import { IoClose } from "react-icons/io5";
+import { Howl } from "howler";
+
+const socket = io("https://api.mymakan.ae");
 
 const Icofont = dynamic(() => import("react-icofont"), { ssr: false });
 const HTopNotification = dynamic(() => import("./HTopNotification"), {
@@ -57,6 +65,270 @@ export const HeaderTop = () => {
   };
 
   const router = useRouter();
+
+  // notification
+  const observer = useRef();
+  const [allNotification, setAllNotification] = useState([]);
+  const [allNotificationLength, setAllNotificationLength] = useState([]);
+  const [loadingNotify, setLoadingNotify] = useState(true);
+  const [sortByNotify, setSortByNotify] = useState("createdAt");
+  const [sortOrderNotify, setSortOrderNotify] = useState("desc");
+  const [limitNotify, setLimitNotify] = useState(3);
+  const [pageNotify, setPageNotify] = useState(1);
+  const [hasMoreNotify, setHasMoreNotify] = useState(true);
+  const [isFetchingNotify, setIsFetchingNotify] = useState(false);
+  const [unseenCount, setUnseenCount] = useState(
+    () => parseInt(localStorage.getItem("unseenCount")) || 0
+  );
+
+  const getAllNotification = async (token) => {
+    setIsFetchingNotify(true);
+    try {
+      let url = `https://api.mymakan.ae/notification/my-all-com-notification?`;
+
+      url += `sortBy=${sortByNotify}&`;
+      url += `sortOrder=${sortOrderNotify}&`;
+      url += `page=${pageNotify}&`;
+      url += `limit=${limitNotify}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const allNotify = await response.json();
+      setHasMoreNotify(allNotify.length === limitNotify);
+      setAllNotification((prevPosts) =>
+        pageNotify === 1 ? allNotify : [...prevPosts, ...allNotify]
+      );
+      setLoadingNotify(false);
+    } catch (error) {
+      console.error("Error fetching:", error);
+    } finally {
+      setIsFetchingNotify(false);
+    }
+  };
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    getAllNotification(token);
+  }, [sortOrderNotify, sortByNotify, limitNotify, pageNotify]);
+
+  const lastPostElementRefNotify = useCallback(
+    (node) => {
+      if (isFetchingNotify) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMoreNotify) {
+          setPageNotify((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNotify, hasMoreNotify]
+  );
+
+  const updateMultipleNotifications = async (ids) => {
+    try {
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      const response = await axios.patch(
+        `https://api.mymakan.ae/notification/multiple-update`,
+        { ids },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating notifications:", error);
+      throw error;
+    }
+  };
+
+  const handleNotificationMarkAsRead = async () => {
+    const notificationIds = allNotification.map(
+      (notification) => notification._id
+    );
+
+    try {
+      // Perform the API call to update the notifications
+      await updateMultipleNotifications(notificationIds);
+
+      // Optimistically update the state assuming the update was successful
+      setAllNotification((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notificationIds.includes(notification._id)
+            ? { ...notification, read: true } // Assume `read` is the property to mark as read
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update notifications:", error);
+    }
+  };
+
+  const handleSingleNotificationMarkAsRead = async (notificationId) => {
+    try {
+      // Perform the API call to update the notification
+      await updateMultipleNotifications([notificationId]);
+
+      // Optimistically update the state assuming the update was successful
+      setAllNotification((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification._id === notificationId
+            ? { ...notification, read: true } // Assume `read` is the property to mark as read
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update notifications:", error);
+    }
+  };
+  const playNotificationSound = () => {
+    const notificationSound = new Audio("/audio/notification.mp3");
+    notificationSound.volume = 1.0;
+
+    notificationSound.addEventListener("canplaythrough", () => {
+      notificationSound.play();
+    });
+  };
+
+  useEffect(() => {
+    const handleNewNotifyCreate = (newnotify) => {
+      const {
+        _id,
+        createdAt,
+        mention,
+        notifyingType,
+        notifyingUserId,
+        notifyingAgentId,
+        nitifyerUserId,
+        nitifyerAgentId,
+        mentionAgentId,
+        mentionUserId,
+        notifyFor,
+        notifyerType,
+      } = newnotify;
+
+      const commonUser =
+        notifyerType === "agent" ? nitifyerAgentId : nitifyerUserId;
+
+      const mentionMe =
+        user?.role === "agent"
+          ? mentionAgentId.some((item) => item._id === user?._id)
+          : mentionUserId.some((item) => item._id === user?._id);
+
+      const notifyText = (() => {
+        if (mention === true && mentionMe === true) {
+          if (notifyFor === "comment") {
+            return `${commonUser?.fullName} mentioned you in a post`;
+          }
+          if (notifyFor === "reply") {
+            return `${commonUser?.fullName} mentioned you in a comment`;
+          }
+          return `${commonUser?.fullName} mentioned you`;
+        }
+
+        switch (notifyFor) {
+          case "comment":
+            return `${commonUser?.fullName} commented on your post`;
+          case "reply":
+            return `${commonUser?.fullName} replied to your comment`;
+          case "like":
+            return `${commonUser?.fullName} liked your post`;
+          case "follow":
+            return `${commonUser?.fullName} started following you`;
+          case "unfollow":
+            return `${commonUser?.fullName} unfollowed you`;
+          default:
+            return "";
+        }
+      })();
+
+      // You can include image URL in the notification data if available
+      const userImage = commonUser?.image; // Replace with default image URL if necessary
+      const userName = commonUser?.fullName; // Replace with default image URL if necessary
+
+      if (
+        (user?.role === "agent" &&
+          user?._id === newnotify?.notifyingAgentId?._id &&
+          user?._id !== newnotify?.nitifyerAgentId?._id) ||
+        newnotify.mentionAgentId.some((item) => item._id === user?._id) ||
+        (user?.role === "buyer" &&
+          user?._id === newnotify?.notifyingUserId?._id &&
+          user?._id !== newnotify?.nitifyerUserId?._id) ||
+        newnotify.mentionUserId.some((item) => item._id === user?._id)
+      ) {
+        setAllNotification((prevNotifys) => [newnotify, ...prevNotifys]);
+        playNotificationSound();
+        const tostId = toast(
+          <div className="relative">
+            <div className="flex items-center ">
+              <img
+                src={userImage}
+                alt="User"
+                className="w-[32px] h-[32px] rounded-full mr-2"
+              />
+              <div>
+                <p className="text-[15px] font-semibold leading-[18px] -mb-0">
+                  {userName}
+                </p>
+                <p className="text-[14px] font-medium leading-[18px] -mb-0">
+                  {notifyText}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => toast.dismiss(tostId)} // Close the toast
+              className="ml-2 p-1 text-gray-500 hover:text-gray-700 absolute -top-[12px] -right-[15px]"
+            >
+              <IoClose className="w-5 h-5" />
+            </button>
+          </div>,
+          {
+            autoClose: 3000, // Adjust as needed
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
+        setUnseenCount((prevCount) => {
+          const newCount = prevCount + 1;
+          localStorage.setItem("unseenCount", newCount);
+          return newCount;
+        });
+      }
+    };
+
+    socket.on("newNotifyCreate", handleNewNotifyCreate);
+
+    return () => {
+      socket.off("newNotifyCreate", handleNewNotifyCreate);
+    };
+  }, [user]);
+
+  useEffect(() => {
+    if (notificationOpen === true) {
+      setUnseenCount(0);
+      localStorage.setItem("unseenCount", 0);
+    }
+  }, [notificationOpen]);
+
+  // match Propertice
+
+  // massage
+
   return (
     <header ref={dropdownRef} className="fixed-header !z-40 ">
       <div className="header-menu relative">
@@ -206,12 +478,18 @@ export const HeaderTop = () => {
                     setMatchOpen(false);
                     setMessageOpen(false);
                     setIsVisible(false);
+
+                    // Clear the unseen notification count
+                    setUnseenCount(0);
+                    localStorage.setItem("unseenCount", 0);
                   }}
                   data-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <i className="icofont-notification" />
-                  <span className="notify-count">3</span>
+                  {unseenCount === 0 ? null : (
+                    <span className="notify-count">{unseenCount}</span>
+                  )}
                 </button>
               </div>
             </div>
@@ -281,6 +559,16 @@ export const HeaderTop = () => {
               logOut={logOut}
               notificationOpen={notificationOpen}
               messageOpen={messageOpen}
+              allNotification={allNotification}
+              lastPostElementRefNotify={lastPostElementRefNotify}
+              loadingNotify={loadingNotify}
+              hasMoreNotify={hasMoreNotify}
+              isFetchingNotify={isFetchingNotify}
+              handleNotificationMarkAsRead={handleNotificationMarkAsRead}
+              handleSingleNotificationMarkAsRead={
+                handleSingleNotificationMarkAsRead
+              }
+              user={user}
             />
           </div>
         </div>

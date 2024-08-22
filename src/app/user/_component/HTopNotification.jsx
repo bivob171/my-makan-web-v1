@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaComments, FaMinus } from "react-icons/fa6";
+import { format, formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 const HTopNotification = ({
   isVisible,
@@ -11,7 +13,58 @@ const HTopNotification = ({
   logOut,
   notificationOpen,
   messageOpen,
+  lastPostElementRefNotify,
+  allNotification,
+  loadingNotify,
+  hasMoreNotify,
+  isFetchingNotify,
+  handleNotificationMarkAsRead,
+  handleSingleNotificationMarkAsRead,
+  user,
 }) => {
+  const [notifyScroll, setNotifyScroll] = useState(false);
+
+  // notification
+  const router = useRouter();
+
+  const handleNotificationClick = (notification) => {
+    const {
+      _id,
+      notifyFor,
+      postCommentId, // Ensure this is part of the notification object
+      postId, // Ensure this is part of the notification object
+      read,
+      createdAt,
+      mention,
+      notifyingType,
+      notifyingUserId,
+      notifyingAgentId,
+      nitifyerUserId,
+      nitifyerAgentId,
+      mentionAgentId,
+      mentionUserId,
+      commentReplyId,
+    } = notification;
+
+    // // Mark the notification as read
+    handleSingleNotificationMarkAsRead(_id);
+
+    console.log(notification);
+
+    // Redirect to the appropriate page
+    if (notifyFor === "comment" && postCommentId._id && postId._id) {
+      router.push(
+        `/user/post-details/${postId._id}?commentId=${postCommentId._id}`
+      ); // Redirect to the post details page with the comment ID
+    } else if (notifyFor === "reply" && commentReplyId._id && postId._id) {
+      router.push(
+        `/user/post-details/${postId._id}?commentId=${postCommentId._id}&reply=${commentReplyId._id}`
+      ); // Redirect to the post details page with the comment ID and reply ID
+    } else if (notifyFor === "like" && postId._id) {
+      router.push(`/user/post-details/${postId._id}`); // Redirect to the post details page
+    }
+  };
+
   return (
     <>
       <div
@@ -344,106 +397,214 @@ const HTopNotification = ({
             <h6 className="pt-[10px] font-bold text-black leading-[15px]">
               Notification
             </h6>
-            <div className="text-right">
+            <div className="text-right flex gap-x-[15px]">
               <a
                 href="#"
                 className="mr-3 text-xs text-gray-500 no-underline transition-all duration-300 ease-in-out cursor-pointer hover:text-[#615dfa]"
               >
                 Settings
               </a>
-              <a
-                href="#"
+              <p
+                onClick={handleNotificationMarkAsRead}
                 className="text-xs text-gray-500 no-underline transition-all duration-300 ease-in-out cursor-pointer hover:text-[#615dfa]"
               >
                 Mark all as Read
-              </a>
+              </p>
             </div>
           </div>
           <div>
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-auto h-auto"
-                  src="/media/figure/notifiy_1.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Diana Jameson</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
-
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
+            <div>
+              {loadingNotify && (
+                <div>
+                  <div>
+                    {[1, 2, 3, 4].map((i) => {
+                      return (
+                        <div key={i} class="h-14  rounded-md w-60 pl-[20px]">
+                          <div class="flex flex-row items-center justify-cente h-full space-x-5 animate ">
+                            <div class="w-10 h-10 bg-gray-300 rounded-full "></div>
+                            <div class="flex flex-col space-y-3 mt-1">
+                              <div class="h-2 bg-gray-300 rounded-md w-36 "></div>
+                              <div class="w-24 h-[6px] bg-gray-300 rounded-md "></div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto rounded-full"
-                  src="/media/figure/notifiy_3.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Bayzid Islam</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
-
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
+              )}
+              {!loadingNotify && allNotification?.length === 0 && (
+                <div className="text-center text-gray-500 mt-4">
+                  No Notification available.
                 </div>
-              </div>
-            </div>
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto rounded-full"
-                  src="/media/figure/notifiy_3.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Bayzid Islam</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
+              )}
+              {!loadingNotify && allNotification.length > 0 && (
+                <div
+                  className={`${
+                    notifyScroll === true
+                      ? "grid grid-cols-1  h-[310px] overflow-y-auto"
+                      : "grid grid-cols-1  h-[250px] overflow-hidden"
+                  }`}
+                >
+                  {allNotification?.map((item, i) => {
+                    const {
+                      read,
+                      _id,
+                      createdAt,
+                      mention,
+                      notifyingType,
+                      notifyingUserId,
+                      notifyingAgentId,
+                      nitifyerUserId,
+                      nitifyerAgentId,
+                      mentionAgentId,
+                      mentionUserId,
+                      notifyFor,
+                      notifyerType,
+                    } = item;
 
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
+                    const commonUser =
+                      notifyerType === "agent"
+                        ? nitifyerAgentId
+                        : nitifyerUserId;
+
+                    const mentionMe =
+                      user?.role === "agent"
+                        ? mentionAgentId.some((item) => item._id === user?._id)
+                        : mentionUserId.some((item) => item._id === user?._id);
+
+                    const notifyText = (() => {
+                      if (mention === true && mentionMe === true) {
+                        if (notifyFor === "comment") {
+                          return `${commonUser?.fullName} mentioned you in a post`;
+                        }
+                        if (notifyFor === "reply") {
+                          return `${commonUser?.fullName} mentioned you in a comment`;
+                        }
+                        return `${commonUser?.fullName} mentioned you`;
+                      }
+
+                      switch (notifyFor) {
+                        case "comment":
+                          return `${commonUser?.fullName} commented on your post`;
+                        case "reply":
+                          return `${commonUser?.fullName} replied to your comment`;
+                        case "like":
+                          return `${commonUser?.fullName} liked your post`;
+                        case "follow":
+                          return `${commonUser?.fullName} started following you`;
+                        case "unfollow":
+                          return `${commonUser?.fullName} unfollowed you`;
+                        default:
+                          return "";
+                      }
+                    })();
+
+                    const formatDate = (isoString) => {
+                      if (!isoString) return "Invalid";
+
+                      const date = new Date(isoString);
+                      if (isNaN(date.getTime())) return "Invalid";
+
+                      const now = new Date();
+                      const timeDifference = now - date;
+
+                      if (timeDifference < 24 * 60 * 60 * 1000) {
+                        let distance = formatDistanceToNow(date, {
+                          addSuffix: true,
+                        });
+
+                        distance = distance
+                          .replace("about ", "")
+                          .replace("minute", "m")
+                          .replace("hour", "h")
+                          .replace("second", "s");
+
+                        return distance;
+                      }
+
+                      return format(date, "d MMMM yyyy h:mm a");
+                    };
+                    return (
+                      <div ref={lastPostElementRefNotify} key={i}>
+                        <div
+                          onClick={() => handleNotificationClick(item)}
+                          className={`${
+                            read === false
+                              ? "flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out bg-[#F6F9FD] cursor-pointer"
+                              : "flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD] cursor-pointer"
+                          }`}
+                        >
+                          <div className="mr-3 mt-[9px]">
+                            <Image
+                              width={1000}
+                              height={100}
+                              className="rounded-full w-[40px] h-[40px]"
+                              src={commonUser?.image}
+                              alt="Notify"
+                            />
+                            <span className="chat-status offline" />
+                          </div>
+                          <div className="relative flex-1 mt-[4px]">
+                            <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                              <a href="#">{commonUser?.fullName}</a>
+                            </h6>
+                            <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                              {notifyText}
+                            </p>
+
+                            <div className="absolute top-[5px] right-0 flex gap-x-2.5">
+                              <p className="text-[11px] font-semibold text-gray-500 leading-4">
+                                {formatDate(createdAt)}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {!hasMoreNotify && allNotification?.length !== 0 && (
+                    <div className="mb-[10px] mt-[10px] text-center">
+                      <p>No more Notification to load.</p>
+                    </div>
+                  )}
+
+                  {isFetchingNotify && (
+                    <div className="mb-[5px] mt-[5px] text-center">
+                      <div>
+                        {[1, 2, 3].map((i) => {
+                          return (
+                            <div
+                              key={i}
+                              class="h-14  rounded-md w-60 pl-[20px]"
+                            >
+                              <div class="flex flex-row items-center justify-cente h-full space-x-5 animate ">
+                                <div class="w-10 h-10 bg-gray-300 rounded-full "></div>
+                                <div class="flex flex-col space-y-3 mt-1">
+                                  <div class="h-2 bg-gray-300 rounded-md w-36 "></div>
+                                  <div class="w-24 h-[6px] bg-gray-300 rounded-md "></div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
-          <div className=" mt-[15px]">
-            <button className="focus:outline-none w-full h-[60px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter">
-              View All Notification
-            </button>
+          <div className=" ">
+            {notifyScroll === false ? (
+              <button
+                type="button"
+                onClick={() => setNotifyScroll(!notifyScroll)}
+                className="focus:outline-none w-full h-[60px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter"
+              >
+                View All Notification
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

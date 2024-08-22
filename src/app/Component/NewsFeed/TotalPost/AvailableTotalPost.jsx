@@ -1,5 +1,11 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -9,6 +15,7 @@ import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "../PostLodaing/PostLodaing";
 import PackageCard from "@/app/user/_component/Card/PackageCard";
+import { FilterRenderContext } from "@/Context/filterRenderContext";
 
 export const AvailableTotalPost = () => {
   const { user } = PrivateRouteContext();
@@ -27,9 +34,73 @@ export const AvailableTotalPost = () => {
   const [saveRerander, setSaveRerander] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
   const observer = useRef();
+
+  const [selectedType, setSelectedType] = useState("");
+  const [forPost, setForPost] = useState("");
+  const [towersorBuildingName, setTowersorBuildingName] = useState("");
+  const [propertyCategoryName, setPropertyCategory] = useState("");
+  const [propertyTypeName, setPropertyType] = useState("");
+  const [parking, setParking] = useState("");
+  const [sellType, setSellType] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [filterRender, setfilterRender] = useState(false);
+
+  const { filterRenderAllPost, setfilterRenderAllPost } =
+    useContext(FilterRenderContext);
+
+  // Load the city value based on the current route
+  useEffect(() => {
+    const newsfeedFilterValue = localStorage.getItem("newsfeedFilterValue");
+    setCity(newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).city : "");
+    setState(newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).state : "");
+    setCountry(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).country : ""
+    );
+    setSelectedType(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).selectedType : ""
+    );
+    setPostType(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).postType : ""
+    );
+    setForPost(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).forPost : ""
+    );
+    setTowersorBuildingName(
+      newsfeedFilterValue
+        ? JSON.parse(newsfeedFilterValue).towersorBuildingName
+        : ""
+    );
+    setPropertyCategory(
+      newsfeedFilterValue
+        ? JSON.parse(newsfeedFilterValue).propertyCategoryName
+        : ""
+    );
+    setPropertyType(
+      newsfeedFilterValue
+        ? JSON.parse(newsfeedFilterValue).propertyTypeName
+        : ""
+    );
+    setParking(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).parking : ""
+    );
+    setSellType(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).sellType : ""
+    );
+    setTags(newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).tags : "");
+    setfilterRender(
+      newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).filterRender : false
+    );
+  }, [filterRenderAllPost]);
+
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
+      if (filterRender) {
+        setLoading(true);
+      }
       let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
@@ -37,6 +108,26 @@ export const AvailableTotalPost = () => {
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
+
+      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
+      if (state !== "") url += `&state=${encodeURIComponent(state)}`;
+      if (city !== "") url += `&city=${encodeURIComponent(city)}`;
+      if (country !== "") url += `&country=${encodeURIComponent(country)}`;
+      if (selectedType !== "")
+        url += `&type=${encodeURIComponent(selectedType)}`;
+      if (propertyCategoryName !== "")
+        url += `&propertyCategory=${encodeURIComponent(propertyCategoryName)}`;
+      if (propertyTypeName !== "")
+        url += `&propertyType=${encodeURIComponent(propertyTypeName)}`;
+      if (towersorBuildingName !== "")
+        url += `&towersorBuildingName=${encodeURIComponent(
+          towersorBuildingName
+        )}`;
+      if (parking !== "") url += `&parking=${encodeURIComponent(parking)}`;
+      if (tags.length !== 0)
+        url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      if (sellType.length !== 0)
+        url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -66,7 +157,27 @@ export const AvailableTotalPost = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
+  }, [
+    filterRender,
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    like,
+    saveRerander,
+    followRerander,
+    selectedType,
+    forPost,
+    state,
+    country,
+    postType,
+    propertyCategoryName,
+    propertyTypeName,
+    towersorBuildingName,
+    parking,
+    sellType,
+    tags,
+  ]);
 
   const lastPostElementRef = useCallback(
     (node) => {

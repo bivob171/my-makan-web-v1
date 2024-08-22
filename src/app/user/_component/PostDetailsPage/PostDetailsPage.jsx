@@ -360,7 +360,7 @@ export const PostDetailsPage = ({ postid }) => {
                           alt="Chat"
                           width={500}
                           height={500}
-                          className="w-[50px] h-auto rounded-full"
+                          className="w-[50px] h-[50px] rounded-full"
                         />
                         <div className="mt-1">
                           <div className="!leading-4 !items-start mb-1">
@@ -509,7 +509,7 @@ export const PostDetailsPage = ({ postid }) => {
                 </div>
               </div>
               {/* blogs  */}
-              <RelatedPosts />
+              <RelatedPosts item={item} />
               <div className="mb-[20px]">
                 {/* sell type  */}
                 <SellTypeSection sellType={sellType} />

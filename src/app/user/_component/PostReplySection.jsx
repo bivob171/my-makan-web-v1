@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
+import io from "socket.io-client";
 
-export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
-  const [commentDa, setReplys] = useState(false);
+const socket = io("https://api.mymakan.ae");
+export const PostReplySection = ({
+  id,
+  replyRerander,
+  setReplyRerander,
+  setReplyDatas,
+  replyDatas,
+}) => {
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -34,7 +41,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
       }
       const allCommentsList = await response.json();
       setHasMore(allCommentsList.length === limit);
-      setReplys((prevPost) =>
+      setReplyDatas((prevPost) =>
         page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
       );
       setLoading(false);
@@ -50,6 +57,27 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllComment(token);
   }, [sortOrder, sortBy, limit, page, id, replyRerander]);
+
+  useEffect(() => {
+    socket.on("newReplyCreate", (newComment) => {
+      setReplyDatas((prevComments) => [...prevComments, newComment]);
+      setReplyRerander(!replyRerander);
+    });
+    socket.on("replyUpdate", (updatedComment) => {
+      setReplyDatas((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === updatedComment._id ? updatedComment : comment
+        )
+      );
+      setReplyRerander(!replyRerander);
+    });
+
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("newReplyCreate");
+      socket.off("replyUpdate");
+    };
+  }, []);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(
@@ -87,10 +115,10 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
   }
 
   return (
-    <div className="w-auto h-auto overflow-y-auto">
-      {commentDa?.length > 0 ? (
+    <div className="w-auto max-h-[300px] overflow-y-auto">
+      {replyDatas?.length > 0 ? (
         <>
-          {commentDa?.map((data, i) => {
+          {replyDatas?.map((data, i) => {
             const comonUser =
               data?.role === "agent" ? data?.agentId : data?.userId;
 
@@ -111,6 +139,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
             return (
               <div
                 ref={lastPostElementRef}
+                id={data._id}
                 key={i}
                 className={`flex text-start mb-2`}
               >
@@ -144,7 +173,7 @@ export const PostReplySection = ({ id, replyRerander, setReplyRerander }) => {
           })}
         </>
       ) : (
-       <div className="hidden" />
+        <div className="hidden" />
       )}
     </div>
   );
