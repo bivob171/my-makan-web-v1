@@ -38,7 +38,7 @@ export const MachedPostPage = ({
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

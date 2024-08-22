@@ -44,7 +44,7 @@ const VideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://3.28.239.173:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -95,7 +95,7 @@ const VideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://3.28.239.173:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -140,7 +140,7 @@ const VideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://3.28.239.173:4000/file-upload/upload",
+        "https://q4m0gph5-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {

@@ -50,8 +50,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "http://3.28.239.173:4000/agent/myProfile"
-        : "http://3.28.239.173:4000/user/myProfile";
+        ? "https://q4m0gph5-4000.asse.devtunnels.ms/agent/myProfile"
+        : "https://q4m0gph5-4000.asse.devtunnels.ms/user/myProfile";
 
     if (endpoint) {
       const token = getStoredToken(userRole);
@@ -71,7 +71,7 @@ const PrivateRouteContext = () => {
     let socket;
 
     if (user) {
-      socket = io("http://3.28.239.173:4000"); // Ensure this matches your backend's URL
+      socket = io("https://q4m0gph5-4000.asse.devtunnels.ms"); // Ensure this matches your backend's URL
       socket.on("connect", () => {
         socket.emit("userConnected", { userId: user._id });
         setIsConnected(true);

@@ -105,7 +105,7 @@ export const EditPost = ({
     setIsFetching(true);
     try {
       const response = await axios.get(
-        `http://3.28.239.173:4000/country/tower`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
         {
           params: {
             search,

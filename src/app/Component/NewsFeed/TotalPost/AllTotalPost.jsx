@@ -15,7 +15,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("http://3.28.239.173:4000", {
+const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,7 +104,7 @@ export const AllTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;

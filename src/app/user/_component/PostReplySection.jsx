@@ -3,7 +3,7 @@ import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
 import io from "socket.io-client";
 
-const socket = io("http://3.28.239.173:4000", {
+const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -24,7 +24,7 @@ export const PostReplySection = ({
 
   const getAllComment = async (token) => {
     try {
-      let url = `http://3.28.239.173:4000/all-post-comment-reply/${id}?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`; // Sorting in ascending order

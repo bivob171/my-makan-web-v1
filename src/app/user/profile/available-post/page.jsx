@@ -18,7 +18,7 @@ import PackageCard from "../../_component/Card/PackageCard";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
 import { IoIosRefresh } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io("http://3.28.239.173:4000", {
+const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -109,7 +109,7 @@ const AvailablePosts = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://3.28.239.173:4000/allposts/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${role}&`;
       url += `postType=${postType}&`;

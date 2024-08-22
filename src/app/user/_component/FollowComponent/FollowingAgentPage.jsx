@@ -22,7 +22,7 @@ export const FollowingAgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `http://3.28.239.173:4000/follow/following-agent?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-agent?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

@@ -17,7 +17,7 @@ export const PopulerAgents = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `http://3.28.239.173:4000/agent/all-get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/agent/all-get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

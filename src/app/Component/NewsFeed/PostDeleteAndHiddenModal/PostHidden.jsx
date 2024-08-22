@@ -26,7 +26,7 @@ export const PostHiddenModal = ({ visible, closePopUp }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://3.28.239.173:4000/allposts/update/${id}`;
+      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/update/${id}`;
       console.log(apiUrl);
       const response = await fetch(apiUrl, {
         method: "PATCH",

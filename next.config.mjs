@@ -35,7 +35,8 @@ const nextConfig = {
     return [
       {
         source: "/socket.io/:path*",
-        destination: "http://3.28.239.173:4000/socket.io/:path*", // Proxy to backend
+        destination:
+          "https://q4m0gph5-4000.asse.devtunnels.ms/socket.io/:path*", // Proxy to backend
       },
     ];
   },

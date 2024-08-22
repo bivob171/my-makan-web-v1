@@ -85,7 +85,7 @@ const Filter = ({
     setIsFetching(true);
     try {
       const response = await axios.get(
-        `http://3.28.239.173:4000/country/tower`,
+        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
         {
           params: {
             search,
@@ -142,7 +142,9 @@ const Filter = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(`http://3.28.239.173:4000/post-field-data/property-category`)
+    fetch(
+      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -164,7 +166,9 @@ const Filter = ({
   const [loadingT, setLoadingT] = useState(true);
   const [errorT, setErrorT] = useState(null);
   useEffect(() => {
-    fetch(`http://3.28.239.173:4000/post-field-data/property-category`)
+    fetch(
+      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -187,7 +191,7 @@ const Filter = ({
   const [loadingSell, setLoadingSell] = useState(true);
   const [errorSell, setErrorSell] = useState(null);
   useEffect(() => {
-    fetch(`http://3.28.239.173:4000/post-field-data/sell-type`)
+    fetch(`https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/sell-type`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -223,7 +227,7 @@ const Filter = ({
   const [loadingTag, setLoadingTag] = useState(true);
   const [errorTag, setErrorTag] = useState(null);
   useEffect(() => {
-    fetch(`http://3.28.239.173:4000/post-field-data/tags`)
+    fetch(`https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/tags`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -11,7 +11,9 @@ const PropertyCategory = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(`http://3.28.239.173:4000/post-field-data/property-category`)
+    fetch(
+      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
