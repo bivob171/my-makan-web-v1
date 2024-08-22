@@ -101,7 +101,7 @@ const AllPostAgent = () => {
       if (filterRender) {
         setLoading(true);
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${encodeURIComponent(role)}&`;
       url += `sortBy=${encodeURIComponent(sortBy)}&`;

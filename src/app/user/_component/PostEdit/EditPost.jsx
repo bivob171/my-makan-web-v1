@@ -104,13 +104,16 @@ export const EditPost = ({
   const fetchTower = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/country/tower`, {
-        params: {
-          search,
-          page,
-          limit,
-        },
-      });
+      const response = await axios.get(
+        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
+        {
+          params: {
+            search,
+            page,
+            limit,
+          },
+        }
+      );
       const newTower = response.data;
       setHasMore(newTower.length === limit);
       setFilteredSuggestions((prevTower) => {

@@ -13,7 +13,10 @@ import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 import { useRouter } from "next/navigation";
 
-const socket = io("https://api.mymakan.ae");
+const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
+  path: "/socket.io", // Ensure this matches the path set in rewrites
+  transports: ["websocket"], // Use WebSocket transport
+});
 
 const AgentComment = ({ _id }) => {
   const { user } = PrivateRouteContext();
@@ -48,7 +51,7 @@ const AgentComment = ({ _id }) => {
 
   const fetchReplies = async (commentId) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment-reply/${commentId}`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/${commentId}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -144,7 +147,7 @@ const AgentComment = ({ _id }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -231,6 +234,15 @@ const AgentComment = ({ _id }) => {
     ? sortedComments
     : [sortedComments[0]];
 
+  const playNotificationSound = () => {
+    const notificationSound = new Audio("/audio/notification.mp3");
+    notificationSound.volume = 1.0;
+
+    notificationSound.addEventListener("canplaythrough", () => {
+      notificationSound.play();
+    });
+  };
+
   const handleSubmit = async (event) => {
     if (event) {
       event.preventDefault();
@@ -274,7 +286,8 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
+      const apiUrl =
+        "https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -289,7 +302,7 @@ const AgentComment = ({ _id }) => {
       } else {
         const responseData = await response.json();
         // setComments((prevPost) => [responseData, ...prevPost]);
-        toast.success("Add Comment successfully!");
+        playNotificationSound();
         setComment("");
         setMentionAgentId([]);
         setMentionName([]);
@@ -354,9 +367,6 @@ const AgentComment = ({ _id }) => {
         };
       }
 
-      console.log(replyData);
-      console.log(mentionReplyRole.length);
-
       let token;
       const userRole = localStorage.getItem("role");
       if (userRole === "agent") {
@@ -364,7 +374,8 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+      const apiUrl =
+        "https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -379,12 +390,12 @@ const AgentComment = ({ _id }) => {
       if (!response.ok) {
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
-        toast.success("Add Reply successfully!");
         setReplyText("");
         const responseData = await response.json();
         // setReplyDatas((prevPost) => [responseData, ...prevPost]);
         // setReplyRerander(!replyRerander);
         // setCommentRerander(!commentRerander);
+        playNotificationSound();
         setMentionReplyAgentId([]);
         setMentionReplyName([]);
         setMentionReplyUserId([]);
@@ -432,7 +443,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/following-agent?`;
+      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-agent?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;
