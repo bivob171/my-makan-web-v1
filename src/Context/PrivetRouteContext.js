@@ -14,6 +14,8 @@ const PrivateRouteContext = () => {
   const [render, setRender] = useState(false);
   const [isConnected, setIsConnected] = useState(false); // Track connection status
   const [customEventData, setCustomEventData] = useState(null); // Track custom event data
+  console.log(isConnected);
+
   const logOut = useCallback(() => {
     setLoading(true);
     setUser(null);
@@ -48,8 +50,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "https://q4m0gph5-4000.asse.devtunnels.ms/agent/myProfile"
-        : "https://q4m0gph5-4000.asse.devtunnels.ms/user/myProfile";
+        ? "http://3.28.239.173:4000/agent/myProfile"
+        : "http://3.28.239.173:4000/user/myProfile";
 
     if (endpoint) {
       const token = getStoredToken(userRole);
@@ -69,7 +71,7 @@ const PrivateRouteContext = () => {
     let socket;
 
     if (user) {
-      socket = io("https://q4m0gph5-4000.asse.devtunnels.ms"); // Ensure this matches your backend's URL
+      socket = io("http://3.28.239.173:4000"); // Ensure this matches your backend's URL
       socket.on("connect", () => {
         socket.emit("userConnected", { userId: user._id });
         setIsConnected(true);

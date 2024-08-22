@@ -40,7 +40,7 @@ export default function MatchedPost() {
 
   const getSinglePost = async (token) => {
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/single-post/${matchpostId}`;
+      let url = `http://3.28.239.173:4000/allposts/single-post/${matchpostId}`;
 
       const response = await fetch(url, {
         method: "GET",

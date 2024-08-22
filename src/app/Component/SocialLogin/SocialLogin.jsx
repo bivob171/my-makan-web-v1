@@ -65,8 +65,8 @@ export const SocialLogin = ({ setError }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     const endpoint =
       role === "buyer"
-        ? `https://q4m0gph5-4000.asse.devtunnels.ms/user/${userId}`
-        : `https://q4m0gph5-4000.asse.devtunnels.ms/agent/${userId}`;
+        ? `http://3.28.239.173:4000/user/${userId}`
+        : `http://3.28.239.173:4000/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -101,8 +101,8 @@ export const SocialLogin = ({ setError }) => {
     if (status === "authenticated" && session?.user) {
       const apiUrl =
         role === "buyer"
-          ? `https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp-with-Google`
-          : `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp-with-gmail`;
+          ? `http://3.28.239.173:4000/auth/user/signUp-with-Google`
+          : `http://3.28.239.173:4000/auth/agent/signUp-with-gmail`;
       createAccountWithGoogle(apiUrl);
     }
   }, [status, session, role]);

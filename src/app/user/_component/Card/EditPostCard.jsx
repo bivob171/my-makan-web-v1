@@ -93,7 +93,7 @@ export default function EditPostCard({
   };
 
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
+    const url = `http://3.28.239.173:4000/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -119,7 +119,7 @@ export default function EditPostCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
+    const url = `http://3.28.239.173:4000/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     console.log(url, token);
@@ -156,7 +156,7 @@ export default function EditPostCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
+      const apiUrl = `http://3.28.239.173:4000/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -181,7 +181,7 @@ export default function EditPostCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `http://3.28.239.173:4000/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -206,7 +206,7 @@ export default function EditPostCard({
     const checkSavePost = async (token) => {
       try {
         const response = await axios.get(
-          `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/save-post-exist/${savePostId}`,
+          `http://3.28.239.173:4000/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include your JWT token if needed

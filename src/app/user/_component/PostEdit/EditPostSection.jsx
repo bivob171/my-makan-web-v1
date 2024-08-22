@@ -208,11 +208,11 @@ export default function EditPostSection({ isOpen, setIsOpen }) {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/update/${postId?._id}`;
+      const apiUrl = `http://3.28.239.173:4000/allposts/update/${postId?._id}`;
       // if (user.role === "agent") {
-      //   apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-agent/post";
+      //   apiUrl = "http://3.28.239.173:4000/post-agent/post";
       // } else {
-      //   apiUrl = "https://q4m0gph5-4000.asse.devtunnels.ms/post-user/post";
+      //   apiUrl = "http://3.28.239.173:4000/post-user/post";
       // }
 
       const response = await fetch(apiUrl, {

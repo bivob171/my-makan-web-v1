@@ -103,7 +103,7 @@ const AddPost = ({
     setIsFetching(true);
     try {
       const response = await axios.get(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
+        `http://3.28.239.173:4000/country/tower`,
         {
           params: {
             search,

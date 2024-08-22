@@ -18,7 +18,7 @@ export const MatchCardData = ({ item }) => {
   const getAllMatchPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get-match-post?`;
+      let url = `http://3.28.239.173:4000/allposts/get-match-post?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;

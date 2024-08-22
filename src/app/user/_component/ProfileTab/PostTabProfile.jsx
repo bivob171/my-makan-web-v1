@@ -52,7 +52,7 @@ export const PostTabProfile = ({
   const getAllPosts = async (token, profileId, profileRole) => {
     try {
       setIsFetching(true);
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
+      let url = `http://3.28.239.173:4000/allposts/get?`;
       if (profileRole === "agent") {
         url += `agentId=${profileId}&`;
       } else {

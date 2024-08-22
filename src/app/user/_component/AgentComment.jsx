@@ -13,7 +13,7 @@ import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 import { useRouter } from "next/navigation";
 
-const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
+const socket = io("http://3.28.239.173:4000", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -56,7 +56,7 @@ const AgentComment = ({ _id }) => {
         : commentId;
     if (id) {
       try {
-        let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/${id}`;
+        let url = `http://3.28.239.173:4000/all-post-comment-reply/${id}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -153,7 +153,7 @@ const AgentComment = ({ _id }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment/${_id}?`;
+      let url = `http://3.28.239.173:4000/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -293,8 +293,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl =
-        "https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment/post";
+      const apiUrl = "http://3.28.239.173:4000/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -379,8 +378,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl =
-        "https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/post";
+      const apiUrl = "http://3.28.239.173:4000/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -445,7 +443,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-agent?`;
+      let url = `http://3.28.239.173:4000/follow/following-agent?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

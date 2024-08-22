@@ -23,7 +23,7 @@ export const PostDeleteModal = ({ visible, closePopUp }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}`;
+      const apiUrl = `http://3.28.239.173:4000/allposts/${id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

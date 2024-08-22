@@ -180,7 +180,7 @@ export const SignupForm = () => {
       };
 
       const response = await fetch(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/signUp`,
+        `http://3.28.239.173:4000/auth/user/signUp`,
         {
           method: "POST",
           headers: {
@@ -289,7 +289,7 @@ export const SignupForm = () => {
       };
 
       const response = await fetch(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/signUp`,
+        `http://3.28.239.173:4000/auth/agent/signUp`,
         {
           method: "POST",
           headers: {
@@ -342,16 +342,13 @@ export const SignupForm = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/company`,
-        {
-          params: {
-            search,
-            page,
-            limit,
-          },
-        }
-      );
+      const response = await axios.get(`http://3.28.239.173:4000/company`, {
+        params: {
+          search,
+          page,
+          limit,
+        },
+      });
       const newCompanies = response.data;
       console.log("Fetched companies:", newCompanies); // Debug log
       setHasMore(newCompanies.length === limit);
