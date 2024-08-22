@@ -607,7 +607,7 @@ const AgentComment = ({ _id }) => {
             className={`${
               showAllComments === false
                 ? " my-2 flex flex-col-reverse"
-                : "overflow-y-auto h-[600px] my-2 flex flex-col-reverse"
+                : "overflow-y-auto max-h-[600px] my-2 flex flex-col-reverse"
             }`}
           >
             {commentDa?.length === 0 ? (
