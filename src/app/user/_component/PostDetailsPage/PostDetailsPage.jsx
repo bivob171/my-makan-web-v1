@@ -201,7 +201,10 @@ export const PostDetailsPage = ({ postid }) => {
     };
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    checkSavePost(token);
+    // Check if savePostId is valid before calling checkSavePost
+    if (savePostId) {
+      checkSavePost(token);
+    }
   }, [savePostId, saveRerander]);
 
   const giveLike = async (id) => {

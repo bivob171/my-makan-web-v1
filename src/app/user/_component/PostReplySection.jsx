@@ -58,14 +58,17 @@ export const PostReplySection = ({
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllComment(token);
+    if (id) {
+      getAllComment(token);
+    }
   }, [sortOrder, sortBy, limit, page, id, replyRerander]);
 
   useEffect(() => {
-    socket.on("newReplyCreate", (newComment) => {
+    const handleNewReply = (newComment) => {
       setReplyDatas((prevComments) => [...prevComments, newComment]);
       setReplyRerander(!replyRerander);
-    });
+    };
+    socket.on("newReplyCreate", handleNewReply);
     socket.on("replyUpdate", (updatedComment) => {
       setReplyDatas((prevComments) =>
         prevComments.map((comment) =>
@@ -80,7 +83,7 @@ export const PostReplySection = ({
       socket.off("newReplyCreate");
       socket.off("replyUpdate");
     };
-  }, []);
+  }, [socket]);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(

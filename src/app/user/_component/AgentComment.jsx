@@ -182,7 +182,9 @@ const AgentComment = ({ _id }) => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllComment(token);
+    if (_id) {
+      getAllComment(token);
+    }
   }, [commentRerander, sortOrder, sortBy, limit, page, _id]);
 
   useEffect(() => {
@@ -237,7 +239,6 @@ const AgentComment = ({ _id }) => {
   const playNotificationSound = () => {
     const notificationSound = new Audio("/audio/postNotify.mp3");
     notificationSound.volume = 1.0;
-
     notificationSound.addEventListener("canplaythrough", () => {
       notificationSound.play();
     });
@@ -318,22 +319,20 @@ const AgentComment = ({ _id }) => {
 
   useEffect(() => {
     const handleNewReplyCreate = (newReply) => {
-      fetchReplies(newReply.postCommentId);
+      fetchReplies(newReply.postCommentId._id);
     };
     socket.on("newReplyCreate", handleNewReplyCreate);
-
-    // Clean up the socket listeners when the component unmounts
     return () => {
       socket.off("newReplyCreate");
     };
-  }, []);
+  }, [socket]);
 
   const handleSubmitReply = async (comment) => {
     try {
       let hasError = false;
 
       if (replyText === "") {
-        toast.error("Comment is required.");
+        toast.error("Reply is required.");
         hasError = true;
       }
 
@@ -392,9 +391,7 @@ const AgentComment = ({ _id }) => {
       } else {
         setReplyText("");
         const responseData = await response.json();
-        // setReplyDatas((prevPost) => [responseData, ...prevPost]);
-        // setReplyRerander(!replyRerander);
-        // setCommentRerander(!commentRerander);
+
         playNotificationSound();
         setMentionReplyAgentId([]);
         setMentionReplyName([]);
