@@ -16,7 +16,13 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "../PostLodaing/PostLodaing";
 import PackageCard from "@/app/user/_component/Card/PackageCard";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
+import io from "socket.io-client";
+import { IoIosRefresh } from "react-icons/io";
 
+const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
+  path: "/socket.io", // Ensure this matches the path set in rewrites
+  transports: ["websocket"], // Use WebSocket transport
+});
 export const AvailableTotalPost = () => {
   const { user } = PrivateRouteContext();
   const myRole = user?.role;
@@ -95,11 +101,12 @@ export const AvailableTotalPost = () => {
     );
   }, [filterRenderAllPost]);
 
-  const getAllPosts = async (token) => {
+  const getAllPosts = async (token, reset = false) => {
     try {
       setIsFetching(true);
-      if (filterRender) {
+      if (filterRender || reset) {
         setLoading(true);
+        setPage(1); // Reset to first page
       }
       let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
@@ -195,10 +202,90 @@ export const AvailableTotalPost = () => {
 
   const myId = user?._id;
 
+  const [newPostCount, setNewPostCount] = useState(5);
+
+  // Function to load new posts and scroll to top
+  function loadNewPost() {
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+
+    // Show loading indicator
+    setLoading(true);
+
+    // Scroll to the top of the page
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Smooth scroll
+    });
+
+    // Reset the page to 1 to fetch new posts from the beginning
+    setPage(1);
+
+    // Refetch posts
+    getAllPosts(token, true);
+  }
+
+  useEffect(() => {
+    const handleNewPost = (newPost) => {
+      if (newPost.postType === "Available") {
+        setNewPostCount((prevCount) => {
+          prevCount + 1;
+        });
+      }
+    };
+    socket.on("newPostCreate", handleNewPost);
+    return () => {
+      socket.off("newPostCreate");
+    };
+  }, [socket]);
+
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    let lastScrollTop = 0;
+
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop > lastScrollTop && scrollTop > 300) {
+        // Scrolling down
+        setShowButton(true);
+      } else {
+        // Scrolling up
+        setShowButton(false);
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleButtonClick = () => {
+    loadNewPost();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="pb-[50px]">
       <div className="">
         <div className="">
+          <div
+            className={`fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-50 transition-opacity duration-300 ease-in-out ${
+              showButton ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {newPostCount > 0 && (
+              <button
+                type="button"
+                onClick={handleButtonClick}
+                className="inline-flex items-center rounded bg-primary px-4 py-2 text-[16px]   leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong font-semibold"
+              >
+                <IoIosRefresh className="text-[20px] mr-[7px]" />
+                Refresh
+              </button>
+            )}
+          </div>
           <div>
             {loading && (
               <div>

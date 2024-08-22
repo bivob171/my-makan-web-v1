@@ -8,7 +8,6 @@ import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import NewsFeedRightSection from "@/app/Component/NewsFeed/NewsFeedRightSection";
 import PostSearch from "@/app/Component/NewsFeed/PostSearch/PostSearch";
 import PostSection from "@/app/Component/NewsFeed/PostSection";
-import Image from "next/image";
 import React, { useState } from "react";
 
 export default function AgentPosts() {
@@ -63,12 +62,13 @@ export default function AgentPosts() {
                       All Posts
                     </a>
                   </li>
+
                   <li
                     className="nav-item"
                     role="presentation"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="MEDIA"
+                    title="BLOG"
                   >
                     <a
                       className={`nav-link ${
@@ -78,7 +78,7 @@ export default function AgentPosts() {
                       role="tab"
                       aria-selected={activeTab === "availablePostsAgent"}
                     >
-                      <i className="icofont-image" />
+                      <i className="icofont-list" />
                       Available Posts
                     </a>
                   </li>

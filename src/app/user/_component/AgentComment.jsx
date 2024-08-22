@@ -50,27 +50,33 @@ const AgentComment = ({ _id }) => {
   const [mentionReplyName, setMentionReplyName] = useState([]);
 
   const fetchReplies = async (commentId) => {
-    try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/${commentId}`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const id =
+      typeof commentId === "object" && commentId !== null
+        ? commentId._id
+        : commentId;
+    if (id) {
+      try {
+        let url = `https://q4m0gph5-4000.asse.devtunnels.ms/all-post-comment-reply/${id}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const replyData = await response.json();
+        setReplies((prevReplies) => ({
+          ...prevReplies,
+          [commentId]: replyData,
+        }));
+      } catch (error) {
+        console.error("Error fetching replies:", error);
       }
-
-      const replyData = await response.json();
-      setReplies((prevReplies) => ({
-        ...prevReplies,
-        [commentId]: replyData,
-      }));
-    } catch (error) {
-      console.error("Error fetching replies:", error);
     }
   };
 
@@ -319,7 +325,7 @@ const AgentComment = ({ _id }) => {
 
   useEffect(() => {
     const handleNewReplyCreate = (newReply) => {
-      fetchReplies(newReply.postCommentId._id);
+      fetchReplies(newReply.postCommentId?._id);
     };
     socket.on("newReplyCreate", handleNewReplyCreate);
     return () => {
@@ -391,7 +397,6 @@ const AgentComment = ({ _id }) => {
       } else {
         setReplyText("");
         const responseData = await response.json();
-
         playNotificationSound();
         setMentionReplyAgentId([]);
         setMentionReplyName([]);
