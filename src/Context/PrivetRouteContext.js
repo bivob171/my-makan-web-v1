@@ -72,19 +72,16 @@ const PrivateRouteContext = () => {
       socket = io("https://q4m0gph5-4000.asse.devtunnels.ms"); // Ensure this matches your backend's URL
 
       socket.on("connect", () => {
-        console.log("Connected to the server");
         socket.emit("userConnected", { userId: user._id });
         setIsConnected(true);
       });
 
       socket.on("disconnect", () => {
-        console.log("Disconnected from the server");
         // socket.emit("userDisconnected", { userId: user._id });
         setIsConnected(false);
       });
 
       socket.on("customEvent", (data) => {
-        console.log("Custom event received:", data);
         setCustomEventData(data);
       });
     }

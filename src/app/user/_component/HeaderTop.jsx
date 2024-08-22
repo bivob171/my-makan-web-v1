@@ -199,7 +199,7 @@ export const HeaderTop = () => {
     }
   };
   const playNotificationSound = () => {
-    const notificationSound = new Audio("/audio/notification.mp3");
+    const notificationSound = new Audio("/audio/incomingNotify.mp3");
     notificationSound.volume = 1.0;
 
     notificationSound.addEventListener("canplaythrough", () => {

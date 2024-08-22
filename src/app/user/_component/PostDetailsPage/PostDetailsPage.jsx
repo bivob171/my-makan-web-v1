@@ -193,7 +193,6 @@ export const PostDetailsPage = ({ postid }) => {
           }
         );
         setIsHeartRed(response.data);
-        console.log(response.data);
       } catch (err) {
         setError(err);
       } finally {

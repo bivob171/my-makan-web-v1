@@ -83,7 +83,6 @@ const RelatedBlogs = ({ item }) => {
         url += `&tags=${encodeURIComponent(tags.join(","))}`;
       if (sellType.length !== 0)
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
-      console.log(url);
 
       const response = await fetch(url, {
         method: "GET",

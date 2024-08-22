@@ -235,7 +235,7 @@ const AgentComment = ({ _id }) => {
     : [sortedComments[0]];
 
   const playNotificationSound = () => {
-    const notificationSound = new Audio("/audio/notification.mp3");
+    const notificationSound = new Audio("/audio/postNotify.mp3");
     notificationSound.volume = 1.0;
 
     notificationSound.addEventListener("canplaythrough", () => {
