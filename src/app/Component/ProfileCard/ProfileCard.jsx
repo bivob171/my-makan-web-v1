@@ -37,7 +37,7 @@ export const ProfileCard = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/my-post-length`;
+      let url = `https://api.mymakan.ae/allposts/my-post-length`;
       const response = await fetch(url, {
         method: "GET",
         headers: {

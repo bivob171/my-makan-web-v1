@@ -14,7 +14,7 @@ import { formatDistanceToNow, format, formatDate } from "date-fns"; // Ensure yo
 import { IoClose } from "react-icons/io5";
 import { Howl } from "howler";
 
-const socket = io("https://q4m0gph5-4000.asse.devtunnels.ms", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -87,7 +87,7 @@ export const HeaderTop = () => {
   const getAllNotification = async (token) => {
     setIsFetchingNotify(true);
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/notification/my-all-com-notification?`;
+      let url = `https://api.mymakan.ae/notification/my-all-com-notification?`;
 
       url += `sortBy=${sortByNotify}&`;
       url += `sortOrder=${sortOrderNotify}&`;
@@ -144,7 +144,7 @@ export const HeaderTop = () => {
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const response = await axios.patch(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/notification/multiple-update`,
+        `https://api.mymakan.ae/notification/multiple-update`,
         { ids },
         {
           headers: {

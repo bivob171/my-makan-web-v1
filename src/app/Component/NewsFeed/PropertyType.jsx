@@ -11,9 +11,7 @@ const PropertyType = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(
-      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-type`
-    )
+    fetch(`https://api.mymakan.ae/post-field-data/property-type`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

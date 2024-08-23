@@ -84,16 +84,13 @@ const Filter = ({
   const fetchTower = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/country/tower`,
-        {
-          params: {
-            search,
-            page,
-            limit,
-          },
-        }
-      );
+      const response = await axios.get(`https://api.mymakan.ae/country/tower`, {
+        params: {
+          search,
+          page,
+          limit,
+        },
+      });
       const newTower = response.data;
       setHasMore(newTower.length === limit);
       setFilteredSuggestions((prevTower) => {
@@ -142,9 +139,7 @@ const Filter = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(
-      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
-    )
+    fetch(`https://api.mymakan.ae/post-field-data/property-category`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -166,9 +161,7 @@ const Filter = ({
   const [loadingT, setLoadingT] = useState(true);
   const [errorT, setErrorT] = useState(null);
   useEffect(() => {
-    fetch(
-      `https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/property-category`
-    )
+    fetch(`https://api.mymakan.ae/post-field-data/property-category`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -191,7 +184,7 @@ const Filter = ({
   const [loadingSell, setLoadingSell] = useState(true);
   const [errorSell, setErrorSell] = useState(null);
   useEffect(() => {
-    fetch(`https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/sell-type`)
+    fetch(`https://api.mymakan.ae/post-field-data/sell-type`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -227,7 +220,7 @@ const Filter = ({
   const [loadingTag, setLoadingTag] = useState(true);
   const [errorTag, setErrorTag] = useState(null);
   useEffect(() => {
-    fetch(`https://q4m0gph5-4000.asse.devtunnels.ms/post-field-data/tags`)
+    fetch(`https://api.mymakan.ae/post-field-data/tags`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -62,16 +62,13 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/user/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(`https://api.mymakan.ae/auth/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
       if (!response.ok) {
         toast.error(data.message);
@@ -112,16 +109,13 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(
-        `https://q4m0gph5-4000.asse.devtunnels.ms/auth/agent/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(`https://api.mymakan.ae/auth/agent/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await response.json();
 
       if (!response.ok) {

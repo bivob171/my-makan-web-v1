@@ -115,7 +115,7 @@ export default function PackageCard({
     return styles[styleIndex];
   };
   const giveLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/like`;
+    const url = `https://api.mymakan.ae/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -140,7 +140,7 @@ export default function PackageCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q4m0gph5-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
+    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -175,7 +175,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -200,7 +200,7 @@ export default function PackageCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -225,7 +225,7 @@ export default function PackageCard({
     const checkSavePost = async (token) => {
       try {
         const response = await axios.get(
-          `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/save-post-exist/${savePostId}`,
+          `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -257,7 +257,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -285,7 +285,7 @@ export default function PackageCard({
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -310,7 +310,7 @@ export default function PackageCard({
     const checkFollowUser = async (token) => {
       try {
         const response = await axios.get(
-          `https://q4m0gph5-4000.asse.devtunnels.ms/follow/following-exist/${followingId}`,
+          `https://api.mymakan.ae/follow/following-exist/${followingId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

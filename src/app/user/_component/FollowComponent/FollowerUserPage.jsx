@@ -22,7 +22,7 @@ export const FollowerUserPage = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/follow/follower-buyer?`;
+      let url = `https://api.mymakan.ae/follow/follower-buyer?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

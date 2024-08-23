@@ -23,7 +23,7 @@ const PrivateRouteContext = () => {
     router.push("/");
     setRender(!render);
     signOut({ callbackUrl: "/" });
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const fetchUserProfile = async (token, endpoint) => {
@@ -50,8 +50,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "https://q4m0gph5-4000.asse.devtunnels.ms/agent/myProfile"
-        : "https://q4m0gph5-4000.asse.devtunnels.ms/user/myProfile";
+        ? "https://api.mymakan.ae/agent/myProfile"
+        : "https://api.mymakan.ae/user/myProfile";
 
     if (endpoint) {
       const token = getStoredToken(userRole);
@@ -69,9 +69,11 @@ const PrivateRouteContext = () => {
 
   useEffect(() => {
     let socket;
+    console.log("socket render");
 
     if (user) {
-      socket = io("https://q4m0gph5-4000.asse.devtunnels.ms"); // Ensure this matches your backend's URL
+      socket = io("https://api.mymakan.ae");
+      // Ensure this matches your backend's URL
       socket.on("connect", () => {
         socket.emit("userConnected", { userId: user._id });
         setIsConnected(true);

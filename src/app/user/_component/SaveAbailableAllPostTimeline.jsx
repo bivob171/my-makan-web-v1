@@ -29,7 +29,7 @@ export const SaveAbailableAllPostTimeline = () => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://q4m0gph5-4000.asse.devtunnels.ms/save-post/my-save-post?`;
+      let url = `https://api.mymakan.ae/save-post/my-save-post?`;
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
