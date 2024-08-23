@@ -14,7 +14,6 @@ const PrivateRouteContext = () => {
   const [render, setRender] = useState(false);
   const [isConnected, setIsConnected] = useState(false); // Track connection status
   const [customEventData, setCustomEventData] = useState(null); // Track custom event data
-  console.log(isConnected);
 
   const logOut = useCallback(() => {
     setLoading(true);
@@ -69,7 +68,6 @@ const PrivateRouteContext = () => {
 
   useEffect(() => {
     let socket;
-    console.log("socket render");
 
     if (user) {
       socket = io("https://api.mymakan.ae");
