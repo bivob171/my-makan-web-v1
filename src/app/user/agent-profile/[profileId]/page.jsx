@@ -23,6 +23,8 @@ export default function AgentProfile() {
   const userId = params.profileId;
   const [profile, setProfile] = useState();
   const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
 
   const renderTabContent = () => {
@@ -51,7 +53,7 @@ export default function AgentProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `http://api.mymakan.ae/agent/${userId}`;
+    const endpoint = `https://api.mymakan.ae/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -75,11 +77,14 @@ export default function AgentProfile() {
   useEffect(() => {
     fetchUserProfile(userId);
   }, [userId, followRerander]);
+
   useEffect(() => {
     setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
   }, [profile, followRerander]);
+
   const [error, setError] = useState("");
-  console.log(error);
   const [uploading, setUploading] = useState(false);
   const [uploadingP, setUploadingP] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -103,7 +108,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `http://api.mymakan.ae/file-upload/upload`,
+        `https://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {
@@ -130,7 +135,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `http://api.mymakan.ae/file-upload/upload`,
+        `https://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {
@@ -158,8 +163,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `http://api.mymakan.ae/user/update-profile`
-          : `http://api.mymakan.ae/agent/update-profile`;
+          ? `https://api.mymakan.ae/user/update-profile`
+          : `https://api.mymakan.ae/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -197,8 +202,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `http://api.mymakan.ae/user/update-profile`
-          : `http://api.mymakan.ae/agent/update-profile`;
+          ? `https://api.mymakan.ae/user/update-profile`
+          : `https://api.mymakan.ae/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -254,7 +259,7 @@ export default function AgentProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -281,7 +286,7 @@ export default function AgentProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `http://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -433,13 +438,29 @@ export default function AgentProfile() {
                 )}
                 {profile?._id !== myId && (
                   <div className="flex justify-start items-center gap-3 mt-2">
-                    {isFollow === true ? (
+                    {isFriend ? (
+                      <button
+                        type="button"
+                        className="bg-green-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-green-500/70 flex justify-center items-center gap-2"
+                      >
+                        <BsJournalBookmarkFill className="w-5 h-5" /> Friend
+                      </button>
+                    ) : isFollow ? (
                       <button
                         type="button"
                         onClick={() => handleUnFollowClick(profile)}
                         className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                       >
                         <BsJournalBookmarkFill className="w-5 h-5" /> Unfollow
+                      </button>
+                    ) : isFollowEr ? (
+                      <button
+                        type="button"
+                        // onClick={() => handleFollowBackClick(profile)}
+                        className="bg-yellow-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-yellow-500/70 flex justify-center items-center gap-2"
+                      >
+                        <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                        Back
                       </button>
                     ) : (
                       <button
@@ -450,6 +471,7 @@ export default function AgentProfile() {
                         <BsJournalBookmarkFill className="w-5 h-5" /> Follow
                       </button>
                     )}
+
                     <button className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2">
                       {" "}
                       <SiImessage className="w-5 h-5" /> Massage

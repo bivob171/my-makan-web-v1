@@ -18,7 +18,7 @@ import PackageCard from "@/app/user/_component/Card/PackageCard";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
 import { IoIosRefresh } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io("http://api.mymakan.ae", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -56,8 +56,6 @@ const AllPost = () => {
 
   const { filterRenderBuyerPost, setfilterRenderBuyerPost } =
     useContext(FilterRenderContext);
-
-  console.log(filterRenderBuyerPost);
 
   // Load the city value based on the current route
   useEffect(() => {
@@ -113,7 +111,7 @@ const AllPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://api.mymakan.ae/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${role}&`;
       url += `sortBy=${sortBy}&`;

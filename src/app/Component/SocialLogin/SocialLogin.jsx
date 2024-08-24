@@ -65,8 +65,8 @@ export const SocialLogin = ({ setError }) => {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     const endpoint =
       role === "buyer"
-        ? `http://api.mymakan.ae/user/${userId}`
-        : `http://api.mymakan.ae/agent/${userId}`;
+        ? `https://api.mymakan.ae/user/${userId}`
+        : `https://api.mymakan.ae/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -101,8 +101,8 @@ export const SocialLogin = ({ setError }) => {
     if (status === "authenticated" && session?.user) {
       const apiUrl =
         role === "buyer"
-          ? `http://api.mymakan.ae/auth/user/signUp-with-Google`
-          : `http://api.mymakan.ae/auth/agent/signUp-with-gmail`;
+          ? `https://api.mymakan.ae/auth/user/signUp-with-Google`
+          : `https://api.mymakan.ae/auth/agent/signUp-with-gmail`;
       createAccountWithGoogle(apiUrl);
     }
   }, [status, session, role]);

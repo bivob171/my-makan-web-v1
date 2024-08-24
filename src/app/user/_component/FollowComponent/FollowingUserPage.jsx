@@ -22,7 +22,7 @@ export const FollowingUserPage = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `http://api.mymakan.ae/follow/following-buyer?`;
+      let url = `https://api.mymakan.ae/follow/following-buyer?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

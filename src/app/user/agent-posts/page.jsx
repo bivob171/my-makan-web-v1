@@ -20,7 +20,7 @@ export default function AgentPosts() {
   }
   const [activeTab, setActiveTab] = useState("allPostsAgent");
   return (
-    <div className="page-content">
+    <div className="page-content -mt-11">
       <div className="container">
         <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
         {/* post nav section  */}

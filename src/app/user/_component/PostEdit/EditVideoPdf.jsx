@@ -44,7 +44,7 @@ const EditVideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://api.mymakan.ae/file-upload/upload",
+        "https://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -95,7 +95,7 @@ const EditVideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://api.mymakan.ae/file-upload/upload",
+        "https://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -140,7 +140,7 @@ const EditVideoPdf = ({
 
     try {
       const response = await axios.post(
-        "http://api.mymakan.ae/file-upload/upload",
+        "https://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {

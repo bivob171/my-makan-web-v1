@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import { SiImessage } from "react-icons/si";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 export default function EditPostCard({
   item,
   myId,
@@ -93,7 +93,7 @@ export default function EditPostCard({
   };
 
   const giveLike = async (id) => {
-    const url = `http://api.mymakan.ae/allposts/${id}/like`;
+    const url = `https://api.mymakan.ae/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -119,7 +119,7 @@ export default function EditPostCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     console.log(url, token);
@@ -156,7 +156,7 @@ export default function EditPostCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -181,7 +181,7 @@ export default function EditPostCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `http://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -206,7 +206,7 @@ export default function EditPostCard({
     const checkSavePost = async (token) => {
       try {
         const response = await axios.get(
-          `http://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
+          `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include your JWT token if needed
@@ -233,6 +233,29 @@ export default function EditPostCard({
   // get path name
   const pathname = usePathname();
   const basePath = pathname.substring(0, pathname.lastIndexOf("/") + 1);
+
+  const router = useRouter();
+  function handleRelatedPosts({ type, value }) {
+    let queryParam = "";
+    switch (type) {
+      case "location":
+        queryParam = `location=` + value.city + `,` + value.country;
+        break;
+      case "tag":
+        queryParam = `tag=${value}`;
+        break;
+      case "for":
+        queryParam = `for=${value}`;
+        break;
+      case "type":
+        queryParam = `type=${value}`;
+        break;
+
+        return;
+    }
+
+    router.push(`/user/related-posts/${_id}?${queryParam}`);
+  }
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">
@@ -316,7 +339,18 @@ export default function EditPostCard({
                 </div>
               </div>
               {item.role === "buyer" ? (
-                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                <p
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "location",
+                      value: {
+                        city: userinfo?.state,
+                        country: userinfo?.country,
+                      },
+                    })
+                  }
+                  className=" cursor-pointer hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
+                >
                   Buyer From{" "}
                   <span className="text-[#E6533C]">
                     {userinfo?.state}
@@ -336,9 +370,19 @@ export default function EditPostCard({
                   </p>
                 </div>
                 <div>
-                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium ml-1">
+                  <p
+                    onClick={() =>
+                      handleRelatedPosts({
+                        type: "location",
+                        value: {
+                          city: location?.city,
+                          country: location?.country,
+                        },
+                      })
+                    }
+                    className="cursor-pointer hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium ml-1"
+                  >
                     {location?.city}
-
                     {location?.country !== null && ", "}
                     {location?.country}
                   </p>
@@ -418,10 +462,24 @@ export default function EditPostCard({
               </div>
             </div>
 
-            <p className="leading-normal text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px]">
+            <p
+              className={` ${
+                item?.postType === "Required"
+                  ? "text-red-500"
+                  : "text-green-500"
+              } "text-[0.825rem] md:text-[1rem]  ps-4 font-semibold -mb-[1px] md:mb-2 leading-3"`}
+            >
               {item?.postType}
             </p>
-            <span className="leading-normal text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end text-black font-medium">
+            <span
+              onClick={() =>
+                handleRelatedPosts({
+                  type: "for",
+                  value: item?.for,
+                })
+              }
+              className="cursor-pointer leading-normal text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end text-black font-medium"
+            >
               For {item?.for}
             </span>
           </div>
@@ -462,6 +520,7 @@ export default function EditPostCard({
                   key={index}
                   className="!py-[0px] px-[7px] md:px-4 rounded "
                   style={{ backgroundColor: bgColor }}
+                  onClick={() => handelRelatedTags(tag)}
                 >
                   <span
                     className="text-[10px] md:text-[14px] font-medium font-inter"
@@ -522,16 +581,43 @@ export default function EditPostCard({
             </div>
             <div>
               {item.type === "Urgent" ? (
-                <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold"
+                >
                   {item.type}
                 </button>
               ) : item.type === "Sponsored" ? (
-                <button className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold"
+                >
                   <span>{item.type}</span>
                   <GoStarFill className="text-[#F5B849] text-[12px] md:text-[12px] font-semibold" />
                 </button>
               ) : (
-                <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center"
+                >
                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[12px] font-semibold">
                     {item.type}
                   </p>

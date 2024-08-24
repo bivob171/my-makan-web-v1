@@ -44,17 +44,17 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
     </button>
   );
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setFilterVisible(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [filterRef]);
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (filterRef.current && !filterRef.current.contains(event.target)) {
+  //       setFilterVisible(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [filterRef]);
 
   const pathname = usePathname();
 
@@ -127,7 +127,7 @@ const PostSearch = ({ open, user, setVerifyPopup, userName }) => {
         </button>
       ) : null}
       {filterVisible && (
-        <div ref={filterRef} className="absolute top-[65px] right-0 z-40">
+        <div ref={filterRef} className="absolute top-[65px] right-0 z-50">
           <Filter
             setFilterCount={setFilterCount}
             filterCount={filterCount}

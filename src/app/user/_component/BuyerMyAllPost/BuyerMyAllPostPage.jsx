@@ -15,11 +15,12 @@ export const BuyerMyAllPostPage = () => {
   const userName = user?.fullName?.split(" ")[0];
 
   const [isOpen, setIsOpen] = useState(false);
+  const [verifyPopup, setVerifyPopup] = useState(false);
   function open() {
     setIsOpen(true);
   }
   return (
-    <div className="container">
+    <div className="container -mt-10">
       <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
         <PostSearch
@@ -90,7 +91,7 @@ export const BuyerMyAllPostPage = () => {
           </ul>
         </div>
       </div>
-      <div className="">
+      <div className="-mt-5">
         {activeTab === "allPosts" && <BuyerMyAllPosts />}
         {activeTab === "availablePosts" && <BuyerMyAvailablePosts />}
         {activeTab === "required" && <BuyerMyRequiredPosts />}

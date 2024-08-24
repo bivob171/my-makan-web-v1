@@ -15,7 +15,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("http://api.mymakan.ae", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,7 +104,7 @@ export const AllTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://api.mymakan.ae/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -264,7 +264,7 @@ export const AllTotalPost = () => {
       <div className="">
         <div className="">
           <div
-            className={`fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-50 transition-opacity duration-300 ease-in-out ${
+            className={`fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-30 transition-opacity duration-300 ease-in-out ${
               showButton ? "opacity-100" : "opacity-0"
             }`}
           >

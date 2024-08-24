@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
 import { IoIosRefresh } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io("http://api.mymakan.ae", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -107,7 +107,7 @@ const AllPostAgent = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://api.mymakan.ae/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${encodeURIComponent(role)}&`;
       url += `sortBy=${encodeURIComponent(sortBy)}&`;
@@ -273,7 +273,7 @@ const AllPostAgent = () => {
       <div className="">
         <div className="">
           <div
-            className={`fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-50 transition-opacity duration-300 ease-in-out ${
+            className={`fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-10 transition-opacity duration-300 ease-in-out ${
               showButton ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -281,9 +281,12 @@ const AllPostAgent = () => {
               <button
                 type="button"
                 onClick={handleButtonClick}
-                className="inline-flex items-center rounded bg-primary px-4 py-2 text-[16px]   leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong font-semibold"
+                className="inline-flex items-center rounded bg-primary px-4 py-2 text-[16px]   leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong font-semibold "
               >
-                <IoIosRefresh className="text-[20px] mr-[7px]" />
+                <IoIosRefresh
+                  className="text-[20px] mr-[7px] font-semibold
+                "
+                />
                 Refresh
               </button>
             )}

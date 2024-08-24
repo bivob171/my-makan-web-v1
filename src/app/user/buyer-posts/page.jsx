@@ -22,7 +22,7 @@ export default function BuyerPosts() {
   }
   const role = user?.role;
   return (
-    <div className="page-content">
+    <div className="page-content -mt-11">
       <div className="container">
         <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
         {/* post nav section  */}

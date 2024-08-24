@@ -62,7 +62,7 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(`http://api.mymakan.ae/auth/user/login`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export const LoginForm = () => {
       if (hasError) {
         return; // exit function if any of the fields are empty
       }
-      const response = await fetch(`http://api.mymakan.ae/auth/agent/login`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/agent/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -198,6 +198,12 @@ export const LoginForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="peer py-2 px-3 border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 w-full"
                 placeholder="password*"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    signupType ? handleLogin(e) : handleAgentLogin(e); // Calling the function
+                  }
+                }}
               />
 
               <span className="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-xm peer-focus:top-0 peer-focus:text-xs peer-focus:text-[#2682d5]">

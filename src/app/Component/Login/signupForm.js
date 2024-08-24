@@ -179,7 +179,7 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(`http://api.mymakan.ae/auth/user/signUp`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/user/signUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -285,7 +285,7 @@ export const SignupForm = () => {
         device: "web",
       };
 
-      const response = await fetch(`http://api.mymakan.ae/auth/agent/signUp`, {
+      const response = await fetch(`https://api.mymakan.ae/auth/agent/signUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -336,7 +336,7 @@ export const SignupForm = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://api.mymakan.ae/company`, {
+      const response = await axios.get(`https://api.mymakan.ae/company`, {
         params: {
           search,
           page,
@@ -573,7 +573,13 @@ export const SignupForm = () => {
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="py-2 px-3 peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 w-full"
-                placeholder="password, email or phone number*"
+                placeholder="password*"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    signupType ? createUserAccount(e) : createAgentAccount(e); // Calling the function
+                  }
+                }}
               />
 
               <span className=" pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-[#2682d5]">

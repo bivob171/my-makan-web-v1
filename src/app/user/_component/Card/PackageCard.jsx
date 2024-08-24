@@ -13,7 +13,7 @@ import { SiImessage } from "react-icons/si";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 export default function PackageCard({
   item,
   myId,
@@ -41,11 +41,16 @@ export default function PackageCard({
   const [isHeartRed, setIsHeartRed] = useState(false);
   const [isFollow, setIsFollow] = useState(false);
   const [followloading, setFollowLoading] = useState(true);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const [followErloading, setFollowErLoading] = useState(true);
   const [saveloading, setSaveLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ferror, setFError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
   const followingId = userinfo?._id;
+  const followerId = userinfo?._id;
+  const followerRole = userinfo?.role;
   const [hasId, setHasId] = useState(false);
 
   const [openModalIndex, setOpenModalIndex] = useState(null);
@@ -115,7 +120,7 @@ export default function PackageCard({
     return styles[styleIndex];
   };
   const giveLike = async (id) => {
-    const url = `http://api.mymakan.ae/allposts/${id}/like`;
+    const url = `https://api.mymakan.ae/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -140,7 +145,7 @@ export default function PackageCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `http://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -175,7 +180,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -200,7 +205,7 @@ export default function PackageCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `http://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -225,7 +230,7 @@ export default function PackageCard({
     const checkSavePost = async (token) => {
       try {
         const response = await axios.get(
-          `http://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
+          `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -244,12 +249,16 @@ export default function PackageCard({
     checkSavePost(token);
   }, [savePostId, saveRerander]);
 
-  const handleFollowClick = async (userinfo) => {
+  const handleFollowClick = async (type, userinfo) => {
     try {
       const _id = userinfo?._id;
       const role = userinfo?.role;
       const fullName = userinfo?.fullName;
-      setIsFollow(true);
+      if (type === "follow") {
+        setIsFollow(true);
+      } else {
+        setIsFriend(true);
+      }
       let token;
       const userRole = localStorage.getItem("role");
       if (userRole === "agent") {
@@ -257,7 +266,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `http://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -285,7 +294,7 @@ export default function PackageCard({
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `http://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -310,7 +319,7 @@ export default function PackageCard({
     const checkFollowUser = async (token) => {
       try {
         const response = await axios.get(
-          `http://api.mymakan.ae/follow/following-exist/${followingId}`,
+          `https://api.mymakan.ae/follow/following-exist/${followingId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -329,9 +338,81 @@ export default function PackageCard({
     checkFollowUser(token);
   }, [followingId, followRerander]);
 
+  // if user follow me
+  useEffect(() => {
+    const checkFollowUser = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://api.mymakan.ae/follow/follower-exist/${followerId}/${followerRole}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsFollowEr(response.data);
+      } catch (err) {
+        setFError(err);
+      } finally {
+        setFollowErLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkFollowUser(token);
+  }, [followerId, followerRole, followRerander]);
+
+  // if user friend
+  useEffect(() => {
+    const checkFollowUser = async (token) => {
+      try {
+        const response = await axios.get(
+          `https://api.mymakan.ae/follow/friend-exist/${followerId}/${followerRole}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsFriend(response.data);
+      } catch (err) {
+        setFError(err);
+      } finally {
+        setFollowErLoading(false);
+      }
+    };
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    checkFollowUser(token);
+  }, [followerId, followerRole, followRerander]);
+
   // get path name
   const pathname = usePathname();
   const basePath = pathname.substring(0, pathname.lastIndexOf("/") + 1);
+
+  const router = useRouter();
+  function handleRelatedPosts({ type, value }) {
+    let queryParam = "";
+    switch (type) {
+      case "location":
+        queryParam = `location=` + value.city + `,` + value.country;
+        break;
+      case "tag":
+        queryParam = `tag=${value}`;
+        break;
+      case "for":
+        queryParam = `for=${value}`;
+        break;
+      case "type":
+        queryParam = `type=${value}`;
+        break;
+
+        return;
+    }
+
+    router.push(`/user/related-posts/${_id}?${queryParam}`);
+  }
+  console.log(isFollowEr);
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
@@ -449,7 +530,18 @@ export default function PackageCard({
                             </div>
                           </div>
                           {item.role === "buyer" ? (
-                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                            <p
+                              onClick={() =>
+                                handleRelatedPosts({
+                                  type: "location",
+                                  value: {
+                                    city: userinfo?.state,
+                                    country: userinfo?.country,
+                                  },
+                                })
+                              }
+                              className="cursor-pointer hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
+                            >
                               Buyer From{" "}
                               <span className="text-[#E6533C]">
                                 {userinfo?.state}
@@ -477,9 +569,19 @@ export default function PackageCard({
                                 src="/homeCard/location.png"
                               />
                             </div>
-                            <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium">
+                            <p
+                              onClick={() =>
+                                handleRelatedPosts({
+                                  type: "location",
+                                  value: {
+                                    city: location?.city,
+                                    country: location?.country,
+                                  },
+                                })
+                              }
+                              className=" cursor-pointer hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium"
+                            >
                               {location?.city}
-
                               {location?.country !== null && ", "}
                               {location?.country}
                             </p>
@@ -488,7 +590,15 @@ export default function PackageCard({
                       </div>
                       {myId === userinfo?._id ? null : (
                         <div className="flex justify-between gap-3 mt-2">
-                          {isFollow === true ? (
+                          {isFriend ? (
+                            <button
+                              type="button"
+                              className="bg-green-500 text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-green-500/70 flex justify-center items-center gap-2"
+                            >
+                              <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                              Friend
+                            </button>
+                          ) : isFollow ? (
                             <button
                               type="button"
                               onClick={() => handleUnFollowClick(userinfo)}
@@ -497,16 +607,30 @@ export default function PackageCard({
                               <BsJournalBookmarkFill className="w-5 h-5" />{" "}
                               Unfollow
                             </button>
+                          ) : isFollowEr ? (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleFollowClick("followBack", userinfo)
+                              }
+                              className="bg-yellow-500 text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-yellow-500/70 flex justify-center items-center gap-2"
+                            >
+                              <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                              Follow Back
+                            </button>
                           ) : (
                             <button
                               type="button"
-                              onClick={() => handleFollowClick(userinfo)}
+                              onClick={() =>
+                                handleFollowClick("follow", userinfo)
+                              }
                               className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
                             >
                               <BsJournalBookmarkFill className="w-5 h-5" />{" "}
                               Follow
                             </button>
                           )}
+
                           <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
                             {" "}
                             <SiImessage className="w-5 h-5" /> Massage
@@ -568,7 +692,18 @@ export default function PackageCard({
                   </div>
                 </div>
                 {item.role === "buyer" ? (
-                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none">
+                  <p
+                    onClick={() =>
+                      handleRelatedPosts({
+                        type: "location",
+                        value: {
+                          city: userinfo?.state,
+                          country: userinfo?.country,
+                        },
+                      })
+                    }
+                    className="cursor-pointer hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none"
+                  >
                     Buyer From{" "}
                     <span className="text-[#E6533C]">
                       {userinfo?.state}
@@ -586,9 +721,19 @@ export default function PackageCard({
                     {formatDate(createdAt)}
                   </p>
 
-                  <p className="hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium !m-0 md:ml-1 flex justify-start items-center gap-x-1">
+                  <p
+                    onClick={() =>
+                      handleRelatedPosts({
+                        type: "location",
+                        value: {
+                          city: location?.city,
+                          country: location?.country,
+                        },
+                      })
+                    }
+                    className="cursor-pointer hover:underline underline-offset-1 text-[#49B6F5] text-[12px] font-medium !m-0 md:ml-1 flex justify-start items-center gap-x-1"
+                  >
                     {location?.city}
-
                     {location?.country !== null && ", "}
                     {location?.country}
                     <Image
@@ -602,10 +747,24 @@ export default function PackageCard({
                 </div>
               </div>
               <div className="text-end">
-                <p className="text-[0.825rem] md:text-[1rem] text-red-500 ps-4 font-semibold -mb-[1px] md:mb-2 leading-3">
+                <p
+                  className={` ${
+                    item?.postType === "Required"
+                      ? "text-red-500"
+                      : "text-green-500"
+                  } "text-[0.825rem] md:text-[1rem]  ps-4 font-semibold -mb-[1px] md:mb-2 leading-3"`}
+                >
                   {item?.postType}
                 </p>
-                <span className="leading-3 text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end font-medium">
+                <span
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "for",
+                      value: item?.for,
+                    })
+                  }
+                  className="cursor-pointer leading-3 text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end font-medium -mt-[10px]"
+                >
                   For {""}
                   {item?.for}
                 </span>
@@ -684,6 +843,12 @@ export default function PackageCard({
                   key={index}
                   className="!py-[0px] px-[7px] md:px-4 rounded "
                   style={{ backgroundColor: bgColor }}
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "tag",
+                      value: tag,
+                    })
+                  }
                 >
                   <span
                     className="text-[10px] md:text-[14px] font-medium font-inter"
@@ -780,16 +945,43 @@ export default function PackageCard({
             </div>
             <div>
               {item.type === "Urgent" ? (
-                <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold"
+                >
                   {item?.type}
                 </button>
               ) : item?.type === "Sponsored" ? (
-                <button className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold"
+                >
                   <span>{item?.type}</span>
                   <GoStarFill className="text-[#F5B849] text-[12px] md:text-[12px] font-semibold" />
                 </button>
               ) : (
-                <button className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "type",
+                      value: item?.type,
+                    })
+                  }
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center"
+                >
                   <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[12px] font-semibold">
                     {item?.type}
                   </p>

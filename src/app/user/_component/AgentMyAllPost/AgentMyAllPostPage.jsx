@@ -21,7 +21,7 @@ export const AgentMyAllPostPage = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container -mt-10">
       <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
         <PostSearch
@@ -92,7 +92,7 @@ export const AgentMyAllPostPage = () => {
           </ul>
         </div>
       </div>
-      <div className="">
+      <div className="-mt-5">
         {activeTab === "allPosts" && <AgentMyAllPosts />}
         {activeTab === "availablePosts" && <AgentMyAvailablePosts />}
         {activeTab === "required" && <AgentMyRequiredPosts />}
