@@ -38,7 +38,7 @@ export const MachedPostPage = ({
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `http://api.mymakan.ae/allposts/get?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

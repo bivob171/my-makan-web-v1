@@ -24,7 +24,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get(`https://api.mymakan.ae/company", {
+//       const response = await axios.get(`http://api.mymakan.ae/company", {
 //         params: {
 //           search,
 //           page,
@@ -183,7 +183,7 @@
 //   const fetchCompanies = async () => {
 //     setIsFetching(true);
 //     try {
-//       const response = await axios.get(`https://api.mymakan.ae/company", {
+//       const response = await axios.get(`http://api.mymakan.ae/company", {
 //         params: {
 //           search,
 //           page,
@@ -247,7 +247,7 @@
 //   const fetchResultCompanies = async () => {
 //     setHasMoreCompany(true);
 //     try {
-//       const response = await axios.get(`https://api.mymakan.ae/company", {
+//       const response = await axios.get(`http://api.mymakan.ae/company", {
 //         params: {
 //           search: searchCompany,
 //           page: pageCompany,
@@ -424,7 +424,7 @@ export const CompanyPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://api.mymakan.ae/company`, {
         params: {
           search,
           page,
@@ -486,7 +486,7 @@ export const CompanyPage = () => {
   const fetchResultCompanies = async () => {
     setIsFetchingCompany(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://api.mymakan.ae/company`, {
         params: {
           name: searchCompany,
           page: pageCompany,

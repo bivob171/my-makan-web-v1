@@ -84,7 +84,7 @@ const Filter = ({
   const fetchTower = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/country/tower`, {
+      const response = await axios.get(`http://api.mymakan.ae/country/tower`, {
         params: {
           search,
           page,
@@ -139,7 +139,7 @@ const Filter = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/property-category`)
+    fetch(`http://api.mymakan.ae/post-field-data/property-category`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -161,7 +161,7 @@ const Filter = ({
   const [loadingT, setLoadingT] = useState(true);
   const [errorT, setErrorT] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/property-category`)
+    fetch(`http://api.mymakan.ae/post-field-data/property-category`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -184,7 +184,7 @@ const Filter = ({
   const [loadingSell, setLoadingSell] = useState(true);
   const [errorSell, setErrorSell] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/sell-type`)
+    fetch(`http://api.mymakan.ae/post-field-data/sell-type`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -220,7 +220,7 @@ const Filter = ({
   const [loadingTag, setLoadingTag] = useState(true);
   const [errorTag, setErrorTag] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/tags`)
+    fetch(`http://api.mymakan.ae/post-field-data/tags`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

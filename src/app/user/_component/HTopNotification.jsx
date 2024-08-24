@@ -36,6 +36,7 @@ const HTopNotification = ({
       read,
       createdAt,
       mention,
+      notifyerType,
       notifyingType,
       notifyingUserId,
       notifyingAgentId,
@@ -62,6 +63,13 @@ const HTopNotification = ({
       ); // Redirect to the post details page with the comment ID and reply ID
     } else if (notifyFor === "like" && postId._id) {
       router.push(`/user/post-details/${postId._id}`); // Redirect to the post details page
+    } else if (notifyFor === "follow" || notifyFor === "unfollow") {
+      if (notifyerType === "agent") {
+        console.log(nitifyerAgentId);
+        router.push(`/user/agent-profile/${nitifyerAgentId._id}`); // Redirect to the post details page
+      } else {
+        router.push(`/user/buyer-profile/${nitifyerUserId._id}`); // Redirect to the post details page
+      }
     }
   };
 

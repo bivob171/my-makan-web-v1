@@ -1,6 +1,6 @@
 "use client";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FollowAgentCard } from "../Card/FollowAgenCard";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -22,7 +22,7 @@ export const FollowerAgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `https://api.mymakan.ae/follow/follower-agent?`;
+      let url = `http://api.mymakan.ae/follow/follower-agent?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -62,25 +62,20 @@ export const FollowerAgentPage = () => {
     getAllPosts(token);
   }, [sortOrder, sortBy, limit, page, searchName]);
 
-  const handleScrollPostResult = () => {
-    const containerM = containerRefPost.current;
-    if (
-      containerM.scrollTop + containerM.clientHeight >=
-        containerM.scrollHeight - 2 &&
-      !isFetching &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const containerM = containerRefPost.current;
-    containerM.addEventListener("scroll", handleScrollPostResult);
-    return () => {
-      containerM.removeEventListener("scroll", handleScrollPostResult);
-    };
-  }, [isFetching, hasMore]);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
   const handleSearchInputChange = (event) => {
     setSearchName(event.target.value);
     console.log(event.target.value);
@@ -181,7 +176,11 @@ export const FollowerAgentPage = () => {
       {!loading && allPosts.length > 0 && (
         <div className="row gutters-20">
           {allPosts?.map((item, i) => {
-            return <FollowAgentCard key={i} item={item} />;
+            return (
+              <div ref={lastPostElementRef} key={i}>
+                <FollowCard item={item} />;
+              </div>
+            );
           })}
         </div>
       )}

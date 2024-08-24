@@ -44,7 +44,7 @@ export const PostDetailsPage = ({ postid }) => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/allposts/single-post/${postid}`;
+      let url = `http://api.mymakan.ae/allposts/single-post/${postid}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -131,7 +131,7 @@ export const PostDetailsPage = ({ postid }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `http://api.mymakan.ae/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -156,7 +156,7 @@ export const PostDetailsPage = ({ postid }) => {
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `http://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -181,7 +181,7 @@ export const PostDetailsPage = ({ postid }) => {
     const checkSavePost = async (token) => {
       try {
         const response = await axios.get(
-          `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
+          `http://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -208,7 +208,7 @@ export const PostDetailsPage = ({ postid }) => {
   }, [savePostId, saveRerander]);
 
   const giveLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/like`;
+    const url = `http://api.mymakan.ae/allposts/${id}/like`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
 
@@ -234,7 +234,7 @@ export const PostDetailsPage = ({ postid }) => {
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `http://api.mymakan.ae/allposts/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
     const token = localStorage.getItem(tokenKey);
     console.log(url, token);

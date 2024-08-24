@@ -24,7 +24,7 @@ export const AddCompanyPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://api.mymakan.ae/company`, {
         params: {
           search,
           page,
@@ -79,7 +79,7 @@ export const AddCompanyPage = () => {
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        `https://api.mymakan.ae/agent/update-profile`,
+        `http://api.mymakan.ae/agent/update-profile`,
         {
           method: "PATCH",
           headers: {

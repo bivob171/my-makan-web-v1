@@ -8,7 +8,7 @@ const TagSelect = ({ selectedTags, setSelectedTags, tagsError }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/tags`)
+    fetch(`http://api.mymakan.ae/post-field-data/tags`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

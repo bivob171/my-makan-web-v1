@@ -51,7 +51,7 @@ export default function AgentProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/agent/${userId}`;
+    const endpoint = `http://api.mymakan.ae/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -103,7 +103,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {
@@ -130,7 +130,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {
@@ -158,8 +158,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://api.mymakan.ae/user/update-profile`
+          : `http://api.mymakan.ae/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -197,8 +197,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://api.mymakan.ae/user/update-profile`
+          : `http://api.mymakan.ae/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -254,7 +254,7 @@ export default function AgentProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `http://api.mymakan.ae/follow/follow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -281,7 +281,7 @@ export default function AgentProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `http://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

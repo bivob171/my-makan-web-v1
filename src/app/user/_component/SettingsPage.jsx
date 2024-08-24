@@ -36,8 +36,8 @@ export const SettingsPage = () => {
   const handleEmailVerifyCodeSent = async () => {
     const endpoint =
       role === "agent"
-        ? `https://api.mymakan.ae/auth/agent/email-verify`
-        : `https://api.mymakan.ae/auth/buyer/email-verify`;
+        ? `http://api.mymakan.ae/auth/agent/email-verify`
+        : `http://api.mymakan.ae/auth/buyer/email-verify`;
 
     try {
       const response = await axios.post(endpoint, {
@@ -156,7 +156,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/auth/change-password`,
+        `http://api.mymakan.ae/auth/change-password`,
         data
       );
       console.log(response);
@@ -211,7 +211,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/auth/agent/password-change`,
+        `http://api.mymakan.ae/auth/agent/password-change`,
         data
       );
       if (response.status === 200) {
@@ -247,7 +247,7 @@ export const SettingsPage = () => {
 
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        `https://api.mymakan.ae/agent/update-profile`,
+        `http://api.mymakan.ae/agent/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -291,7 +291,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {

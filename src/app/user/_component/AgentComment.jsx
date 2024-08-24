@@ -13,7 +13,7 @@ import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 import { useRouter } from "next/navigation";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("http://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -56,7 +56,7 @@ const AgentComment = ({ _id }) => {
         : commentId;
     if (id) {
       try {
-        let url = `https://api.mymakan.ae/all-post-comment-reply/${id}`;
+        let url = `http://api.mymakan.ae/all-post-comment-reply/${id}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -153,7 +153,7 @@ const AgentComment = ({ _id }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      let url = `http://api.mymakan.ae/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -293,7 +293,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
+      const apiUrl = "http://api.mymakan.ae/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -378,7 +378,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+      const apiUrl = "http://api.mymakan.ae/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -443,7 +443,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/following-agent?`;
+      let url = `http://api.mymakan.ae/follow/following-agent?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;
