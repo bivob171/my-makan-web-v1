@@ -14,8 +14,8 @@ import { MentionsInput, Mention } from "react-mentions";
 import { useRouter } from "next/navigation";
 
 const socket = io("https://api.mymakan.ae", {
-  path: "/socket.io", // Ensure this matches the path set in rewrites
-  transports: ["websocket"], // Use WebSocket transport
+  path: "/socket.io",
+  transports: ["websocket"],
 });
 
 const AgentComment = ({ _id }) => {
@@ -422,7 +422,6 @@ const AgentComment = ({ _id }) => {
     };
   }, [replyInputRef]);
 
-  // mention user
   const [inputValue, setInputValue] = useState("");
   const [inputValuerReply, setInputValueReply] = useState("");
   const [allMentionUsers, setAllMentionUsers] = useState([]);
@@ -555,13 +554,10 @@ const AgentComment = ({ _id }) => {
     }
   };
 
-  // notify routing
-
   const router = useRouter();
 
   const { query } = router;
 
-  // Use optional chaining and default values
   const commentId = query?.commentId || null;
   const reply = query?.reply || null;
 
@@ -570,14 +566,14 @@ const AgentComment = ({ _id }) => {
       const commentElement = document.getElementById(commentId);
       if (commentElement) {
         commentElement.scrollIntoView({ behavior: "smooth" });
-        commentElement.classList.add("highlight"); // Optionally add a class to highlight the comment
+        commentElement.classList.add("highlight");
       }
     }
     if (reply) {
       const replyElement = document.getElementById(reply);
       if (replyElement) {
         replyElement.scrollIntoView({ behavior: "smooth" });
-        replyElement.classList.add("highlight"); // Optionally add a class to highlight the reply
+        replyElement.classList.add("highlight");
       }
     }
   }, [commentId, reply]);
@@ -763,6 +759,7 @@ const AgentComment = ({ _id }) => {
                                                             user?.followingAgent
                                                               .image
                                                           }
+                                                          alt=""
                                                           width={30}
                                                           height={30}
                                                           className="rounded-full w-[25px] h-[25px]"
@@ -882,6 +879,7 @@ const AgentComment = ({ _id }) => {
                             <div>
                               <Image
                                 src={user?.followingAgent.image}
+                                alt=""
                                 width={30}
                                 height={30}
                                 className="rounded-full w-[30px] h-[30px]"

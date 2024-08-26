@@ -22,6 +22,11 @@ import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import PropertyCard2 from "@/app/Component/NewsFeed/PropertyCard2";
 import RelatedPosts from "../RelatedBlogs";
 import { useRouter } from "next/navigation";
+import { MdSlowMotionVideo } from "react-icons/md";
+import { FiMapPin } from "react-icons/fi";
+import { MdFavoriteBorder } from "react-icons/md";
+import { IoCameraOutline } from "react-icons/io5";
+import PostDetailsPhotoModal from "./PostDetailsPhotoModal";
 
 export const PostDetailsPage = ({ postid }) => {
   const { user } = PrivateRouteContext();
@@ -30,6 +35,16 @@ export const PostDetailsPage = ({ postid }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [saveloading, setSaveLoading] = useState(true);
   const [error, setError] = useState(null);
+  let [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+
+  function openPhotoModal() {
+    setIsPhotoModalOpen(true);
+  }
+
+  function closePhotoModal() {
+    setIsPhotoModalOpen(false);
+  }
+
   function open() {
     setIsOpen(true);
   }
@@ -93,6 +108,7 @@ export const PostDetailsPage = ({ postid }) => {
   } = item;
   const userinfo = role === "agent" ? agentId : userId;
   const [hasId, setHasId] = useState(false);
+
   useEffect(() => {
     const userHasId = likedBy?.some((user) => user._id === myId);
     setHasId(userHasId);
@@ -234,6 +250,7 @@ export const PostDetailsPage = ({ postid }) => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
   const giveUnLike = async (id) => {
     const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const tokenKey = `${user?.role}AccessToken`;
@@ -266,6 +283,7 @@ export const PostDetailsPage = ({ postid }) => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
   const router = useRouter();
   function handleRelatedPosts({ type, value }) {
     let queryParam = "";
@@ -303,36 +321,83 @@ export const PostDetailsPage = ({ postid }) => {
 
     router.push(`/user/related-posts/${_id}?${queryParam}`);
   }
+
   return (
     <div className="page-content text-[#333] ">
       {" "}
       <div className="container">
-        <div className="row">
-          <div className="col-lg-3 widget-block widget-break-lg lg:block hidden">
-            <div className="!sticky top-[110px]">
-              <div className="h-[86vh] overflow-y-scroll">
-                <NewsFeedLeftSection />
-                <div className="space-y-6 mt-6">
-                  <PropertyCard2 />
-                  <PropertyCard2 />
-                  <PropertyCard2 />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-9">
-            <div>
-              <div className="block-box user-single-blog ">
-                <div className="blog-thumbnail">
+        <div>
+          <div className="block-box user-single-blog !bg-[#f8fafff3]">
+            <div className="grid grid-cols-12 mb-4 gap-x-[8px]">
+              <div className="col-span-9 relative h-[516px]">
+                <button className="w-full h-full" onClick={openPhotoModal}>
                   <Image
-                    src="/media/blog/blog_10.jpg"
+                    src="/media/blog/blog_1.jpg"
                     width={1000}
                     height={1000}
                     alt="Blog"
-                    className="w-full"
+                    className="w-full h-full object-cover rounded-md"
                   />
+                  <div className="absolute bottom-4 left-4 space-x-2 z-20">
+                    <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1">
+                      <MdSlowMotionVideo className="w-3 h-3" />{" "}
+                      <span className="">See video</span>
+                    </div>
+                    <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1">
+                      <FiMapPin className="w-3 h-3" />{" "}
+                      <span className="">Map</span>
+                    </div>
+                  </div>
+                  <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
+                </button>
+              </div>
+              <div className="col-span-3 grid grid-rows-2 gap-y-[8px]">
+                <button className="relative w-full h-[250px]" onClick={openPhotoModal}>
+                  <Image
+                    src="/media/blog/blog_3.jpg"
+                    width={1000}
+                    height={1000}
+                    alt="Blog"
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                  <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
+                </button>
+                <div className="grid grid-rows-2 gap-y-[8px] w-full h-[250px]">
+                  <button className="relative" onClick={openPhotoModal}>
+                    <Image
+                      src="/media/blog/blog_6.jpg"
+                      width={1000}
+                      height={1000}
+                      alt="Blog"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                    <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
+                  </button>
+                  <button className="relative" onClick={openPhotoModal}>
+                    <Image
+                      src="/media/blog/blog_7.jpg"
+                      width={1000}
+                      height={1000}
+                      alt="Blog"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                    <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1 absolute bottom-4 right-4 z-20">
+                      <IoCameraOutline className="w-3 h-3" />{" "}
+                      <span className="">19</span>
+                    </div>
+                    <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
+                  </button>
                 </div>
-                <div className="blog-content-wrap">
+              </div>
+              <PostDetailsPhotoModal
+                isPhotoModalOpen={isPhotoModalOpen}
+                closePhotoModal={closePhotoModal}
+              />
+            </div>
+
+            <div className="grid grid-cols-12">
+              <div className="col-span-9">
+                <div className="blog-content-wrap !px-4 !py-0">
                   <div className="blog-entry-header">
                     <div className="flex justify-between items-center">
                       <div className="inline-flex items-center font-bold gap-2 mb-3">
@@ -356,16 +421,16 @@ export const PostDetailsPage = ({ postid }) => {
                           </>
                         )}
                       </div>
-                      <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="grid grid-cols-2 gap-2 mb-3">
                         {isHeartRed === true ? (
                           <button
-                            className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 ${
+                            className={`p-[8px] rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 leading-none ${
                               isHeartRed === true ? "bg-[#625dfa]" : ""
                             }`}
                             onClick={() => handleUnSaveClick(_id)}
                           >
                             <BsHeartFill
-                              className={`w-5 h-5 ${
+                              className={`w-4 h-4 ${
                                 isHeartRed === true ? "text-[red]" : ""
                               }`}
                             />{" "}
@@ -373,17 +438,17 @@ export const PostDetailsPage = ({ postid }) => {
                           </button>
                         ) : (
                           <button
-                            className={`px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 `}
+                            className={`p-[8px] rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 leading-none`}
                             onClick={handleSaveClick}
                           >
-                            <BsHeartFill className={`w-5 h-5 `} /> Save
+                            <MdFavoriteBorder className={`w-4 h-4 `} /> Save
                           </button>
                         )}
                         <button
-                          className="px-3 py-2 rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2"
+                          className="p-[8px] rounded bg-[#625dfa99] text-[white] font-medium flex justify-center items-center gap-2 leading-none"
                           onClick={() => setIsOpen(true)}
                         >
-                          <CiShare1 className="w-5 h-5" />
+                          <CiShare1 className="w-4 h-4" />
                           Share
                         </button>
                       </div>
@@ -465,7 +530,7 @@ export const PostDetailsPage = ({ postid }) => {
                     <blockquote>
                       <p>{item?.description}</p>
                     </blockquote>
-                    {data?.length > 0 && (
+                    {/* {data?.length > 0 && (
                       <div className="">
                         <center>
                           <h2 className="mt-3 !mb-6 text-[#444] underline">
@@ -494,7 +559,7 @@ export const PostDetailsPage = ({ postid }) => {
                         </center>
                         <File files={files} />
                       </div>
-                    )}
+                    )} */}
                   </div>
                   {/* Property Information */}
                   <div>
@@ -547,16 +612,26 @@ export const PostDetailsPage = ({ postid }) => {
                   </div>
                 </div>
               </div>
-              {/* blogs  */}
-              <RelatedPosts item={item} />
-              <div className="mb-[20px]">
-                {/* sell type  */}
-                <SellTypeSection sellType={sellType} />
+
+              <div className="col-span-3">
+                <div className="">
+                  <NewsFeedLeftSection />
+                  {/* <div className="space-y-5">
+                      <PropertyCard2 />
+                     
+                    </div> */}
+                </div>
               </div>
-              {/* tags  */}
-              <TagsSection tags={tags} />
             </div>
           </div>
+          {/* blogs  */}
+          <RelatedPosts item={item} />
+          <div className="mb-[20px]">
+            {/* sell type  */}
+            <SellTypeSection sellType={sellType} />
+          </div>
+          {/* tags  */}
+          <TagsSection tags={tags} />
         </div>
       </div>
     </div>

@@ -23,16 +23,14 @@ const HTopNotification = ({
   user,
 }) => {
   const [notifyScroll, setNotifyScroll] = useState(false);
-
-  // notification
   const router = useRouter();
 
   const handleNotificationClick = (notification) => {
     const {
       _id,
       notifyFor,
-      postCommentId, // Ensure this is part of the notification object
-      postId, // Ensure this is part of the notification object
+      postCommentId, 
+      postId, 
       read,
       createdAt,
       mention,
@@ -47,31 +45,30 @@ const HTopNotification = ({
       commentReplyId,
     } = notification;
 
-    // // Mark the notification as read
     handleSingleNotificationMarkAsRead(_id);
 
     console.log(notification);
 
-    // Redirect to the appropriate page
     if (notifyFor === "comment" && postCommentId._id && postId._id) {
       router.push(
         `/user/post-details/${postId._id}?commentId=${postCommentId._id}`
-      ); // Redirect to the post details page with the comment ID
+      ); 
     } else if (notifyFor === "reply" && commentReplyId._id && postId._id) {
       router.push(
         `/user/post-details/${postId._id}?commentId=${postCommentId._id}&reply=${commentReplyId._id}`
-      ); // Redirect to the post details page with the comment ID and reply ID
+      );
     } else if (notifyFor === "like" && postId._id) {
-      router.push(`/user/post-details/${postId._id}`); // Redirect to the post details page
+      router.push(`/user/post-details/${postId._id}`);
     } else if (notifyFor === "follow" || notifyFor === "unfollow") {
       if (notifyerType === "agent") {
         console.log(nitifyerAgentId);
-        router.push(`/user/agent-profile/${nitifyerAgentId._id}`); // Redirect to the post details page
+        router.push(`/user/agent-profile/${nitifyerAgentId._id}`); 
       } else {
-        router.push(`/user/buyer-profile/${nitifyerUserId._id}`); // Redirect to the post details page
+        router.push(`/user/buyer-profile/${nitifyerUserId._id}`); 
       }
     }
   };
+  
 
   return (
     <>
@@ -404,6 +401,8 @@ const HTopNotification = ({
         </div>
       </div>
       <div></div>
+
+
       <div
         className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
           notificationOpen === true
@@ -439,7 +438,7 @@ const HTopNotification = ({
                     {[1, 2, 3, 4].map((i) => {
                       return (
                         <div key={i} class="h-14  rounded-md w-60 pl-[20px]">
-                          <div class="flex flex-row items-center justify-cente h-full space-x-5 animate ">
+                          <div class="flex flex-row items-center justify-center h-full space-x-5 animate ">
                             <div class="w-10 h-10 bg-gray-300 rounded-full "></div>
                             <div class="flex flex-col space-y-3 mt-1">
                               <div class="h-2 bg-gray-300 rounded-md w-36 "></div>
