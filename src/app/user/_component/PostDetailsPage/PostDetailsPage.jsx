@@ -351,7 +351,7 @@ export const PostDetailsPage = ({ postid }) => {
                   <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                 </button>
               </div>
-              <div className="col-span-3 grid grid-rows-2 gap-y-[8px]">
+              <div className="col-span-3 grid grid-rows-2">
                 <button className="relative w-full h-[250px]" onClick={openPhotoModal}>
                   <Image
                     src="/media/blog/blog_3.jpg"
@@ -362,14 +362,14 @@ export const PostDetailsPage = ({ postid }) => {
                   />
                   <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                 </button>
-                <div className="grid grid-rows-2 gap-y-[8px] w-full h-[250px]">
+                <div className="grid grid-rows-2 w-full h-[250px] space-y-2">
                   <button className="relative" onClick={openPhotoModal}>
                     <Image
                       src="/media/blog/blog_6.jpg"
                       width={1000}
                       height={1000}
                       alt="Blog"
-                      className="w-full h-full object-cover rounded-md"
+                      className="w-full h-[125px] object-cover rounded-md"
                     />
                     <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                   </button>
@@ -379,7 +379,7 @@ export const PostDetailsPage = ({ postid }) => {
                       width={1000}
                       height={1000}
                       alt="Blog"
-                      className="w-full h-full object-cover rounded-md"
+                      className="w-full h-[125px] object-cover rounded-md"
                     />
                     <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1 absolute bottom-4 right-4 z-20">
                       <IoCameraOutline className="w-3 h-3" />{" "}
@@ -395,9 +395,9 @@ export const PostDetailsPage = ({ postid }) => {
               />
             </div>
 
-            <div className="grid grid-cols-12">
+            <div className="grid grid-cols-12 gap-[20px] !px-4">
               <div className="col-span-9">
-                <div className="blog-content-wrap !px-4 !py-0">
+                <div className="blog-content-wrap !px-0 !py-0 !pb-4">
                   <div className="blog-entry-header">
                     <div className="flex justify-between items-center">
                       <div className="inline-flex items-center font-bold gap-2 mb-3">
