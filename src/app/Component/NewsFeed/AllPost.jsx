@@ -322,7 +322,7 @@ const AllPost = () => {
               </div>
             )}
 
-            {isFetching && (
+            {isFetching && loading === false && (
               <div className="mb-[20px] mt-[20px] text-center">
                 <PostLodaing />
               </div>

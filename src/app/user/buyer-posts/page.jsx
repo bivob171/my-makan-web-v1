@@ -36,7 +36,7 @@ export default function BuyerPosts() {
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="!sticky top-[100px] bg-[#EFF4FB] z-440">
+            <div className="!sticky top-[100px] bg-[#EFF4FB] z-40">
               <PostSearch
                 open={open}
                 user={user}

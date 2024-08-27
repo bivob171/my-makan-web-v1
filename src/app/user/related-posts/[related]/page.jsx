@@ -366,7 +366,7 @@ export default function RelatedPost() {
             })}
           </div>
 
-          {isFetching && (
+          {isFetching && loading === false && (
             <div className="mb-[20px] mt-[20px] text-center">
               <PostLodaing />
             </div>
