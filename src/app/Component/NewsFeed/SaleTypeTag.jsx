@@ -9,7 +9,7 @@ const SaleTypeTag = ({ setSellType, sellType }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch(`https://api.mymakan.ae/post-field-data/sell-type`)
+    fetch(`http://localhost:4000/post-field-data/sell-type`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

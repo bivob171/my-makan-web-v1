@@ -26,7 +26,7 @@ export const AgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetchingAgent(true);
     try {
-      let url = `https://api.mymakan.ae/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `http://localhost:4000/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
       if (countryFind) url += `&country=${countryFind}`;
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
@@ -122,7 +122,7 @@ export const AgentPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://localhost:4000/company`, {
         params: {
           search,
           page: pageco,
@@ -188,7 +188,7 @@ export const AgentPage = () => {
   const fetchCountries = async () => {
     setIsFetchingCountry(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/country`, {
+      const response = await axios.get(`http://localhost:4000/country`, {
         params: {
           search: searchCountry,
           page: pageCountry,
@@ -498,7 +498,7 @@ export const AgentPage = () => {
                       ref={lastPostElementRef}
                       className={`delay-150 duration-200 ease-in-out hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full bg-white rounded-lg relative border-[#E8E8E8] border-[1px] transition shadow-[#615DFA] p-2`}
                       style={{
-                        backgroundImage: `url(${data?.image})`,
+                        backgroundImage: `url(${data?.coverImage})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
@@ -548,13 +548,28 @@ export const AgentPage = () => {
                             {data?.fullName}
                           </h2>
                           <h2 className="font-semibold leading-[17px] text-[15px] !text-[white]">
-                            Properties:{" "}
+                            Total Posts:{" "}
                             <span className="font-normal font-mono">
                               {/* {data.properties} */}
+                              {data?.totalPost}
+                            </span>
+                          </h2>
+                          <h2 className="font-semibold leading-[17px] text-[15px] !text-[white]">
+                            Urgent Posts:{" "}
+                            <span className="font-normal font-mono">
+                              {/* {data.properties} */}
+                              {data?.totalUrgentPost}
+                            </span>
+                          </h2>
+                          <h2 className="font-semibold leading-[17px] text-[15px] !text-[white]">
+                            Sponsored Posts:{" "}
+                            <span className="font-normal font-mono">
+                              {/* {data.properties} */}
+                              {data?.totalSponsoredPost}
                             </span>
                           </h2>
                           <h2 className="font-semibold leading-[17px] -mb-0 mt-[5px] text-[15px] !text-[white]">
-                            Spake:{" "}
+                            language:{" "}
                             <span className="font-normal font-mono">
                               {formatLanguages(language)}
                             </span>

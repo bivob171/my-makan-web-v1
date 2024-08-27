@@ -514,6 +514,8 @@ const HTopNotification = ({
                           return `${commonUser?.fullName} started following you`;
                         case "unfollow":
                           return `${commonUser?.fullName} unfollowed you`;
+                        case "followBack":
+                          return `${commonUser?.fullName} follow Back you`;
                         default:
                           return "";
                       }

@@ -58,7 +58,7 @@ const RelatedBlogs = ({ item }) => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `http://localhost:4000/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;

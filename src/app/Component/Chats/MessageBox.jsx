@@ -1,47 +1,269 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MdVideoCall } from "react-icons/md";
-
-const MessageBox = ({ onProfileClick }) => {
+import {
+  db,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp,
+  doc,
+  updateDoc,
+  increment,
+  writeBatch,
+  where,
+  getDocs,
+  getDoc,
+  Timestamp,
+} from "../../../firebase";
+import Link from "next/link";
+import { CheckIcon } from "lucide-react";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { AiOutlineCheck } from "react-icons/ai";
+import { LuCheckCheck } from "react-icons/lu";
+const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
+  const { user } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [chatOpened, setChatOpened] = useState(false);
   const textareaRef = useRef(null);
+  const messageContainerRef = useRef(null);
+  const userId = user?._id;
 
-  const handleInput = (event) => {
+  const scrollToBottom = () => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  };
+  useEffect(() => {
+    scrollToBottom(); // Scroll to bottom when messages change
+  }, [messages]);
+  const playNotificationSound = () => {
+    const notificationSound = new Audio("/audio/massagesendnotify.mp3");
+    notificationSound.volume = 1.0;
+    notificationSound.addEventListener("canplaythrough", () => {
+      notificationSound.play();
+    });
+  };
+  const playNotificationSoundMassageCome = () => {
+    const notificationSound = new Audio("/audio/massageNotify.mp3");
+    notificationSound.volume = 1.0;
+    notificationSound.addEventListener("canplaythrough", () => {
+      notificationSound.play();
+    });
+  };
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+
+    try {
+      // Reference to the messages collection within the chat
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+
+      // Add the new message to Firestore
+      const newMessageRef = await addDoc(messagesRef, {
+        senderId: userId,
+        content: newMessage,
+        createdAt: serverTimestamp(),
+        seen: false,
+      });
+
+      // Get the timestamp of the new message
+      const messageSnapshot = await getDoc(newMessageRef);
+      const messageData = messageSnapshot.data();
+      const messageTimestamp = messageData?.createdAt?.toMillis();
+
+      // Reference to the chat document
+      const chatDocRef = doc(db, `chats/${chatId}`);
+      const chatDocSnapshot = await getDoc(chatDocRef);
+
+      if (!chatDocSnapshot.exists()) {
+        throw new Error("Chat document not found.");
+      }
+
+      // Get chat data and participants
+      const chatData = chatDocSnapshot.data();
+      const participants = chatData.participants || [];
+
+      // Prepare the unseen messages update object
+      const unseenMessagesUpdate = {};
+      participants.forEach((participant) => {
+        if (participant.id !== userId) {
+          unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
+            increment(1);
+        }
+      });
+
+      if (typeof messageTimestamp === "number") {
+        // Update the chat document with the latest message info
+        const chatRef = doc(db, "chats", chatId);
+        await updateDoc(chatRef, {
+          latestMessage: newMessage,
+          latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
+          ...unseenMessagesUpdate, // Increment unseen messages count for other participants
+        });
+      } else {
+        console.error("Error: Message timestamp is invalid or undefined.");
+      }
+
+      // Clear the input field and reset rows
+      setNewMessage("");
+      setRows(1);
+
+      // Scroll to the bottom and play notification sound
+      scrollToBottom();
+      playNotificationSound();
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const handleInput = async (event) => {
+    const messageContent = event.target.value;
+    setNewMessage(messageContent);
+
+    // Handle textarea auto-resizing
     const textareaLineHeight = 24;
-    const previousRows = textareaRef.current.rows;
-    textareaRef.current.rows = 1;
+    textareaRef.current.rows = 1; // Reset rows to 1 to calculate the actual height
     const currentRows = Math.floor(
       textareaRef.current.scrollHeight / textareaLineHeight
     );
 
-    if (currentRows === previousRows) {
-      textareaRef.current.rows = currentRows;
-    }
-
     if (currentRows >= 5) {
       textareaRef.current.rows = 5;
-      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Scroll to the bottom if the content exceeds the height
     } else {
       textareaRef.current.rows = currentRows;
     }
-
     setRows(currentRows < 5 ? currentRows : 5);
-    setMessage(event.target.value);
+
+    // Send message when Enter key is pressed without Shift
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (!messageContent.trim()) return;
+
+      try {
+        sendMessage();
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
   };
+
+  // Function to mark unseen messages as seen when opening the chat
+  const markMessagesAsSeen = async (chatId, userId) => {
+    if (!chatId || !userId) return; // Ensure chatId and userId are provided
+
+    try {
+      // Reference to the messages collection in the chat
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+
+      // Query to get unseen messages
+      const q = query(messagesRef, where("seen", "==", false));
+
+      // Get all unseen messages
+      const querySnapshot = await getDocs(q);
+      const batch = writeBatch(db);
+
+      // Iterate over unseen messages and update their seen status
+      querySnapshot.forEach((doc) => {
+        if (doc.data().senderId !== userId) {
+          batch.update(doc.ref, { seen: true });
+        }
+      });
+
+      // Commit batch updates
+      await batch.commit();
+
+      // Update the chat document to reset unseenMessagesCount
+      const chatRef = doc(db, "chats", chatId);
+      const chatDoc = await getDoc(chatRef);
+      if (!chatDoc.exists()) {
+        console.error("Chat document not found.");
+        return;
+      }
+
+      const chatData = chatDoc.data();
+      const currentUnseenMessages = chatData?.unseenMessages || {};
+      // Update the unseen messages count
+      await updateDoc(chatRef, {
+        unseenMessages: {
+          ...currentUnseenMessages,
+          [userId]: 0, // Reset unseen messages count for the current user
+        },
+      });
+    } catch (error) {
+      console.error("Error marking messages as seen:", error);
+    }
+  };
+  // Subscribe to real-time updates of messages
+  useEffect(() => {
+    if (chatId) {
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+      const q = query(messagesRef, orderBy("createdAt", "asc"));
+
+      const unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
+        const fetchedMessages = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMessages(fetchedMessages);
+
+        if (!chatOpened) {
+          // Play notification sound for new messages if the chat is not currently open
+          playNotificationSoundMassageCome();
+        }
+
+        // Mark messages as seen only if the chat is currently open
+        if (chatOpened) {
+          markMessagesAsSeen();
+        }
+      });
+
+      return () => {
+        unsubscribeMessages();
+      };
+    }
+  }, [chatId, chatOpened]);
+
+  // Handle marking messages as seen when chat is opened
+
+  useEffect(() => {
+    if (chatId) {
+      setChatOpened(true); // Mark chat as opened
+      markMessagesAsSeen(chatId, userId); // Mark messages as seen when chat is opened
+    }
+
+    return () => {
+      setChatOpened(false); // Reset chat open state on unmount or chatId change
+    };
+  }, [chatId, chatOpened, messages]);
+
+  const participantImage = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.image)[0];
+  const participantName = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.name)[0];
+
+  const [isSent, setisSent] = useState(true);
 
   return (
     <div className="">
       <div className="sticky top-0 h-[65px] bg-white border-b flex items-center justify-between px-3">
         {/* click this button then open profile details section  */}
         <button
-          onClick={onProfileClick}
+          type="button"
+          onClick={profileSideBar}
           className="flex justify-start items-center gap-2 hover:bg-[#f5f8fd] rounded"
         >
           <Image
-            src="/media/figure/author_4.jpg"
+            src={participantImage}
             alt=""
             width={500}
             height={500}
@@ -49,7 +271,11 @@ const MessageBox = ({ onProfileClick }) => {
           />
 
           <div className="flex flex-col items-start">
-            <h3 className="text-[16px] font-bold leading-4"> Md Muzahidul</h3>
+            <h3 className="text-[16px] font-bold leading-4">
+              {" "}
+              {participantName}
+            </h3>
+
             <p className="text-center leading-3 text-[12px] m-0">
               Active 46m ago
             </p>
@@ -59,7 +285,93 @@ const MessageBox = ({ onProfileClick }) => {
           <MdVideoCall className="w-6 h-6 text-[#615DFA]" />
         </button>
       </div>
-      <div className="overflow-y-auto"></div>
+      <div
+        ref={messageContainerRef}
+        className="overflow-y-auto h-[480px] bg-[#F7FAFD] pb-[30px]"
+      >
+        {messages.length > 0 ? (
+          messages.map((msg) => {
+            const formatTimestamp = (timestamp) => {
+              if (!timestamp) return "No Date";
+              const date = timestamp.toDate(); // Convert Timestamp to Date object
+              return date.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }); // Format as 'HH:MM'
+            };
+
+            const isSent = msg.senderId === userId;
+
+            const formattedTime = msg.createdAt
+              ?.toDate()
+              .toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true, // Ensure 12-hour format with AM/PM
+              })
+              .toLowerCase();
+            return (
+              <div>
+                <div
+                  key={msg.id}
+                  className={`col-start-${isSent ? "6" : "1"} col-end-${
+                    isSent ? "13" : "8"
+                  } p-3 rounded-lg `}
+                >
+                  <div
+                    className={`flex items-end ${
+                      isSent ? "justify-start flex-row-reverse" : "flex-row"
+                    }`}
+                  >
+                    {isSent ? (
+                      <Image
+                        alt=""
+                        src={participantImage}
+                        width={500}
+                        height={500}
+                        className="w-[30px] h-[30px] rounded-full"
+                      />
+                    ) : (
+                      <Image
+                        alt=""
+                        src={user?.image}
+                        width={500}
+                        height={500}
+                        className="w-[30px] h-[30px] rounded-full"
+                      />
+                    )}
+                    <div
+                      className={`relative ${
+                        isSent ? "mr-3" : "ml-3"
+                      } text-sm ${
+                        isSent ? "bg-indigo-100" : "bg-white"
+                      } py-2 px-4  rounded-xl min-w-[130px] max-w-[300px]`}
+                    >
+                      <div>{msg.content}</div>
+                      <div className="flex justify-end gap-x-[3px] items-center -mb-3">
+                        <p className="text-[10px]">{formattedTime}</p>
+                        <div className="">
+                          <p
+                            className={`${
+                              msg.seen === true
+                                ? "text-blue-500"
+                                : "text-green-500"
+                            } "text-[13px]   font-bold"`}
+                          >
+                            <LuCheckCheck />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-center text-gray-500">No messages yet.</p>
+        )}
+      </div>
       {/* bottom */}
       <div className="absolute bottom-0 h-auto min-h-[55px] max-h-[150px] bg-white border-t-[0.5px] w-full flex justify-around items-center gap-1 py-2 px-2">
         <button>
@@ -98,12 +410,14 @@ const MessageBox = ({ onProfileClick }) => {
           ref={textareaRef}
           className="w-full max-w-[80%] border-[0.5px] rounded-2xl bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[12px] leading-5"
           rows={rows}
-          onInput={handleInput}
-          value={message}
+          onChange={handleInput}
+          onKeyDown={handleInput}
+          value={newMessage}
+          placeholder="Type your message..."
         />
         {/* Conditionally render Send or Like button */}
-        {message.trim().length > 0 ? (
-          <button>
+        {newMessage.trim().length > 0 ? (
+          <button type="button" onClick={sendMessage}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -120,7 +434,7 @@ const MessageBox = ({ onProfileClick }) => {
             </svg>
           </button>
         ) : (
-          <button>
+          <button type="button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

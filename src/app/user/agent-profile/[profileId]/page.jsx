@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { MdAddAPhoto } from "react-icons/md";
 import { GoStarFill } from "react-icons/go";
@@ -12,12 +12,22 @@ import { PostLocationValueContext } from "@/Context/postValueContext";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { SiImessage } from "react-icons/si";
 import { PostTabProfile } from "../../_component/ProfileTab/PostTabProfile";
+import {
+  db,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+} from "../../../../firebase"; // Assuming you have firebase setup
+import { ChatValueContext } from "@/Context/chatContext";
 export default function AgentProfile() {
   const { user, setRender, render } = PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
     PostLocationValueContext
   );
-  const myId = user?._id;
+
   const params = useParams();
   const [activeTab, setActiveTab] = useState("Posts");
   const userId = params.profileId;
@@ -26,7 +36,8 @@ export default function AgentProfile() {
   const [isFollowEr, setIsFollowEr] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
-
+  const myId = user?._id;
+  const profiled = profile?._id;
   const renderTabContent = () => {
     switch (activeTab) {
       case "Posts":
@@ -53,7 +64,7 @@ export default function AgentProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/agent/${userId}`;
+    const endpoint = `http://localhost:4000/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -108,7 +119,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -135,7 +146,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -163,8 +174,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -202,8 +213,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -247,11 +258,16 @@ export default function AgentProfile() {
 
   // follow funtion
 
-  const handleFollowClick = async (profile) => {
+  const handleFollowClick = async (type, profile) => {
     try {
       const _id = profile?._id;
       const role = profile?.role;
-      setIsFollow(true);
+      if (type === "follow") {
+        setIsFollow(true);
+      } else {
+        setIsFriend(true);
+      }
+
       let token;
       const userRole = localStorage.getItem("role");
       if (userRole === "agent") {
@@ -259,7 +275,7 @@ export default function AgentProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/follow/${role}/${_id}/${type}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -286,7 +302,7 @@ export default function AgentProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -306,6 +322,9 @@ export default function AgentProfile() {
       toast.error(`${error.message}`);
     }
   };
+
+  // chat
+  const { createNewChat } = useContext(ChatValueContext);
 
   return (
     <div className="bg-[#EFF4FB]">
@@ -451,12 +470,12 @@ export default function AgentProfile() {
                         onClick={() => handleUnFollowClick(profile)}
                         className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                       >
-                        <BsJournalBookmarkFill className="w-5 h-5" /> Unfollow
+                        <BsJournalBookmarkFill className="w-5 h-5" /> Pending
                       </button>
                     ) : isFollowEr ? (
                       <button
                         type="button"
-                        // onClick={() => handleFollowBackClick(profile)}
+                        onClick={() => handleFollowClick("follow", profile)}
                         className="bg-yellow-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-yellow-500/70 flex justify-center items-center gap-2"
                       >
                         <BsJournalBookmarkFill className="w-5 h-5" /> Follow
@@ -465,14 +484,18 @@ export default function AgentProfile() {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => handleFollowClick(profile)}
+                        onClick={() => handleFollowClick("follow", profile)}
                         className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                       >
                         <BsJournalBookmarkFill className="w-5 h-5" /> Follow
                       </button>
                     )}
 
-                    <button className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => createNewChat(user, profile)}
+                      className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                    >
                       {" "}
                       <SiImessage className="w-5 h-5" /> Massage
                     </button>

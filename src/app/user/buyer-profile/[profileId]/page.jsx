@@ -11,7 +11,15 @@ import { SiImessage } from "react-icons/si";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { PostTabProfile } from "../../_component/ProfileTab/PostTabProfile";
-
+import {
+  db,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "../../../../firebase";
+import { ChatValueContext } from "@/Context/chatContext";
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
@@ -23,6 +31,8 @@ export default function BuyerProfile() {
   const userId = params.profileId;
   const [profile, setProfile] = useState();
   const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
   const [followRerander, setFollowRerander] = useState(false);
   const renderTabContent = () => {
     switch (activeTab) {
@@ -49,7 +59,7 @@ export default function BuyerProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/user/${userId}`;
+    const endpoint = `http://localhost:4000/user/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -75,6 +85,8 @@ export default function BuyerProfile() {
   }, [userId, followRerander]);
   useEffect(() => {
     setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
   }, [profile, followRerander]);
 
   // image update
@@ -102,7 +114,7 @@ export default function BuyerProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -129,7 +141,7 @@ export default function BuyerProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -157,8 +169,8 @@ export default function BuyerProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -197,8 +209,8 @@ export default function BuyerProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -243,11 +255,16 @@ export default function BuyerProfile() {
 
   // follow funtion
 
-  const handleFollowClick = async (profile) => {
+  const handleFollowClick = async (type, profile) => {
     try {
       const _id = profile?._id;
       const role = profile?.role;
-      setIsFollow(true);
+      if (type === "follow") {
+        setIsFollow(true);
+      } else {
+        setIsFriend(true);
+      }
+
       let token;
       const userRole = localStorage.getItem("role");
       if (userRole === "agent") {
@@ -255,7 +272,7 @@ export default function BuyerProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/follow/${role}/${_id}/${type}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -282,7 +299,7 @@ export default function BuyerProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -302,6 +319,69 @@ export default function BuyerProfile() {
       toast.error(`${error.message}`);
     }
   };
+
+  const handleCreateChat = async () => {
+    if (!myId || !profile?._id) return;
+    const profileId = profile?._id;
+    try {
+      const chatRef = collection(db, "chats"); // 'chats' is the collection name
+      // Query to check if a chat already exists with these participants
+      const q = query(
+        chatRef,
+        where("participants", "array-contains", { id: myId })
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      let chatExists = false;
+      querySnapshot.forEach((doc) => {
+        const participants = doc.data().participants;
+        const hasBothParticipants =
+          participants.some((participant) => participant.id === myId) &&
+          participants.some((participant) => participant.id === profileId);
+
+        if (hasBothParticipants) {
+          chatExists = true;
+        }
+      });
+
+      if (chatExists) {
+        toast.info("Chat already exists!");
+        return;
+      }
+
+      await addDoc(chatRef, {
+        participants: [
+          {
+            id: myId,
+            name: user?.fullName,
+            image: user?.image, // Assuming you have `image` in your `user` object
+            role: user?.role, // Assuming you have `role` in your `user` object
+          },
+          {
+            id: profile._id,
+            name: profile.fullName,
+            image: profile.image, // Assuming `image` is a field in the `profile` object
+            role: profile.role, // Assuming `role` is a field in the `profile` object
+          },
+        ],
+        createdAt: new Date(),
+        latestMessage: "",
+        unseenMessages: {
+          [myId]: 0,
+          [profileId]: 0,
+        },
+      });
+
+      toast.success("Chat created successfully!");
+    } catch (error) {
+      console.error("Error creating chat:", error);
+      toast.error("Failed to create chat.");
+    }
+  };
+
+  // chat
+  const { createNewChat } = useContext(ChatValueContext);
 
   return (
     <div className="bg-[#EFF4FB]">
@@ -408,6 +488,18 @@ export default function BuyerProfile() {
                       <h1 className="text-[42px] leading-none">
                         {profile?.fullName}{" "}
                       </h1>
+                    ) : isFriend ? (
+                      <h1 className="text-[42px] leading-none">
+                        {profile?.fullName}{" "}
+                      </h1>
+                    ) : isFollow ? (
+                      <h1 className="text-[42px] leading-none">
+                        {profile?.fullName}{" "}
+                      </h1>
+                    ) : isFollowEr ? (
+                      <h1 className="text-[42px] leading-none">
+                        {profile?.fullName}{" "}
+                      </h1>
                     ) : (
                       <h1 className="text-[42px]  text-[#8F8F8F] leading-none">
                         Hidden Name{" "}
@@ -428,27 +520,53 @@ export default function BuyerProfile() {
                 </div>
                 {profile?._id !== myId && (
                   <div className="flex justify-between gap-3 mt-2">
-                    {isFollow === true ? (
-                      <button
-                        type="button"
-                        onClick={() => handleUnFollowClick(profile)}
-                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
-                      >
-                        <BsJournalBookmarkFill className="w-5 h-5" /> Unfollow
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleFollowClick(profile)}
-                        className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
-                      >
-                        <BsJournalBookmarkFill className="w-5 h-5" /> Follow
-                      </button>
+                    {profile?._id !== myId && (
+                      <div className="flex justify-start items-center gap-3 mt-2">
+                        {isFriend ? (
+                          <button
+                            type="button"
+                            className="bg-green-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-green-500/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" /> Friend
+                          </button>
+                        ) : isFollow ? (
+                          <button
+                            type="button"
+                            onClick={() => handleUnFollowClick(profile)}
+                            className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" />{" "}
+                            Pending
+                          </button>
+                        ) : isFollowEr ? (
+                          <button
+                            type="button"
+                            onClick={() => handleFollowClick("follow", profile)}
+                            className="bg-yellow-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-yellow-500/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                            Back
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleFollowClick("follow", profile)}
+                            className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                          >
+                            <BsJournalBookmarkFill className="w-5 h-5" /> Follow
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => createNewChat(user, profile)}
+                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                        >
+                          {" "}
+                          <SiImessage className="w-5 h-5" /> Massage
+                        </button>
+                      </div>
                     )}
-                    <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
-                      {" "}
-                      <SiImessage className="w-5 h-5" /> Massage
-                    </button>
                   </div>
                 )}
               </div>

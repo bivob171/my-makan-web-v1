@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
@@ -14,6 +14,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
 import { usePathname, useRouter } from "next/navigation";
+import { ChatValueContext } from "@/Context/chatContext";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 export default function PackageCard({
   item,
   myId,
@@ -35,7 +37,12 @@ export default function PackageCard({
     likeCount,
     comment,
     likedBy,
+    saveByMe,
+    following,
+    follower,
+    friend,
   } = item;
+
   const savePostId = _id;
   const [isHovered, setIsHovered] = useState(false);
   const [isHeartRed, setIsHeartRed] = useState(false);
@@ -120,7 +127,7 @@ export default function PackageCard({
     return styles[styleIndex];
   };
   const giveLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/like`;
+    const url = `http://localhost:4000/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -145,7 +152,7 @@ export default function PackageCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `http://localhost:4000/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -180,7 +187,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -205,7 +212,7 @@ export default function PackageCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `http://localhost:4000/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -227,27 +234,8 @@ export default function PackageCard({
   };
 
   useEffect(() => {
-    const checkSavePost = async (token) => {
-      try {
-        const response = await axios.get(
-          `https://api.mymakan.ae/save-post/save-post-exist/${savePostId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setIsHeartRed(response.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setSaveLoading(false);
-      }
-    };
-    const userRole = localStorage.getItem("role");
-    const token = localStorage.getItem(`${userRole}AccessToken`);
-    checkSavePost(token);
-  }, [savePostId, saveRerander]);
+    setIsHeartRed(saveByMe);
+  }, [saveByMe, saveRerander, item]);
 
   const handleFollowClick = async (type, userinfo) => {
     try {
@@ -266,7 +254,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/follow/${role}/${_id}/${type}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -294,7 +282,7 @@ export default function PackageCard({
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -316,75 +304,10 @@ export default function PackageCard({
   };
 
   useEffect(() => {
-    const checkFollowUser = async (token) => {
-      try {
-        const response = await axios.get(
-          `https://api.mymakan.ae/follow/following-exist/${followingId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setIsFollow(response.data);
-      } catch (err) {
-        setFError(err);
-      } finally {
-        setFollowLoading(false);
-      }
-    };
-    const userRole = localStorage.getItem("role");
-    const token = localStorage.getItem(`${userRole}AccessToken`);
-    checkFollowUser(token);
-  }, [followingId, followRerander]);
-
-  // if user follow me
-  useEffect(() => {
-    const checkFollowUser = async (token) => {
-      try {
-        const response = await axios.get(
-          `https://api.mymakan.ae/follow/follower-exist/${followerId}/${followerRole}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setIsFollowEr(response.data);
-      } catch (err) {
-        setFError(err);
-      } finally {
-        setFollowErLoading(false);
-      }
-    };
-    const userRole = localStorage.getItem("role");
-    const token = localStorage.getItem(`${userRole}AccessToken`);
-    checkFollowUser(token);
-  }, [followerId, followerRole, followRerander]);
-
-  // if user friend
-  useEffect(() => {
-    const checkFollowUser = async (token) => {
-      try {
-        const response = await axios.get(
-          `https://api.mymakan.ae/follow/friend-exist/${followerId}/${followerRole}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setIsFriend(response.data);
-      } catch (err) {
-        setFError(err);
-      } finally {
-        setFollowErLoading(false);
-      }
-    };
-    const userRole = localStorage.getItem("role");
-    const token = localStorage.getItem(`${userRole}AccessToken`);
-    checkFollowUser(token);
-  }, [followerId, followerRole, followRerander]);
+    setIsFollow(following);
+    setIsFollowEr(follower);
+    setIsFriend(friend);
+  }, [following, follower, friend, followRerander, item]);
 
   // get path name
   const pathname = usePathname();
@@ -412,7 +335,10 @@ export default function PackageCard({
 
     router.push(`/user/related-posts/${_id}?${queryParam}`);
   }
-  console.log(isFollowEr);
+
+  // chat
+  const { user } = PrivateRouteContext();
+  const { createNewChat } = useContext(ChatValueContext);
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
@@ -479,6 +405,36 @@ export default function PackageCard({
                               {item.role === "buyer" ? (
                                 <>
                                   {userinfo?._id === myId ? (
+                                    <Link
+                                      href={`${"/user/buyer-profile"}/${
+                                        userinfo?._id
+                                      }`}
+                                    >
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                                        {userinfo?.fullName}
+                                      </p>
+                                    </Link>
+                                  ) : isFriend ? (
+                                    <Link
+                                      href={`${"/user/buyer-profile"}/${
+                                        userinfo?._id
+                                      }`}
+                                    >
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                                        {userinfo?.fullName}
+                                      </p>
+                                    </Link>
+                                  ) : isFollowEr ? (
+                                    <Link
+                                      href={`${"/user/buyer-profile"}/${
+                                        userinfo?._id
+                                      }`}
+                                    >
+                                      <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                                        {userinfo?.fullName}
+                                      </p>
+                                    </Link>
+                                  ) : isFollow ? (
                                     <Link
                                       href={`${"/user/buyer-profile"}/${
                                         userinfo?._id
@@ -605,7 +561,7 @@ export default function PackageCard({
                               className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
                             >
                               <BsJournalBookmarkFill className="w-5 h-5" />{" "}
-                              Unfollow
+                              Pending
                             </button>
                           ) : isFollowEr ? (
                             <button
@@ -631,7 +587,11 @@ export default function PackageCard({
                             </button>
                           )}
 
-                          <button className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => createNewChat(user, userinfo)}
+                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                          >
                             {" "}
                             <SiImessage className="w-5 h-5" /> Massage
                           </button>
@@ -649,6 +609,30 @@ export default function PackageCard({
                     {item.role === "buyer" ? (
                       <>
                         {userinfo?._id === myId ? (
+                          <Link
+                            href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                          >
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                              {userinfo?.fullName}
+                            </p>
+                          </Link>
+                        ) : isFriend ? (
+                          <Link
+                            href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                          >
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                              {userinfo?.fullName}
+                            </p>
+                          </Link>
+                        ) : isFollowEr ? (
+                          <Link
+                            href={`${"/user/buyer-profile"}/${userinfo?._id}`}
+                          >
+                            <p className="text-[0.875rem] md:!text-[1.3rem] hover:underline text-[#333335] font-semibold">
+                              {userinfo?.fullName}
+                            </p>
+                          </Link>
+                        ) : isFollow ? (
                           <Link
                             href={`${"/user/buyer-profile"}/${userinfo?._id}`}
                           >

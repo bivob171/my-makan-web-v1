@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
+import PackageCard from "../../_component/Card/PackageCard";
 
 export default function RelatedPost() {
   const searchParams = useSearchParams();
@@ -59,11 +61,11 @@ export default function RelatedPost() {
   const getAllPosts = async (token, reset = false) => {
     try {
       setIsFetching(true);
-      if (filterRender || reset) {
+      if (reset) {
         setLoading(true);
-        setPage(1); // Reset to first page
+        setPage(1);
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `http://localhost:4000/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -155,5 +157,55 @@ export default function RelatedPost() {
 
   const myId = user?._id;
 
-  return <div></div>;
+  return (
+    <div className="pb-[50px]">
+      <div className="">
+        <div className="">
+          <div>
+            {loading && (
+              <div>
+                <PostLodaing />
+              </div>
+            )}
+            {!loading && allPosts?.length === 0 && (
+              <div className="text-center text-gray-500 mt-4">
+                No posts available.
+              </div>
+            )}
+            {!loading && allPosts.length > 0 && (
+              <div className="grid grid-cols-1 gap-4 ">
+                {allPosts?.map((item, i) => {
+                  return (
+                    <div ref={lastPostElementRef} key={i}>
+                      <PackageCard
+                        item={item}
+                        myId={myId}
+                        setlike={setlike}
+                        like={like}
+                        saveRerander={saveRerander}
+                        setSaveRerander={setSaveRerander}
+                        followRerander={followRerander}
+                        setFollowRerander={setFollowRerander}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {isFetching && (
+              <div className="mb-[20px] mt-[20px] text-center">
+                <PostLodaing />
+              </div>
+            )}
+            {!hasMore && allPosts.length !== 0 && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>No more Post to load.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -5,37 +5,61 @@ import Image from "next/image";
 import { BsInfoCircle } from "react-icons/bs";
 import { IoCloseOutline } from "react-icons/io5";
 import Link from "next/link";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
-const ProfileDetails = ({ onClose }) => {
+const ProfileDetails = ({ selectedChat, profileSideBar }) => {
   const [isMuted, setIsMuted] = useState(false);
-
+  const { user } = PrivateRouteContext();
+  const userId = user?._id;
   const handleMuteToggle = () => {
     setIsMuted((prevState) => !prevState);
   };
 
+  const participantName = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.name)[0];
+  const participantImage = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.image)[0];
+  const participantRole = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.role)[0];
+  const participantId = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.id)[0];
+
   return (
     <div className="p-3 relative">
       <button
-        onClick={onClose}
+        type="button"
+        onClick={profileSideBar}
         className="absolute top-2 right-2 hover:bg-slate-100 p-1 rounded-full"
       >
         <IoCloseOutline className="text-[#999] w-6 h-6" />
       </button>
       <center className="">
         <Image
-          src="/media/figure/author_4.jpg"
+          src={participantImage}
           alt=""
           width={500}
           height={500}
           className="w-[120px] h-[120px] object-cover rounded-full object-top"
         />
       </center>
+
       <h3 className="text-center leading-6 text-[22px] m-0 font-bold mt-2">
-        Md Muzahidul
+        {participantName}
       </h3>
+
       <p className="text-center leading-6 text-[12px] m-0">Active 46m ago</p>
       <div className="flex justify-center gap-2 my-2">
-        <Link href="/">
+        <Link
+          href={
+            participantRole === "buyer"
+              ? `/user/buyer-profile/${participantId}`
+              : `/user/agent-profile/${participantId}`
+          }
+        >
           {" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"

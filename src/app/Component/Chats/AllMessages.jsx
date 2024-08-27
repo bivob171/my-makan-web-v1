@@ -1,126 +1,109 @@
-
+"use client";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import { LuCheckCheck } from "react-icons/lu";
 
-const AllMessages = () => {
-  const users = [
-    {
-      id: 1,
-      name: "Random James",
-      userProfile: "/media/figure/author_6.jpg",
-      lastUser: "Kamal Uddin",
-      lastUserProfile: "/media/figure/author_3.jpg",
-      lastMessage: {
-        me: "",
-        userMessage: "Hello I&apos;m Reduan jahan and you?",
-      },
-      time: "3.30 PM",
-      messageSendType: "seen",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      userProfile: "/media/figure/author_5.jpg",
-      lastUser: "Faruk Hossin",
-      lastUserProfile: "/media/figure/author_2.jpg",
-      lastMessage: {
-        me: "Today weather is very nice!",
-        userMessage: "",
-      },
-      time: "1.30 AM",
-      messageSendType: "Delivery",
-    },
-    {
-      id: 3,
-      name: "Bob Spinkler",
-      userProfile: "/media/figure/author_7.jpg",
-      lastUser: "Bayzid Hossain",
-      lastUserProfile: "/media/figure/author_8.jpg",
-      lastMessage: {
-        me: "Tomorrow I&apos;m coming",
-        userMessage: "",
-      },
-      time: "4.04 PM",
-      messageSendType: "sent",
-    },
-    {
-      id: 4,
-      name: "Random James",
-      userProfile: "/media/figure/author_9.jpg",
-      lastUser: "Kamal Uddin",
-      lastUserProfile: "/media/figure/author_1.jpg",
-      lastMessage: {
-        me: "",
-        userMessage: "Hello I&apos;m Reduan jahan and you?",
-      },
-      time: "3.30 PM",
-      messageSendType: "seen",
-    },
-    {
-      id: 5,
-      name: "Random James",
-      userProfile: "/media/figure/author_4.jpg",
-      lastUser: "Kamal Uddin",
-      lastUserProfile: "/media/figure/author_3.jpg",
-      lastMessage: {
-        me: "",
-        userMessage: "Hello I&apos;m Reduan jahan and you?",
-      },
-      time: "3.30 PM",
-      messageSendType: "Delivery",
-    },
-  ];
-
+const AllMessages = ({ chats, handleChatSelection }) => {
+  const { user, setRender, render } = PrivateRouteContext();
   return (
     <div className="px-3 py-2">
-      {users.map((user) => (
-        <div
-          key={user.id}
-          className="flex justify-start items-start gap-2 py-[6px] border-b-[1px] hover:bg-[#eff4fbc0] hover:rounded-md"
-        >
-          <Image
-            src={user.userProfile}
-            alt={user.name}
-            width={500}
-            height={500}
-            className="w-[50px] h-[50px] object-cover rounded-full object-top"
-          />
-          <div className="w-full">
-            <div className="flex justify-between items-start">
-              <span className="text-[16px] font-bold ">{user.name}</span>
-              <span className="text-[10px] font-normal">{user.time}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[12px] leading-5">
-                {user.lastMessage.me
-                  ? user.lastMessage.me.length > 30
-                    ? `You: ${user.lastMessage.me.substring(0, 30)}...`
-                    : `You: ${user.lastMessage.me}`
-                  : user.lastMessage.userMessage.length > 20
-                  ? `${user.lastMessage.userMessage.substring(0, 30)}...`
-                  : user.lastMessage.userMessage}
-              </span>
-              {user.messageSendType === "sent" && (
-                <IoCheckmarkOutline className="w-3 h-3 text-[#615DFA]" />
-              )}
-              {user.messageSendType === "Delivery" && (
-                <IoCheckmarkDoneOutline className="w-3 h-3 text-[#615DFA]" />
-              )}
-              {user.messageSendType === "seen" && (
-                <Image
-                  src={user.lastUserProfile}
-                  alt={user.lastUser}
-                  width={50}
-                  height={50}
-                  className="w-[12px] h-[12px] object-cover rounded-full object-top"
-                />
-              )}
+      {chats.map((chat) => {
+        const formatTimestamp = (timestamp) => {
+          if (!timestamp) return "No Date";
+          const date = timestamp.toDate(); // Convert Timestamp to Date object
+          return date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }); // Format as 'HH:MM'
+        };
+
+        const participantId = chat?.participants
+          .filter((p) => p.id !== user?._id) // Exclude the current user
+          .map((p) => p.id)[0];
+        const participantImage = chat?.participants
+          .filter((p) => p.id !== user?._id) // Exclude the current user
+          .map((p) => p.image)[0];
+        const participantName = chat?.participants
+          .filter((p) => p.id !== user?._id) // Exclude the current user
+          .map((p) => p.name)[0];
+        const unseenCountparticipan = chat.unseenMessages[participantId] || 0;
+        const unseenCount = chat.unseenMessages[user?._id] || 0;
+        return (
+          <div
+            key={chat.id}
+            onClick={() => handleChatSelection(chat.id, chat)}
+            className="flex justify-start items-start gap-2 py-[6px] px-[2px] border-b-[1px] hover:bg-[#eff4fbc0] hover:rounded-md"
+          >
+            <Image
+              src={participantImage}
+              alt=""
+              width={500}
+              height={500}
+              className="w-[50px] h-[50px] object-cover rounded-full object-top"
+            />
+
+            <div className="w-full">
+              <div className="flex justify-between items-start">
+                <span className="text-[16px] font-bold ">
+                  {participantName}
+                </span>
+
+                <span className="text-[10px] font-normal">
+                  {formatTimestamp(chat.latestMessageTimestamp)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center -mt-1">
+                {chat.latestMessage.length > 0 ? (
+                  <span className="text-[12px] leading-5">
+                    {" "}
+                    {chat.latestMessage.length > 30
+                      ? chat.latestMessage.slice(0, 30) + "..."
+                      : chat.latestMessage}{" "}
+                  </span>
+                ) : (
+                  <span className="text-[12px] leading-5">
+                    {" "}
+                    No messages yet.
+                  </span>
+                )}
+
+                <div className="flex gap-x-[5px] items-center">
+                  <div className="">
+                    {" "}
+                    {unseenCount > 0 ? null : (
+                      <>
+                        {chat.latestMessage.length > 0 ? (
+                          <p
+                            className={`${
+                              unseenCountparticipan > 0 || unseenCount > 0
+                                ? "text-green-500"
+                                : "text-blue-500"
+                            } "text-[11px]   font-bold "`}
+                          >
+                            <LuCheckCheck />
+                          </p>
+                        ) : null}
+                      </>
+                    )}
+                  </div>
+                  <div>
+                    {unseenCount > 0 ? (
+                      <div className="w-[20px] h-[20px] bg-red-500 rounded-full px-2 py-0.5 relative">
+                        <span className=" text-white text-[9px] absolute inset-0 flex items-center justify-center">
+                          {unseenCount}
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
