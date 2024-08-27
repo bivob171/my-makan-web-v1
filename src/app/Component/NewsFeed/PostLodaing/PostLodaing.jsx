@@ -2,7 +2,7 @@ import React from "react";
 
 export const PostLodaing = () => {
   return (
-    <div>
+    <div className="h-screen">
       {" "}
       <div className="text-center ">
         <div className="text-center mb-[12px]">

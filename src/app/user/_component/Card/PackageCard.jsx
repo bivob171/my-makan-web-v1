@@ -343,7 +343,7 @@ export default function PackageCard({
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">
-        <div className="flex justify-between items-start px-[12px] md:px-[15px]">
+        <div className="flex justify-between items-start px-[12px] md:px-[15px] !h-full !min-h-[90px]">
           <div className="flex gap-x-[15px] items-start w-full">
             <div className="">
               <div
@@ -498,7 +498,7 @@ export default function PackageCard({
                               }
                               className="cursor-pointer hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
                             >
-                              Buyer From{" "}
+                              <span className="text-[14px]">Buyer From </span>
                               <span className="text-[#E6533C]">
                                 {userinfo?.state}
                                 {userinfo?.country !== null && ", "}
@@ -688,7 +688,7 @@ export default function PackageCard({
                     }
                     className="cursor-pointer hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none"
                   >
-                    Buyer From{" "}
+                    <span className="text-[14px]">Buyer From </span>
                     <span className="text-[#E6533C]">
                       {userinfo?.state}
                       {userinfo?.country !== null && ", "}
@@ -792,32 +792,32 @@ export default function PackageCard({
           </div>
         </div>
         <div className="h-[0.5px] w-full bg-[#e9e9e9] my-2 md:!my-3"></div>
-        <div className="px-[15px]">
-          <div>
-            <p className="font-inter text-[22px] md:text-[28px] text-[#222] font-semibold mb-2 leading-[40px]">
-              {item?.title}
-            </p>
-            {item?.description?.length > 132 ? (
-              <p className="font-inter text-[#333] !text-[14px] md:!text-[16px] font-normal leading-[20px]">
-                {item?.description.slice(0, 133)}...
-                <Link href={`${"/user/post-details"}/${_id}`}>
-                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
-                    see more
-                  </span>
-                </Link>
+        <div className="px-[15px] w-full">
+          <Link href={`/user/post-details/${_id}`} className="w-full">
+            <div>
+              <p className="font-inter text-[22px] md:text-[26px] text-[#666] font-semibold mb-2 leading-[40px]">
+                {item?.title.length > 33
+                  ? `${item?.title.slice(0, 33)}...`
+                  : item?.title}
               </p>
-            ) : (
-              <p className="font-inter text-[#333] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
-                {item?.description}...
-                <Link href={`${"/user/post-details"}/${_id}`}>
-                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
-                    see more
-                  </span>
-                </Link>
+              <p className="font-inter text-[#333] !text-[14px] md:!text-[16px] font-normal leading-[20px] px-3 text-justify h-[80px]">
+                {item?.description.length > 133 ? (
+                  <>
+                    {item?.description.slice(0, 133)}...
+                    <Link href={`/user/post-details/${_id}`}>
+                      <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
+                        see more
+                      </span>
+                    </Link>
+                  </>
+                ) : (
+                  item?.description
+                )}
               </p>
-            )}
-          </div>
+            </div>
+          </Link>
         </div>
+
         <div className="px-[15px] flex items-start justify-between !mt-4">
           <div className="flex flex-wrap gap-[8px]">
             {item.tags?.map((tag, index) => {
@@ -825,7 +825,7 @@ export default function PackageCard({
               return (
                 <button
                   key={index}
-                  className="!py-[0px] px-[7px] md:px-4 rounded "
+                  className="!py-[2px] px-[4px] md:px-2 rounded leading-none"
                   style={{ backgroundColor: bgColor }}
                   onClick={() =>
                     handleRelatedPosts({
@@ -835,7 +835,7 @@ export default function PackageCard({
                   }
                 >
                   <span
-                    className="text-[10px] md:text-[14px] font-medium font-inter"
+                    className="text-[9px] md:text-[11px] font-medium font-inter leading-none"
                     style={{ color: textColor }}
                   >
                     {tag}
@@ -884,8 +884,9 @@ export default function PackageCard({
             )}
           </div>
         </div>
+        {/* footer  */}
         <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
-        <div className=" flex items-center justify-between px-[15px]">
+        <footer className=" flex items-center justify-between px-[15px]">
           {/* match post */}
           {basePath === "/user/matched-post/" ? (
             <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
@@ -973,7 +974,7 @@ export default function PackageCard({
               )}
             </div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );
