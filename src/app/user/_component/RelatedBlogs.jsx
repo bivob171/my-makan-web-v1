@@ -39,6 +39,7 @@ const RelatedBlogs = ({ item }) => {
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
+  const [minMatchPercentage, setMinMatchPercentage] = useState(0);
 
   useEffect(() => {
     setSelectedType(item?.postType);
@@ -58,7 +59,7 @@ const RelatedBlogs = ({ item }) => {
   const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/match-post?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -95,10 +96,14 @@ const RelatedBlogs = ({ item }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const allPostsList = await response.json();
-      setHasMore(allPostsList.length === limit);
+      const postData = await response.json();
+      const allPostsList = postData.posts;
+      const filteredPosts = allPostsList.filter(
+        (post) => Number(post.matchPercentage) >= minMatchPercentage
+      );
+      setHasMore(filteredPosts.length === limit);
       setAllPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+        page === 1 ? filteredPosts : [...prevPost, ...filteredPosts]
       );
       setLoading(false);
     } catch (error) {
@@ -132,6 +137,7 @@ const RelatedBlogs = ({ item }) => {
     parking,
     sellType,
     tags,
+    minMatchPercentage,
   ]);
 
   const myId = user?._id;

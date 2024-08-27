@@ -29,14 +29,14 @@ export default function BuyerPosts() {
 
         <div className="row">
           <div className="col-lg-3 widget-block widget-break-lg ">
-            <div className="!sticky top-[110px]">
+            <div className="!sticky top-[110px] ">
               <div className="h-[86vh] overflow-y-scroll">
                 <NewsFeedLeftSection />
               </div>
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+            <div className="!sticky top-[100px] bg-[#EFF4FB] z-440">
               <PostSearch
                 open={open}
                 user={user}

@@ -192,7 +192,11 @@ const AddPost = ({
                     <Image
                       width={1000}
                       height={120}
-                      className="w-auto h-[80px] rounded-"
+                      className={`w-auto h-[80px] rounded- ${
+                        imageUploading !== null && imageUploading < 100
+                          ? "blur-sm"
+                          : ""
+                      }`}
                       src={file.url}
                       alt={`Uploaded ${index}`}
                     />

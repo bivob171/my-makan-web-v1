@@ -38,6 +38,8 @@ const PostLocationValueProvider = ({ children }) => {
   const [media, setmedia] = useState([]);
   const [files, setFiles] = useState([]);
   const [newsFeedRender, setNewsFeedRender] = useState(false);
+  console.log(media);
+
   return (
     <PostLocationValueContext.Provider
       value={{

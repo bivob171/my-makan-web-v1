@@ -202,7 +202,7 @@ const AvailablePosts = () => {
 
   const myId = user?._id;
 
-  const [newPostCount, setNewPostCount] = useState(5);
+  const [newPostCount, setNewPostCount] = useState(0);
 
   // Function to load new posts and scroll to top
   function loadNewPost() {
@@ -275,11 +275,13 @@ const AvailablePosts = () => {
               showButton ? "opacity-100" : "opacity-0"
             }`}
           >
-            {newPostCount > 0 && (
+            {newPostCount > 20 && (
               <button
                 type="button"
                 onClick={handleButtonClick}
-                className="inline-flex items-center rounded bg-primary px-4 py-2 text-[16px]   leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong font-semibold"
+                className={`inline-flex items-center rounded bg-primary px-4 py-2 text-[16px]   leading-normal text-white shadow-primary-3 hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong font-semibold fixed 2xl:top-[240px] xl:top-[240px] lg:top-[240px] md:top-[240px] sm:top-[120px] top-[120px] left-1/2 transform -translate-x-1/2 z-10 transition-opacity duration-300 ease-in-out ${
+                  showButton ? "block" : "hidden"
+                }`}
               >
                 <IoIosRefresh className="text-[20px] mr-[7px]" />
                 Refresh

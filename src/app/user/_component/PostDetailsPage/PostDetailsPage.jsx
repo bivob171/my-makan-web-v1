@@ -130,11 +130,34 @@ export const PostDetailsPage = ({ postid }) => {
     return date.toLocaleDateString("en-GB", options);
   };
 
+  const [firstImg, setFirstImg] = useState(null);
+  const [secondImg, setSecondImg] = useState(null);
+  const [thirdImg, setThirdImg] = useState(null);
+  const [fourthImg, setFourthImg] = useState(null);
+
+  useEffect(() => {
+    const imageIndices = media?.reduce((indices, mediaItem, index) => {
+      if (mediaItem.type === "image") {
+        indices.push(index);
+      }
+      return indices;
+    }, []);
+
+    if (imageIndices && imageIndices.length >= 4) {
+      setFirstImg(media[imageIndices[0]]);
+      setSecondImg(media[imageIndices[1]]);
+      setThirdImg(media[imageIndices[2]]);
+      setFourthImg(media[imageIndices[3]]);
+    } else {
+      console.log("Not enough images found or media is undefined.");
+    }
+  }, [item]);
+
   const mediaArray = Array.isArray(media) ? media : [];
 
-  const data = mediaArray.filter((file) => file.type === "image");
-  const videos = mediaArray.filter((file) => file.type === "video");
-  const files = mediaArray.filter((file) => file.type === "pdf");
+  const allImages = mediaArray.filter((file) => file.type === "image");
+  const allVideos = mediaArray.filter((file) => file.type === "video");
+  const allPdf = mediaArray.filter((file) => file.type === "pdf");
 
   const [saveRerander, setSaveRerander] = useState(false);
 
@@ -332,7 +355,7 @@ export const PostDetailsPage = ({ postid }) => {
               <div className="col-span-9 relative h-[516px]">
                 <button className="w-full h-full" onClick={openPhotoModal}>
                   <Image
-                    src="/media/blog/blog_1.jpg"
+                    src={firstImg?.url}
                     width={1000}
                     height={1000}
                     alt="Blog"
@@ -343,18 +366,21 @@ export const PostDetailsPage = ({ postid }) => {
                       <MdSlowMotionVideo className="w-3 h-3" />{" "}
                       <span className="">See video</span>
                     </div>
-                    <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1">
+                    {/* <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1">
                       <FiMapPin className="w-3 h-3" />{" "}
                       <span className="">Map</span>
-                    </div>
+                    </div> */}
                   </div>
                   <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                 </button>
               </div>
               <div className="col-span-3 grid grid-rows-2 gap-y-[8px]">
-                <button className="relative w-full h-[250px]" onClick={openPhotoModal}>
+                <button
+                  className="relative w-full h-[250px]"
+                  onClick={openPhotoModal}
+                >
                   <Image
-                    src="/media/blog/blog_3.jpg"
+                    src={secondImg?.url}
                     width={1000}
                     height={1000}
                     alt="Blog"
@@ -365,7 +391,7 @@ export const PostDetailsPage = ({ postid }) => {
                 <div className="grid grid-rows-2 gap-y-[8px] w-full h-[250px]">
                   <button className="relative" onClick={openPhotoModal}>
                     <Image
-                      src="/media/blog/blog_6.jpg"
+                      src={thirdImg?.url}
                       width={1000}
                       height={1000}
                       alt="Blog"
@@ -375,7 +401,7 @@ export const PostDetailsPage = ({ postid }) => {
                   </button>
                   <button className="relative" onClick={openPhotoModal}>
                     <Image
-                      src="/media/blog/blog_7.jpg"
+                      src={fourthImg?.url}
                       width={1000}
                       height={1000}
                       alt="Blog"
@@ -383,7 +409,9 @@ export const PostDetailsPage = ({ postid }) => {
                     />
                     <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1 absolute bottom-4 right-4 z-20">
                       <IoCameraOutline className="w-3 h-3" />{" "}
-                      <span className="">19</span>
+                      <span className="">
+                        {allImages.length > 4 ? allImages.length : null}
+                      </span>
                     </div>
                     <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                   </button>
@@ -392,6 +420,8 @@ export const PostDetailsPage = ({ postid }) => {
               <PostDetailsPhotoModal
                 isPhotoModalOpen={isPhotoModalOpen}
                 closePhotoModal={closePhotoModal}
+                allImages={allImages}
+                allVideos={allVideos}
               />
             </div>
 
@@ -563,7 +593,10 @@ export const PostDetailsPage = ({ postid }) => {
                   </div>
                   {/* Property Information */}
                   <div>
-                    <PropertyInformation item={item} />
+                    <PropertyInformation
+                      item={item}
+                      handleRelatedPosts={handleRelatedPosts}
+                    />
                   </div>
                   <div className="">
                     <center>
@@ -628,10 +661,13 @@ export const PostDetailsPage = ({ postid }) => {
           <RelatedPosts item={item} />
           <div className="mb-[20px]">
             {/* sell type  */}
-            <SellTypeSection sellType={sellType} />
+            <SellTypeSection
+              sellType={sellType}
+              handleRelatedPosts={handleRelatedPosts}
+            />
           </div>
           {/* tags  */}
-          <TagsSection tags={tags} />
+          <TagsSection tags={tags} handleRelatedPosts={handleRelatedPosts} />
         </div>
       </div>
     </div>

@@ -34,7 +34,7 @@ export default function AgentPosts() {
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="!sticky top-[100px] bg-[#EFF4FB] z-10">
+            <div className="!sticky top-[100px] bg-[#EFF4FB] z-40">
               <PostSearch
                 open={open}
                 user={user}

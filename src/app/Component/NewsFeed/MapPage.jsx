@@ -90,56 +90,67 @@ const MapPage = ({ setCurrentPanel, currentPanel }) => {
 
   useEffect(() => {
     if (isLoaded && inputRef.current) {
-      const searchBoxInstance = new window.google.maps.places.Autocomplete(
-        inputRef.current
-      );
-      setSearchBox(searchBoxInstance);
+      const checkAndInitializeAutocomplete = () => {
+        if (window.google && window.google.maps && window.google.maps.places) {
+          const searchBoxInstance = new window.google.maps.places.Autocomplete(
+            inputRef.current
+          );
+          setSearchBox(searchBoxInstance);
 
-      searchBoxInstance.addListener("place_changed", () => {
-        const place = searchBoxInstance.getPlace();
-        if (!place.geometry) {
-          console.error("No geometry found for the place");
-          return;
+          searchBoxInstance.addListener("place_changed", () => {
+            const place = searchBoxInstance.getPlace();
+            if (!place.geometry) {
+              console.error("No geometry found for the place");
+              return;
+            }
+
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            const address = place.formatted_address;
+
+            setSelectedLocation({ lat, lng });
+            setSelectedAddress(address);
+            setSearchText(address); // Update the search input with the selected address
+
+            if (mapRef.current) {
+              mapRef.current.panTo({ lat, lng });
+              mapRef.current.setZoom(15); // Zoom in when a place is selected
+            }
+
+            const addressComponents = place.address_components;
+            let country = "";
+            let state = "";
+            let city = "";
+
+            addressComponents.forEach((component) => {
+              if (component.types.includes("country")) {
+                country = component.long_name;
+              } else if (
+                component.types.includes("administrative_area_level_1")
+              ) {
+                state = component.long_name;
+              } else if (
+                component.types.includes("locality") ||
+                component.types.includes("administrative_area_level_2")
+              ) {
+                city = component.long_name;
+              }
+            });
+
+            setSelectedLata(lat);
+            setSelectedLon(lng);
+            setSelectedformatted_address(address);
+            setSelectedCountry(country);
+            setSelectedState(state);
+            setSelectedCity(city);
+          });
+        } else {
+          // Retry after a short delay if places library is not yet available
+          setTimeout(checkAndInitializeAutocomplete, 100);
         }
+      };
 
-        const lat = place.geometry.location.lat();
-        const lng = place.geometry.location.lng();
-        const address = place.formatted_address;
-
-        setSelectedLocation({ lat, lng });
-        setSelectedAddress(address);
-        setSearchText(address); // Update the search input with the selected address
-
-        if (mapRef.current) {
-          mapRef.current.panTo({ lat, lng });
-          mapRef.current.setZoom(15); // Zoom in when a place is selected
-        }
-
-        const addressComponents = place.address_components;
-        let country = "";
-        let state = "";
-        let city = "";
-
-        addressComponents.forEach((component) => {
-          if (component.types.includes("country")) {
-            country = component.long_name;
-          } else if (component.types.includes("administrative_area_level_1")) {
-            state = component.long_name;
-          } else if (
-            component.types.includes("locality") ||
-            component.types.includes("administrative_area_level_2")
-          ) {
-            city = component.long_name;
-          }
-        });
-
-        setSelectedLata(lat);
-        setSelectedLon(lng);
-        setSelectedformatted_address(address);
-        setSelectedCountry(country);
-        setSelectedState(state);
-        setSelectedCity(city);
-      });
+      checkAndInitializeAutocomplete();
     }
   }, [isLoaded]);
 

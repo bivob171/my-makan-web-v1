@@ -23,6 +23,11 @@ export default function RelatedPost() {
   const tag = searchParams.get("tag");
   const forPos = searchParams.get("for");
   const type = searchParams.get("type");
+  const postTypeq = searchParams.get("postType");
+  const propertyCategoryq = searchParams.get("propertyCategory");
+  const propertyTypeq = searchParams.get("propertyType");
+  const parkingq = searchParams.get("parking");
+  const saleTypeq = searchParams.get("saleType");
 
   const { user } = PrivateRouteContext();
   // state
@@ -66,7 +71,35 @@ export default function RelatedPost() {
     if (forPos) {
       setForPost(forPos);
     }
-  }, [location, tag, forPos, type]);
+    if (type) {
+      setSelectedType(type);
+    }
+    if (postTypeq) {
+      setPostType(postTypeq);
+    }
+    if (propertyCategoryq) {
+      setPropertyCategory(propertyCategoryq);
+    }
+    if (propertyTypeq) {
+      setPropertyType(propertyTypeq);
+    }
+    if (parkingq) {
+      setParking(parkingq);
+    }
+    if (saleTypeq) {
+      setSellType([saleTypeq]);
+    }
+  }, [
+    location,
+    tag,
+    forPos,
+    type,
+    postTypeq,
+    propertyCategoryq,
+    propertyTypeq,
+    parkingq,
+    saleTypeq,
+  ]);
 
   const [filterRender, setfilterRender] = useState(false);
   const { filterRenderRelatedPost, setfilterRenderRelatedPost } =
