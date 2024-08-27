@@ -18,6 +18,7 @@ import {
   Timestamp,
 } from "../../../firebase";
 import { CheckIcon } from "lucide-react";
+import Image from "next/image";
 
 export default function Chat({ chatId, userId }) {
   const [messages, setMessages] = useState([]);
@@ -157,7 +158,9 @@ export default function Chat({ chatId, userId }) {
             >
               {msg.senderId !== userId && msg.seen && (
                 <div className="mr-2">
-                  <img
+                  <Image
+                    width={50}
+                    height={50}
                     src="https://mymakan-image.s3.eu-north-1.amazonaws.com/1721841554930-bayzid.png"
                     alt="Receiver"
                     className="h-8 w-8 rounded-full"

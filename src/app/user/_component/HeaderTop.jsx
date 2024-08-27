@@ -280,7 +280,9 @@ export const HeaderTop = () => {
         const tostId = toast(
           <div className="relative">
             <div className="flex items-center ">
-              <img
+              <Image
+                width={50}
+                height={50}
                 src={userImage}
                 alt="User"
                 className="w-[32px] h-[32px] rounded-full mr-2"

@@ -192,7 +192,7 @@ export default function PackageCard({
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
         toast.success("Post saved on your timeline");
-        setSaveRerander(!saveRerander);
+        // setSaveRerander(!saveRerander);
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -217,7 +217,7 @@ export default function PackageCard({
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
         toast.success("Post UnSave successfully!");
-        setSaveRerander(!saveRerander);
+        // setSaveRerander(!saveRerander);
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -259,7 +259,7 @@ export default function PackageCard({
         toast.error(`${response.status}`);
       } else {
         toast.success(`Successful following ${fullName}`);
-        setFollowRerander(!followRerander);
+        // setFollowRerander(!followRerander);
       }
     } catch (error) {
       toast.error(` ${error.message}`);
@@ -287,7 +287,7 @@ export default function PackageCard({
         toast.error(`${response.status}`);
       } else {
         toast.success(`Successful Unfollowing ${fullName}`);
-        setFollowRerander(!followRerander);
+        // setFollowRerander(!followRerander);
       }
     } catch (error) {
       toast.error(`${error.message}`);

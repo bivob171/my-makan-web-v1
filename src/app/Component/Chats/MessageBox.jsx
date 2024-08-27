@@ -311,9 +311,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
               })
               .toLowerCase();
             return (
-              <div>
+              <div key={msg.id}>
                 <div
-                  key={msg.id}
                   className={`col-start-${isSent ? "6" : "1"} col-end-${
                     isSent ? "13" : "8"
                   } p-3 rounded-lg `}

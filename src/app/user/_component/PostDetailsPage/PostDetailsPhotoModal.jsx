@@ -103,6 +103,7 @@ export default function PostDetailsPhotoModal({
                             <div className="aspect-w-16 aspect-h-9">
                               {video.map((video, index) => (
                                 <video
+                                  key={index}
                                   controls
                                   src={video?.url}
                                   className="w-full h-auto rounded-md cursor-pointer mb-[15px]"

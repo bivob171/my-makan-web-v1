@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import PhotoAlbum from "react-photo-album";
 
@@ -32,7 +33,9 @@ const GallerySection = ({ data }) => {
   };
 
   const renderPhoto = ({ photo, onClick }) => (
-    <img
+    <Image
+      width={50}
+      height={50}
       src={photo?.src}
       alt={photo?.alt || "Image"}
       style={{ cursor: "pointer" }}

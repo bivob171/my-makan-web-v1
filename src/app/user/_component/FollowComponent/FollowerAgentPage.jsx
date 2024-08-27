@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FollowAgentCard } from "../Card/FollowAgenCard";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { FollowCard } from "../Card/FollowCard";
 export const FollowerAgentPage = () => {
   const { user } = PrivateRouteContext();
   const myRole = user?.role;

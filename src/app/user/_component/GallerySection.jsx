@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PhotoAlbum from "react-photo-album";
 import photos from "./photos";
+import Image from "next/image";
 
 const GallerySection = () => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -36,7 +37,9 @@ const GallerySection = () => {
       />
       {selectedPhoto && (
         <div className="full-screen-overlay" onClick={handleCloseFullScreen}>
-          <img
+          <Image
+            width={50}
+            height={50}
             src={selectedPhoto.src}
             alt=""
             className="full-screen-image border-8 border-[#fefefe]"

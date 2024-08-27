@@ -286,7 +286,7 @@ export default function BuyerProfile() {
         toast.error(`${response.status}`);
       } else {
         toast.success(`Successful following ${user?.fullName}`);
-        setFollowRerander(!followRerander);
+        // setFollowRerander(!followRerander);
       }
     } catch (error) {
       toast.error(` ${error.message}`);
@@ -313,7 +313,7 @@ export default function BuyerProfile() {
         toast.error(`${response.status}`);
       } else {
         toast.success(`Successful Unfollowing ${user?.fullName}`);
-        setFollowRerander(!followRerander);
+        // setFollowRerander(!followRerander);
       }
     } catch (error) {
       toast.error(`${error.message}`);
