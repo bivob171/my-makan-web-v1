@@ -43,21 +43,12 @@ export default function PackageCard({
     friend,
   } = item;
 
-  const savePostId = _id;
   const [isHovered, setIsHovered] = useState(false);
   const [isHeartRed, setIsHeartRed] = useState(false);
   const [isFollow, setIsFollow] = useState(false);
-  const [followloading, setFollowLoading] = useState(true);
   const [isFollowEr, setIsFollowEr] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
-  const [followErloading, setFollowErLoading] = useState(true);
-  const [saveloading, setSaveLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [ferror, setFError] = useState(null);
   const userinfo = role === "agent" ? agentId : userId;
-  const followingId = userinfo?._id;
-  const followerId = userinfo?._id;
-  const followerRole = userinfo?.role;
   const [hasId, setHasId] = useState(false);
 
   const [openModalIndex, setOpenModalIndex] = useState(null);
@@ -339,6 +330,9 @@ export default function PackageCard({
   // chat
   const { user } = PrivateRouteContext();
   const { createNewChat } = useContext(ChatValueContext);
+
+  const matchPercentage = item?.matchPercentage && item?.matchPercentage;
+  const roundedmatchPercentage = Math.round(matchPercentage);
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
@@ -890,7 +884,8 @@ export default function PackageCard({
           {/* match post */}
           {basePath === "/user/matched-post/" ? (
             <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-              Matched Post
+              <span className="text-blue-500">{item?.matchPercentage}%</span>{" "}
+              Matched on the selected Post
             </p>
           ) : (
             <MatchCardData item={item} />

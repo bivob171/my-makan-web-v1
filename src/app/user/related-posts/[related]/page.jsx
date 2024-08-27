@@ -2,12 +2,20 @@
 
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
 import PackageCard from "../../_component/Card/PackageCard";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import PropertyCard2 from "@/app/Component/NewsFeed/PropertyCard2";
+import Filter from "@/app/Component/NewsFeed/PostSearch/Filter";
+import { FilterRenderContext } from "@/Context/filterRenderContext";
 
 export default function RelatedPost() {
   const searchParams = useSearchParams();
@@ -60,10 +68,71 @@ export default function RelatedPost() {
     }
   }, [location, tag, forPos, type]);
 
+  const [filterRender, setfilterRender] = useState(false);
+  const { filterRenderRelatedPost, setfilterRenderRelatedPost } =
+    useContext(FilterRenderContext);
+  console.log(filterRenderRelatedPost);
+
+  // Load the city value based on the current route
+  useEffect(() => {
+    const relatedPostFilterValue = localStorage.getItem(
+      "relatedPostFilterValue"
+    );
+    setCity(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).city : ""
+    );
+    setState(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).state : ""
+    );
+    setCountry(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).country : ""
+    );
+    setSelectedType(
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).selectedType
+        : ""
+    );
+    setPostType(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).postType : ""
+    );
+    setForPost(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).forPost : ""
+    );
+    setTowersorBuildingName(
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).towersorBuildingName
+        : ""
+    );
+    setPropertyCategory(
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).propertyCategoryName
+        : ""
+    );
+    setPropertyType(
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).propertyTypeName
+        : ""
+    );
+    setParking(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).parking : ""
+    );
+    setSellType(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).sellType : ""
+    );
+    setTags(
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).tags : ""
+    );
+    setfilterRender(
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).filterRender
+        : false
+    );
+  }, [filterRenderRelatedPost]);
+
   const getAllPosts = async (token, reset = false) => {
     try {
       setIsFetching(true);
-      if (reset) {
+      if (filterRender || reset) {
         setLoading(true);
         setPage(1);
       }
@@ -123,6 +192,7 @@ export default function RelatedPost() {
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
   }, [
+    filterRender,
     sortOrder,
     sortBy,
     limit,
@@ -159,19 +229,24 @@ export default function RelatedPost() {
 
   const myId = user?._id;
 
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterCount, setFilterCount] = useState(0);
+  const filterRef = useRef(null);
+
   return (
     <div className="mx-auto container pt-[120px] text-[#222]">
       <div className="flex justify-between items-start">
         <div className="bg-[#fdeaeae1] rounded-3xl mb-3 px-7 py-[16px] w-full max-w-[400px] inline-block">
           <h3 className="text-[22px] font-black text-[#666] leading-none m-0">
-            Related - Garden City
+            Related - Posts
           </h3>
         </div>
-        <div>
+        <div className="relative">
           {" "}
           <button
             className="col-span-1 flex justify-center !items-center hover:bg-[#dfdfdf6e] hover:rounded-full p-1 relative"
             type="button"
+            onClick={() => setFilterVisible(!filterVisible)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -188,19 +263,41 @@ export default function RelatedPost() {
               />
             </svg>
             {/* select filter number  */}
-            <div className="absolute -top-[5px] right-0">
-              <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
-                <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  1
-                </span>
+            {filterCount > 0 && (
+              <div className="absolute -top-[5px] right-0">
+                <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
+                  <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    {filterCount}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </button>
+          {filterVisible && (
+            <div ref={filterRef} className="absolute top-[65px] right-0 z-50">
+              <Filter
+                setFilterCount={setFilterCount}
+                filterCount={filterCount}
+                filterVisible={filterVisible}
+                setFilterVisible={setFilterVisible}
+              />
+            </div>
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-3">
         <div className="col-span-9">
+          {loading && (
+            <div>
+              <PostLodaing />
+            </div>
+          )}
+          {!loading && allPosts?.length === 0 && (
+            <div className="text-center text-gray-500 mt-4">
+              No posts available.
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-3">
             {allPosts?.map((item, i) => {
               if (allPosts.length === i + 1) {

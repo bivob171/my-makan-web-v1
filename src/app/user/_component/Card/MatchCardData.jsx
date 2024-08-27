@@ -6,7 +6,9 @@ import Link from "next/link";
 export const MatchCardData = ({ item }) => {
   // match posts
 
-  const [allMatchPosts, setAllMatchPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState();
+  const [matchingPosts, setmatchingPosts] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
@@ -15,14 +17,48 @@ export const MatchCardData = ({ item }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
+  const [postType, setPostType] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [forPost, setForPost] = useState("");
+  const [towersorBuildingName, setTowersorBuildingName] = useState("");
+  const [propertyCategoryName, setPropertyCategory] = useState("");
+  const [propertyTypeName, setPropertyType] = useState("");
+  const [parking, setParking] = useState(item.parking);
+  const [sellType, setSellType] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [minMatchPercentage, setMinMatchPercentage] = useState(0);
   const getAllMatchPosts = async (token) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get-match-post?`;
+      let url = `https://api.mymakan.ae/allposts/match-post?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
+
+      if (postType !== "") url += `&postType=${postType}`;
+      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
+      if (state !== "") url += `&state=${encodeURIComponent(state)}`;
+      if (city !== "") url += `&city=${encodeURIComponent(city)}`;
+      if (country !== "") url += `&country=${encodeURIComponent(country)}`;
+      if (selectedType !== "")
+        url += `&type=${encodeURIComponent(selectedType)}`;
+      if (propertyCategoryName !== "")
+        url += `&propertyCategory=${encodeURIComponent(propertyCategoryName)}`;
+      if (propertyTypeName !== "")
+        url += `&propertyType=${encodeURIComponent(propertyTypeName)}`;
+      if (towersorBuildingName !== "")
+        url += `&towersorBuildingName=${encodeURIComponent(
+          towersorBuildingName
+        )}`;
+      if (parking !== "") url += `&parking=${encodeURIComponent(parking)}`;
+      if (tags.length !== 0)
+        url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      if (sellType.length !== 0)
+        url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -35,10 +71,15 @@ export const MatchCardData = ({ item }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const allPostsList = await response.json();
-      setHasMore(allPostsList.length === limit);
-      setAllMatchPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+      const postData = await response.json();
+      setAllPosts(postData);
+      const allPostsList = postData.posts;
+      const filteredPosts = allPostsList.filter(
+        (post) => Number(post.matchPercentage) >= minMatchPercentage
+      );
+      setHasMore(filteredPosts.length === limit);
+      setmatchingPosts((prevPost) =>
+        page === 1 ? filteredPosts : [...prevPost, ...filteredPosts]
       );
       setLoading(false);
     } catch (error) {
@@ -52,9 +93,52 @@ export const MatchCardData = ({ item }) => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllMatchPosts(token);
-  }, [sortOrder, sortBy, limit, page]);
+  }, [
+    sortOrder,
+    sortBy,
+    limit,
+    page,
+    postType,
+    forPost,
+    state,
+    city,
+    country,
+    towersorBuildingName,
+    propertyCategoryName,
+    propertyTypeName,
+    sellType,
+    tags,
+    minMatchPercentage,
+  ]);
 
-  const matchPlusMore = allMatchPosts?.total - 4;
+  useEffect(() => {
+    const parking = item?.parking;
+    const postType = item?.postType;
+    const selectedType = item?.type;
+    const forPost = item?.for;
+    const towersorBuildingName = item?.location?.towersorBuildingName;
+    const city = item?.location?.city;
+    const state = item?.location?.state;
+    const country = item?.location?.country;
+    const propertyCategoryName = item?.propertyCategory;
+    const propertyTypeName = item?.propertyType;
+    const sellType = item?.sellType;
+    const tags = item?.tags;
+    setCity(city);
+    setState(state);
+    setCountry(country);
+    setSelectedType(selectedType);
+    setPostType(postType);
+    setForPost(forPost);
+    setTowersorBuildingName(towersorBuildingName);
+    setPropertyCategory(propertyCategoryName);
+    setPropertyType(propertyTypeName);
+    setParking(parking);
+    setSellType(sellType);
+    setTags(tags);
+  }, [item]);
+
+  const matchPlusMore = allPosts?.total - 4;
 
   //   match post page
   const matchpostId = item?._id;
@@ -97,7 +181,7 @@ export const MatchCardData = ({ item }) => {
         </div>
       ) : (
         <>
-          {allMatchPosts?.total === 0 ? (
+          {allPosts?.total === 0 ? (
             <div className="flex flex-wrap items-center gap-x-[10px]">
               <div className="flex">
                 {[0, 1, 2, 3].map((i) => {
@@ -134,9 +218,9 @@ export const MatchCardData = ({ item }) => {
             </div>
           ) : (
             <div className="flex flex-wrap items-center gap-x-[10px]">
-              {allMatchPosts?.posts.length > 0 && (
+              {matchingPosts?.length >= 4 ? (
                 <div className="flex">
-                  {allMatchPosts?.posts?.map((data, i) => {
+                  {matchingPosts?.map((data, i) => {
                     const { role, _id } = data;
 
                     const userMatchinfo =
@@ -158,7 +242,7 @@ export const MatchCardData = ({ item }) => {
                       </Link>
                     );
                   })}
-                  {allMatchPosts?.total <= 4 ? null : (
+                  {allPosts?.total <= 4 ? null : (
                     <div className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-50 hover:-mt-[2.5px] flex items-center justify-center">
                       <Link href={`${"/user/matched-post"}/${matchpostId}`}>
                         <p className="text-[8px] -mb-[1px] text-white font-normal">
@@ -168,22 +252,23 @@ export const MatchCardData = ({ item }) => {
                     </div>
                   )}
                 </div>
+              ) : (
+                <div>
+                  {allPosts?.total <= 4 ? (
+                    <Link href={`${"/user/matched-post"}/${matchpostId}`}>
+                      <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+                        {allPosts?.total} Matched
+                      </p>
+                    </Link>
+                  ) : (
+                    <Link href={`${"/user/matched-post"}/${matchpostId}`}>
+                      <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+                        +{matchPlusMore} Matched
+                      </p>
+                    </Link>
+                  )}
+                </div>
               )}
-              <div>
-                {allMatchPosts?.total <= 4 ? (
-                  <Link href={`${"/user/matched-post"}/${matchpostId}`}>
-                    <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-                      {allMatchPosts?.total} Matched
-                    </p>
-                  </Link>
-                ) : (
-                  <Link href={`${"/user/matched-post"}/${matchpostId}`}>
-                    <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-                      +{matchPlusMore} Matched
-                    </p>
-                  </Link>
-                )}
-              </div>
             </div>
           )}
         </>

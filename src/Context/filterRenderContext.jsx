@@ -8,6 +8,7 @@ const FilterRenderProvider = ({ children }) => {
   const [filterRenderAgentPost, setfilterRenderAgentPost] = useState(false);
   const [filterRenderBuyerPost, setfilterRenderBuyerPost] = useState(false);
   const [filterRenderAllPost, setfilterRenderAllPost] = useState(false);
+  const [filterRenderRelatedPost, setfilterRenderRelatedPost] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const [postType, setPostType] = useState("");
   const [forPost, setForPost] = useState("");
@@ -63,6 +64,8 @@ const FilterRenderProvider = ({ children }) => {
         setState,
         city,
         setCity,
+        filterRenderRelatedPost,
+        setfilterRenderRelatedPost,
       }}
     >
       {children}

@@ -16,6 +16,8 @@ const Filter = ({
   setFilterVisible,
 }) => {
   const pathname = usePathname();
+  const basePath = pathname.split("/").slice(0, 3).join("/");
+
   // postType
   const {
     filterRenderAgentPost,
@@ -54,6 +56,8 @@ const Filter = ({
     setState,
     city,
     setCity,
+    filterRenderRelatedPost,
+    setfilterRenderRelatedPost,
   } = useContext(FilterRenderContext);
   const [filterRender, setfilterRender] = useState(false);
   const [filterMapOpen, setFilterMapOpen] = useState(false);
@@ -385,10 +389,55 @@ const Filter = ({
       JSON.stringify(updatedBuyerPostFilterValue)
     );
   };
+  // Function to save related post
+  const handleRelatedPostsFilterValue = (e) => {
+    const relatedPostFilterValue = {
+      selectedType,
+      postType,
+      forPost,
+      towersorBuildingName,
+      propertyCategoryName,
+      propertyTypeName,
+      parking,
+      sellType,
+      tags,
+      country,
+      state,
+      city,
+      filterRender: filterRender === false ? true : false,
+    };
+
+    // Get an array of non-empty values, excluding `filterRender`
+    const nonEmptyValues = Object.entries(relatedPostFilterValue)
+      .filter(([key, value]) => {
+        // Exclude `filterRender` from the check
+        if (key === "filterRender") return false;
+
+        // Check if the field is either `sellType` or `tags` and ensure it's an array with elements
+        if ((key === "sellType" || key === "tags") && Array.isArray(value)) {
+          return value.length > 0;
+        }
+
+        // General check for non-empty values
+        return value !== undefined && value !== null && value !== "";
+      })
+      .map(([_, value]) => value); // Extract the values after filtering
+
+    const filterCounteNumber = nonEmptyValues.length;
+    const updatedRelatedPostFilterValue = {
+      ...relatedPostFilterValue,
+      filterCounteNumber,
+    };
+
+    localStorage.setItem(
+      "relatedPostFilterValue",
+      JSON.stringify(updatedRelatedPostFilterValue)
+    );
+  };
 
   // Load the city value based on the current route
   useEffect(() => {
-    if (pathname === "/user/newsfeed" || pathname === "/user") {
+    if (basePath === "/user/newsfeed" || basePath === "/user") {
       const newsfeedFilterValue = localStorage.getItem("newsfeedFilterValue");
       setCity(newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).city : "");
       setState(
@@ -428,7 +477,7 @@ const Filter = ({
         newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).sellType : ""
       );
       setTags(newsfeedFilterValue ? JSON.parse(newsfeedFilterValue).tags : "");
-    } else if (pathname === "/user/agent-posts") {
+    } else if (basePath === "/user/agent-posts") {
       const agentPostFilterValue = localStorage.getItem("agentPostFilterValue");
       setCity(
         agentPostFilterValue ? JSON.parse(agentPostFilterValue).city : ""
@@ -474,7 +523,7 @@ const Filter = ({
       setTags(
         agentPostFilterValue ? JSON.parse(agentPostFilterValue).tags : ""
       );
-    } else if ("/user/buyer-posts") {
+    } else if (basePath === "/user/buyer-posts") {
       const buyerPostFilterValue = localStorage.getItem("buyerPostFilterValue");
       setCity(
         buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).city : ""
@@ -520,36 +569,94 @@ const Filter = ({
       setTags(
         buyerPostFilterValue ? JSON.parse(buyerPostFilterValue).tags : ""
       );
+    } else if (basePath === "/user/related-posts") {
+      const relatedPostFilterValue = localStorage.getItem(
+        "relatedPostFilterValue"
+      );
+      setCity(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).city : ""
+      );
+      setState(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).state : ""
+      );
+      setCountry(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).country : ""
+      );
+      setSelectedType(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).selectedType
+          : ""
+      );
+      setPostType(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).postType
+          : ""
+      );
+      setForPost(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).forPost : ""
+      );
+      setTowersorBuildingName(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).towersorBuildingName
+          : ""
+      );
+      setPropertyCategory(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).propertyCategoryName
+          : ""
+      );
+      setPropertyType(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).propertyTypeName
+          : ""
+      );
+      setParking(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).parking : ""
+      );
+      setSellType(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).sellType
+          : ""
+      );
+      setTags(
+        relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).tags : ""
+      );
     }
-  }, [pathname]);
+  }, [basePath]);
 
   // Load the city value based on the current route
 
   // Function to save  values
   const handleResultButtonClick = () => {
-    if (pathname === "/user/newsfeed") {
+    if (basePath === "/user/newsfeed") {
       handleSaveFilterValue(); // Call the function to save newsfeed data
       setfilterRenderAllPost(!filterRenderAllPost);
-    } else if (pathname === "/user/agent-posts") {
+    } else if (basePath === "/user/agent-posts") {
       handleSaveAgentPostFilterValue(); // Call the function to save agent data
       setfilterRenderAgentPost(!filterRenderAgentPost);
-    } else if (pathname === "/user/buyer-posts") {
+    } else if (basePath === "/user/buyer-posts") {
       handleSaveBuyerFilterValue(); // Call the function to save buyer data
       setfilterRenderBuyerPost(!filterRenderBuyerPost);
+    } else if (basePath === "/user/related-posts") {
+      handleRelatedPostsFilterValue(); // Call the function to save buyer data
+      setfilterRenderRelatedPost(!filterRenderRelatedPost);
     }
   };
 
-  // Function to clear data based on pathname
+  // Function to clear data based on basePath
   const handleSaveClear = () => {
-    if (pathname === "/user/newsfeed") {
+    if (basePath === "/user/newsfeed") {
       localStorage.removeItem("newsfeedFilterValue");
       setfilterRenderAllPost(!filterRenderAllPost);
-    } else if (pathname === "/user/agent-posts") {
+    } else if (basePath === "/user/agent-posts") {
       localStorage.removeItem("agentPostFilterValue");
       setfilterRenderAgentPost(!filterRenderAgentPost);
-    } else if (pathname === "/user/buyer-posts") {
+    } else if (basePath === "/user/buyer-posts") {
       localStorage.removeItem("buyerPostFilterValue");
       setfilterRenderBuyerPost(!filterRenderBuyerPost);
+    } else if (basePath === "/user/related-posts") {
+      localStorage.removeItem("relatedPostFilterValue");
+      setfilterRenderRelatedPost(!filterRenderRelatedPost);
     }
 
     // Reset all states to their initial values
@@ -598,33 +705,43 @@ const Filter = ({
   };
 
   useEffect(() => {
-    if (pathname === "/user/newsfeed" || pathname === "/user") {
+    if (basePath === "/user/newsfeed" || basePath === "/user") {
       const newsfeedFilterValue = localStorage.getItem("newsfeedFilterValue");
       setFilterCount(
         newsfeedFilterValue
           ? JSON.parse(newsfeedFilterValue).filterCounteNumber
           : 0
       );
-    } else if (pathname === "/user/agent-posts") {
+    } else if (basePath === "/user/agent-posts") {
       const agentPostFilterValue = localStorage.getItem("agentPostFilterValue");
       setFilterCount(
         agentPostFilterValue
           ? JSON.parse(agentPostFilterValue).filterCounteNumber
           : 0
       );
-    } else if ("/user/buyer-posts") {
+    } else if (basePath === "/user/buyer-posts") {
       const buyerPostFilterValue = localStorage.getItem("buyerPostFilterValue");
       setFilterCount(
         buyerPostFilterValue
           ? JSON.parse(buyerPostFilterValue).filterCounteNumber
           : 0
       );
+    } else if (basePath === "/user/related-posts") {
+      const relatedPostFilterValue = localStorage.getItem(
+        "relatedPostFilterValue"
+      );
+      setFilterCount(
+        relatedPostFilterValue
+          ? JSON.parse(relatedPostFilterValue).filterCounteNumber
+          : 0
+      );
     }
   }, [
-    pathname,
+    basePath,
     filterRenderAgentPost,
     filterRenderBuyerPost,
     filterRenderAllPost,
+    filterRenderRelatedPost,
   ]);
 
   return (
