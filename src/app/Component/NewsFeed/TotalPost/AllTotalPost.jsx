@@ -15,7 +15,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("http://localhost:4000", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,7 +104,7 @@ export const AllTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `http://localhost:4000/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;

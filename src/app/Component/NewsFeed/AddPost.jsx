@@ -102,7 +102,7 @@ const AddPost = ({
   const fetchTower = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`http://localhost:4000/country/tower`, {
+      const response = await axios.get(`https://api.mymakan.ae/country/tower`, {
         params: {
           search,
           page,
