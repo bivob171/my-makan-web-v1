@@ -168,6 +168,10 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       } else {
         setPropertyTypeError("");
       }
+      if (media.length < 4) {
+        alert("Please select a minimum of 4 images for the post.");
+        hasError = true;
+      }
       if (hasError) {
         return;
       }
