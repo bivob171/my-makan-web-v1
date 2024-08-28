@@ -240,11 +240,12 @@ const AddPost = ({
                               </g>
                             </svg>
                             <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                              <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
-                                {Object.keys(imageUploading).length !== 0 &&
-                                  imageUploading[file?._id]}
-                                %
-                              </span>
+                              {Object.keys(imageUploading).length !== 0 &&
+                              imageUploading[file?._id] < 100 ? (
+                                <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                                  {imageUploading[file?._id]}%
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -306,11 +307,12 @@ const AddPost = ({
                               </g>
                             </svg>
                             <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                              <span class="text-center text-[5.5px] font-bold z-10 text-blue-800 dark:text-white">
-                                {Object.keys(videoUploading).length !== 0 &&
-                                  videoUploading[file?._id]}
-                                %
-                              </span>
+                              {Object.keys(videoUploading).length !== 0 &&
+                              videoUploading[file?._id] < 100 ? (
+                                <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                                  {videoUploading[file?._id]}%
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -370,11 +372,12 @@ const AddPost = ({
                               </g>
                             </svg>
                             <div class="absolute top-[8.5px] start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                              <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
-                                {Object.keys(pdfUploading).length !== 0 &&
-                                  pdfUploading[file?._id]}
-                                %
-                              </span>
+                              {Object.keys(pdfUploading).length !== 0 &&
+                              pdfUploading[file?._id] < 100 ? (
+                                <span class="text-center text-[5.5px] font-bold text-blue-800 dark:text-white">
+                                  {pdfUploading[file?._id]}%
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </div>

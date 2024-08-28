@@ -227,6 +227,9 @@ export default function EditPostCard({
       case "type":
         queryParam = `type=${value}`;
         break;
+      case "company":
+        queryParam = `company=${value}`;
+        break;
 
         return;
     }
@@ -336,7 +339,17 @@ export default function EditPostCard({
                   </span>
                 </p>
               ) : (
-                <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                <p
+                  onClick={() =>
+                    handleRelatedPosts({
+                      type: "company",
+                      value: {
+                        company: userinfo?.companyName,
+                      },
+                    })
+                  }
+                  className="hover:underline cursor-pointer underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
+                >
                   {userinfo?.companyName}
                 </p>
               )}

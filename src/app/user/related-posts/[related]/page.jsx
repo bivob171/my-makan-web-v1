@@ -19,6 +19,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 
 export default function RelatedPost() {
   const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
   const location = searchParams.get("location");
   const tag = searchParams.get("tag");
   const forPos = searchParams.get("for");
@@ -28,6 +29,7 @@ export default function RelatedPost() {
   const propertyTypeq = searchParams.get("propertyType");
   const parkingq = searchParams.get("parking");
   const saleTypeq = searchParams.get("saleType");
+  const company = searchParams.get("company");
 
   const { user } = PrivateRouteContext();
   // state
@@ -265,13 +267,23 @@ export default function RelatedPost() {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
   const filterRef = useRef(null);
+  console.log(tag);
 
   return (
     <div className="mx-auto container pt-[120px] text-[#222]">
       <div className="flex justify-between items-start">
-        <div className="bg-[#fdeaeae1] rounded-3xl mb-3 px-7 py-[16px] w-full max-w-[400px] inline-block">
+        <div className="bg-[#fdeaeae1] rounded-3xl mb-3 px-7 py-[16px] w-auto  inline-block">
           <h3 className="text-[22px] font-black text-[#666] leading-none m-0">
-            Related - Posts
+            Related - {location && `Location > ${location}`}
+            {tag && `Tag > ${tag}`}
+            {forPos && `For > ${forPos}`}
+            {type && `Type > ${type}`}
+            {postTypeq && `Post Type > ${postTypeq}`}
+            {propertyCategoryq && `Property Category > ${propertyCategoryq}`}
+            {propertyTypeq && `Property Type > ${propertyTypeq}`}
+            {parkingq && `Parking > ${parkingq}`}
+            {saleTypeq && `Sale Type > ${saleTypeq}`}
+            {company && `Company > ${company}`}
           </h3>
         </div>
         <div className="relative">

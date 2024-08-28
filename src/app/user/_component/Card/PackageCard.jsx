@@ -306,6 +306,8 @@ export default function PackageCard({
 
   const router = useRouter();
   function handleRelatedPosts({ type, value }) {
+    console.log(value.company);
+
     let queryParam = "";
     switch (type) {
       case "location":
@@ -319,6 +321,9 @@ export default function PackageCard({
         break;
       case "type":
         queryParam = `type=${value}`;
+        break;
+      case "company":
+        queryParam = `company=${value.company}`;
         break;
 
         return;
@@ -500,7 +505,17 @@ export default function PackageCard({
                               </span>
                             </p>
                           ) : (
-                            <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1">
+                            <p
+                              onClick={() =>
+                                handleRelatedPosts({
+                                  type: "company",
+                                  value: {
+                                    company: userinfo?.companyName,
+                                  },
+                                })
+                              }
+                              className="hover:underline cursor-pointer underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
+                            >
                               {userinfo?.companyName}
                             </p>
                           )}
@@ -690,7 +705,17 @@ export default function PackageCard({
                     </span>
                   </p>
                 ) : (
-                  <p className="hover:underline underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none">
+                  <p
+                    onClick={() =>
+                      handleRelatedPosts({
+                        type: "company",
+                        value: {
+                          company: userinfo?.companyName,
+                        },
+                      })
+                    }
+                    className="hover:underline cursor-pointer underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium mt-[12px] md:mt-[8px] -mb-0 md:-mb-[3px] leading-none"
+                  >
                     {userinfo?.companyName}
                   </p>
                 )}
