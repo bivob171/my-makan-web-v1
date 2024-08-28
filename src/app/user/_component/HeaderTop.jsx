@@ -336,6 +336,33 @@ export const HeaderTop = () => {
 
   // massage
 
+  function handleRelatedPosts({ type, value }) {
+    console.log(value.company);
+
+    let queryParam = "";
+    switch (type) {
+      case "location":
+        queryParam = `location=` + value.city + `,` + value.country;
+        break;
+      case "tag":
+        queryParam = `tag=${value}`;
+        break;
+      case "for":
+        queryParam = `for=${value}`;
+        break;
+      case "type":
+        queryParam = `type=${value}`;
+        break;
+      case "company":
+        queryParam = `company=${value.company}`;
+        break;
+
+        return;
+    }
+
+    router.push(`/user/related-posts?${queryParam}`);
+  }
+
   return (
     <header ref={dropdownRef} className="fixed-header !z-40 ">
       <div className="header-menu relative">
@@ -404,22 +431,94 @@ export const HeaderTop = () => {
                   </a>
                   <ul className="sub-menu">
                     <li>
-                      <a href="about-us.html">Dubai</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Dubai",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Dubai
+                      </a>
                     </li>
                     <li>
-                      <a href="user-blog.html">Ajman</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Ajman",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Ajman
+                      </a>
                     </li>
                     <li>
-                      <a href="shop.html">Ras-alkhaima</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Ras-alkhaima",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Ras-alkhaima
+                      </a>
                     </li>
                     <li>
-                      <a href="single-blog.html">Sharjah</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Sharjah",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Sharjah
+                      </a>
                     </li>
                     <li>
-                      <a href="single-shop.html">Al-ain</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Al-ain",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Al-ain
+                      </a>
                     </li>
                     <li>
-                      <a href="contact.html">Ummul-Quin</a>
+                      <a
+                        onClick={() =>
+                          handleRelatedPosts({
+                            type: "location",
+                            value: {
+                              city: "Ummul-Quin",
+                              country: "United Arab Emirates",
+                            },
+                          })
+                        }
+                      >
+                        Ummul-Quin
+                      </a>
                     </li>
                   </ul>
                 </li>

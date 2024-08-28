@@ -306,8 +306,6 @@ export default function PackageCard({
 
   const router = useRouter();
   function handleRelatedPosts({ type, value }) {
-    console.log(value.company);
-
     let queryParam = "";
     switch (type) {
       case "location":
