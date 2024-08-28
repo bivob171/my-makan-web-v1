@@ -359,7 +359,13 @@ export const PostDetailsPage = ({ postid }) => {
                     width={1000}
                     height={1000}
                     alt="Blog"
-                    className="w-full h-full object-cover rounded-md"
+                    className={`w-full h-full object-cover rounded-md ${
+                      firstImg?.url === null ||
+                      firstImg?.url === undefined ||
+                      firstImg?.url === ""
+                        ? "blur-sm"
+                        : ""
+                    }`}
                   />
                   <div className="absolute bottom-4 left-4 space-x-2 z-20">
                     <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1">
@@ -384,7 +390,13 @@ export const PostDetailsPage = ({ postid }) => {
                     width={1000}
                     height={1000}
                     alt="Blog"
-                    className="w-full h-full object-cover rounded-md"
+                    className={`w-full h-full object-cover rounded-md ${
+                      secondImg?.url === null ||
+                      secondImg?.url === undefined ||
+                      secondImg?.url === ""
+                        ? "blur-sm"
+                        : ""
+                    }`}
                   />
                   <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                 </button>
@@ -395,7 +407,13 @@ export const PostDetailsPage = ({ postid }) => {
                       width={1000}
                       height={1000}
                       alt="Blog"
-                      className="w-full h-full object-cover rounded-md"
+                      className={`w-full h-full object-cover rounded-md ${
+                        thirdImg?.url === null ||
+                        thirdImg?.url === undefined ||
+                        thirdImg?.url === ""
+                          ? "blur-sm"
+                          : ""
+                      }`}
                     />
                     <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                   </button>
@@ -405,7 +423,13 @@ export const PostDetailsPage = ({ postid }) => {
                       width={1000}
                       height={1000}
                       alt="Blog"
-                      className="w-full h-full object-cover rounded-md"
+                      className={`w-full h-full object-cover rounded-md ${
+                        fourthImg?.url === null ||
+                        fourthImg?.url === undefined ||
+                        fourthImg?.url === ""
+                          ? "blur-sm"
+                          : ""
+                      }`}
                     />
                     <div className="bg-[#000000c5] text-[11px] gap-1 text-[#fcfeff] inline-flex items-center rounded-full px-3 leading-4 py-1 absolute bottom-4 right-4 z-20">
                       <IoCameraOutline className="w-3 h-3" />{" "}
