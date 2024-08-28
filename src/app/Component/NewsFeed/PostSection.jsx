@@ -168,7 +168,10 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       } else {
         setPropertyTypeError("");
       }
-      if (media.length < 4) {
+
+      const mediaArray = Array.isArray(media) ? media : [];
+      const allImages = mediaArray.filter((file) => file.type === "image");
+      if (allImages.length < 4) {
         alert("Please select a minimum of 4 images for the post.");
         hasError = true;
       }
