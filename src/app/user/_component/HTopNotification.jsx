@@ -31,53 +31,27 @@ const HTopNotification = ({
       notifyFor,
       postCommentId,
       postId,
-      read,
-      createdAt,
-      mention,
-      notifyerType,
-      notifyingType,
-      notifyingUserId,
-      notifyingAgentId,
+      commentReplyId,
       nitifyerUserId,
       nitifyerAgentId,
-      mentionAgentId,
-      mentionUserId,
-      commentReplyId,
     } = notification;
-
+  
     handleSingleNotificationMarkAsRead(_id);
-
-    console.log(notification);
-
-    if (
-      notification.notifyFor === "comment" &&
-      notification.postCommentId._id &&
-      notification.postId._id
-    ) {
-      router.push(
-        `/user/post-details/${notification.postId._id}?commentId=${notification.postCommentId._id}`
-      );
-    } else if (
-      notification.notifyFor === "reply" &&
-      notification.commentReplyId._id &&
-      notification.postId._id
-    ) {
-      router.push(
-        `/user/post-details/${notification.postId._id}?commentId=${notification.postCommentId._id}&reply=${notification.commentReplyId._id}`
-      );
-    } else if (notification.notifyFor === "like" && notification.postId._id) {
-      router.push(`/user/post-details/${notification.postId._id}`);
-    } else if (
-      notification.notifyFor === "follow" ||
-      notification.notifyFor === "unfollow"
-    ) {
-      if (notification.notifyerType === "agent") {
-        router.push(`/user/agent-profile/${notification.nitifyerAgentId._id}`);
-      } else {
-        router.push(`/user/buyer-profile/${notification.nitifyerUserId._id}`);
-      }
+  
+    if (notifyFor === "comment" && postCommentId?._id && postId?._id) {
+      router.push(`/user/post-details/${postId._id}?commentId=${postCommentId._id}`);
+    } else if (notifyFor === "reply" && commentReplyId?._id && postId?._id) {
+      router.push(`/user/post-details/${postId._id}?commentId=${postCommentId._id}&reply=${commentReplyId._id}`);
+    } else if (notifyFor === "like" && postId?._id) {
+      router.push(`/user/post-details/${postId._id}`);
+    } else if (notifyFor === "follow" || notifyFor === "unfollow") {
+      const profileUrl = notification.notifyerType === "agent"
+        ? `/user/agent-profile/${nitifyerAgentId._id}`
+        : `/user/buyer-profile/${nitifyerUserId._id}`;
+      router.push(profileUrl);
     }
   };
+  
 
   return (
     <>
@@ -410,6 +384,7 @@ const HTopNotification = ({
         </div>
       </div>
       <div></div>
+
 
       <div
         className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${

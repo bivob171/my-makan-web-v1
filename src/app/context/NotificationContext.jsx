@@ -1,21 +1,21 @@
-"use client";
-
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useRef, useContext } from "react";
 
 const NotificationContext = createContext();
 
-export const useNotification = () => useContext(NotificationContext);
-
 export const NotificationProvider = ({ children }) => {
-  const [notificationData, setNotificationData] = useState(null);
+  const notificationRefs = useRef({});
 
-  const handleNotificationClick = (notification) => {
-    setNotificationData(notification);
+  const registerRef = (id, ref) => {
+    notificationRefs.current[id] = ref;
   };
 
+  const getRef = (id) => notificationRefs.current[id];
+
   return (
-    <NotificationContext.Provider value={{ notificationData, handleNotificationClick }}>
+    <NotificationContext.Provider value={{ registerRef, getRef }}>
       {children}
     </NotificationContext.Provider>
   );
 };
+
+export const useNotificationContext = () => useContext(NotificationContext);

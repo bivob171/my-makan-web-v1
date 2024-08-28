@@ -329,7 +329,7 @@ export const PostDetailsPage = ({ postid }) => {
         <div>
           <div className="block-box user-single-blog !bg-[#f8fafff3]">
             <div className="grid grid-cols-12 mb-4 gap-x-[8px]">
-              <div className="col-span-9 relative h-[516px]">
+              <div className="lg:col-span-9 col-span-12 relative h-[516px]">
                 <button className="w-full h-full" onClick={openPhotoModal}>
                   <Image
                     src="/media/blog/blog_1.jpg"
@@ -351,7 +351,7 @@ export const PostDetailsPage = ({ postid }) => {
                   <div className=" bg-black opacity-5 hover:opacity-30 transition-opacity duration-300 rounded-md w-full h-full absolute top-0 left-0 z-10"></div>
                 </button>
               </div>
-              <div className="col-span-3 grid grid-rows-2">
+              <div className="col-span-12 lg:col-span-3 grid lg:grid-rows-2 grid-cols-2 mt-2 lg:mt-0">
                 <button className="relative w-full h-[250px]" onClick={openPhotoModal}>
                   <Image
                     src="/media/blog/blog_3.jpg"
@@ -396,7 +396,7 @@ export const PostDetailsPage = ({ postid }) => {
             </div>
 
             <div className="grid grid-cols-12 gap-[20px] !px-4">
-              <div className="col-span-9">
+              <div className="lg:col-span-9 col-span-12">
                 <div className="blog-content-wrap !px-0 !py-0 !pb-4">
                   <div className="blog-entry-header">
                     <div className="flex justify-between items-center">
@@ -613,7 +613,7 @@ export const PostDetailsPage = ({ postid }) => {
                 </div>
               </div>
 
-              <div className="col-span-3">
+              <div className="col-span-3 lg:block hidden">
                 <div className="">
                   <NewsFeedLeftSection />
                   {/* <div className="space-y-5">

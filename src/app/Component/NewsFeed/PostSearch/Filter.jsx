@@ -628,7 +628,7 @@ const Filter = ({
   ]);
 
   return (
-    <div className="backdrop-blur-[20px] bg-[#ffffff80] bg-opacity-90 shadow rounded-md w-96 h-auto pt-4 relative">
+    <div className="backdrop-blur-[20px] bg-[#ffffff80] bg-opacity-90 shadow rounded-md w-96 h-auto pt-4 relative z-50">
       {filterMapOpen === false ? (
         <div>
           <button

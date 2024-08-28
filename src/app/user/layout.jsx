@@ -11,6 +11,7 @@ import { HeaderRight } from "./_component/HeaderRight";
 import FilterRenderProvider from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
+import { NotificationProvider } from "../context/NotificationContext";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -38,7 +39,9 @@ export default function Layout({ children }) {
         <FilterRenderProvider>
           <PostLocationValueProvider>
             <EditPostLocationValueProvider>
-              <div className={nunito.className}>{children}</div>
+              <NotificationProvider>
+                <div className={nunito.className}>{children}</div>
+              </NotificationProvider>
             </EditPostLocationValueProvider>
           </PostLocationValueProvider>
         </FilterRenderProvider>

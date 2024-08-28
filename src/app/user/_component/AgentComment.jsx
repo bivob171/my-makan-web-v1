@@ -554,29 +554,45 @@ const AgentComment = ({ _id }) => {
     }
   };
 
+  // importent code
+
   const router = useRouter();
-
   const { query } = router;
-
   const commentId = query?.commentId || null;
   const reply = query?.reply || null;
+
+  console.log(query, commentId);
 
   useEffect(() => {
     if (commentId) {
       const commentElement = document.getElementById(commentId);
+      console.log('Comment ID:', commentId);
+      console.log('Comment Element:', commentElement);
+  
       if (commentElement) {
         commentElement.scrollIntoView({ behavior: "smooth" });
         commentElement.classList.add("highlight");
+        console.log('Scrolling to comment:', commentId);
+      } else {
+        console.log('Comment element not found for ID:', commentId);found
       }
     }
+  
     if (reply) {
       const replyElement = document.getElementById(reply);
+      console.log('Reply ID:', reply); 
+      console.log('Reply Element:', replyElement); 
+  
       if (replyElement) {
         replyElement.scrollIntoView({ behavior: "smooth" });
         replyElement.classList.add("highlight");
+        console.log('Scrolling to reply:', reply);
+      } else {
+        console.log('Reply element not found for ID:', reply);
       }
     }
   }, [commentId, reply]);
+  
 
   return (
     <div className="blog-comment-form">

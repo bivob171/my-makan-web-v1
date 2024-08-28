@@ -94,7 +94,7 @@ export const NewsFeedPage = () => {
               </div>
             </div>
             <div className="lg:col-span-6">
-              <div className="md:!sticky top-[100px] bg-[#EFF4FB] z-10">
+              <div className="md:!sticky top-[100px] bg-[#EFF4FB] z-40">
                 <PostSearch
                   open={open}
                   user={user}
