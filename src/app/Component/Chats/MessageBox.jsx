@@ -60,6 +60,9 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   };
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
+    setNewMessage("");
+    scrollToBottom();
+    playNotificationSound();
 
     try {
       // Reference to the messages collection within the chat
@@ -112,12 +115,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       }
 
       // Clear the input field and reset rows
-      setNewMessage("");
       setRows(1);
-
       // Scroll to the bottom and play notification sound
-      scrollToBottom();
-      playNotificationSound();
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -325,7 +324,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                     {isSent ? (
                       <Image
                         alt=""
-                        src={participantImage}
+                        src={user?.image}
                         width={500}
                         height={500}
                         className="w-[30px] h-[30px] rounded-full"
@@ -333,7 +332,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                     ) : (
                       <Image
                         alt=""
-                        src={user?.image}
+                        src={participantImage}
                         width={500}
                         height={500}
                         className="w-[30px] h-[30px] rounded-full"
