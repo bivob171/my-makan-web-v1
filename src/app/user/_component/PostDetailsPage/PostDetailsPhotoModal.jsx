@@ -112,9 +112,7 @@ export default function PostDetailsPhotoModal({
                                 />
                               ))}
                             </div>
-                          ) : (
-                            <p className="text-[20px] text-white">No video</p>
-                          )}
+                          ) : null}
                         </TabPanel>
                       ))}
                     </TabPanels>
