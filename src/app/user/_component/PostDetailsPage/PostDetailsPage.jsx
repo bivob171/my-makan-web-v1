@@ -342,7 +342,7 @@ export const PostDetailsPage = ({ postid }) => {
         return;
     }
 
-    router.push(`/user/related-posts/${_id}?${queryParam}`);
+    router.push(`/user/related-posts?${queryParam}`);
   }
 
   return (

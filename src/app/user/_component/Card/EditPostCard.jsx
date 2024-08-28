@@ -234,7 +234,7 @@ export default function EditPostCard({
         return;
     }
 
-    router.push(`/user/related-posts/${_id}?${queryParam}`);
+    router.push(`/user/related-posts?${queryParam}`);
   }
 
   return (

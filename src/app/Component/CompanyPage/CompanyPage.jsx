@@ -403,6 +403,7 @@ import Image from "next/image";
 import axios from "axios"; // Ensure axios is imported
 import { MdNavigateNext } from "react-icons/md";
 import { CardLoding } from "../NewsFeed/PostLodaing/CardLoding";
+import { useRouter } from "next/navigation";
 
 export const CompanyPage = () => {
   const [selectedCompany, setSelectedCompany] = useState("");
@@ -529,6 +530,35 @@ export const CompanyPage = () => {
     setSearchCompany(selectedCompany);
     setlimitCompany(0);
   };
+
+  const router = useRouter();
+
+  function handleRelatedPosts({ type, value }) {
+    console.log(value.company);
+
+    let queryParam = "";
+    switch (type) {
+      case "location":
+        queryParam = `location=` + value.city + `,` + value.country;
+        break;
+      case "tag":
+        queryParam = `tag=${value}`;
+        break;
+      case "for":
+        queryParam = `for=${value}`;
+        break;
+      case "type":
+        queryParam = `type=${value}`;
+        break;
+      case "company":
+        queryParam = `company=${value.company}`;
+        break;
+
+        return;
+    }
+
+    router.push(`/user/related-posts?${queryParam}`);
+  }
   return (
     <div ref={containerRefResult} className="h-screen overflow-auto">
       <div className="page-content">
@@ -614,7 +644,7 @@ export const CompanyPage = () => {
                 {companies?.map((data) => (
                   <div
                     className="delay-150 duration-200 ease-in-out hover:shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full bg-white rounded-lg relative border-[#E8E8E8] border-[1px] transition shadow-[#615DFA] hover:-translate-y-1 hover:scale-100"
-                    key={data.id}
+                    key={data._id}
                   >
                     <div className="rounded-t-lg h-[130px] overflow-hidden relative">
                       <Image
@@ -628,7 +658,17 @@ export const CompanyPage = () => {
                     <div className="px-[12px] py-2">
                       <div className="text-start mt-[9px]">
                         <div className="flex items-center justify-between cursor-pointer">
-                          <h2 className="font-semibold leading-[14px] text-[15px] text-[#222] -mb-0 hover:!text-[#615DFA] transition delay-150 duration-300 ease-in-out">
+                          <h2
+                            onClick={() =>
+                              handleRelatedPosts({
+                                type: "company",
+                                value: {
+                                  company: data.Office_name_english,
+                                },
+                              })
+                            }
+                            className="font-semibold leading-[14px] text-[15px] text-[#222] -mb-0 hover:!text-[#615DFA] transition delay-150 duration-300 ease-in-out"
+                          >
                             {data.Office_name_english}
                           </h2>
                           <p className="font-semibold leading-[15px]  text-[18px] text-[#999] mb-[2px] cursor-pointer">

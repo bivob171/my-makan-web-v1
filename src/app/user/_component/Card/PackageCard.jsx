@@ -329,7 +329,7 @@ export default function PackageCard({
         return;
     }
 
-    router.push(`/user/related-posts/${_id}?${queryParam}`);
+    router.push(`/user/related-posts?${queryParam}`);
   }
 
   // chat

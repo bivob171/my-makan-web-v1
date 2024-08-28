@@ -11,11 +11,11 @@ import React, {
 } from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { PostLodaing } from "@/app/Component/NewsFeed/PostLodaing/PostLodaing";
-import PackageCard from "../../_component/Card/PackageCard";
 import NewsFeedLeftSection from "@/app/Component/NewsFeed/NewsFeedLeftSection";
 import PropertyCard2 from "@/app/Component/NewsFeed/PropertyCard2";
 import Filter from "@/app/Component/NewsFeed/PostSearch/Filter";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
+import PackageCard from "../_component/Card/PackageCard";
 
 export default function RelatedPost() {
   const searchParams = useSearchParams();
@@ -106,7 +106,6 @@ export default function RelatedPost() {
   const [filterRender, setfilterRender] = useState(false);
   const { filterRenderRelatedPost, setfilterRenderRelatedPost } =
     useContext(FilterRenderContext);
-  console.log(filterRenderRelatedPost);
 
   // Load the city value based on the current route
   useEffect(() => {
