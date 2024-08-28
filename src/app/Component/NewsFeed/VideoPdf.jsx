@@ -44,11 +44,22 @@ const VideoPdf = ({
 
     try {
       const response = await axios.post(
-        "https://api.mymakan.ae/file-upload/upload",
+        "http://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
-            setVideoUploading(Math.round((data.loaded / data.total) * 100));
+            const progress = Math.round((data.loaded / data.total) * 100);
+
+            // Create a new object to track progress for each file
+            const progressUpdates = {};
+            fileDetails.forEach((file) => {
+              progressUpdates[file._id] = progress;
+            });
+
+            setVideoUploading((prevProgress) => ({
+              ...prevProgress,
+              ...progressUpdates,
+            }));
           },
           headers: {
             "Content-Type": "multipart/form-data",
@@ -65,7 +76,14 @@ const VideoPdf = ({
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setVideoUploading(null);
+      // Clear upload progress for files after upload completes
+      setVideoUploading((prevProgress) => {
+        const updatedProgress = { ...prevProgress };
+        fileDetails.forEach((file) => {
+          delete updatedProgress[file._id];
+        });
+        return updatedProgress;
+      });
     }
   };
 
@@ -99,7 +117,18 @@ const VideoPdf = ({
         formData,
         {
           onUploadProgress: (data) => {
-            setPdfUploading(Math.round((data.loaded / data.total) * 100));
+            const progress = Math.round((data.loaded / data.total) * 100);
+
+            // Create a new object to track progress for each file
+            const progressUpdates = {};
+            fileDetails.forEach((file) => {
+              progressUpdates[file._id] = progress;
+            });
+
+            setPdfUploading((prevProgress) => ({
+              ...prevProgress,
+              ...progressUpdates,
+            }));
           },
           headers: {
             "Content-Type": "multipart/form-data",
@@ -115,7 +144,16 @@ const VideoPdf = ({
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setPdfUploading(null);
+      {
+        // Clear upload progress for files after upload completes
+        setPdfUploading((prevProgress) => {
+          const updatedProgress = { ...prevProgress };
+          fileDetails.forEach((file) => {
+            delete updatedProgress[file._id];
+          });
+          return updatedProgress;
+        });
+      }
     }
   };
 
@@ -132,35 +170,56 @@ const VideoPdf = ({
 
     handleUpload(files, fileDetails);
   };
+
   const handleUpload = async (files, fileDetails) => {
     const formData = new FormData();
-    for (let file of files) {
-      formData.append("files", file);
-    }
+    files.forEach((file) => {
+      formData.append("files", file); // Append each file to FormData
+    });
 
     try {
       const response = await axios.post(
-        "https://api.mymakan.ae/file-upload/upload",
+        "http://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
-            setImageUploading(Math.round((data.loaded / data.total) * 100));
+            const progress = Math.round((data.loaded / data.total) * 100);
+
+            // Create a new object to track progress for each file
+            const progressUpdates = {};
+            fileDetails.forEach((file) => {
+              progressUpdates[file._id] = progress;
+            });
+
+            setImageUploading((prevProgress) => ({
+              ...prevProgress,
+              ...progressUpdates,
+            }));
           },
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
+
       const links = response.data.map((item, index) => ({
-        _id: fileDetails[index]._id, // Access the _id of the current file detail
-        type: fileDetails[index].type, // Access the type of the current file detail
+        _id: fileDetails[index]._id,
+        type: fileDetails[index].type,
         url: item.Location,
       }));
+
       setmedia((prevImages) => [...prevImages, ...links]);
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setImageUploading(null);
+      // Clear upload progress for files after upload completes
+      setImageUploading((prevProgress) => {
+        const updatedProgress = { ...prevProgress };
+        fileDetails.forEach((file) => {
+          delete updatedProgress[file._id];
+        });
+        return updatedProgress;
+      });
     }
   };
 
