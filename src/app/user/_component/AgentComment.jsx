@@ -11,7 +11,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const socket = io("https://api.mymakan.ae", {
   path: "/socket.io",
@@ -555,44 +555,39 @@ const AgentComment = ({ _id }) => {
   };
 
   // importent code
-
-  const router = useRouter();
-  const { query } = router;
-  const commentId = query?.commentId || null;
-  const reply = query?.reply || null;
-
-  console.log(query, commentId);
+  const searchParams = useSearchParams();
+  const commentId = searchParams.get("commentId");
+  const reply = searchParams.get("reply");
 
   useEffect(() => {
     if (commentId) {
       const commentElement = document.getElementById(commentId);
-      console.log('Comment ID:', commentId);
-      console.log('Comment Element:', commentElement);
-  
+      console.log("Comment ID:", commentId);
+      console.log("Comment Element:", commentElement);
+
       if (commentElement) {
         commentElement.scrollIntoView({ behavior: "smooth" });
         commentElement.classList.add("highlight");
-        console.log('Scrolling to comment:', commentId);
+        console.log("Scrolling to comment:", commentId);
       } else {
-        console.log('Comment element not found for ID:', commentId);found
+        console.log("Comment element not found for ID:", commentId);
       }
     }
-  
+
     if (reply) {
       const replyElement = document.getElementById(reply);
-      console.log('Reply ID:', reply); 
-      console.log('Reply Element:', replyElement); 
-  
+      console.log("Reply ID:", reply);
+      console.log("Reply Element:", replyElement);
+
       if (replyElement) {
         replyElement.scrollIntoView({ behavior: "smooth" });
         replyElement.classList.add("highlight");
-        console.log('Scrolling to reply:', reply);
+        console.log("Scrolling to reply:", reply);
       } else {
-        console.log('Reply element not found for ID:', reply);
+        console.log("Reply element not found for ID:", reply);
       }
     }
   }, [commentId, reply]);
-  
 
   return (
     <div className="blog-comment-form">
