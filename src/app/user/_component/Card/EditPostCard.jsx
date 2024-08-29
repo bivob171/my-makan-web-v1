@@ -21,6 +21,7 @@ import { SiImessage } from "react-icons/si";
 import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
 import { usePathname, useRouter } from "next/navigation";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 export default function EditPostCard({
   item,
   myId,
@@ -236,7 +237,8 @@ export default function EditPostCard({
 
     router.push(`/user/related-posts?${queryParam}`);
   }
-
+  const { activeUsers } = PrivateRouteContext();
+  const isActive = activeUsers.includes(userinfo?._id);
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">
       <div className="pt-2">

@@ -32,8 +32,15 @@ const HTopNotification = dynamic(() => import("./HTopNotification"), {
 });
 
 export const HeaderTop = () => {
-  const { isAuthenticated, loading, user, setRender, render, logOut } =
-    PrivateRouteContext();
+  const {
+    isAuthenticated,
+    loading,
+    user,
+    setRender,
+    render,
+    logOut,
+    activeUsers,
+  } = PrivateRouteContext();
   const {
     setAllNotificationNumber,
     allNotificationNumber,
@@ -342,8 +349,8 @@ export const HeaderTop = () => {
 
       const endpoint =
         userRole === "agent"
-          ? "http://localhost:4000/agent/update-notification"
-          : "http://localhost:4000/user/update-notification";
+          ? "https://api.mymakan.ae/agent/update-notification"
+          : "https://api.mymakan.ae/user/update-notification";
       const response = await fetch(endpoint, {
         method: "PATCH",
         headers: {
@@ -707,6 +714,7 @@ export const HeaderTop = () => {
                 handleSingleNotificationMarkAsRead
               }
               user={user}
+              activeUsers={activeUsers}
             />
           </div>
         </div>

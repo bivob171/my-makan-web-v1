@@ -24,6 +24,7 @@ const HTopNotification = ({
   handleNotificationMarkAsRead,
   handleSingleNotificationMarkAsRead,
   user,
+  activeUsers,
 }) => {
   const [notifyScroll, setNotifyScroll] = useState(false);
   const router = useRouter();
@@ -325,62 +326,64 @@ const HTopNotification = ({
             </div>
           </div>
           <div>
-            {chats.map((chat) => {
-              const formatTimestamp = (timestamp) => {
-                if (!timestamp) return "No Date";
-                const date = timestamp.toDate(); // Convert Timestamp to Date object
-                return date.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }); // Format as 'HH:MM'
-              };
+            {chats.length > 0 &&
+              chats?.map((chat) => {
+                const formatTimestamp = (timestamp) => {
+                  if (!timestamp) return "No Date";
+                  const date = timestamp.toDate(); // Convert Timestamp to Date object
+                  return date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }); // Format as 'HH:MM'
+                };
 
-              const participantId = chat?.participants
-                .filter((p) => p.id !== user?._id) // Exclude the current user
-                .map((p) => p.id)[0];
-              const participantImage = chat?.participants
-                .filter((p) => p.id !== user?._id) // Exclude the current user
-                .map((p) => p.image)[0];
-              const participantName = chat?.participants
-                .filter((p) => p.id !== user?._id) // Exclude the current user
-                .map((p) => p.name)[0];
-              const unseenCountparticipan =
-                chat.unseenMessages[participantId] || 0;
-              const unseenCount = chat.unseenMessages[user?._id] || 0;
-              return (
-                <div
-                  key={msg.id}
-                  className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]"
-                >
-                  <div className="mr-3 mt-[9px]">
-                    <Image
-                      width={40}
-                      height={40}
-                      className="rounded-full w-[40px] h-[40px]"
-                      src={participantImage}
-                      alt="Notify"
-                    />
-                    <span className="chat-status offline" />
-                  </div>
-                  <div className="relative flex-1 mt-[4px]">
-                    <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                      <a href="#">{participantName}</a>
-                    </h6>
-                    <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                      {chat.latestMessage.length > 30
-                        ? chat.latestMessage.slice(0, 30) + "..."
-                        : chat.latestMessage}
-                    </p>
-
-                    <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                      <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                        {formatTimestamp(chat.latestMessageTimestamp)}
+                const participantId = chat?.participants
+                  .filter((p) => p.id !== user?._id) // Exclude the current user
+                  .map((p) => p.id)[0];
+                const participantImage = chat?.participants
+                  .filter((p) => p.id !== user?._id) // Exclude the current user
+                  .map((p) => p.image)[0];
+                const participantName = chat?.participants
+                  .filter((p) => p.id !== user?._id) // Exclude the current user
+                  .map((p) => p.name)[0];
+                const unseenCountparticipan =
+                  chat.unseenMessages[participantId] || 0;
+                const unseenCount = chat.unseenMessages[user?._id] || 0;
+                const isActive = activeUsers.includes(participantId);
+                return (
+                  <div
+                    key={chat?.id}
+                    className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]"
+                  >
+                    <div className="mr-3 mt-[9px]">
+                      <Image
+                        width={40}
+                        height={40}
+                        className="rounded-full w-[40px] h-[40px]"
+                        src={participantImage}
+                        alt="Notify"
+                      />
+                      <span className="chat-status offline" />
+                    </div>
+                    <div className="relative flex-1 mt-[4px]">
+                      <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                        <a href="#">{participantName}</a>
+                      </h6>
+                      <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                        {chat.latestMessage.length > 30
+                          ? chat.latestMessage.slice(0, 30) + "..."
+                          : chat.latestMessage}
                       </p>
+
+                      <div className="absolute top-[5px] right-0 flex gap-x-2.5">
+                        <p className="text-[11px] font-semibold text-gray-500 leading-4">
+                          {formatTimestamp(chat.latestMessageTimestamp)}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           <div className=" mt-[15px]">
             <button

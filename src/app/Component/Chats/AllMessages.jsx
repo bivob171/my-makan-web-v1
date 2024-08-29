@@ -7,7 +7,7 @@ import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { LuCheckCheck } from "react-icons/lu";
 
 const AllMessages = ({ chats, handleChatSelection }) => {
-  const { user, setRender, render } = PrivateRouteContext();
+  const { user, activeUsers } = PrivateRouteContext();
   return (
     <div className="px-3 py-2">
       {chats.map((chat) => {
@@ -31,6 +31,7 @@ const AllMessages = ({ chats, handleChatSelection }) => {
           .map((p) => p.name)[0];
         const unseenCountparticipan = chat.unseenMessages[participantId] || 0;
         const unseenCount = chat.unseenMessages[user?._id] || 0;
+        const isActive = activeUsers.includes(participantId);
         return (
           <div
             key={chat.id}

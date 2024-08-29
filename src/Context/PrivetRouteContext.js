@@ -59,30 +59,30 @@ const PrivateRouteContext = () => {
     }
   }, []);
 
+  const [activeUsers, setActiveUsers] = useState([]);
+
   useEffect(() => {
     let socket;
 
     if (user) {
       socket = io("https://api.mymakan.ae");
-      // Ensure this matches your backend's URL
-      socket.on("connect", () => {
-        socket.emit("userConnected", { userId: user._id });
-        setIsConnected(true);
+
+      // Handle user connection
+      socket.on("userConnected", (data) => {
+        setActiveUsers((prevUsers) => [...prevUsers, data.userId]);
       });
 
-      socket.on("disconnect", () => {
-        setIsConnected(false);
-      });
-
-      socket.on("customEvent", (data) => {
-        console.log("Custom event received:", data);
-        setCustomEventData(data);
+      // Handle user disconnection
+      socket.on("userDisconnected", (data) => {
+        setActiveUsers((prevUsers) =>
+          prevUsers.filter((id) => id !== data.userId)
+        );
       });
     }
 
     return () => {
       if (socket) {
-        socket.emit("userDisconnected", { userId: user._id }); // Emit before disconnect
+        socket.emit("userDisconnected", { userId: user._id });
         socket.disconnect();
       }
     };
@@ -99,6 +99,7 @@ const PrivateRouteContext = () => {
     setIsConnected,
     customEventData,
     setCustomEventData,
+    activeUsers,
   };
 };
 

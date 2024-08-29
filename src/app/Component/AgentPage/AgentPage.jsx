@@ -5,8 +5,10 @@ import Image from "next/image";
 import axios from "axios";
 import { CardLoding } from "../NewsFeed/PostLodaing/CardLoding";
 import Link from "next/link";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
 export const AgentPage = () => {
+  const { user, activeUsers } = PrivateRouteContext();
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -493,6 +495,8 @@ export const AgentPage = () => {
                       }`;
                     }
                   };
+                  const isActive = activeUsers.includes(data?._id);
+
                   return (
                     <div
                       ref={lastPostElementRef}

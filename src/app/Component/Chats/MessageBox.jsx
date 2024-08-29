@@ -52,7 +52,7 @@ const formatDateHeader = (date) => {
 };
 
 const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
-  const { user } = PrivateRouteContext();
+  const { user, activeUsers } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -70,6 +70,9 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const participantName = selectedChat?.participants
     .filter((p) => p.id !== userId) // Exclude the current user
     .map((p) => p.name)[0];
+  const participantId = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.id)[0];
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
@@ -428,6 +431,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
   let lastDate = "";
 
+  const isActive = activeUsers.includes(participantId);
+
   return (
     <div className="" ref={filePreviewRef}>
       <div className="sticky top-0 h-[65px] bg-white border-b flex items-center justify-between px-3">
@@ -452,7 +457,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             </h3>
 
             <p className="text-center leading-3 text-[12px] m-0">
-              Active 46m ago
+              {} Active 46m ago
             </p>
           </div>
         </button>

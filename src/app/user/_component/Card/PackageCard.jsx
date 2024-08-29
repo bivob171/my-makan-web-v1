@@ -331,11 +331,13 @@ export default function PackageCard({
   }
 
   // chat
-  const { user } = PrivateRouteContext();
+  const { user, activeUsers } = PrivateRouteContext();
+  const isActive = activeUsers.includes(userinfo?._id);
+
   const { createNewChat } = useContext(ChatValueContext);
 
   const matchPercentage = item?.matchPercentage && item?.matchPercentage;
-
+  activeUsers;
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">

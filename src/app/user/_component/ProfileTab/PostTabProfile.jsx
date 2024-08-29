@@ -28,6 +28,7 @@ export const PostTabProfile = ({
   profile,
   followRerander,
   setFollowRerander,
+  activeUsers,
 }) => {
   const { user } = PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
@@ -105,6 +106,7 @@ export const PostTabProfile = ({
     profileRole,
     postType,
     followRerander,
+    myId,
   ]);
 
   const observer = useRef();
@@ -168,6 +170,9 @@ export const PostTabProfile = ({
       setPostType("Required"),
       setSaveRerander(!saveRerander);
   }
+
+  const isActive = activeUsers.includes(profileId);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-11 gap-y-10 lg:gap-10 ">
       <div className="lg:col-span-5">
@@ -227,7 +232,7 @@ export const PostTabProfile = ({
                 <div className="h-[0.5px] w-full bg-[#5EDFFF] " />
                 <div className="mt-[15px] px-[10px]">
                   <p className="-mb-0 text-start text-[16px] text-[#323232CC] text-opacity-80 font-semibold leading-[20px]">
-                    Verified By My-Makan in
+                    Verified By My-Makan in{" "}
                   </p>
                   <div className="flex gap-x-2 items-center mt-[10px] ">
                     <div>

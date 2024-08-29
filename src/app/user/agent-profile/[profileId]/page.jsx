@@ -23,7 +23,8 @@ import {
 } from "../../../../firebase"; // Assuming you have firebase setup
 import { ChatValueContext } from "@/Context/chatContext";
 export default function AgentProfile() {
-  const { user, setRender, render } = PrivateRouteContext();
+  const { user, setRender, render, isConnected, activeUsers } =
+    PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
     PostLocationValueContext
   );
@@ -47,6 +48,8 @@ export default function AgentProfile() {
             profile={profile}
             followRerander={followRerander}
             setFollowRerander={setFollowRerander}
+            activeUsers={activeUsers}
+            myId={myId}
           />
         );
       case "About":
