@@ -333,6 +333,7 @@ export default function PackageCard({
   // chat
   const { user, activeUsers } = PrivateRouteContext();
   const isActive = activeUsers.includes(userinfo?._id);
+  console.log();
 
   const { createNewChat } = useContext(ChatValueContext);
 
