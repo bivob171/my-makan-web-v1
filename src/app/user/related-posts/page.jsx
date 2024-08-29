@@ -269,86 +269,94 @@ export default function RelatedPost() {
   console.log(tag);
 
   return (
-    <div className="mx-auto container pt-[120px] text-[#222]">
-      <div className="flex justify-between items-start">
-        <div className="bg-[#fdeaeae1] rounded-3xl mb-3 px-7 py-[16px] w-auto  inline-block">
-          <h3 className="text-[22px] font-black text-[#666] leading-none m-0">
-            Related - {location && `Location > ${location}`}
-            {tag && `Tag > ${tag}`}
-            {forPos && `For > ${forPos}`}
-            {type && `Type > ${type}`}
-            {postTypeq && `Post Type > ${postTypeq}`}
-            {propertyCategoryq && `Property Category > ${propertyCategoryq}`}
-            {propertyTypeq && `Property Type > ${propertyTypeq}`}
-            {parkingq && `Parking > ${parkingq}`}
-            {saleTypeq && `Sale Type > ${saleTypeq}`}
-            {company && `Company > ${company}`}
-          </h3>
-        </div>
-        <div className="relative">
-          {" "}
-          <button
-            className="col-span-1 flex justify-center !items-center hover:bg-[#dfdfdf6e] hover:rounded-full p-1 relative"
-            type="button"
-            onClick={() => setFilterVisible(!filterVisible)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-[#615DFA]"
+    <div className="page-content mt-6 lg:mt-0">
+      <div className="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-2xl 2xl:max-w-full md:px-24 lg:px-8 text-[#222] relative">
+        {/* Related banner */}
+        <div className="flex justify-between items-center bg-white rounded-md mb-10 px-10 py-[20px] !sticky top-[100px] !z-30">
+          <div className="rounded-3xl w-full max-w-[400px] inline-block">
+            <h3 className="text-[22px] font-black text-[#666] leading-none m-0 text-nowrap">
+              Related - {location && `Location > ${location}`}
+              {tag && `Tag > ${tag}`}
+              {forPos && `For > ${forPos}`}
+              {type && `Type > ${type}`}
+              {postTypeq && `Post Type > ${postTypeq}`}
+              {propertyCategoryq && `Property Category > ${propertyCategoryq}`}
+              {propertyTypeq && `Property Type > ${propertyTypeq}`}
+              {parkingq && `Parking > ${parkingq}`}
+              {saleTypeq && `Sale Type > ${saleTypeq}`}
+              {company && `Company > ${company}`}
+            </h3>
+          </div>
+          <div className="relative">
+            {" "}
+            <button
+              className="col-span-1 flex justify-center !items-center hover:bg-[#dfdfdf6e] hover:rounded-full p-1 relative"
+              type="button"
+              onClick={() => setFilterVisible(!filterVisible)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-              />
-            </svg>
-            {/* select filter number  */}
-            {filterCount > 0 && (
-              <div className="absolute -top-[5px] right-0">
-                <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
-                  <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    {filterCount}
-                  </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-[#615DFA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                />
+              </svg>
+              {/* select filter number  */}
+              {filterCount > 0 && (
+                <div className="absolute -top-[5px] right-0">
+                  <div className="bg-[#ff3333bd] rounded-full w-4 h-4 relative">
+                    <span className="text-[10px] text-[#fefefe] font-mono font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      {filterCount}
+                    </span>
+                  </div>
                 </div>
+              )}
+            </button>
+            {filterVisible && (
+              <div ref={filterRef} className="absolute top-[55px] right-0 z-50">
+                <Filter
+                  setFilterCount={setFilterCount}
+                  filterCount={filterCount}
+                  filterVisible={filterVisible}
+                  setFilterVisible={setFilterVisible}
+                />
               </div>
             )}
-          </button>
-          {filterVisible && (
-            <div ref={filterRef} className="absolute top-[65px] right-0 z-50">
-              <Filter
-                setFilterCount={setFilterCount}
-                filterCount={filterCount}
-                filterVisible={filterVisible}
-                setFilterVisible={setFilterVisible}
-              />
-            </div>
-          )}
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-9">
-          {loading && (
-            <div>
-              <PostLodaing />
-            </div>
-          )}
-          {!loading && allPosts?.length === 0 && (
-            <div className="text-center text-gray-500 mt-4">
-              No posts available.
-            </div>
-          )}
-          <div className="grid grid-cols-2 gap-3">
-            {allPosts?.map((item, i) => {
-              if (allPosts.length === i + 1) {
-                return (
-                  <div ref={lastPostElementRef} key={i}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-12 lg:col-span-9">
+            {/* all post  */}
+            <div className="grid md:grid-cols-2 2xl:grid-cols-3 gap-3">
+              {allPosts?.map((item, i) => {
+                if (allPosts.length === i + 1) {
+                  return (
+                    <div ref={lastPostElementRef} key={i}>
+                      <PackageCard
+                        item={item}
+                        myId={myId}
+                        setlike={setlike}
+                        like={like}
+                        saveRerander={saveRerander}
+                        setSaveRerander={setSaveRerander}
+                        followRerander={followRerander}
+                        setFollowRerander={setFollowRerander}
+                      />
+                    </div>
+                  );
+                } else {
+                  return (
                     <PackageCard
                       item={item}
+                      key={i}
                       myId={myId}
                       setlike={setlike}
                       like={like}
@@ -357,43 +365,31 @@ export default function RelatedPost() {
                       followRerander={followRerander}
                       setFollowRerander={setFollowRerander}
                     />
-                  </div>
-                );
-              } else {
-                return (
-                  <PackageCard
-                    item={item}
-                    key={i}
-                    myId={myId}
-                    setlike={setlike}
-                    like={like}
-                    saveRerander={saveRerander}
-                    setSaveRerander={setSaveRerander}
-                    followRerander={followRerander}
-                    setFollowRerander={setFollowRerander}
-                  />
-                );
-              }
-            })}
-          </div>
+                  );
+                }
+              })}
+            </div>
 
-          {isFetching && loading === false && (
-            <div className="mb-[20px] mt-[20px] text-center">
-              <PostLodaing />
-            </div>
-          )}
-          {!hasMore && allPosts?.length !== 0 && (
-            <div className="mb-[20px] mt-[40px] text-center">
-              <p>No more Post to load.</p>
-            </div>
-          )}
-        </div>
-        <div className="col-span-3">
-          <div className="!sticky top-[110px]">
-            <div className="h-[86vh] overflow-y-scroll">
-              <NewsFeedLeftSection />
-              <div className="space-y-5">
-                <PropertyCard2 />
+            {isFetching && (
+              <div className="mb-[20px] mt-[20px] text-center">
+                <PostLodaing />
+              </div>
+            )}
+            {!hasMore && allPosts?.length !== 0 && (
+              <div className="mb-[20px] mt-[40px] text-center">
+                <p>No more Post to load.</p>
+              </div>
+            )}
+          </div>
+          <div className="col-span-3">
+            <div className="!sticky top-[180px]">
+              <div className="lg:col-span-3 hidden lg:flex justify-end w-full">
+                <div className="!w-[300px]">
+                  <NewsFeedLeftSection />
+                  <div className="space-y-5">
+                    <PropertyCard2 />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -24,7 +24,7 @@ import {
 import PrivateRouteContext from "./PrivetRouteContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-const ChatValueProvider = ({ children }) => {
+const ChatNotificationValueContext = () => {
   const { user } = PrivateRouteContext();
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -257,28 +257,22 @@ const ChatValueProvider = ({ children }) => {
     }
   };
 
-  return (
-    <ChatValueContext.Provider
-      value={{
-        handleChatSelection,
-        selectedChatId,
-        setSelectedChatId,
-        activeChatId,
-        setActiveChatId,
-        chats,
-        setChats,
-        setLoading,
-        loading,
-        searchQuery,
-        setSearchQuery,
-        selectedChat,
-        setSelectedChat,
-        createNewChat,
-      }}
-    >
-      {children}
-    </ChatValueContext.Provider>
-  );
+  return {
+    handleChatSelection,
+    selectedChatId,
+    setSelectedChatId,
+    activeChatId,
+    setActiveChatId,
+    chats,
+    setChats,
+    setLoading,
+    loading,
+    searchQuery,
+    setSearchQuery,
+    selectedChat,
+    setSelectedChat,
+    createNewChat,
+  };
 };
 
-export default ChatValueProvider;
+export default ChatNotificationValueContext;

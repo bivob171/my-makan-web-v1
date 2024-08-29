@@ -37,6 +37,8 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { FaPlusCircle, FaPlusSquare } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import { CgClose } from "react-icons/cg";
+import axios from "axios";
+import { SingleChat } from "./SingleChat";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isToday);
@@ -55,20 +57,29 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatOpened, setChatOpened] = useState(false);
-  const textareaRef = useRef(null);
+  const textareaRef = useRef(1);
   const messageContainerRef = useRef(null);
   const userId = user?._id;
+  const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
-  const [media, setMedia] = useState(null);
-  const [imageUploadingProssing, setImageUploadingProssing] = useState({});
-  console.log(file);
+  const [uploadingProssing, setUploadingProssing] = useState([]);
+
+  const participantImage = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.image)[0];
+  const participantName = selectedChat?.participants
+    .filter((p) => p.id !== userId) // Exclude the current user
+    .map((p) => p.name)[0];
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
+      messageContainerRef.current.scrollTo({
+        top: messageContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   };
+
   useEffect(() => {
     scrollToBottom(); // Scroll to bottom when messages change
   }, [messages]);
@@ -86,170 +97,246 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       notificationSound.play();
     });
   };
-  // const sendMessage = async () => {
-  //   if (!newMessage.trim()) return;
-  //   setNewMessage("");
-  //   scrollToBottom();
-  //   playNotificationSound();
-
-  //   try {
-  //     // Reference to the messages collection within the chat
-  //     const messagesRef = collection(db, `chats/${chatId}/messages`);
-
-  //     // Add the new message to Firestore
-  //     const newMessageRef = await addDoc(messagesRef, {
-  //       senderId: userId,
-  //       content: newMessage,
-  //       createdAt: serverTimestamp(),
-  //       seen: false,
-  //     });
-
-  //     // Get the timestamp of the new message
-  //     const messageSnapshot = await getDoc(newMessageRef);
-  //     const messageData = messageSnapshot.data();
-  //     const messageTimestamp = messageData?.createdAt?.toMillis();
-
-  //     // Reference to the chat document
-  //     const chatDocRef = doc(db, `chats/${chatId}`);
-  //     const chatDocSnapshot = await getDoc(chatDocRef);
-
-  //     if (!chatDocSnapshot.exists()) {
-  //       throw new Error("Chat document not found.");
-  //     }
-
-  //     // Get chat data and participants
-  //     const chatData = chatDocSnapshot.data();
-  //     const participants = chatData.participants || [];
-
-  //     // Prepare the unseen messages update object
-  //     const unseenMessagesUpdate = {};
-  //     participants.forEach((participant) => {
-  //       if (participant.id !== userId) {
-  //         unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
-  //           increment(1);
-  //       }
-  //     });
-
-  //     if (typeof messageTimestamp === "number") {
-  //       // Update the chat document with the latest message info
-  //       const chatRef = doc(db, "chats", chatId);
-  //       await updateDoc(chatRef, {
-  //         latestMessage: newMessage,
-  //         latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
-  //         ...unseenMessagesUpdate, // Increment unseen messages count for other participants
-  //       });
-  //     } else {
-  //       console.error("Error: Message timestamp is invalid or undefined.");
-  //     }
-
-  //     // Clear the input field and reset rows
-  //     setRows(1);
-  //     // Scroll to the bottom and play notification sound
-  //   } catch (error) {
-  //     console.error("Error sending message:", error);
-  //   }
-  // };
-
-  // const handleInput = async (event) => {
-  //   const messageContent = event.target.value;
-  //   setNewMessage(messageContent);
-
-  //   // Handle textarea auto-resizing
-  //   const textareaLineHeight = 24;
-  //   textareaRef.current.rows = 1; // Reset rows to 1 to calculate the actual height
-  //   const currentRows = Math.floor(
-  //     textareaRef.current.scrollHeight / textareaLineHeight
-  //   );
-
-  //   if (currentRows >= 5) {
-  //     textareaRef.current.rows = 5;
-  //     textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Scroll to the bottom if the content exceeds the height
-  //   } else {
-  //     textareaRef.current.rows = currentRows;
-  //   }
-  //   setRows(currentRows < 5 ? currentRows : 5);
-
-  //   // Send message when Enter key is pressed without Shift
-  //   if (event.key === "Enter" && !event.shiftKey) {
-  //     event.preventDefault();
-  //     if (!messageContent.trim()) return;
-
-  //     try {
-  //       sendMessage();
-  //     } catch (error) {
-  //       console.error("Error sending message:", error);
-  //     }
-  //   }
-  // };
 
   const sendMessage = async () => {
-    if (!newMessage.trim() && !file) return;
+    if (newMessage.trim() === "" && file.length === 0) return;
 
-    setNewMessage("");
-    setFile(null);
+    const tempId = Date.now(); // Temporary ID for the message
+    const messageData = {
+      chatId,
+      senderId: userId,
+      content: newMessage || "",
+      status: "sending", // Set initial status to "sending"
+      media: file || null, // Ensure media is defined or set to null
+      createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
+      tempId,
+      seen: null,
+    };
+    playNotificationSound();
     scrollToBottom();
-    playNotificationSound("/audio/massagesendnotify.mp3");
+    // Update the local messages state with "sending" status
+    setMessages((prevMessages) => [...prevMessages, messageData]);
+    // Clear the input field
+    setNewMessage("");
+    setFilePreview(false);
 
     try {
-      const messagesRef = collection(db, `chats/${chatId}/messages`);
-      const messageData = {
-        senderId: user?._id,
-        createdAt: serverTimestamp(),
-        seen: false,
-      };
+      let uploadedMedia = [];
 
-      if (file) {
-        const imageUrl = await uploadImage(file);
-        messageData.imageUrl = imageUrl;
-      } else {
-        messageData.content = newMessage;
+      if (file.length > 0) {
+        uploadedMedia = await handleUpload(rawFile, file);
       }
 
-      const newMessageRef = await addDoc(messagesRef, messageData);
-      const messageSnapshot = await getDoc(newMessageRef);
-      const messageTimestamp = messageSnapshot.data()?.createdAt?.toMillis();
+      // Add the message to Firestore with uploaded media URLs
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+      const docRef = await addDoc(messagesRef, {
+        ...messageData,
+        media: uploadedMedia.length > 0 ? uploadedMedia : null,
+        createdAt: serverTimestamp(), // Overwrite createdAt with Firestore's server timestamp
+        status: "sent", // Set status to "sent" after successful send
+        seen: null,
+      });
+      // Update the message status to "sent" in the local state
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.tempId === tempId
+            ? { ...msg, status: "sent", id: docRef.id }
+            : msg
+        )
+      );
 
-      if (messageTimestamp) {
-        const chatRef = doc(db, `chats/${chatId}`);
-        const chatDoc = await getDoc(chatRef);
-        const participants = chatDoc.data()?.participants || [];
-        const unseenMessagesUpdate = {};
+      // Clear files and media state
+      setFile([]);
+      setRawFile([]);
 
-        participants.forEach((participant) => {
-          if (participant.id !== user?._id) {
-            unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
-              increment(1);
-          }
-        });
+      // Get the timestamp of the new message
+      const messageSnapshot = await getDoc(docRef);
+      const messageDataFromFirestore = messageSnapshot.data();
+      const messageTimestamp = messageDataFromFirestore?.createdAt?.toMillis();
 
-        await updateDoc(chatRef, {
-          latestMessage: file ? "Image" : newMessage,
+      // Reference to the chat document
+      const chatDocRef = doc(db, `chats/${chatId}`);
+      const chatDocSnapshot = await getDoc(chatDocRef);
+
+      if (!chatDocSnapshot.exists()) {
+        throw new Error("Chat document not found.");
+      }
+
+      // Get chat data and participants
+      const chatData = chatDocSnapshot.data();
+      const participants = chatData.participants || [];
+
+      // Prepare the unseen messages update object
+      const unseenMessagesUpdate = {};
+      participants.forEach((participant) => {
+        if (participant.id !== userId) {
+          unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
+            increment(1);
+        }
+      });
+
+      if (typeof messageTimestamp === "number") {
+        // Update the chat document with the latest message info
+        await updateDoc(chatDocRef, {
+          latestMessage: newMessage === "" ? "image" : newMessage,
           latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
-          ...unseenMessagesUpdate,
+          ...unseenMessagesUpdate, // Increment unseen messages count for other participants
         });
+      } else {
+        console.error("Error: Message timestamp is invalid or undefined.");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error sending message: ", error);
+      // Optionally update the message status to "failed" in the local state
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.tempId === tempId ? { ...msg, status: "failed" } : msg
+        )
+      );
     }
   };
 
-  const handleInput = (event) => {
-    const messageContent = event.target.value;
-    setNewMessage(messageContent);
-
-    const textareaLineHeight = 24;
-    textareaRef.current.rows = 1;
-    const currentRows = Math.floor(
-      textareaRef.current.scrollHeight / textareaLineHeight
-    );
-
-    textareaRef.current.rows = currentRows >= 5 ? 5 : currentRows;
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      if (messageContent.trim()) sendMessage();
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
   };
 
+  // Function to upload an image
+  const generateRandomCode = () => {
+    const randomNum = Math.floor(Math.random() * 10000);
+    const code = String(randomNum).padStart(4, "0");
+    return code;
+  };
+  const [filePreview, setFilePreview] = useState(false);
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+
+    const fileDetails = files.map((file) => ({
+      _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
+      type: "image",
+      url: URL.createObjectURL(file),
+    }));
+
+    setFile((prevFiles) => [...prevFiles, ...fileDetails]);
+    setRawFile((prevFiles) => [...prevFiles, ...files]);
+    setFilePreview(true);
+  };
+  const handleUpload = async (files, fileDetails) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file); // Append each file to FormData
+    });
+
+    try {
+      const response = await axios.post(
+        "https://api.mymakan.ae/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            const progress = Math.round((data.loaded / data.total) * 100);
+
+            const progressUpdates = fileDetails.map((file) => ({
+              _id: file._id,
+              progress: progress,
+            }));
+
+            setUploadingProssing((prevProgress) => {
+              const updatedProgress = [...prevProgress];
+
+              progressUpdates.forEach((update) => {
+                const index = updatedProgress.findIndex(
+                  (item) => item._id === update._id
+                );
+
+                if (index !== -1) {
+                  updatedProgress[index] = {
+                    ...updatedProgress[index],
+                    progress: update.progress,
+                  };
+                } else {
+                  updatedProgress.push(update);
+                }
+              });
+
+              return updatedProgress;
+            });
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const links = response.data.map((item, index) => ({
+        _id: fileDetails[index]._id,
+        type: fileDetails[index].type,
+        url: item.Location,
+      }));
+
+      return links; // Return the uploaded media links
+    } catch (error) {
+      console.error("Upload failed:", error);
+      return []; // Return an empty array on failure
+    } finally {
+      // Clear upload progress for files after upload completes
+      setUploadingProssing((prevProgress) =>
+        prevProgress.filter((item) =>
+          fileDetails.some((file) => file._id !== item._id)
+        )
+      );
+    }
+  };
+
+  // file disply
+
+  const [selectedImage, setSelectedImage] = useState({});
+  useEffect(() => {
+    if (file) {
+      const defultSelecetdImage = file.length > 0 && file[0];
+      setSelectedImage(defultSelecetdImage);
+    }
+  }, [file]);
+
+  function handelselectedImage(value) {
+    setSelectedImage(value);
+  }
+
+  const handleFileDelete = (fileId) => {
+    // Filter out the file with the specified _id
+    setFile((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
+    setRawFile((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
+  };
+  const videoRefs = useRef([]);
+  const handleVideoClick = (index) => {
+    if (videoRefs.current[index]) {
+      if (videoRefs.current[index].paused) {
+        videoRefs.current[index].play();
+      } else {
+        videoRefs.current[index].pause();
+      }
+    }
+  };
+
+  const filePreviewRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        filePreviewRef.current &&
+        !filePreviewRef.current.contains(event.target)
+      ) {
+        setFilePreview(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [filePreviewRef]);
+
+  // massage seen and get
   // Function to mark unseen messages as seen when opening the chat
   const markMessagesAsSeen = async (chatId, userId) => {
     if (!chatId || !userId) return; // Ensure chatId and userId are provided
@@ -259,7 +346,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       const messagesRef = collection(db, `chats/${chatId}/messages`);
 
       // Query to get unseen messages
-      const q = query(messagesRef, where("seen", "==", false));
+      const q = query(messagesRef, where("seen", "==", null));
 
       // Get all unseen messages
       const querySnapshot = await getDocs(q);
@@ -268,7 +355,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       // Iterate over unseen messages and update their seen status
       querySnapshot.forEach((doc) => {
         if (doc.data().senderId !== userId) {
-          batch.update(doc.ref, { seen: true });
+          batch.update(doc.ref, { seen: serverTimestamp() });
         }
       });
 
@@ -339,134 +426,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     };
   }, [chatId, chatOpened, messages]);
 
-  const participantImage = selectedChat?.participants
-    .filter((p) => p.id !== userId) // Exclude the current user
-    .map((p) => p.image)[0];
-  const participantName = selectedChat?.participants
-    .filter((p) => p.id !== userId) // Exclude the current user
-    .map((p) => p.name)[0];
-
   let lastDate = "";
-
-  // Function to upload an image
-  const generateRandomCode = () => {
-    const randomNum = Math.floor(Math.random() * 10000);
-    const code = String(randomNum).padStart(4, "0");
-    return code;
-  };
-  const [filePreview, setFilePreview] = useState(false);
-  const handleImageChange = (event) => {
-    const files = Array.from(event.target.files);
-
-    const fileDetails = files.map((file) => ({
-      _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
-      type: "image",
-      url: URL.createObjectURL(file),
-    }));
-
-    setFile((prevFiles) => [...prevFiles, ...fileDetails]);
-
-    setFilePreview(true);
-
-    // handleUpload(files, fileDetails);
-  };
-
-  const handleUpload = async (files, fileDetails) => {
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("files", file); // Append each file to FormData
-    });
-
-    try {
-      const response = await axios.post(
-        "https://api.mymakan.ae/file-upload/upload",
-        formData,
-        {
-          onUploadProgress: (data) => {
-            const progress = Math.round((data.loaded / data.total) * 100);
-
-            // Create a new object to track progress for each file
-            const progressUpdates = {};
-            fileDetails.forEach((file) => {
-              progressUpdates[file._id] = progress;
-            });
-
-            setImageUploading((prevProgress) => ({
-              ...prevProgress,
-              ...progressUpdates,
-            }));
-          },
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      const links = response.data.map((item, index) => ({
-        _id: fileDetails[index]._id,
-        type: fileDetails[index].type,
-        url: item.Location,
-      }));
-
-      setMedia((prevImages) => [...prevImages, ...links]);
-    } catch (error) {
-      console.error("Upload failed:", error);
-    } finally {
-      // Clear upload progress for files after upload completes
-      setImageUploadingProssing((prevProgress) => {
-        const updatedProgress = { ...prevProgress };
-        fileDetails.forEach((file) => {
-          delete updatedProgress[file._id];
-        });
-        return updatedProgress;
-      });
-    }
-  };
-
-  const [selectedImage, setSelectedImage] = useState({});
-  useEffect(() => {
-    if (file) {
-      const defultSelecetdImage = file.length > 0 && file[0];
-      setSelectedImage(defultSelecetdImage);
-    }
-  }, [file]);
-
-  function handelselectedImage(value) {
-    setSelectedImage(value);
-  }
-
-  const handleFileDelete = (fileId) => {
-    // Filter out the file with the specified _id
-    setFile((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
-  };
-  const videoRefs = useRef([]);
-  const handleVideoClick = (index) => {
-    if (videoRefs.current[index]) {
-      if (videoRefs.current[index].paused) {
-        videoRefs.current[index].play();
-      } else {
-        videoRefs.current[index].pause();
-      }
-    }
-  };
-
-  const filePreviewRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        filePreviewRef.current &&
-        !filePreviewRef.current.contains(event.target)
-      ) {
-        setFile([]);
-        setFilePreview(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [filePreviewRef]);
 
   return (
     <div className="" ref={filePreviewRef}>
@@ -507,7 +467,14 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
         {messages.length > 0 ? (
           messages.map((msg, index) => {
             const isSent = msg.senderId === userId;
-            const parsedDate = dayjs(msg.createdAt?.toMillis());
+            // Ensure msg.createdAt is not null or undefined and is a Firestore Timestamp
+            const createdAt = msg.createdAt
+              ? msg.createdAt.toDate
+                ? msg.createdAt.toDate()
+                : msg.createdAt
+              : new Date();
+
+            const parsedDate = dayjs(createdAt);
             const msgDate = parsedDate.format("YYYY-MM-DD");
             const formattedDate = formatDateHeader(parsedDate);
             const formattedTime = parsedDate.format("h:mm A");
@@ -515,76 +482,20 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             // Only show the date header if the date of the current message is different from the last message's date
             const showDateHeader = lastDate !== msgDate;
             lastDate = msgDate;
+
             return (
-              <div key={msg.id}>
-                {showDateHeader && (
-                  <div className="text-center text-gray-500 text-[15px] font-medium my-[14px]">
-                    {formattedDate}
-                  </div>
-                )}
-                <div
-                  className={`col-start-${isSent ? "6" : "1"} col-end-${
-                    isSent ? "13" : "8"
-                  } p-3 rounded-lg`}
-                >
-                  <div
-                    className={`flex items-end ${
-                      isSent ? "justify-start flex-row-reverse" : "flex-row"
-                    }`}
-                  >
-                    {isSent ? (
-                      <Image
-                        alt=""
-                        src={user?.image}
-                        width={500}
-                        height={500}
-                        className="w-[30px] h-[30px] rounded-full"
-                      />
-                    ) : (
-                      <Image
-                        alt=""
-                        src={participantImage}
-                        width={500}
-                        height={500}
-                        className="w-[30px] h-[30px] rounded-full"
-                      />
-                    )}
-                    <div
-                      className={`relative ${
-                        isSent ? "mr-3" : "ml-3"
-                      } text-sm ${
-                        isSent ? "bg-indigo-100" : "bg-white"
-                      } py-2 px-4 rounded-xl min-w-[130px] max-w-[300px]`}
-                    >
-                      {/* Display content or image */}
-                      {msg.imageUrl ? (
-                        <Image
-                          alt="Message image"
-                          src={msg.imageUrl}
-                          width={300}
-                          height={300}
-                          className="object-cover rounded-lg"
-                        />
-                      ) : (
-                        <div>{msg.content}</div>
-                      )}
-                      <div className="flex justify-end gap-x-[3px] items-center -mb-3">
-                        <p className="text-[10px]">{formattedTime}</p>
-                        <div>
-                          <p
-                            className={`${
-                              msg.seen ? "text-blue-500" : "text-green-500"
-                            } text-[13px] font-bold`}
-                          >
-                            {/* Assuming LuCheckCheck is a check mark icon */}
-                            <LuCheckCheck />
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <SingleChat
+                key={index}
+                msg={msg}
+                isSent={isSent}
+                formattedDate={formattedDate}
+                formattedTime={formattedTime}
+                showDateHeader={showDateHeader}
+                user={user}
+                status={msg.status}
+                uploadingProssing={uploadingProssing}
+                participantImage={participantImage}
+              />
             );
           })
         ) : (
@@ -643,7 +554,10 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
               <div>
                 <textarea
                   className="w-full max-w-[100%] border-[0.5px]  bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[5px] leading-5"
+                  value={newMessage}
                   placeholder="Type your message..."
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <div className="flex justify-between items-center px-[10px] mt-[5px]">
@@ -684,11 +598,11 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                     );
                   })}
                 </div>
-                <div className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm">
-                  <p
-                    onClick={sendMessage}
-                    className=" ml-[5px] text-[20px] text-white mt-[5px]"
-                  >
+                <div
+                  onClick={sendMessage}
+                  className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm cursor-pointer"
+                >
+                  <p className=" ml-[5px] text-[20px] text-white mt-[5px]">
                     <IoMdSend />
                   </p>
 
@@ -722,13 +636,11 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
           </svg>
         </button>
         <textarea
-          ref={textareaRef}
           className="w-full max-w-[80%] border-[0.5px] rounded-2xl bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[12px] leading-5"
-          rows={rows}
-          onChange={handleInput}
-          onKeyDown={handleInput}
           value={newMessage}
           placeholder="Type your message..."
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         {/* Conditionally render Send or Like button */}
         {newMessage.trim().length > 0 ? (

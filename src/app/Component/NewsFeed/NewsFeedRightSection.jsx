@@ -9,7 +9,7 @@ const NewsFeedRightSection = () => {
   const [activeTab, setActiveTab] = useState("topAgents");
 
   return (
-    <div className="!sticky top-[110px]">
+    <div className="!sticky top-[120px]">
       <div className="h-[86vh] overflow-y-scroll">
         <div>
           <ProfileCard />

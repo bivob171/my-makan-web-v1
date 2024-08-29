@@ -17,10 +17,8 @@ const PrivateRouteContext = () => {
 
   const logOut = useCallback(() => {
     setLoading(true);
-    setUser(null);
     localStorage.clear();
     router.push("/");
-    setRender(!render);
     signOut({ callbackUrl: "/" });
   }, []);
 
@@ -52,19 +50,14 @@ const PrivateRouteContext = () => {
         ? "https://api.mymakan.ae/agent/myProfile"
         : "https://api.mymakan.ae/user/myProfile";
 
-    if (endpoint) {
-      const token = getStoredToken(userRole);
-      if (token) {
-        fetchUserProfile(token, endpoint);
-      } else {
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
+    const token = getStoredToken(userRole);
+    if (token) {
+      fetchUserProfile(token, endpoint);
     } else {
       setIsAuthenticated(false);
       setLoading(false);
     }
-  }, [render]);
+  }, []);
 
   useEffect(() => {
     let socket;

@@ -335,7 +335,6 @@ export default function PackageCard({
   const { createNewChat } = useContext(ChatValueContext);
 
   const matchPercentage = item?.matchPercentage && item?.matchPercentage;
-  const roundedmatchPercentage = Math.round(matchPercentage);
 
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
@@ -812,12 +811,12 @@ export default function PackageCard({
         <div className="px-[15px] w-full">
           <Link href={`/user/post-details/${_id}`} className="w-full">
             <div>
-              <p className="font-inter text-[22px] md:text-[26px] text-[#666] font-semibold mb-2 leading-[40px]">
-                {item?.title.length > 33
-                  ? `${item?.title.slice(0, 33)}...`
+              <p className="font-inter text-[18px] text-[#666] font-bold mb-2 leading-[40px]">
+                {item?.title.length > 63
+                  ? `${item?.title.slice(0, 63)}...`
                   : item?.title}
               </p>
-              <p className="font-inter text-[#333] !text-[14px] md:!text-[16px] font-normal leading-[20px] px-3 text-justify h-[80px]">
+              <p className="font-inter text-[#333] !text-[14px] font-normal leading-[20px] text-justify h-[80px]">
                 {item?.description.length > 133 ? (
                   <>
                     {item?.description.slice(0, 133)}...

@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaComments, FaMinus } from "react-icons/fa6";
 import { format, formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
+import { ChatValueContext } from "@/Context/chatContext";
+import NotificationValueContext from "@/Context/notificationContext";
+import ChatNotificationValueContext from "@/Context/chatNotification";
 
 const HTopNotification = ({
   isVisible,
@@ -29,46 +32,55 @@ const HTopNotification = ({
     const {
       _id,
       notifyFor,
-      postCommentId, 
-      postId, 
-      read,
-      createdAt,
-      mention,
-      notifyerType,
-      notifyingType,
-      notifyingUserId,
-      notifyingAgentId,
+      postCommentId,
+      postId,
+      commentReplyId,
       nitifyerUserId,
       nitifyerAgentId,
-      mentionAgentId,
-      mentionUserId,
-      commentReplyId,
     } = notification;
 
     handleSingleNotificationMarkAsRead(_id);
 
-    console.log(notification);
-
-    if (notifyFor === "comment" && postCommentId._id && postId._id) {
+    if (notifyFor === "comment" && postCommentId?._id && postId?._id) {
       router.push(
         `/user/post-details/${postId._id}?commentId=${postCommentId._id}`
-      ); 
-    } else if (notifyFor === "reply" && commentReplyId._id && postId._id) {
+      );
+    } else if (notifyFor === "reply" && commentReplyId?._id && postId?._id) {
       router.push(
         `/user/post-details/${postId._id}?commentId=${postCommentId._id}&reply=${commentReplyId._id}`
       );
-    } else if (notifyFor === "like" && postId._id) {
+    } else if (notifyFor === "like" && postId?._id) {
       router.push(`/user/post-details/${postId._id}`);
     } else if (notifyFor === "follow" || notifyFor === "unfollow") {
-      if (notifyerType === "agent") {
-        console.log(nitifyerAgentId);
-        router.push(`/user/agent-profile/${nitifyerAgentId._id}`); 
-      } else {
-        router.push(`/user/buyer-profile/${nitifyerUserId._id}`); 
-      }
+      const profileUrl =
+        notification.notifyerType === "agent"
+          ? `/user/agent-profile/${nitifyerAgentId._id}`
+          : ` /user/buyer-profile/${nitifyerUserId._id}`;
+      router.push(profileUrl);
     }
   };
-  
+
+  // all chat notification
+
+  const {
+    handleChatSelection,
+    selectedChatId,
+    setSelectedChatId,
+    activeChatId,
+    setActiveChatId,
+    chats,
+    setChats,
+    setLoading,
+    loading,
+    searchQuery,
+    setSearchQuery,
+    selectedChat,
+    setSelectedChat,
+  } = ChatNotificationValueContext();
+
+  function chatPage() {
+    router.push("/user/chats");
+  }
 
   return (
     <>
@@ -313,95 +325,75 @@ const HTopNotification = ({
             </div>
           </div>
           <div>
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-auto h-auto"
-                  src="/media/figure/notifiy_1.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Diana Jameson</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
+            {chats.map((chat) => {
+              const formatTimestamp = (timestamp) => {
+                if (!timestamp) return "No Date";
+                const date = timestamp.toDate(); // Convert Timestamp to Date object
+                return date.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }); // Format as 'HH:MM'
+              };
 
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
+              const participantId = chat?.participants
+                .filter((p) => p.id !== user?._id) // Exclude the current user
+                .map((p) => p.id)[0];
+              const participantImage = chat?.participants
+                .filter((p) => p.id !== user?._id) // Exclude the current user
+                .map((p) => p.image)[0];
+              const participantName = chat?.participants
+                .filter((p) => p.id !== user?._id) // Exclude the current user
+                .map((p) => p.name)[0];
+              const unseenCountparticipan =
+                chat.unseenMessages[participantId] || 0;
+              const unseenCount = chat.unseenMessages[user?._id] || 0;
+              return (
+                <div
+                  key={msg.id}
+                  className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]"
+                >
+                  <div className="mr-3 mt-[9px]">
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-full w-[40px] h-[40px]"
+                      src={participantImage}
+                      alt="Notify"
+                    />
+                    <span className="chat-status offline" />
+                  </div>
+                  <div className="relative flex-1 mt-[4px]">
+                    <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                      <a href="#">{participantName}</a>
+                    </h6>
+                    <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                      {chat.latestMessage.length > 30
+                        ? chat.latestMessage.slice(0, 30) + "..."
+                        : chat.latestMessage}
+                    </p>
+
+                    <div className="absolute top-[5px] right-0 flex gap-x-2.5">
+                      <p className="text-[11px] font-semibold text-gray-500 leading-4">
+                        {formatTimestamp(chat.latestMessageTimestamp)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto rounded-full"
-                  src="/media/figure/notifiy_3.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Bayzid Islam</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
-
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]">
-              <div className="mr-3 mt-[9px]">
-                <Image
-                  width={1000}
-                  height={100}
-                  className="w-auto h-auto rounded-full"
-                  src="/media/figure/notifiy_3.png"
-                  alt="Notify"
-                />
-                <span className="chat-status offline" />
-              </div>
-              <div className="relative flex-1 mt-[4px]">
-                <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                  <a href="#">Bayzid Islam</a>
-                </h6>
-                <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-                  when are nknowen printer took galley of types ...
-                </p>
-
-                <div className="absolute top-[5px] right-0 flex gap-x-2.5">
-                  <p className="text-[11px] font-semibold text-gray-500 leading-4">
-                    15 Minite
-                  </p>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
           <div className=" mt-[15px]">
-            <button className="focus:outline-none w-full h-[60px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter">
+            <button
+              type="button"
+              onClick={chatPage}
+              className="focus:outline-none w-full h-[60px] text-base font-normal text-white bg-[#615DFA] rounded-b-lg  block no-underline cursor-pointer transition-all duration-300 ease-in-out font-inter"
+            >
               View All Messages
             </button>
           </div>
         </div>
       </div>
       <div></div>
-
 
       <div
         className={`absolute  2xl:ml-[65px] xl:ml-[65px] lg:ml-[65px] md:ml-[65px] ml-[0px] 2xl:top-[73px] xl:top-[73px] lg:top-[76px] md:top-[58px] sm:top-[55px] top-[52px] transition-all duration-300 ease-in-out transform ${
@@ -452,7 +444,7 @@ const HTopNotification = ({
                 </div>
               )}
               {!loadingNotify && allNotification?.length === 0 && (
-                <div className="text-center text-gray-500 mt-4">
+                <div className="text-center text-gray-500 my-2 text-[15px]">
                   No Notification available.
                 </div>
               )}

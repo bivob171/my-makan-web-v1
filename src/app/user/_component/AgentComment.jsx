@@ -11,7 +11,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const socket = io("https://api.mymakan.ae", {
   path: "/socket.io",
@@ -555,27 +555,26 @@ const AgentComment = ({ _id }) => {
     }
   };
 
-  const router = useRouter();
-
-  const { query } = router;
-
-  const commentId = query?.commentId || null;
-  const reply = query?.reply || null;
+  const searchParams = useSearchParams();
+  const commentId = searchParams.get("commentId");
+  const reply = searchParams.get("reply");
 
   useEffect(() => {
+    const scrollToElement = (id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("highlight");
+      } else {
+      }
+    };
+
     if (commentId) {
-      const commentElement = document.getElementById(commentId);
-      if (commentElement) {
-        commentElement.scrollIntoView({ behavior: "smooth" });
-        commentElement.classList.add("highlight");
-      }
+      scrollToElement(commentId);
     }
+
     if (reply) {
-      const replyElement = document.getElementById(reply);
-      if (replyElement) {
-        replyElement.scrollIntoView({ behavior: "smooth" });
-        replyElement.classList.add("highlight");
-      }
+      scrollToElement(reply);
     }
   }, [commentId, reply]);
 

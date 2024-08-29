@@ -35,8 +35,8 @@ export const NewsFeedPage = () => {
   return (
     <>
       <div className="page-content mt-6 lg:mt-0">
-        <div className="container">
-          <div className="newsfeed-banner !mb-0">
+        <div className="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-2xl 2xl:max-w-full md:px-24 lg:px-8">
+          <div className="newsfeed-banner !mb-5">
             <div className="media gap-x-4 items-center flex md:py-4">
               <div className="flex gap-x-5 mb-2">
                 <Image
@@ -86,15 +86,15 @@ export const NewsFeedPage = () => {
             <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <div className="grid lg:grid-cols-12 gap-[24px]">
-            <div className="lg:col-span-3 hidden lg:block">
-              <div className="!sticky top-[110px]">
+            <div className="lg:col-span-3 hidden lg:block w-[300px]">
+              <div className="!sticky top-[120px]">
                 <div className="h-[86vh] overflow-y-scroll">
                   <NewsFeedLeftSection />
                 </div>
               </div>
             </div>
             <div className="lg:col-span-6">
-              <div className="md:!sticky top-[100px] bg-[#EFF4FB] z-40">
+              <div className="md:!sticky top-[100px] bg-[#EFF4FB] z-30">
                 <PostSearch
                   open={open}
                   user={user}
@@ -168,8 +168,10 @@ export const NewsFeedPage = () => {
               {activeTab === "availablePosts" && <AvailableTotalPost />}
               {activeTab === "required" && <RequiredTotalPost />}
             </div>
-            <div className="lg:col-span-3 hidden lg:block ">
-              <NewsFeedRightSection />
+            <div className="lg:col-span-3 hidden lg:flex justify-end w-full">
+              <div className="!w-[300px]">
+                <NewsFeedRightSection />
+              </div>
             </div>
           </div>
         </div>

@@ -263,7 +263,7 @@ export const AllTotalPost = () => {
     <div className="pb-[50px] ">
       <div className="">
         <div className="">
-          {newPostCount > 20 && (
+          {newPostCount > 0 && (
             <button
               type="button"
               onClick={handleButtonClick}
@@ -324,7 +324,7 @@ export const AllTotalPost = () => {
               </div>
             )}
 
-            {isFetching && loading === false && (
+            {isFetching && (
               <div className="mb-[20px] mt-[20px] text-center">
                 <PostLodaing />
               </div>
