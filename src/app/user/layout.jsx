@@ -9,10 +9,7 @@ import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import FilterRenderProvider from "@/Context/filterRenderContext";
-import io from "socket.io-client";
-import { useEffect, useState } from "react";
 import ChatValueProvider from "@/Context/chatContext";
-import NotificationProvider from "@/Context/notificationContext";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -36,18 +33,19 @@ export default function Layout({ children }) {
     return (
       <div className="bg-[#EFF4FB]">
         <HeaderTop />
+
         {pathname !== "/user/chats" && <HeaderLeft />}
-        <NotificationProvider>
-          <ChatValueProvider>
-            <FilterRenderProvider>
-              <PostLocationValueProvider>
-                <EditPostLocationValueProvider>
-                  <div className={nunito.className}>{children}</div>
-                </EditPostLocationValueProvider>
-              </PostLocationValueProvider>
-            </FilterRenderProvider>
-          </ChatValueProvider>
-        </NotificationProvider>
+
+        <ChatValueProvider>
+          <FilterRenderProvider>
+            <PostLocationValueProvider>
+              <EditPostLocationValueProvider>
+                <div className={nunito.className}>{children}</div>
+              </EditPostLocationValueProvider>
+            </PostLocationValueProvider>
+          </FilterRenderProvider>
+        </ChatValueProvider>
+
         {pathname !== "/user/chats" && <HeaderRight />}
       </div>
     );

@@ -19,12 +19,36 @@ import {
   getDocs,
   getDoc,
   Timestamp,
+  storage,
 } from "../../../firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Link from "next/link";
 import { CheckIcon } from "lucide-react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { AiOutlineCheck } from "react-icons/ai";
 import { LuCheckCheck } from "react-icons/lu";
+
+// Extend dayjs with the plugins
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { FaPlusCircle, FaPlusSquare } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
+import { CgClose } from "react-icons/cg";
+
+dayjs.extend(relativeTime);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(customParseFormat);
+
+const formatDateHeader = (date) => {
+  if (dayjs(date).isToday()) return "Today";
+  if (dayjs(date).isYesterday()) return "Yesterday";
+  return dayjs(date).format("DD, MM, YYYY");
+};
+
 const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const { user } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
@@ -34,6 +58,10 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const textareaRef = useRef(null);
   const messageContainerRef = useRef(null);
   const userId = user?._id;
+  const [file, setFile] = useState([]);
+  const [media, setMedia] = useState(null);
+  const [imageUploadingProssing, setImageUploadingProssing] = useState({});
+  console.log(file);
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
@@ -58,99 +86,167 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       notificationSound.play();
     });
   };
+  // const sendMessage = async () => {
+  //   if (!newMessage.trim()) return;
+  //   setNewMessage("");
+  //   scrollToBottom();
+  //   playNotificationSound();
+
+  //   try {
+  //     // Reference to the messages collection within the chat
+  //     const messagesRef = collection(db, `chats/${chatId}/messages`);
+
+  //     // Add the new message to Firestore
+  //     const newMessageRef = await addDoc(messagesRef, {
+  //       senderId: userId,
+  //       content: newMessage,
+  //       createdAt: serverTimestamp(),
+  //       seen: false,
+  //     });
+
+  //     // Get the timestamp of the new message
+  //     const messageSnapshot = await getDoc(newMessageRef);
+  //     const messageData = messageSnapshot.data();
+  //     const messageTimestamp = messageData?.createdAt?.toMillis();
+
+  //     // Reference to the chat document
+  //     const chatDocRef = doc(db, `chats/${chatId}`);
+  //     const chatDocSnapshot = await getDoc(chatDocRef);
+
+  //     if (!chatDocSnapshot.exists()) {
+  //       throw new Error("Chat document not found.");
+  //     }
+
+  //     // Get chat data and participants
+  //     const chatData = chatDocSnapshot.data();
+  //     const participants = chatData.participants || [];
+
+  //     // Prepare the unseen messages update object
+  //     const unseenMessagesUpdate = {};
+  //     participants.forEach((participant) => {
+  //       if (participant.id !== userId) {
+  //         unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
+  //           increment(1);
+  //       }
+  //     });
+
+  //     if (typeof messageTimestamp === "number") {
+  //       // Update the chat document with the latest message info
+  //       const chatRef = doc(db, "chats", chatId);
+  //       await updateDoc(chatRef, {
+  //         latestMessage: newMessage,
+  //         latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
+  //         ...unseenMessagesUpdate, // Increment unseen messages count for other participants
+  //       });
+  //     } else {
+  //       console.error("Error: Message timestamp is invalid or undefined.");
+  //     }
+
+  //     // Clear the input field and reset rows
+  //     setRows(1);
+  //     // Scroll to the bottom and play notification sound
+  //   } catch (error) {
+  //     console.error("Error sending message:", error);
+  //   }
+  // };
+
+  // const handleInput = async (event) => {
+  //   const messageContent = event.target.value;
+  //   setNewMessage(messageContent);
+
+  //   // Handle textarea auto-resizing
+  //   const textareaLineHeight = 24;
+  //   textareaRef.current.rows = 1; // Reset rows to 1 to calculate the actual height
+  //   const currentRows = Math.floor(
+  //     textareaRef.current.scrollHeight / textareaLineHeight
+  //   );
+
+  //   if (currentRows >= 5) {
+  //     textareaRef.current.rows = 5;
+  //     textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Scroll to the bottom if the content exceeds the height
+  //   } else {
+  //     textareaRef.current.rows = currentRows;
+  //   }
+  //   setRows(currentRows < 5 ? currentRows : 5);
+
+  //   // Send message when Enter key is pressed without Shift
+  //   if (event.key === "Enter" && !event.shiftKey) {
+  //     event.preventDefault();
+  //     if (!messageContent.trim()) return;
+
+  //     try {
+  //       sendMessage();
+  //     } catch (error) {
+  //       console.error("Error sending message:", error);
+  //     }
+  //   }
+  // };
+
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() && !file) return;
+
     setNewMessage("");
+    setFile(null);
     scrollToBottom();
-    playNotificationSound();
+    playNotificationSound("/audio/massagesendnotify.mp3");
 
     try {
-      // Reference to the messages collection within the chat
       const messagesRef = collection(db, `chats/${chatId}/messages`);
-
-      // Add the new message to Firestore
-      const newMessageRef = await addDoc(messagesRef, {
-        senderId: userId,
-        content: newMessage,
+      const messageData = {
+        senderId: user?._id,
         createdAt: serverTimestamp(),
         seen: false,
-      });
+      };
 
-      // Get the timestamp of the new message
-      const messageSnapshot = await getDoc(newMessageRef);
-      const messageData = messageSnapshot.data();
-      const messageTimestamp = messageData?.createdAt?.toMillis();
-
-      // Reference to the chat document
-      const chatDocRef = doc(db, `chats/${chatId}`);
-      const chatDocSnapshot = await getDoc(chatDocRef);
-
-      if (!chatDocSnapshot.exists()) {
-        throw new Error("Chat document not found.");
-      }
-
-      // Get chat data and participants
-      const chatData = chatDocSnapshot.data();
-      const participants = chatData.participants || [];
-
-      // Prepare the unseen messages update object
-      const unseenMessagesUpdate = {};
-      participants.forEach((participant) => {
-        if (participant.id !== userId) {
-          unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
-            increment(1);
-        }
-      });
-
-      if (typeof messageTimestamp === "number") {
-        // Update the chat document with the latest message info
-        const chatRef = doc(db, "chats", chatId);
-        await updateDoc(chatRef, {
-          latestMessage: newMessage,
-          latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
-          ...unseenMessagesUpdate, // Increment unseen messages count for other participants
-        });
+      if (file) {
+        const imageUrl = await uploadImage(file);
+        messageData.imageUrl = imageUrl;
       } else {
-        console.error("Error: Message timestamp is invalid or undefined.");
+        messageData.content = newMessage;
       }
 
-      // Clear the input field and reset rows
-      setRows(1);
-      // Scroll to the bottom and play notification sound
+      const newMessageRef = await addDoc(messagesRef, messageData);
+      const messageSnapshot = await getDoc(newMessageRef);
+      const messageTimestamp = messageSnapshot.data()?.createdAt?.toMillis();
+
+      if (messageTimestamp) {
+        const chatRef = doc(db, `chats/${chatId}`);
+        const chatDoc = await getDoc(chatRef);
+        const participants = chatDoc.data()?.participants || [];
+        const unseenMessagesUpdate = {};
+
+        participants.forEach((participant) => {
+          if (participant.id !== user?._id) {
+            unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
+              increment(1);
+          }
+        });
+
+        await updateDoc(chatRef, {
+          latestMessage: file ? "Image" : newMessage,
+          latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
+          ...unseenMessagesUpdate,
+        });
+      }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  const handleInput = async (event) => {
+  const handleInput = (event) => {
     const messageContent = event.target.value;
     setNewMessage(messageContent);
 
-    // Handle textarea auto-resizing
     const textareaLineHeight = 24;
-    textareaRef.current.rows = 1; // Reset rows to 1 to calculate the actual height
+    textareaRef.current.rows = 1;
     const currentRows = Math.floor(
       textareaRef.current.scrollHeight / textareaLineHeight
     );
 
-    if (currentRows >= 5) {
-      textareaRef.current.rows = 5;
-      textareaRef.current.scrollTop = textareaRef.current.scrollHeight; // Scroll to the bottom if the content exceeds the height
-    } else {
-      textareaRef.current.rows = currentRows;
-    }
-    setRows(currentRows < 5 ? currentRows : 5);
-
-    // Send message when Enter key is pressed without Shift
+    textareaRef.current.rows = currentRows >= 5 ? 5 : currentRows;
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      if (!messageContent.trim()) return;
-
-      try {
-        sendMessage();
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
+      if (messageContent.trim()) sendMessage();
     }
   };
 
@@ -250,10 +346,130 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     .filter((p) => p.id !== userId) // Exclude the current user
     .map((p) => p.name)[0];
 
-  const [isSent, setisSent] = useState(true);
+  let lastDate = "";
+
+  // Function to upload an image
+  const generateRandomCode = () => {
+    const randomNum = Math.floor(Math.random() * 10000);
+    const code = String(randomNum).padStart(4, "0");
+    return code;
+  };
+  const [filePreview, setFilePreview] = useState(false);
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+
+    const fileDetails = files.map((file) => ({
+      _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
+      type: "image",
+      url: URL.createObjectURL(file),
+    }));
+
+    setFile((prevFiles) => [...prevFiles, ...fileDetails]);
+
+    setFilePreview(true);
+
+    // handleUpload(files, fileDetails);
+  };
+
+  const handleUpload = async (files, fileDetails) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file); // Append each file to FormData
+    });
+
+    try {
+      const response = await axios.post(
+        "https://api.mymakan.ae/file-upload/upload",
+        formData,
+        {
+          onUploadProgress: (data) => {
+            const progress = Math.round((data.loaded / data.total) * 100);
+
+            // Create a new object to track progress for each file
+            const progressUpdates = {};
+            fileDetails.forEach((file) => {
+              progressUpdates[file._id] = progress;
+            });
+
+            setImageUploading((prevProgress) => ({
+              ...prevProgress,
+              ...progressUpdates,
+            }));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const links = response.data.map((item, index) => ({
+        _id: fileDetails[index]._id,
+        type: fileDetails[index].type,
+        url: item.Location,
+      }));
+
+      setMedia((prevImages) => [...prevImages, ...links]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      // Clear upload progress for files after upload completes
+      setImageUploadingProssing((prevProgress) => {
+        const updatedProgress = { ...prevProgress };
+        fileDetails.forEach((file) => {
+          delete updatedProgress[file._id];
+        });
+        return updatedProgress;
+      });
+    }
+  };
+
+  const [selectedImage, setSelectedImage] = useState({});
+  useEffect(() => {
+    if (file) {
+      const defultSelecetdImage = file.length > 0 && file[0];
+      setSelectedImage(defultSelecetdImage);
+    }
+  }, [file]);
+
+  function handelselectedImage(value) {
+    setSelectedImage(value);
+  }
+
+  const handleFileDelete = (fileId) => {
+    // Filter out the file with the specified _id
+    setFile((prevFiles) => prevFiles.filter((file) => file._id !== fileId));
+  };
+  const videoRefs = useRef([]);
+  const handleVideoClick = (index) => {
+    if (videoRefs.current[index]) {
+      if (videoRefs.current[index].paused) {
+        videoRefs.current[index].play();
+      } else {
+        videoRefs.current[index].pause();
+      }
+    }
+  };
+
+  const filePreviewRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        filePreviewRef.current &&
+        !filePreviewRef.current.contains(event.target)
+      ) {
+        setFile([]);
+        setFilePreview(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [filePreviewRef]);
 
   return (
-    <div className="">
+    <div className="" ref={filePreviewRef}>
       <div className="sticky top-0 h-[65px] bg-white border-b flex items-center justify-between px-3">
         {/* click this button then open profile details section  */}
         <button
@@ -286,35 +502,30 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       </div>
       <div
         ref={messageContainerRef}
-        className="overflow-y-auto h-[480px] bg-[#F7FAFD] pb-[30px]"
+        className="overflow-y-auto h-[480px] bg-[#F7FAFD] pb-[100px]"
       >
         {messages.length > 0 ? (
-          messages.map((msg) => {
-            const formatTimestamp = (timestamp) => {
-              if (!timestamp) return "No Date";
-              const date = timestamp.toDate(); // Convert Timestamp to Date object
-              return date.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }); // Format as 'HH:MM'
-            };
-
+          messages.map((msg, index) => {
             const isSent = msg.senderId === userId;
+            const parsedDate = dayjs(msg.createdAt?.toMillis());
+            const msgDate = parsedDate.format("YYYY-MM-DD");
+            const formattedDate = formatDateHeader(parsedDate);
+            const formattedTime = parsedDate.format("h:mm A");
 
-            const formattedTime = msg.createdAt
-              ?.toDate()
-              .toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true, // Ensure 12-hour format with AM/PM
-              })
-              .toLowerCase();
+            // Only show the date header if the date of the current message is different from the last message's date
+            const showDateHeader = lastDate !== msgDate;
+            lastDate = msgDate;
             return (
               <div key={msg.id}>
+                {showDateHeader && (
+                  <div className="text-center text-gray-500 text-[15px] font-medium my-[14px]">
+                    {formattedDate}
+                  </div>
+                )}
                 <div
                   className={`col-start-${isSent ? "6" : "1"} col-end-${
                     isSent ? "13" : "8"
-                  } p-3 rounded-lg `}
+                  } p-3 rounded-lg`}
                 >
                   <div
                     className={`flex items-end ${
@@ -343,19 +554,29 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                         isSent ? "mr-3" : "ml-3"
                       } text-sm ${
                         isSent ? "bg-indigo-100" : "bg-white"
-                      } py-2 px-4  rounded-xl min-w-[130px] max-w-[300px]`}
+                      } py-2 px-4 rounded-xl min-w-[130px] max-w-[300px]`}
                     >
-                      <div>{msg.content}</div>
+                      {/* Display content or image */}
+                      {msg.imageUrl ? (
+                        <Image
+                          alt="Message image"
+                          src={msg.imageUrl}
+                          width={300}
+                          height={300}
+                          className="object-cover rounded-lg"
+                        />
+                      ) : (
+                        <div>{msg.content}</div>
+                      )}
                       <div className="flex justify-end gap-x-[3px] items-center -mb-3">
                         <p className="text-[10px]">{formattedTime}</p>
-                        <div className="">
+                        <div>
                           <p
                             className={`${
-                              msg.seen === true
-                                ? "text-blue-500"
-                                : "text-green-500"
-                            } "text-[13px]   font-bold"`}
+                              msg.seen ? "text-blue-500" : "text-green-500"
+                            } text-[13px] font-bold`}
                           >
+                            {/* Assuming LuCheckCheck is a check mark icon */}
                             <LuCheckCheck />
                           </p>
                         </div>
@@ -372,23 +593,119 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       </div>
       {/* bottom */}
       <div className="absolute bottom-0 h-auto min-h-[55px] max-h-[150px] bg-white border-t-[0.5px] w-full flex justify-around items-center gap-1 py-2 px-2">
-        <button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6 text-[#615DFA]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12.75 8.25v7.5m6-7.5h-3V12m0 0v3.75m0-3.75H18M9.75 9.348c-1.03-1.464-2.698-1.464-3.728 0-1.03 1.465-1.03 3.84 0 5.304 1.03 1.464 2.699 1.464 3.728 0V12h-1.5M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-            />
-          </svg>
-        </button>
-        <button>
+        <div className="relative">
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6 text-[#615DFA]"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12.75 8.25v7.5m6-7.5h-3V12m0 0v3.75m0-3.75H18M9.75 9.348c-1.03-1.464-2.698-1.464-3.728 0-1.03 1.465-1.03 3.84 0 5.304 1.03 1.464 2.699 1.464 3.728 0V12h-1.5M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+              />
+            </svg>
+          </button>
+          {filePreview === true ? (
+            <div className="absolute bottom-[1px] bg-[#F7F7F7] shadow-md w-[400px] h-[300px] rounded-[10px]">
+              {selectedImage.type === "image" ? (
+                <div className="bg-slate-50 w-full h-[180px] rounded-[10px] relative">
+                  <Image
+                    src={selectedImage?.url}
+                    width={100}
+                    height={100}
+                    alt=""
+                    className="w-full h-[180px] object-cover rounded-t-[10px]"
+                  />
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                    onClick={() => handleFileDelete(selectedImage?._id)}
+                  />
+                </div>
+              ) : (
+                <div className="bg-slate-50 w-full h-[180px] rounded-[10px] relative">
+                  <video
+                    src={selectedImage?.url}
+                    width="50"
+                    onClick={() => handleVideoClick(_id)}
+                    className="w-full h-[180px] object-cover rounded-t-[10px]"
+                  />
+                  <CgClose
+                    className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                    onClick={() => handleFileDelete(selectedImage?._id)}
+                  />
+                </div>
+              )}
+              <div>
+                <textarea
+                  className="w-full max-w-[100%] border-[0.5px]  bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[5px] leading-5"
+                  placeholder="Type your message..."
+                />
+              </div>
+              <div className="flex justify-between items-center px-[10px] mt-[5px]">
+                <div>
+                  <p
+                    className="cursor-pointer text-[30px] text-blue-500 pt-[7px]"
+                    onClick={() =>
+                      document.getElementById("image-input").click()
+                    }
+                  >
+                    <FaPlusSquare />
+                  </p>
+                </div>
+                <div className="flex gap-x-[5px] w-[175px] overflow-auto  ">
+                  {file.map((f, i) => {
+                    return (
+                      <div key={i}>
+                        {f?.type === "image" && (
+                          <Image
+                            onClick={() => handelselectedImage(f)}
+                            src={f.url}
+                            alt=""
+                            width={50}
+                            height={50}
+                            className="object-cover cursor-pointer rounded-sm blur-[1px]"
+                          />
+                        )}
+                        {f?.type === "video" && (
+                          <video
+                            width="50"
+                            onClick={() => handelselectedImage(f)}
+                            src={f.url}
+                            alt=""
+                            className="object-cover h-[50px] cursor-pointer rounded-sm blur-[1px]"
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm">
+                  <p
+                    onClick={sendMessage}
+                    className=" ml-[5px] text-[20px] text-white mt-[5px]"
+                  >
+                    <IoMdSend />
+                  </p>
+
+                  <div className="absolute top-[25px] w-[10px] h-[10px] right-0 bg-white flex justify-center rounded-full">
+                    <p className=" text-[7px]  leading-[10px] ">
+                      {file.length}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={() => document.getElementById("image-input").click()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -450,6 +767,14 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
           </button>
         )}
       </div>
+      <input
+        id="image-input"
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleImageChange}
+        style={{ display: "none" }}
+      />
     </div>
   );
 };

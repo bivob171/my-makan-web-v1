@@ -268,7 +268,8 @@ const AgentComment = ({ _id }) => {
       if (hasError) {
         return;
       }
-
+      playNotificationSound();
+      setComment("");
       let commentData;
       if (mentionRole.length > 0) {
         commentData = {
@@ -308,8 +309,7 @@ const AgentComment = ({ _id }) => {
       } else {
         const responseData = await response.json();
         // setComments((prevPost) => [responseData, ...prevPost]);
-        playNotificationSound();
-        setComment("");
+
         setMentionAgentId([]);
         setMentionName([]);
         setMentionUserId([]);
@@ -344,7 +344,8 @@ const AgentComment = ({ _id }) => {
       if (hasError) {
         return;
       }
-
+      setReplyText("");
+      playNotificationSound();
       const _id = comment._id;
       const postId = comment.postId;
 
@@ -395,7 +396,7 @@ const AgentComment = ({ _id }) => {
       } else {
         setReplyText("");
         const responseData = await response.json();
-        playNotificationSound();
+
         setMentionReplyAgentId([]);
         setMentionReplyName([]);
         setMentionReplyUserId([]);

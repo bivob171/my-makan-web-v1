@@ -1,7 +1,14 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import NotificationValueContext from "@/Context/notificationContext";
 import Image from "next/image";
 import Link from "next/link";
 import { FaComments, FaMinus } from "react-icons/fa";
@@ -27,11 +34,17 @@ const HTopNotification = dynamic(() => import("./HTopNotification"), {
 export const HeaderTop = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
+  const {
+    setAllNotificationNumber,
+    allNotificationNumber,
+    setnotificationRerander,
+    notificationRerander,
+  } = NotificationValueContext();
+
   const [matchOpen, setMatchOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -80,9 +93,6 @@ export const HeaderTop = () => {
   const [pageNotify, setPageNotify] = useState(1);
   const [hasMoreNotify, setHasMoreNotify] = useState(true);
   const [isFetchingNotify, setIsFetchingNotify] = useState(false);
-  const [unseenCount, setUnseenCount] = useState(
-    () => parseInt(localStorage.getItem("unseenCount")) || 0
-  );
 
   const getAllNotification = async (token) => {
     setIsFetchingNotify(true);
@@ -310,11 +320,11 @@ export const HeaderTop = () => {
             draggable: true,
           }
         );
-        setUnseenCount((prevCount) => {
-          const newCount = prevCount + 1;
-          localStorage.setItem("unseenCount", newCount);
-          return newCount;
-        });
+        setnotificationRerander(!notificationRerander);
+        // If notification panel is open, mark notifications as seen
+        if (notificationOpen === true) {
+          markNotificationAsSeen();
+        }
       }
     };
 
@@ -325,12 +335,33 @@ export const HeaderTop = () => {
     };
   }, [user]);
 
-  useEffect(() => {
-    if (notificationOpen === true) {
-      setUnseenCount(0);
-      localStorage.setItem("unseenCount", 0);
+  const markNotificationAsSeen = async () => {
+    try {
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+
+      const endpoint =
+        userRole === "agent"
+          ? "http://localhost:4000/agent/update-notification"
+          : "http://localhost:4000/user/update-notification";
+      const response = await fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        toast.error(` ${response.status}`);
+        console.log(response);
+      } else {
+        const data = await response.json();
+        setnotificationRerander(!notificationRerander);
+      }
+    } catch (error) {
+      console.log(` ${error}`);
     }
-  }, [notificationOpen]);
+  };
 
   // match Propertice
 
@@ -581,20 +612,21 @@ export const HeaderTop = () => {
                   type="button"
                   onClick={() => {
                     setNotificationOpen(!notificationOpen);
+                    markNotificationAsSeen();
                     setMatchOpen(false);
                     setMessageOpen(false);
                     setIsVisible(false);
 
                     // Clear the unseen notification count
-                    setUnseenCount(0);
-                    localStorage.setItem("unseenCount", 0);
                   }}
                   data-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <i className="icofont-notification" />
-                  {unseenCount === 0 ? null : (
-                    <span className="notify-count">{unseenCount}</span>
+                  {allNotificationNumber === 0 ? null : (
+                    <span className="notify-count">
+                      {allNotificationNumber}
+                    </span>
                   )}
                 </button>
               </div>

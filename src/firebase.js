@@ -19,6 +19,7 @@ import {
   Timestamp,
   startAfter,
 } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import from firebase/storage
 
 const firebaseConfig = {
   apiKey: "AIzaSyAa3H1VKYm435oKsXWQY97dOJNG1mZIZ10",
@@ -31,6 +32,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 export {
   db,
@@ -50,4 +52,8 @@ export {
   getDoc,
   Timestamp,
   startAfter,
+  storage, // Export the storage object
+  ref,
+  uploadBytes,
+  getDownloadURL,
 };

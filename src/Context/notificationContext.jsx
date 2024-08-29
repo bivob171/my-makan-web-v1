@@ -1,13 +1,11 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export const NotificationContext = createContext();
-
-const NotificationProvider = ({ children }) => {
+const NotificationValueContext = () => {
   const [notificationRerander, setnotificationRerander] = useState(false);
-  const [allNotificationNumber, setAllNotificationNumber] = useState(0);
   const [profile, setProfile] = useState();
+  const [allNotificationNumber, setAllNotificationNumber] = useState(0);
 
   const fetchUserProfile = async () => {
     const userRole = localStorage.getItem("role");
@@ -30,7 +28,8 @@ const NotificationProvider = ({ children }) => {
         throw new Error("Failed to fetch user profile");
       } else {
         const profile = await response.json();
-        setProfile(profile);
+        const totalAllnotify = profile?.notification?.allNotification;
+        setAllNotificationNumber(totalAllnotify);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -41,18 +40,12 @@ const NotificationProvider = ({ children }) => {
     fetchUserProfile();
   }, [notificationRerander]);
 
-  return (
-    <NotificationContext.Provider
-      value={{
-        setAllNotificationNumber,
-        notificationRerander,
-        setnotificationRerander,
-        allNotificationNumber,
-      }}
-    >
-      {children}
-    </NotificationContext.Provider>
-  );
+  return {
+    setAllNotificationNumber,
+    notificationRerander,
+    setnotificationRerander,
+    allNotificationNumber,
+  };
 };
 
-export default NotificationProvider;
+export default NotificationValueContext;
