@@ -7,8 +7,8 @@ import { BiLogOut } from "react-icons/bi";
 import { CiLogout } from "react-icons/ci";
 
 export const HeaderLeft = () => {
-  const { isAuthenticated, loading, user, setRender, render, logOut } =
-    PrivateRouteContext();
+  const { user } = PrivateRouteContext();
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -157,15 +157,15 @@ export const HeaderLeft = () => {
           }`}
         >
           <div className="bg-blue-600 text-center h-[100px] flex items-center justify-between pl-[30px] pr-[18px]">
-              <Link href="/user">
-                <Image
-                  src="/media/logo2.png"
-                  alt="Logo"
-                  className="w-full h-[40px]"
-                  width={1000}
-                  height={100}
-                />
-              </Link>
+            <Link href="/user">
+              <Image
+                src="/media/logo2.png"
+                alt="Logo"
+                className="w-full h-[40px]"
+                width={1000}
+                height={100}
+              />
+            </Link>
             <div className="sidebar-toggle !bg-[#ffffff00]">
               <button
                 onClick={toggleVisibility}

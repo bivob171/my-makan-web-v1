@@ -21,7 +21,6 @@ import {
   Timestamp,
   storage,
 } from "../../../firebase";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Link from "next/link";
 import { CheckIcon } from "lucide-react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";

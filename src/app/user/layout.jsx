@@ -9,7 +9,6 @@ import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import FilterRenderProvider from "@/Context/filterRenderContext";
-import ChatValueProvider from "@/Context/chatContext";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -36,15 +35,13 @@ export default function Layout({ children }) {
 
         {pathname !== "/user/chats" && <HeaderLeft />}
 
-        <ChatValueProvider>
-          <FilterRenderProvider>
-            <PostLocationValueProvider>
-              <EditPostLocationValueProvider>
-                <div className={nunito.className}>{children}</div>
-              </EditPostLocationValueProvider>
-            </PostLocationValueProvider>
-          </FilterRenderProvider>
-        </ChatValueProvider>
+        <FilterRenderProvider>
+          <PostLocationValueProvider>
+            <EditPostLocationValueProvider>
+              <div className={nunito.className}>{children}</div>
+            </EditPostLocationValueProvider>
+          </PostLocationValueProvider>
+        </FilterRenderProvider>
 
         {pathname !== "/user/chats" && <HeaderRight />}
       </div>

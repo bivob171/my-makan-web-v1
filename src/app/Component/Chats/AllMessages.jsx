@@ -35,7 +35,7 @@ const AllMessages = ({ chats, handleChatSelection }) => {
         return (
           <div
             key={chat.id}
-            onClick={() => handleChatSelection(chat.id, chat)}
+            onClick={() => handleChatSelection(chat?.id, chat)}
             className="flex justify-start items-start gap-2 py-[6px] px-[2px] border-b-[1px] hover:bg-[#eff4fbc0] hover:rounded-md"
           >
             <Image

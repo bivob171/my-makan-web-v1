@@ -1,8 +1,7 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export const ChatValueContext = createContext();
 import {
   db,
   collection,
@@ -136,7 +135,10 @@ const ChatNotificationValueContext = () => {
       },
     });
   };
-
+  const handelChatSelectedFromChatNotifyDropdown = async (chatId, chatData) => {
+    await handleChatSelection(chatId, chatData);
+    router.push("/user/chats");
+  };
   const checkIdsInParticipants = (data, user, profile) => {
     const myId = user?._id;
     const profiled = profile?._id;
@@ -272,6 +274,7 @@ const ChatNotificationValueContext = () => {
     selectedChat,
     setSelectedChat,
     createNewChat,
+    handelChatSelectedFromChatNotifyDropdown,
   };
 };
 

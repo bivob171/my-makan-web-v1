@@ -320,66 +320,6 @@ export default function BuyerProfile() {
     }
   };
 
-  const handleCreateChat = async () => {
-    if (!myId || !profile?._id) return;
-    const profileId = profile?._id;
-    try {
-      const chatRef = collection(db, "chats"); // 'chats' is the collection name
-      // Query to check if a chat already exists with these participants
-      const q = query(
-        chatRef,
-        where("participants", "array-contains", { id: myId })
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      let chatExists = false;
-      querySnapshot.forEach((doc) => {
-        const participants = doc.data().participants;
-        const hasBothParticipants =
-          participants.some((participant) => participant.id === myId) &&
-          participants.some((participant) => participant.id === profileId);
-
-        if (hasBothParticipants) {
-          chatExists = true;
-        }
-      });
-
-      if (chatExists) {
-        toast.info("Chat already exists!");
-        return;
-      }
-
-      await addDoc(chatRef, {
-        participants: [
-          {
-            id: myId,
-            name: user?.fullName,
-            image: user?.image, // Assuming you have `image` in your `user` object
-            role: user?.role, // Assuming you have `role` in your `user` object
-          },
-          {
-            id: profile._id,
-            name: profile.fullName,
-            image: profile.image, // Assuming `image` is a field in the `profile` object
-            role: profile.role, // Assuming `role` is a field in the `profile` object
-          },
-        ],
-        createdAt: new Date(),
-        latestMessage: "",
-        unseenMessages: {
-          [myId]: 0,
-          [profileId]: 0,
-        },
-      });
-
-      toast.success("Chat created successfully!");
-    } catch (error) {
-      console.error("Error creating chat:", error);
-      toast.error("Failed to create chat.");
-    }
-  };
-
   // chat
   const { createNewChat } = useContext(ChatValueContext);
 

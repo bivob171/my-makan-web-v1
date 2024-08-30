@@ -137,6 +137,11 @@ const ChatValueProvider = ({ children }) => {
     });
   };
 
+  const handelChatSelectedFromChatNotifyDropdown = async (chatId, chatData) => {
+    await handleChatSelection(chatId, chatData);
+    router.push("/user/chats");
+  };
+
   const checkIdsInParticipants = (data, user, profile) => {
     const myId = user?._id;
     const profiled = profile?._id;
@@ -274,6 +279,7 @@ const ChatValueProvider = ({ children }) => {
         selectedChat,
         setSelectedChat,
         createNewChat,
+        handelChatSelectedFromChatNotifyDropdown,
       }}
     >
       {children}

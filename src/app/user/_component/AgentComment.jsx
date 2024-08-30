@@ -443,7 +443,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/following-agent?`;
+      let url = `https://api.mymakan.ae/follow/friend-list?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

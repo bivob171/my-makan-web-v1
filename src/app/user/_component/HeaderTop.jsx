@@ -20,6 +20,8 @@ import io from "socket.io-client";
 import { formatDistanceToNow, format, formatDate } from "date-fns"; // Ensure you have these imports
 import { IoClose } from "react-icons/io5";
 import { Howl } from "howler";
+import ChatNotificationValueContext from "@/Context/chatNotification";
+import { ChatValueContext } from "@/Context/chatContext";
 
 const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
@@ -401,6 +403,33 @@ export const HeaderTop = () => {
     router.push(`/user/related-posts?${queryParam}`);
   }
 
+  const { chats, handelChatSelectedFromChatNotifyDropdown } =
+    useContext(ChatValueContext);
+
+  // Function to play the notification sound
+  const playNotificationSoundMassageCome = () => {
+    const notificationSound = new Audio("/audio/massageNotify.mp3");
+    notificationSound.volume = 1.0;
+    notificationSound.addEventListener("canplaythrough", () => {
+      notificationSound.play();
+    });
+  };
+
+  // Calculate total unseen count across all chats
+  const totalUnseenCount = chats.reduce((total, chat) => {
+    const unseenCount = chat?.unseenMessages[user?._id] || 0;
+    return total + unseenCount;
+  }, 0);
+
+  // useEffect to handle notification sound when unseen count increases
+  useEffect(() => {
+    if (totalUnseenCount) {
+      playNotificationSoundMassageCome();
+    }
+  }, [totalUnseenCount]);
+
+  // Rest of your component logic here
+
   return (
     <header ref={dropdownRef} className="fixed-header !z-40 ">
       <div className="header-menu relative">
@@ -611,6 +640,9 @@ export const HeaderTop = () => {
                   aria-expanded="false"
                 >
                   <Icofont icon="speech-comments" />
+                  {totalUnseenCount === 0 ? null : (
+                    <span className="notify-count">{totalUnseenCount}</span>
+                  )}
                 </button>
               </div>
               <div className="dropdown dropdown-notification">
@@ -715,6 +747,11 @@ export const HeaderTop = () => {
               }
               user={user}
               activeUsers={activeUsers}
+              totalUnseenCount={totalUnseenCount}
+              chats={chats}
+              handelChatSelectedFromChatNotifyDropdown={
+                handelChatSelectedFromChatNotifyDropdown
+              }
             />
           </div>
         </div>

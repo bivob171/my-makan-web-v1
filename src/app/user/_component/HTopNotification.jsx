@@ -25,6 +25,9 @@ const HTopNotification = ({
   handleSingleNotificationMarkAsRead,
   user,
   activeUsers,
+  totalUnseenCount,
+  handelChatSelectedFromChatNotifyDropdown,
+  chats,
 }) => {
   const [notifyScroll, setNotifyScroll] = useState(false);
   const router = useRouter();
@@ -62,22 +65,6 @@ const HTopNotification = ({
   };
 
   // all chat notification
-
-  const {
-    handleChatSelection,
-    selectedChatId,
-    setSelectedChatId,
-    activeChatId,
-    setActiveChatId,
-    chats,
-    setChats,
-    setLoading,
-    loading,
-    searchQuery,
-    setSearchQuery,
-    selectedChat,
-    setSelectedChat,
-  } = ChatNotificationValueContext();
 
   function chatPage() {
     router.push("/user/chats");
@@ -349,11 +336,15 @@ const HTopNotification = ({
                 const unseenCountparticipan =
                   chat.unseenMessages[participantId] || 0;
                 const unseenCount = chat.unseenMessages[user?._id] || 0;
+
                 const isActive = activeUsers.includes(participantId);
                 return (
                   <div
                     key={chat?.id}
-                    className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD]"
+                    onClick={() =>
+                      handelChatSelectedFromChatNotifyDropdown(chat?.id, chat)
+                    }
+                    className="flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD] relative cursor-pointer"
                   >
                     <div className="mr-3 mt-[9px]">
                       <Image
@@ -367,7 +358,7 @@ const HTopNotification = ({
                     </div>
                     <div className="relative flex-1 mt-[4px]">
                       <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                        <a href="#">{participantName}</a>
+                        {participantName}
                       </h6>
                       <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                         {chat.latestMessage.length > 30
@@ -380,6 +371,15 @@ const HTopNotification = ({
                           {formatTimestamp(chat.latestMessageTimestamp)}
                         </p>
                       </div>
+                    </div>
+                    <div className="absolute right-[10px] bottom-[20px]">
+                      {unseenCount > 0 ? (
+                        <div className="w-[20px] h-[20px] bg-red-500 rounded-full px-2 py-0.5 relative ">
+                          <span className=" text-white text-[9px] absolute inset-0 flex items-center justify-center">
+                            {unseenCount}
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 );
