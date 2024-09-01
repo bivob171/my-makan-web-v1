@@ -64,15 +64,15 @@ export const HeaderLeft = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="user-timeline.html"
+                  <Link
+                    href="/user/profile/timeline"
                     className="menu-link"
                     data-toggle="tooltip"
                     data-placement="right"
                     title="AGENTS TIMELINE"
                   >
                     <i className="icofont-list" />
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a

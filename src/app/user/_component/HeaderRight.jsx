@@ -86,15 +86,10 @@ export const HeaderRight = () => {
                             }); // Format as 'HH:MM'
                           };
 
-                          const participantId = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
-                            .map((p) => p.id)[0];
-                          const participantImage = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
-                            .map((p) => p.image)[0];
-                          const participantName = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
-                            .map((p) => p.name)[0];
+                          const participantId = chat?.participantsInfo?.id;
+                          const participantImage =
+                            chat?.participantsInfo?.image;
+                          const participantName = chat?.participantsInfo?.name;
                           const unseenCountparticipan =
                             chat.unseenMessages[participantId] || 0;
                           const unseenCount =

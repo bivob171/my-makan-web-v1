@@ -22,6 +22,7 @@ import { IoClose } from "react-icons/io5";
 import { Howl } from "howler";
 import ChatNotificationValueContext from "@/Context/chatNotification";
 import { ChatValueContext } from "@/Context/chatContext";
+import { HeaderInPutSearch } from "./HeaderInPutSearch";
 
 const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
@@ -595,18 +596,7 @@ export const HeaderTop = () => {
           <div className="relative nav-item header-control items-center">
             {/* search  */}
             <div className="inline-item d-none d-md-block">
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here......."
-                />
-                <div className="input-group-append">
-                  <button className="submit-btn" type="button">
-                    <i className="icofont-search" />
-                  </button>
-                </div>
-              </div>
+              <HeaderInPutSearch />
             </div>
             <div className=" inline-item d-flex align-items-center focus:outline-none">
               {/* button  */}

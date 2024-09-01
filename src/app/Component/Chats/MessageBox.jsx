@@ -63,15 +63,9 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
 
-  const participantImage = selectedChat?.participants
-    .filter((p) => p.id !== userId) // Exclude the current user
-    .map((p) => p.image)[0];
-  const participantName = selectedChat?.participants
-    .filter((p) => p.id !== userId) // Exclude the current user
-    .map((p) => p.name)[0];
-  const participantId = selectedChat?.participants
-    .filter((p) => p.id !== userId) // Exclude the current user
-    .map((p) => p.id)[0];
+  const participantId = selectedChat?.participantsInfo?.id;
+  const participantImage = selectedChat?.participantsInfo?.image;
+  const participantName = selectedChat?.participantsInfo?.name;
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
