@@ -20,18 +20,16 @@ const AllMessages = ({ chats, handleChatSelection }) => {
           }); // Format as 'HH:MM'
         };
 
-        const participantId = chat?.participants
-          .filter((p) => p.id !== user?._id) // Exclude the current user
-          .map((p) => p.id)[0];
-        const participantImage = chat?.participants
-          .filter((p) => p.id !== user?._id) // Exclude the current user
-          .map((p) => p.image)[0];
-        const participantName = chat?.participants
-          .filter((p) => p.id !== user?._id) // Exclude the current user
-          .map((p) => p.name)[0];
+        const participantId = chat?.participantsInfo?.id;
+        const participantImage = chat?.participantsInfo?.image;
+        const participantName = chat?.participantsInfo?.name;
         const unseenCountparticipan = chat.unseenMessages[participantId] || 0;
         const unseenCount = chat.unseenMessages[user?._id] || 0;
         const isActive = activeUsers.includes(participantId);
+
+        const time = chat.latestMessageTimestamp
+          ? chat.latestMessageTimestamp
+          : chat.createdAt;
         return (
           <div
             key={chat.id}
@@ -51,9 +49,8 @@ const AllMessages = ({ chats, handleChatSelection }) => {
                 <span className="text-[16px] font-bold ">
                   {participantName}
                 </span>
-
                 <span className="text-[10px] font-normal">
-                  {formatTimestamp(chat.latestMessageTimestamp)}
+                  {formatTimestamp(time)}
                 </span>
               </div>
               <div className="flex justify-between items-center -mt-1">
