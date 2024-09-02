@@ -15,10 +15,15 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
     setIsMuted((prevState) => !prevState);
   };
 
-  const participantId = selectedChat?.participantsInfo?.id;
-  const participantImage = selectedChat?.participantsInfo?.image;
-  const participantName = selectedChat?.participantsInfo?.name;
-  const participantRole = selectedChat?.participantsInfo?.role;
+  const participantId = chat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.id)[0];
+  const participantImage = chat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.image)[0];
+  const participantName = chat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.name)[0];
 
   return (
     <div className="p-3 relative">
