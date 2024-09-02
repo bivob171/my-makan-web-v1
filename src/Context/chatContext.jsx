@@ -222,12 +222,7 @@ const ChatValueProvider = ({ children }) => {
             role: profile.role, // Assuming `role` is a field in the `profile` object
           },
         ],
-        participantsInfo: {
-          id: profile._id,
-          name: profile.fullName,
-          image: profile.image, // Assuming `image` is a field in the `profile` object
-          role: profile.role, // Assuming `role` is a field in the `profile` object
-        },
+        latestMessageTimestamp: new Date(),
         createdAt: new Date(),
         latestMessage: "",
         unseenMessages: {
@@ -253,12 +248,7 @@ const ChatValueProvider = ({ children }) => {
             role: profile.role,
           },
         ],
-        participantsInfo: {
-          id: profileId,
-          name: profile.fullName,
-          image: profile.image, // Assuming `image` is a field in the `profile` object
-          role: profile.role, // Assuming `role` is a field in the `profile` object
-        },
+        latestMessageTimestamp: new Date(),
         createdAt: new Date(),
         latestMessage: "",
         unseenMessages: {
