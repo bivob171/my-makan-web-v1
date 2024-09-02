@@ -51,7 +51,7 @@ const formatDateHeader = (date) => {
 };
 
 const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
-  const { user, activeUsers } = PrivateRouteContext();
+  const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -63,13 +63,13 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
 
-  const participantId = chat?.participants
+  const participantId = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.id)[0];
-  const participantImage = chat?.participants
+  const participantImage = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.image)[0];
-  const participantName = chat?.participants
+  const participantName = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.name)[0];
 
@@ -431,6 +431,9 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   let lastDate = "";
 
   const isActive = activeUsers.includes(participantId);
+  const lastActive = lastActiveTime[participantId]
+    ? timeAgo(lastActiveTime[participantId])
+    : "No recent activity";
 
   return (
     <div className="" ref={filePreviewRef}>
@@ -454,10 +457,15 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
               {" "}
               {participantName}
             </h3>
-
-            <p className="text-center leading-3 text-[12px] m-0">
-              {} Active 46m ago
-            </p>
+            {isActive ? (
+              <p className="text-center leading-3 text-[12px] m-0">{} Active</p>
+            ) : (
+              <divp className="text-center leading-3 text-[12px] m-0">
+                {lastActive === "No recent activity"
+                  ? lastActive
+                  : ` Last seen ${lastActive}`}
+              </divp>
+            )}
           </div>
         </button>
         <button>
