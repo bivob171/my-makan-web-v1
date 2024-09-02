@@ -694,7 +694,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       <input
         id="image-input"
         type="file"
-        accept="image/*"
+        accept="image/*,video/*"
         multiple
         onChange={handleImageChange}
         style={{ display: "none" }}
