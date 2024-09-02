@@ -28,7 +28,7 @@ export const AgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetchingAgent(true);
     try {
-      let url = `https://api.mymakan.ae/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `http://localhost:4000/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
       if (countryFind) url += `&country=${countryFind}`;
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
@@ -124,7 +124,7 @@ export const AgentPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
+      const response = await axios.get(`http://localhost:4000/company`, {
         params: {
           search,
           page: pageco,
@@ -190,7 +190,7 @@ export const AgentPage = () => {
   const fetchCountries = async () => {
     setIsFetchingCountry(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/country`, {
+      const response = await axios.get(`http://localhost:4000/country`, {
         params: {
           search: searchCountry,
           page: pageCountry,

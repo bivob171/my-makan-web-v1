@@ -13,7 +13,7 @@ import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("http://localhost:4000", {
   path: "/socket.io",
   transports: ["websocket"],
 });
@@ -56,7 +56,7 @@ const AgentComment = ({ _id }) => {
         : commentId;
     if (id) {
       try {
-        let url = `https://api.mymakan.ae/all-post-comment-reply/${id}`;
+        let url = `http://localhost:4000/all-post-comment-reply/${id}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -153,7 +153,7 @@ const AgentComment = ({ _id }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      let url = `http://localhost:4000/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -294,7 +294,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
+      const apiUrl = "http://localhost:4000/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -379,7 +379,7 @@ const AgentComment = ({ _id }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+      const apiUrl = "http://localhost:4000/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -443,7 +443,7 @@ const AgentComment = ({ _id }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/friend-list?`;
+      let url = `http://localhost:4000/follow/friend-list?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

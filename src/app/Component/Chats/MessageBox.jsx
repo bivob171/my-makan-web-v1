@@ -51,7 +51,7 @@ const formatDateHeader = (date) => {
 };
 
 const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
-  const { user, activeUsers } = PrivateRouteContext();
+  const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -227,7 +227,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
     try {
       const response = await axios.post(
-        "https://api.mymakan.ae/file-upload/upload",
+        "http://localhost:4000/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -448,10 +448,13 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
               {" "}
               {participantName}
             </h3>
-
-            <p className="text-center leading-3 text-[12px] m-0">
-              {} Active 46m ago
-            </p>
+            {isActive ? (
+              <p className="text-center leading-3 text-[12px] m-0">Active</p>
+            ) : (
+              <p className="text-center leading-3 text-[12px] m-0">
+                Last Active {timeAgo(lastActiveTime[participantId])}
+              </p>
+            )}
           </div>
         </button>
         <button>

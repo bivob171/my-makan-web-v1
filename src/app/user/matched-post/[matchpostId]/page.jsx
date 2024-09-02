@@ -22,7 +22,7 @@ export default function MatchedPost() {
 
   const getSinglePost = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/allposts/single-post/${matchpostId}`;
+      let url = `http://localhost:4000/allposts/single-post/${matchpostId}`;
 
       const response = await fetch(url, {
         method: "GET",

@@ -24,7 +24,7 @@ import ChatNotificationValueContext from "@/Context/chatNotification";
 import { ChatValueContext } from "@/Context/chatContext";
 import { HeaderInPutSearch } from "./HeaderInPutSearch";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("http://localhost:4000", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -107,7 +107,7 @@ export const HeaderTop = () => {
   const getAllNotification = async (token) => {
     setIsFetchingNotify(true);
     try {
-      let url = `https://api.mymakan.ae/notification/my-all-com-notification?`;
+      let url = `http://localhost:4000/notification/my-all-com-notification?`;
 
       url += `sortBy=${sortByNotify}&`;
       url += `sortOrder=${sortOrderNotify}&`;
@@ -164,7 +164,7 @@ export const HeaderTop = () => {
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const response = await axios.patch(
-        `https://api.mymakan.ae/notification/multiple-update`,
+        `http://localhost:4000/notification/multiple-update`,
         { ids },
         {
           headers: {
@@ -352,8 +352,8 @@ export const HeaderTop = () => {
 
       const endpoint =
         userRole === "agent"
-          ? "https://api.mymakan.ae/agent/update-notification"
-          : "https://api.mymakan.ae/user/update-notification";
+          ? "http://localhost:4000/agent/update-notification"
+          : "http://localhost:4000/user/update-notification";
       const response = await fetch(endpoint, {
         method: "PATCH",
         headers: {

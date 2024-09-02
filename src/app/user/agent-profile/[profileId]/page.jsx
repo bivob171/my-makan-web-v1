@@ -23,7 +23,7 @@ import {
 } from "../../../../firebase"; // Assuming you have firebase setup
 import { ChatValueContext } from "@/Context/chatContext";
 export default function AgentProfile() {
-  const { user, setRender, render, isConnected, activeUsers } =
+  const { user, setRender, render, activeUsers, lastActiveTime } =
     PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
     PostLocationValueContext
@@ -49,6 +49,7 @@ export default function AgentProfile() {
             followRerander={followRerander}
             setFollowRerander={setFollowRerander}
             activeUsers={activeUsers}
+            lastActiveTime={lastActiveTime}
             myId={myId}
           />
         );
@@ -67,7 +68,7 @@ export default function AgentProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/agent/${userId}`;
+    const endpoint = `http://localhost:4000/agent/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -122,7 +123,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -149,7 +150,7 @@ export default function AgentProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `http://localhost:4000/file-upload/upload`,
         formData,
         {
           headers: {
@@ -177,8 +178,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -216,8 +217,8 @@ export default function AgentProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `http://localhost:4000/user/update-profile`
+          : `http://localhost:4000/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -278,7 +279,7 @@ export default function AgentProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}/${type}`;
+      const apiUrl = `http://localhost:4000/follow/follow/${role}/${_id}/${type}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -305,7 +306,7 @@ export default function AgentProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

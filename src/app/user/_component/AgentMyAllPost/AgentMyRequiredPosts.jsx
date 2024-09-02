@@ -39,7 +39,7 @@ const AgentMyRequiredPosts = () => {
   const getAllPosts = async (token, myId) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `http://localhost:4000/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `agentId=${myId}&`;
       url += `role=${role}&`;

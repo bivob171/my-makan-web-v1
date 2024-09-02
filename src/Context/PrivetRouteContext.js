@@ -47,8 +47,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "https://api.mymakan.ae/agent/myProfile"
-        : "https://api.mymakan.ae/user/myProfile";
+        ? "http://localhost:4000/agent/myProfile"
+        : "http://localhost:4000/user/myProfile";
 
     const token = getStoredToken(userRole);
     if (token) {
@@ -60,16 +60,28 @@ const PrivateRouteContext = () => {
   }, []);
 
   const [activeUsers, setActiveUsers] = useState([]);
+  const [lastActiveTime, setLastActiveTime] = useState({});
 
   useEffect(() => {
     let socket;
 
     if (user) {
-      socket = io("https://api.mymakan.ae");
+      socket = io("http://localhost:4000");
+
+      // Emit user connected event
+      socket.emit("userConnected", { userId: user._id });
+
+      // Handle connection established
+      setIsConnected(true);
 
       // Handle user connection
       socket.on("userConnected", (data) => {
         setActiveUsers((prevUsers) => [...prevUsers, data.userId]);
+        setLastActiveTime((prevTimes) => {
+          const newTimes = { ...prevTimes };
+          delete newTimes[data.userId]; // Remove last active time since the user is now connected
+          return newTimes;
+        });
       });
 
       // Handle user disconnection
@@ -77,6 +89,15 @@ const PrivateRouteContext = () => {
         setActiveUsers((prevUsers) =>
           prevUsers.filter((id) => id !== data.userId)
         );
+        setLastActiveTime((prevTimes) => ({
+          ...prevTimes,
+          [data.userId]: data.lastActiveTime,
+        }));
+      });
+
+      // Handle custom events
+      socket.on("customEvent", (data) => {
+        setCustomEventData(data);
       });
     }
 
@@ -84,9 +105,32 @@ const PrivateRouteContext = () => {
       if (socket) {
         socket.emit("userDisconnected", { userId: user._id });
         socket.disconnect();
+        setIsConnected(false);
       }
     };
   }, [user]);
+
+  const timeAgo = (date) => {
+    const now = new Date();
+    const seconds = Math.floor((now - new Date(date)) / 1000);
+
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+
+    return Math.floor(seconds) + " seconds ago";
+  };
 
   return {
     isAuthenticated,
@@ -100,6 +144,8 @@ const PrivateRouteContext = () => {
     customEventData,
     setCustomEventData,
     activeUsers,
+    lastActiveTime,
+    timeAgo,
   };
 };
 
