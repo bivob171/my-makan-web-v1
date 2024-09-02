@@ -36,6 +36,7 @@ export default function Layout({ children }) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -45,7 +46,7 @@ export default function Layout({ children }) {
 
   return (
     <div>
-      {loading ? (
+      {loading === true ? (
         <Preloader />
       ) : (
         <div>
