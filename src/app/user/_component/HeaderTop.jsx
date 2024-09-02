@@ -343,7 +343,7 @@ export const HeaderTop = () => {
     return () => {
       socket.off("newNotifyCreate", handleNewNotifyCreate);
     };
-  }, [user]);
+  }, [user, socket]);
 
   const markNotificationAsSeen = async () => {
     try {
