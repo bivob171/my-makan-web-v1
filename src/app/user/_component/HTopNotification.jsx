@@ -61,6 +61,8 @@ const HTopNotification = ({
           ? `/user/agent-profile/${nitifyerAgentId._id}`
           : ` /user/buyer-profile/${nitifyerUserId._id}`;
       router.push(profileUrl);
+    } else if (notifyFor === "successVerify" || notifyFor === "reject") {
+      router.push(`/user/profile/settings`);
     }
   };
 
@@ -510,6 +512,10 @@ const HTopNotification = ({
                           return `${commonUser?.fullName} unfollowed you`;
                         case "followBack":
                           return `${commonUser?.fullName} follow Back you`;
+                        case "successVerify":
+                          return `Congratulations! Your account has been verified by MyMakan.`;
+                        case "reject":
+                          return `Sorry, your verification request has been rejected. Please re-upload your verification document.`;
                         default:
                           return "";
                       }
@@ -551,14 +557,29 @@ const HTopNotification = ({
                           }`}
                         >
                           <div className="mr-3 mt-[9px]">
-                            <Image
-                              width={1000}
-                              height={100}
-                              className="rounded-full w-[40px] h-[40px]"
-                              src={commonUser?.image}
-                              alt="Notify"
-                            />
-                            <span className="chat-status offline" />
+                            {notifyFor === "successVerify" ||
+                            notifyFor === "reject" ? (
+                              <div className="w-[40px] h-[40px] rounded-full mr-2 bg-blue-500">
+                                <Image
+                                  width={27}
+                                  height={27}
+                                  src="/favicon.ico"
+                                  alt="User"
+                                  className="w-[35px] h-[35px] rounded-full "
+                                />
+                              </div>
+                            ) : (
+                              <div>
+                                <Image
+                                  width={1000}
+                                  height={100}
+                                  className="rounded-full w-[40px] h-[40px]"
+                                  src={commonUser?.image}
+                                  alt="Notify"
+                                />
+                                <span className="chat-status offline" />
+                              </div>
+                            )}
                           </div>
                           <div className="relative flex-1 mt-[4px]">
                             <h6 className=" mt-[5px] font-bold text-[14px] text-black">
