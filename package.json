@@ -48,6 +48,7 @@
     "ignore-loader": "^0.1.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "lightgallery": "^2.7.2",
     "lottie-web": "^5.12.2",
     "lucide-react": "^0.379.0",
     "magnific-popup": "^1.2.0",

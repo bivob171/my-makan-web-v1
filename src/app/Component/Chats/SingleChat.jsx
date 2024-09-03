@@ -1,7 +1,15 @@
 import { cx } from "class-variance-authority";
 import Image from "next/image";
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { LuCheck, LuCheckCheck } from "react-icons/lu";
+import LightGallery from 'lightgallery/react';
+
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+
+import 'lightgallery/css/lightgallery.css';
+import 'lightgallery/css/lg-zoom.css';
+import 'lightgallery/css/lg-thumbnail.css';
 
 export const SingleChat = ({
   showDateHeader,
@@ -83,7 +91,7 @@ export const SingleChat = ({
                 <div className={cx("mt-1 text-base font-medium", isSent ? 'text-white' : 'text-gray-900')}>{msg?.content}</div>
               ) : null}
               <div className="flex justify-end gap-x-[3px] items-center">
-                <p className={cx("text-[10px] font-semibold tracking-wider mb-0",isSent?'text-gray-100':'text-gray-500')}>{formattedTime}</p>
+                <p className={cx("text-[10px] font-semibold tracking-wider mb-0", isSent ? 'text-gray-100' : 'text-gray-500')}>{formattedTime}</p>
               </div>
             </div>
             {
@@ -105,7 +113,7 @@ export const SingleChat = ({
                 )
               ) : null
             }
-            <div className={cx("w-0 h-0 border-t-[10px] border-r-[10px] border-r-white shadow-sm border-t-transparent border-b-transparent absolute bottom-0 left-0 -translate-x-full",isSent?'hidden':'')} />
+            <div className={cx("w-0 h-0 border-t-[10px] border-r-[10px] border-r-white shadow-sm border-t-transparent border-b-transparent absolute bottom-0 left-0 -translate-x-full", isSent ? 'hidden' : '')} />
           </div>
         </div>
       </div>
@@ -114,36 +122,87 @@ export const SingleChat = ({
 };
 
 const ImageGrid = ({ images = [] }) => {
+  const lightbox = useRef(null);
   const imageCount = images?.length || 0;
-  if (!imageCount) return;
-  if (imageCount <= 4) {
-    return (
-      <div className={cx(`grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`)}>
-        {images.map((image, index) => (
-          <div key={index}>
-            <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className={cx("w-full rounded-md",imageCount===1?'object-cover aspect-auto':'aspect-square object-cover')} />
+  if (!imageCount) return null;
+  return (
+    <LightGallery onInit={(ref) => {
+      if (ref) {
+        lightbox.current = ref.instance;
+      }
+    }}
+      dynamic
+      dynamicEl={images.map((image) => ({
+        src: image?.url,
+        thumb: image?.url,
+        width: "1406-1390",
+        alt: 'images',
+      }))}
+      mode="lg-fade" speed={500} plugins={[lgThumbnail]}>
+      {imageCount <= 4 ? (
+        <div className={cx(`grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`)}>
+          {images.map((image, index) => (
+            <a
+              key={index}
+              data-lg-size="1406-1390"
+              className="gallery-item"
+              data-src={image?.url}
+              onClick={() => {
+                lightbox.current?.openGallery(index)
+              }}
+            >
+              <Image
+                src={image?.url}
+                width={500}
+                height={500}
+                alt={`image${index + 1}`}
+                className={cx("w-full rounded-sm", imageCount === 1 ? 'object-cover aspect-auto' : 'aspect-square object-cover')}
+              />
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <div className={cx(`grid gap-1 mb-1 grid-cols-2`)}>
+            {images.slice(0, 2).map((image, index) => (
+              <a key={index}
+                data-lg-size="1406-1390"
+                className="gallery-item"
+                data-src={image?.url}
+                onClick={() => {
+                  lightbox.current?.openGallery(index)
+                }}>
+                <Image
+                  src={image?.url}
+                  width={500}
+                  height={500}
+                  alt={`image${index + 1}`}
+                  className={cx("w-full rounded-sm", imageCount === 1 ? 'object-cover aspect-auto' : 'aspect-square object-cover')}
+                />
+              </a>
+            ))}
           </div>
-        ))}
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <div className={cx(`grid gap-1 mb-1 grid-cols-2`)}>
-          {images.slice(0, 2).map((image, index) => (
-            <div key={index}>
-              <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className={cx("w-full rounded-sm",imageCount===1?'object-cover aspect-auto':'aspect-square object-cover')} />
-            </div>
-          ))}
+          <div className={cx(`grid gap-1 grid-cols-3`)}>
+            {images.slice(2).map((image, index) => (
+              <a key={index}
+                data-lg-size="1406-1390"
+                className="gallery-item"
+                data-src={image?.url}
+                onClick={() => {
+                  lightbox.current?.openGallery(index+2)
+                }} >
+                <Image
+                  src={image?.url}
+                  width={500}
+                  height={500}
+                  alt={`image${index + 1}`}
+                  className="w-full aspect-square object-cover rounded-sm"
+                />
+              </a>
+            ))}
+          </div>
         </div>
-        <div className={cx(`grid gap-1 grid-cols-3`)}>
-          {images.slice(2).map((image, index) => (
-            <div key={index}>
-              <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className="w-full aspect-square object-cover rounded-sm" />
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
+      )}
+    </LightGallery>
+  );
 }
