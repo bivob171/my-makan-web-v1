@@ -542,7 +542,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                     width={100}
                     height={100}
                     alt=""
-                    className="w-full h-[180px] object-cover rounded-t-[10px]"
+                    className="w-full h-[180px] object-contain rounded-t-[10px]"
                   />
                   <CgClose
                     className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
@@ -572,18 +572,18 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                   onKeyPress={handleKeyPress}
                 />
               </div>
-              <div className="flex justify-between items-center px-[10px] mt-[5px]">
+              <div className="flex justify-between items-center gap-2 px-[10px] mx-2">
                 <div>
-                  <p
-                    className="cursor-pointer text-[30px] text-blue-500 pt-[7px]"
+                  <button
+                    className="text-[30px] text-blue-500 pt-[7px]"
                     onClick={() =>
                       document.getElementById("image-input").click()
                     }
                   >
                     <FaPlusSquare />
-                  </p>
+                  </button>
                 </div>
-                <div className="flex gap-x-[5px] w-[175px] overflow-auto  ">
+                <div className="flex gap-x-1 flex-grow overflow-auto">
                   {file.map((f, i) => {
                     return (
                       <div key={i}>
@@ -594,7 +594,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                             alt=""
                             width={50}
                             height={50}
-                            className="object-cover cursor-pointer rounded-sm blur-[1px]"
+                            className="object-contain bg-white aspect-square cursor-pointer rounded-sm"
                           />
                         )}
                         {f?.type === "video" && (

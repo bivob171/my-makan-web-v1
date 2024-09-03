@@ -1,6 +1,6 @@
 import { cx } from "class-variance-authority";
 import Image from "next/image";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LuCheck, LuCheckCheck } from "react-icons/lu";
 import LightGallery from 'lightgallery/react';
 
@@ -10,6 +10,10 @@ import lgZoom from 'lightgallery/plugins/zoom';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import 'lightgallery/css/lg-thumbnail.css';
+import { MdDeleteOutline, MdOutlineEmojiEmotions } from "react-icons/md";
+import clsx from "clsx";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { useClickOutside } from "react-haiku";
 
 export const SingleChat = ({
   showDateHeader,
@@ -22,6 +26,22 @@ export const SingleChat = ({
   status,
   uploadingProssing,
 }) => {
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const emojiRef = useRef(null)
+  const menuRef = useRef(null)
+  useClickOutside(emojiRef, () => {
+    if (isEmojiOpen) {
+      setIsEmojiOpen(false);
+    }
+  });
+  useClickOutside(menuRef, () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  });
+  const toggleEmojiMenu = () => setIsEmojiOpen(e => !e);
+  const toggleMenu = () => setIsMenuOpen(e => !e);
   const msg_status = msg?.seen ? 'seen' : msg.status;
   return (
     <div>
@@ -35,7 +55,7 @@ export const SingleChat = ({
           } p-3 rounded-lg`}
       >
         <div
-          className={`flex items-end ${isSent ? "justify-start flex-row-reverse" : "flex-row"
+          className={`flex items-end gap-2 ${isSent ? "justify-start flex-row-reverse" : "flex-row"
             }`}
         >
           {isSent ? (
@@ -57,6 +77,7 @@ export const SingleChat = ({
               className="w-[30px] h-[30px] rounded-full"
             />
           )}
+
           {/* MESSAGE CAPSULE */}
           <div className={cx("flex items-end gap-1 relative", isSent ? 'mr-0' : 'ml-2.5')}>
             <div className={cx('relative text-sm  p-2 pb-1 rounded-md min-w-[130px] max-w-[300px] shadow-sm shadow-gray-50/50', {
@@ -64,29 +85,7 @@ export const SingleChat = ({
               'bg-gradient-to-br from-blue-400 to-blue-400': isSent
             })}
             >
-              {/* Display content or image */}
               <ImageGrid images={msg?.media} />
-              {/* {msg?.media?.length > 0 ? (
-                <div className="flex gap-x-1">
-                  {msg.media.map((m, i) => {
-                    const progressItem = uploadingProssing.find(
-                      (item) => item._id === m._id
-                    );
-
-                    return (
-                      <div key={i}>
-                        <Image
-                          alt="Message image"
-                          src={m?.url}
-                          width={300}
-                          height={300}
-                          className={cx(`object-cover rounded-md`, `opacity-[${(progressItem?.progress || 100) / 100}]`)}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : null} */}
               {msg.content ? (
                 <div className={cx("mt-1 text-base font-medium", isSent ? 'text-white' : 'text-gray-900')}>{msg?.content}</div>
               ) : null}
@@ -114,6 +113,26 @@ export const SingleChat = ({
               ) : null
             }
             <div className={cx("w-0 h-0 border-t-[10px] border-r-[10px] border-r-white shadow-sm border-t-transparent border-b-transparent absolute bottom-0 left-0 -translate-x-full", isSent ? 'hidden' : '')} />
+          </div>
+
+          {/* Message Actions */}
+          <div className={clsx("relative self-center")}>
+            <div className={clsx(" flex gap-1.5", isSent ? "flex-row-reverse" : '')}>
+              <button className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600" onClick={toggleEmojiMenu}>
+                <MdOutlineEmojiEmotions className="size-4" />
+              </button>
+              <button className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600" onClick={toggleMenu}>
+                <BsThreeDotsVertical className="size-4" />
+              </button>
+            </div>
+            <div ref={emojiRef} className={clsx("absolute mb-1 bottom-full flex p-1 bg-white shadow-md rounded-full", isEmojiOpen ? 'flex' : 'hidden',isSent?'right-4 translate-x-1/2':'left-3 -translate-x-1/2')}>
+              <button className="hover:bg-gray-100 size-8 rounded-full">👍</button>
+              <button className="hover:bg-gray-100 size-8 rounded-full">💖</button>
+              <button className="hover:bg-gray-100 size-8 rounded-full rotate-180">👍</button>
+            </div>
+            <div ref={menuRef} className={clsx("absolute mb-1 bottom-full flex p-1 bg-white shadow-md rounded-full", isMenuOpen ? 'flex' : 'hidden',isSent?'left-4 -translate-x-1/2':'right-4 translate-x-1/2')}>
+              <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center"><MdDeleteOutline className="size-4" /></button>
+            </div>
           </div>
         </div>
       </div>
@@ -189,7 +208,7 @@ const ImageGrid = ({ images = [] }) => {
                 className="gallery-item"
                 data-src={image?.url}
                 onClick={() => {
-                  lightbox.current?.openGallery(index+2)
+                  lightbox.current?.openGallery(index + 2)
                 }} >
                 <Image
                   src={image?.url}
