@@ -276,6 +276,10 @@ export const HeaderTop = () => {
             return `${commonUser?.fullName} unfollowed you`;
           case "followBack":
             return `${commonUser?.fullName} follow Back you`;
+          case "successVerify":
+            return `Congratulations! Your account has been verified by MyMakan.`;
+          case "reject":
+            return `Sorry, your verification request has been rejected. Please re-upload your verification document.`;
           default:
             return "";
         }
@@ -300,13 +304,26 @@ export const HeaderTop = () => {
         const tostId = toast(
           <div className="relative">
             <div className="flex items-center ">
-              <Image
-                width={50}
-                height={50}
-                src={userImage}
-                alt="User"
-                className="w-[32px] h-[32px] rounded-full mr-2"
-              />
+              {notifyFor === "successVerify" || notifyFor === "reject" ? (
+                <div className="w-[32px] h-[32px] rounded-full mr-2 bg-blue-500">
+                  <Image
+                    width={27}
+                    height={27}
+                    src="/favicon.ico"
+                    alt="User"
+                    className="w-[26px] h-[26px] rounded-full "
+                  />
+                </div>
+              ) : (
+                <Image
+                  width={50}
+                  height={50}
+                  src={userImage}
+                  alt="User"
+                  className="w-[32px] h-[32px] rounded-full mr-2"
+                />
+              )}
+
               <div>
                 <p className="text-[15px] font-semibold leading-[18px] -mb-0">
                   {userName}

@@ -568,7 +568,7 @@ export default function EditPostCard({
                 <BiCommentDetail />
               </p>
               <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px]">
-                {item.comment?.length === 0 ? "00" : item.comment?.length}{" "}
+                {item.commentCount ? item.commentCount : "00"}{" "}
               </p>
             </div>
             <div>
