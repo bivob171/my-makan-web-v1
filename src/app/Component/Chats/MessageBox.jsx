@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
-import { MdVideoCall } from "react-icons/md";
+import { MdAddAPhoto, MdVideoCall } from "react-icons/md";
 import {
   db,
   collection,
@@ -38,6 +38,8 @@ import { IoMdSend } from "react-icons/io";
 import { CgClose } from "react-icons/cg";
 import axios from "axios";
 import { SingleChat } from "./SingleChat";
+import { useClickOutside } from "react-haiku";
+import clsx from "clsx";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isToday);
@@ -51,6 +53,7 @@ const formatDateHeader = (date) => {
 };
 
 const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
+  const sendWithMediaRef = useRef(null);
   const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
@@ -62,7 +65,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
-
+  
   const participantId = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.id)[0];
@@ -212,14 +215,22 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     return code;
   };
   const [filePreview, setFilePreview] = useState(false);
+  useClickOutside(sendWithMediaRef,()=>{
+    setFilePreview(false);
+    setFile([]);
+    setRawFile([])
+  })
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
 
-    const fileDetails = files.map((file) => ({
-      _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
-      type: "image",
-      url: URL.createObjectURL(file),
-    }));
+    const fileDetails = files.map((file) => {
+      console.log(String(file.type||'').split('/')?.[0]||file?.type,file)
+      return ({
+        _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
+        type: String(file.type||'').split('/')?.[0]||file?.type,
+        url: URL.createObjectURL(file),
+      })
+    });
 
     setFile((prevFiles) => [...prevFiles, ...fileDetails]);
     setRawFile((prevFiles) => [...prevFiles, ...files]);
@@ -290,9 +301,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       );
     }
   };
-
   // file disply
-
   const [selectedImage, setSelectedImage] = useState({});
   useEffect(() => {
     if (file) {
@@ -534,56 +543,54 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             </svg>
           </button>
           {filePreview === true ? (
-            <div className="absolute bottom-[1px] bg-[#F7F7F7] shadow-md w-[400px] h-[300px] rounded-[10px]">
-              {selectedImage.type === "image" ? (
-                <div className="bg-slate-50 w-full h-[180px] rounded-[10px] relative">
-                  <Image
-                    src={selectedImage?.url}
-                    width={100}
-                    height={100}
-                    alt=""
-                    className="w-full h-[180px] object-contain rounded-t-[10px]"
-                  />
-                  <CgClose
-                    className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
-                    onClick={() => handleFileDelete(selectedImage?._id)}
-                  />
-                </div>
-              ) : (
-                <div className="bg-slate-50 w-full h-[180px] rounded-[10px] relative">
-                  <video
-                    src={selectedImage?.url}
-                    width="50"
-                    onClick={() => handleVideoClick(_id)}
-                    className="w-full h-[180px] object-cover rounded-t-[10px]"
-                  />
-                  <CgClose
-                    className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
-                    onClick={() => handleFileDelete(selectedImage?._id)}
-                  />
-                </div>
-              )}
+            <div ref={sendWithMediaRef} className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md">
+              <div className="p-2">
+                {selectedImage.type === "image" ? (
+                  <div className="w-full relative">
+                    <Image
+                      src={selectedImage?.url}
+                      width={100}
+                      height={100}
+                      alt=""
+                      className="w-full  aspect-video object-contain rounded-md"
+                    />
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                      onClick={() => handleFileDelete(selectedImage?._id)}
+                    />
+                  </div>
+                ) : (
+                  <div className=" w-full aspect-video relative">
+                    <video
+                      src={selectedImage?.url}
+                      controls
+                      className="w-full aspect-video object-contain bg-black rounded-md"
+                    />
+                    <CgClose
+                      className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                      onClick={() => handleFileDelete(selectedImage?._id)}
+                    />
+                  </div>
+                )}
+              </div>
               <div>
                 <textarea
-                  className="w-full max-w-[100%] border-[0.5px]  bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[5px] leading-5"
+                  className="w-full max-w-[100%] border-[0.5px]  border-gray-100 max-h-12 resize-none outline-none px-3 py-1 scroll-pb-1.5 leading-5"
                   value={newMessage}
+                  rows={2}
                   placeholder="Type your message..."
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 px-[10px] mx-2">
-                <div>
-                  <button
-                    className="text-[30px] text-blue-500 pt-[7px]"
-                    onClick={() =>
-                      document.getElementById("image-input").click()
-                    }
-                  >
-                    <FaPlusSquare />
-                  </button>
-                </div>
-                <div className="flex gap-x-1 flex-grow overflow-auto">
+              <div className="flex justify-between items-center gap-2 px-2 pl-4 pb-1">
+                <button
+                  className="text-[30px] text-blue-500 aspect-squere"
+                  onClick={() => document.getElementById("image-input").click()}
+                >
+                  <MdAddAPhoto className="size-5" />
+                </button>
+                <div className="flex gap-x-1 flex-grow overflow-auto p-2">
                   {file.map((f, i) => {
                     return (
                       <div key={i}>
@@ -594,7 +601,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                             alt=""
                             width={50}
                             height={50}
-                            className="object-contain bg-white aspect-square cursor-pointer rounded-sm"
+                            className={clsx("flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10", selectedImage?._id===f._id?'ring-2 ring-offset-1 ring-blue-600':'')}
                           />
                         )}
                         {f?.type === "video" && (
@@ -603,9 +610,10 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                             onClick={() => handelselectedImage(f)}
                             src={f.url}
                             alt=""
-                            className="object-cover h-[50px] cursor-pointer rounded-sm blur-[1px]"
+                            className={clsx("flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm", selectedImage?._id===f._id?'ring-2 ring-offset-1 ring-blue-600':'')}
                           />
                         )}
+                        {console.log(selectedImage,f)}
                       </div>
                     );
                   })}
