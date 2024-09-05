@@ -6,7 +6,7 @@ import { Tooltip } from "@mui/material";
 import { VscSend } from "react-icons/vsc";
 import { TbPhotoHexagon } from "react-icons/tb";
 import { BsEmojiSunglasses } from "react-icons/bs";
-import { PostReplySection } from "./PostReplySection";
+import { ReplyCard } from "./ReplyCard";
 import { format, formatDistanceToNow } from "date-fns";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
@@ -18,7 +18,7 @@ const socket = io("https://api.mymakan.ae", {
   transports: ["websocket"],
 });
 
-const AgentComment = ({ _id }) => {
+const CommentCard = ({ _id }) => {
   const { user } = PrivateRouteContext();
   const [commentDa, setComments] = useState([]);
   const [commentRerander, setCommentRerander] = useState(false);
@@ -577,13 +577,31 @@ const AgentComment = ({ _id }) => {
       scrollToElement(reply);
     }
   }, [commentId, reply]);
+  if (loading) {
+    return (
+      <div>
+        {[1, 2, 3].map((i) => {
+          return (
+            <div key={i} className="h-14 rounded-md w-60">
+              <div className="flex flex-row items-center justify-center h-full space-x-5 animate ">
+                <div className="w-10 h-10 bg-gray-300 rounded-full "></div>
+                <div className="flex flex-col space-y-3 mt-1">
+                  <div className="h-2 bg-gray-300 rounded-md w-36 "></div>
+                  <div className="w-24 h-[6px] bg-gray-300 rounded-md "></div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
-    <div className="blog-comment-form">
+    <div className="blog-comment-form px-[20px]">
       <div className="">
         <div className="w-full">
           <div className="flex justify-between items-end">
-            <h3 className="w-full !mb-0">Leave a Comment</h3>
             <button
               className="w-full text-end !mb-0"
               onClick={() => setShowAllComments(!showAllComments)}
@@ -601,7 +619,7 @@ const AgentComment = ({ _id }) => {
             className={`${
               showAllComments === false
                 ? " my-2 flex flex-col-reverse"
-                : "overflow-y-auto max-h-[600px] my-2 flex flex-col-reverse"
+                : "overflow-y-auto max-h-[300px] my-2 flex flex-col-reverse"
             }`}
           >
             {commentDa?.length === 0 ? (
@@ -699,7 +717,7 @@ const AgentComment = ({ _id }) => {
                             {/* reply section */}
                             {replyView === comment?._id ? (
                               <div className="my-[10px]">
-                                <PostReplySection
+                                <ReplyCard
                                   id={comment?._id}
                                   replyRerander={replyRerander}
                                   setReplyRerander={setReplyRerander}
@@ -844,21 +862,36 @@ const AgentComment = ({ _id }) => {
       <form action="" className="z-10">
         <div className="w-full ">
           <div className="relative">
-            <textarea
-              type="text"
-              className="bg-[#EDF2F9] w-full text-[#666] outline-none rounded-t-2xl p-6 placeholder:text-[20px] text-[20px] resize-none -mb-[10px]"
-              placeholder={`Type your comment and mention someone with @..., ${user?.fullName}`}
-              rows={4}
-              ref={inputRef}
-              value={comment}
-              onChange={handleChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit();
-                }
-              }}
-            />
+            <div className="flex justify-between items-center  w-full gap-x-3">
+              <div className="w-full">
+                <textarea
+                  type="text"
+                  className="bg-[#EDF2F9]  w-full text-[#666] outline-none rounded-[25PX] p-[16px] placeholder:text-[14px] text-[14px] resize-none -mb-[10px] h-[50px] leading-4 text-nowrap"
+                  placeholder={`Type your comment, ${user?.fullName}`}
+                  rows={4}
+                  ref={inputRef}
+                  value={comment}
+                  onChange={handleChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit();
+                    }
+                  }}
+                />
+              </div>
+              <div className="w-[30px] h-[30px] -mt-[15px]">
+                <Tooltip title="Send" arrow placement="top-start">
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="hover:bg-[#fff] p-2 rounded-full"
+                  >
+                    <VscSend className="w-[30px] h-[30px] text-blue-500" />
+                  </button>
+                </Tooltip>
+              </div>
+            </div>
 
             {selectedMentionDropdown && (
               <div
@@ -896,48 +929,12 @@ const AgentComment = ({ _id }) => {
                     })
                   ) : (
                     <p className="font-noto font-normal text-[#95004A] text-[14px] leading-[36px] w-[332px] h-[30px] flex items-center pt-[6px] pl-[20px] mb-[3px]">
-                      No friend found
+                      No feirnd found
                     </p>
                   )}
                 </div>
               </div>
             )}
-          </div>
-          <div className="flex justify-between items-center w-full px-6 pb-2 bg-[#EDF2F9] rounded-b-2xl">
-            <div className="flex">
-              <Tooltip title="Emoji" arrow placement="top-start">
-                <button
-                  type="button"
-                  onClick={handleEmojiButtonClick}
-                  className="hover:bg-[#fff] p-2 rounded-full"
-                >
-                  <BsEmojiSunglasses className="w-8 h-8" />
-                </button>
-              </Tooltip>
-
-              {showEmojiPicker && (
-                <div className="absolute z-10 mt-2">
-                  <EmojiPicker
-                    onEmojiClick={(event, emoji) => onEmojiClick(emoji)}
-                  />
-                </div>
-              )}
-
-              <Tooltip title="Photo and video" arrow placement="top-start">
-                <button className="hover:bg-[#fff] p-2 rounded-full">
-                  <TbPhotoHexagon className="w-8 h-8" />
-                </button>
-              </Tooltip>
-            </div>
-            <Tooltip title="Send" arrow placement="top-start">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="hover:bg-[#fff] p-2 rounded-full"
-              >
-                <VscSend className="w-8 h-8" />
-              </button>
-            </Tooltip>
           </div>
         </div>
       </form>
@@ -945,4 +942,4 @@ const AgentComment = ({ _id }) => {
   );
 };
 
-export default AgentComment;
+export default CommentCard;

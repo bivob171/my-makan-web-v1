@@ -16,6 +16,7 @@ import { MatchCardData } from "./MatchCardData";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatValueContext } from "@/Context/chatContext";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import CommentCard from "./CommentCard";
 export default function PackageCard({
   item,
   myId,
@@ -339,6 +340,8 @@ export default function PackageCard({
 
   const matchPercentage = item?.matchPercentage && item?.matchPercentage;
   activeUsers;
+
+  const [commentDropdown, setCommentDropdown] = useState("");
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">
@@ -929,22 +932,25 @@ export default function PackageCard({
               ) : (
                 <p
                   onClick={() => giveLike(item?._id)}
-                  className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
+                  className="  text-[12px] md:text-[14px] -mb-0 mr-[2px]"
                 >
                   {" "}
                   <BiSolidLike />
                 </p>
               )}
-              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0">
+              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0 cursor-pointer">
                 {item?.likeCount === 0 ? "00" : item?.likeCount}
               </p>
             </div>
-            <div className="flex items-center">
+            <div
+              onClick={() => setCommentDropdown(_id)}
+              className="flex items-center cursor-pointer"
+            >
               <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
                 {" "}
                 <BiCommentDetail />
               </p>
-              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px]">
+              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px] ">
                 {item.commentCount ? item.commentCount : "00"}{" "}
               </p>
             </div>
@@ -995,6 +1001,15 @@ export default function PackageCard({
             </div>
           </div>
         </footer>
+        {/* comment  */}
+        {commentDropdown === _id ? (
+          <div>
+            <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
+            <div>
+              <CommentCard _id={_id} />
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
