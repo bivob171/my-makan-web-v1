@@ -18,6 +18,8 @@ import {
   getDoc,
   Timestamp,
   startAfter,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import from firebase/storage
 
@@ -56,4 +58,6 @@ export {
   ref,
   uploadBytes,
   getDownloadURL,
+  arrayUnion,
+  arrayRemove,
 };

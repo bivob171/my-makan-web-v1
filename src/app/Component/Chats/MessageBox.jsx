@@ -20,6 +20,8 @@ import {
   getDoc,
   Timestamp,
   storage,
+  arrayUnion,
+  arrayRemove,
 } from "../../../firebase";
 import Link from "next/link";
 import { CheckIcon } from "lucide-react";
@@ -65,7 +67,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
-  
+
   const participantId = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.id)[0];
@@ -116,6 +118,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
       tempId,
       seen: null,
+      reactions: [],
+      deletedFor: [],
     };
     playNotificationSound();
     scrollToBottom();
@@ -215,21 +219,21 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     return code;
   };
   const [filePreview, setFilePreview] = useState(false);
-  useClickOutside(sendWithMediaRef,()=>{
+  useClickOutside(sendWithMediaRef, () => {
     setFilePreview(false);
     setFile([]);
-    setRawFile([])
-  })
+    setRawFile([]);
+  });
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
 
     const fileDetails = files.map((file) => {
-      console.log(String(file.type||'').split('/')?.[0]||file?.type,file)
-      return ({
+      console.log(String(file.type || "").split("/")?.[0] || file?.type, file);
+      return {
         _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
-        type: String(file.type||'').split('/')?.[0]||file?.type,
+        type: String(file.type || "").split("/")?.[0] || file?.type,
         url: URL.createObjectURL(file),
-      })
+      };
     });
 
     setFile((prevFiles) => [...prevFiles, ...fileDetails]);
@@ -543,7 +547,10 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             </svg>
           </button>
           {filePreview === true ? (
-            <div ref={sendWithMediaRef} className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md">
+            <div
+              ref={sendWithMediaRef}
+              className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md"
+            >
               <div className="p-2">
                 {selectedImage.type === "image" ? (
                   <div className="w-full relative">
@@ -601,7 +608,12 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                             alt=""
                             width={50}
                             height={50}
-                            className={clsx("flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10", selectedImage?._id===f._id?'ring-2 ring-offset-1 ring-blue-600':'')}
+                            className={clsx(
+                              "flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10",
+                              selectedImage?._id === f._id
+                                ? "ring-2 ring-offset-1 ring-blue-600"
+                                : ""
+                            )}
                           />
                         )}
                         {f?.type === "video" && (
@@ -610,10 +622,15 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
                             onClick={() => handelselectedImage(f)}
                             src={f.url}
                             alt=""
-                            className={clsx("flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm", selectedImage?._id===f._id?'ring-2 ring-offset-1 ring-blue-600':'')}
+                            className={clsx(
+                              "flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm",
+                              selectedImage?._id === f._id
+                                ? "ring-2 ring-offset-1 ring-blue-600"
+                                : ""
+                            )}
                           />
                         )}
-                        {console.log(selectedImage,f)}
+                        {console.log(selectedImage, f)}
                       </div>
                     );
                   })}
