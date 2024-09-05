@@ -44,9 +44,15 @@ export const NewsFeedChatCard = ({
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
-  const participantImage = selectedChat?.participantsInfo?.image;
-  const participantName = selectedChat?.participantsInfo?.name;
-  const participantId = selectedChat?.participantsInfo?.id;
+  const participantId = selectedChat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.id)[0];
+  const participantImage = selectedChat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.image)[0];
+  const participantName = selectedChat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.name)[0];
 
   const isActive = activeUsers.includes(participantId);
 
@@ -424,9 +430,9 @@ export const NewsFeedChatCard = ({
                 {participantName}
               </p>
               {isActive ? (
-                <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[3px] rounded-full"></div>
+                <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[2px] rounded-full"></div>
               ) : (
-                <div className="bg-red-500 h-[6px] w-[6px] mt-[3px] rounded-full"></div>
+                <div className="bg-red-500 h-[6px] w-[6px] mt-[2px] rounded-full"></div>
               )}
             </div>
           </div>

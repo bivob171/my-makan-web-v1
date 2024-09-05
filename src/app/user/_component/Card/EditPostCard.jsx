@@ -22,6 +22,7 @@ import axios from "axios";
 import { MatchCardData } from "./MatchCardData";
 import { usePathname, useRouter } from "next/navigation";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import CommentCard from "./CommentCard";
 export default function EditPostCard({
   item,
   myId,
@@ -239,6 +240,8 @@ export default function EditPostCard({
   }
   const { activeUsers } = PrivateRouteContext();
   const isActive = activeUsers.includes(userinfo?._id);
+  const [commentDropdown, setCommentDropdown] = useState("");
+
   return (
     <div className="w-full h-auto bg-white rounded-[15px] py-[25px] ">
       <div className="pt-2">
@@ -562,12 +565,15 @@ export default function EditPostCard({
                 {item.likeCount === 0 ? "00" : item.likeCount}
               </p>
             </div>
-            <div className="flex items-center">
+            <div
+              onClick={() => setCommentDropdown(_id)}
+              className="flex items-center cursor-pointer"
+            >
               <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
                 {" "}
                 <BiCommentDetail />
               </p>
-              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px]">
+              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px] ">
                 {item.commentCount ? item.commentCount : "00"}{" "}
               </p>
             </div>
@@ -617,7 +623,16 @@ export default function EditPostCard({
               )}
             </div>
           </div>
+          {/* comment  */}
         </div>
+        {commentDropdown === _id ? (
+          <div>
+            <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
+            <div>
+              <CommentCard _id={_id} />
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
