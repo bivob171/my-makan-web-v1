@@ -23182,3 +23182,9 @@ nav.template-main-menu > ul > li:hover ul.mega-menu {
 .custom-next-button {
   right: 10px; /* Adjust as needed */
 }
+
+.lg-object.lg-image{
+  height : 90%!important;
+  width : 90%!important;
+  object-fit : contain;
+}

@@ -1,8 +1,39 @@
 import { cx } from "class-variance-authority";
 import Image from "next/image";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LuCheck, LuCheckCheck } from "react-icons/lu";
+import LightGallery from "lightgallery/react";
 
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgZoom from "lightgallery/plugins/zoom";
+
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+import { MdDeleteOutline, MdOutlineEmojiEmotions } from "react-icons/md";
+import clsx from "clsx";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { useClickOutside } from "react-haiku";
+import {
+  db,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp,
+  doc,
+  updateDoc,
+  increment,
+  writeBatch,
+  where,
+  getDocs,
+  getDoc,
+  Timestamp,
+  storage,
+  arrayUnion,
+  arrayRemove,
+} from "../../../firebase";
 export const SingleChat = ({
   showDateHeader,
   msg,
@@ -14,7 +45,72 @@ export const SingleChat = ({
   status,
   uploadingProssing,
 }) => {
-  const msg_status = msg?.seen ? 'seen' : msg.status;
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const emojiRef = useRef(null);
+  const menuRef = useRef(null);
+  useClickOutside(emojiRef, () => {
+    if (isEmojiOpen) {
+      setIsEmojiOpen(false);
+    }
+  });
+  useClickOutside(menuRef, () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  });
+  const toggleEmojiMenu = () => setIsEmojiOpen((e) => !e);
+  const toggleMenu = () => setIsMenuOpen((e) => !e);
+  const msg_status = msg?.seen ? "seen" : msg.status;
+
+  // funtion for reaction or delete
+  const chatId = msg?.chatId;
+  const messageId = msg?.id;
+  const userId = user?._id;
+
+  async function reactToMessage(reaction) {
+    const messageRef = doc(db, "chats", chatId, "messages", messageId);
+
+    try {
+      // Remove existing reaction for this user, if any, and then add the new one
+      const userReactionField = `reactions.${userId}`;
+
+      await updateDoc(messageRef, {
+        [userReactionField]: reaction, // Updates the user's reaction
+      });
+
+      console.log(`User ${userId} reacted with ${reaction}`);
+    } catch (error) {
+      console.error("Error reacting to message: ", error);
+    }
+  }
+  async function deleteMessageForMe() {
+    const messageRef = doc(db, "chats", chatId, "messages", messageId);
+
+    try {
+      await updateDoc(messageRef, {
+        deletedFor: arrayUnion(userId), // Adds userId to the deletedFor array
+      });
+      console.log(`User ${userId} deleted the message for themselves.`);
+    } catch (error) {
+      console.error("Error deleting message for me: ", error);
+    }
+  }
+  async function deleteMessageForEveryone() {
+    const messageRef = doc(db, "chats", chatId, "messages", messageId);
+
+    try {
+      await updateDoc(messageRef, {
+        content: "This message was deleted", // Mark message as deleted
+        media: [], // Clear any media associated with the message
+        reactions: {}, // Clear reactions
+      });
+      console.log("Message deleted for everyone.");
+    } catch (error) {
+      console.error("Error deleting message for everyone: ", error);
+    }
+  }
+
   return (
     <div>
       {showDateHeader && (
@@ -23,12 +119,14 @@ export const SingleChat = ({
         </div>
       )}
       <div
-        className={`col-start-${isSent ? "6" : "1"} col-end-${isSent ? "13" : "8"
-          } p-3 rounded-lg`}
+        className={`col-start-${isSent ? "6" : "1"} col-end-${
+          isSent ? "13" : "8"
+        } p-3 rounded-lg`}
       >
         <div
-          className={`flex items-end ${isSent ? "justify-start flex-row-reverse" : "flex-row"
-            }`}
+          className={`flex items-end gap-2 ${
+            isSent ? "justify-start flex-row-reverse" : "flex-row"
+          }`}
         >
           {isSent ? (
             <>
@@ -49,63 +147,143 @@ export const SingleChat = ({
               className="w-[30px] h-[30px] rounded-full"
             />
           )}
-          {/* MESSAGE CAPSULE */}
-          <div className={cx("flex items-end gap-1 relative", isSent ? 'mr-0' : 'ml-2.5')}>
-            <div className={cx('relative text-sm  p-2 pb-1 rounded-md min-w-[130px] max-w-[300px] shadow-sm shadow-gray-50/50', {
-              'bg-white rounded-bl-none': !isSent,
-              'bg-gradient-to-br from-blue-400 to-blue-400': isSent
-            })}
-            >
-              {/* Display content or image */}
-              <ImageGrid images={msg?.media} />
-              {/* {msg?.media?.length > 0 ? (
-                <div className="flex gap-x-1">
-                  {msg.media.map((m, i) => {
-                    const progressItem = uploadingProssing.find(
-                      (item) => item._id === m._id
-                    );
 
-                    return (
-                      <div key={i}>
-                        <Image
-                          alt="Message image"
-                          src={m?.url}
-                          width={300}
-                          height={300}
-                          className={cx(`object-cover rounded-md`, `opacity-[${(progressItem?.progress || 100) / 100}]`)}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : null} */}
+          {/* MESSAGE CAPSULE */}
+          <div
+            className={cx(
+              "flex items-end gap-1 relative",
+              isSent ? "mr-0" : "ml-2.5"
+            )}
+          >
+            <div
+              className={cx(
+                "relative text-sm  p-2 pb-1 rounded-md min-w-[130px] max-w-[300px] shadow-sm shadow-gray-50/50",
+                {
+                  "bg-white rounded-bl-none": !isSent,
+                  "bg-gradient-to-br from-blue-400 to-blue-400": isSent,
+                }
+              )}
+            >
+              <ImageGrid images={msg?.media} />
               {msg.content ? (
-                <div className={cx("mt-1 text-base font-medium", isSent ? 'text-white' : 'text-gray-900')}>{msg?.content}</div>
+                <div
+                  className={cx(
+                    "mt-1 text-base font-medium",
+                    isSent ? "text-white" : "text-gray-900"
+                  )}
+                >
+                  {msg?.content}
+                </div>
               ) : null}
               <div className="flex justify-end gap-x-[3px] items-center">
-                <p className={cx("text-[10px] font-semibold tracking-wider mb-0",isSent?'text-gray-100':'text-gray-500')}>{formattedTime}</p>
+                <p
+                  className={cx(
+                    "text-[10px] font-semibold tracking-wider mb-0",
+                    isSent ? "text-gray-100" : "text-gray-500"
+                  )}
+                >
+                  {formattedTime}
+                </p>
               </div>
             </div>
-            {
-              isSent ? (
-                msg_status === 'seen' ? (
-                  <Image
-                    alt=""
-                    src={participantImage}
-                    width={30}
-                    height={30}
-                    className="size-[16px] rounded-full mb-1"
-                  />
-                ) : (
-                  <div className={cx("size-4 rounded-full border-2 border-blue-400 inline-flex justify-center items-center", {
-                    'text-blue-500': msg_status === 'sent'
-                  })}>
-                    {msg_status === 'sending' ? null : <LuCheck className="size-[10px] font-black" strokeWidth={3} />}
-                  </div>
-                )
-              ) : null
-            }
-            <div className={cx("w-0 h-0 border-t-[10px] border-r-[10px] border-r-white shadow-sm border-t-transparent border-b-transparent absolute bottom-0 left-0 -translate-x-full",isSent?'hidden':'')} />
+            {isSent ? (
+              msg_status === "seen" ? (
+                <Image
+                  alt=""
+                  src={participantImage}
+                  width={30}
+                  height={30}
+                  className="size-[16px] rounded-full mb-1"
+                />
+              ) : (
+                <div
+                  className={cx(
+                    "size-4 rounded-full border-2 border-blue-400 inline-flex justify-center items-center",
+                    {
+                      "text-blue-500": msg_status === "sent",
+                    }
+                  )}
+                >
+                  {msg_status === "sending" ? null : (
+                    <LuCheck
+                      className="size-[10px] font-black"
+                      strokeWidth={3}
+                    />
+                  )}
+                </div>
+              )
+            ) : null}
+            <div
+              className={cx(
+                "w-0 h-0 border-t-[10px] border-r-[10px] border-r-white shadow-sm border-t-transparent border-b-transparent absolute bottom-0 left-0 -translate-x-full",
+                isSent ? "hidden" : ""
+              )}
+            />
+          </div>
+
+          {/* Message Actions */}
+          <div className={clsx("relative self-center")}>
+            <div
+              className={clsx(
+                " flex gap-1.5",
+                isSent ? "flex-row-reverse" : ""
+              )}
+            >
+              <button
+                className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+                onClick={toggleEmojiMenu}
+              >
+                <MdOutlineEmojiEmotions className="size-4" />
+              </button>
+              <button
+                className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+                onClick={toggleMenu}
+              >
+                <BsThreeDotsVertical className="size-4" />
+              </button>
+            </div>
+            <div
+              ref={emojiRef}
+              className={clsx(
+                "absolute mb-1 bottom-full flex p-1 bg-white shadow-md rounded-full",
+                isEmojiOpen ? "flex" : "hidden",
+                isSent ? "right-4 translate-x-1/2" : "left-3 -translate-x-1/2"
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => reactToMessage("👍")}
+                className="hover:bg-gray-100 size-8 rounded-full"
+              >
+                👍
+              </button>
+              <button
+                type="button"
+                onClick={() => reactToMessage("💖")}
+                className="hover:bg-gray-100 size-8 rounded-full"
+              >
+                💖
+              </button>
+              <button
+                type="button"
+                onClick={() => reactToMessage("👍")}
+                className="hover:bg-gray-100 size-8 rounded-full rotate-180"
+              >
+                👍
+              </button>
+            </div>
+            <div
+              ref={menuRef}
+              className={clsx(
+                "absolute mb-1 bottom-full flex p-1 bg-white shadow-md rounded-full",
+                isMenuOpen ? "flex" : "hidden",
+                isSent ? "left-4 -translate-x-1/2" : "right-4 translate-x-1/2"
+              )}
+            >
+              <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
+                <MdDeleteOutline className="size-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -114,36 +292,109 @@ export const SingleChat = ({
 };
 
 const ImageGrid = ({ images = [] }) => {
+  const lightbox = useRef(null);
   const imageCount = images?.length || 0;
-  if (!imageCount) return;
-  if (imageCount <= 4) {
-    return (
-      <div className={cx(`grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`)}>
-        {images.map((image, index) => (
-          <div key={index}>
-            <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className={cx("w-full rounded-md",imageCount===1?'object-cover aspect-auto':'aspect-square object-cover')} />
+  if (!imageCount) return null;
+  return (
+    <LightGallery
+      onInit={(ref) => {
+        if (ref) {
+          lightbox.current = ref.instance;
+        }
+      }}
+      dynamic
+      dynamicEl={images.map((image) => ({
+        src: image?.url,
+        thumb: image?.url,
+        width: "1406-1390",
+        alt: "images",
+      }))}
+      mode="lg-fade"
+      speed={500}
+      plugins={[lgThumbnail]}
+    >
+      {imageCount <= 4 ? (
+        <div
+          className={cx(
+            `grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`
+          )}
+        >
+          {images.map((image, index) => (
+            <a
+              key={index}
+              data-lg-size="1406-1390"
+              className="gallery-item"
+              data-src={image?.url}
+              onClick={() => {
+                lightbox.current?.openGallery(index);
+              }}
+            >
+              <Image
+                src={image?.url}
+                width={500}
+                height={500}
+                alt={`image${index + 1}`}
+                className={cx(
+                  "w-full rounded-sm",
+                  imageCount === 1
+                    ? "object-cover aspect-auto"
+                    : "aspect-square object-cover"
+                )}
+              />
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <div className={cx(`grid gap-1 mb-1 grid-cols-2`)}>
+            {images.slice(0, 2).map((image, index) => (
+              <a
+                key={index}
+                data-lg-size="1406-1390"
+                className="gallery-item"
+                data-src={image?.url}
+                onClick={() => {
+                  lightbox.current?.openGallery(index);
+                }}
+              >
+                <Image
+                  src={image?.url}
+                  width={500}
+                  height={500}
+                  alt={`image${index + 1}`}
+                  className={cx(
+                    "w-full rounded-sm",
+                    imageCount === 1
+                      ? "object-cover aspect-auto"
+                      : "aspect-square object-cover"
+                  )}
+                />
+              </a>
+            ))}
           </div>
-        ))}
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <div className={cx(`grid gap-1 mb-1 grid-cols-2`)}>
-          {images.slice(0, 2).map((image, index) => (
-            <div key={index}>
-              <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className={cx("w-full rounded-sm",imageCount===1?'object-cover aspect-auto':'aspect-square object-cover')} />
-            </div>
-          ))}
+          <div className={cx(`grid gap-1 grid-cols-3`)}>
+            {images.slice(2).map((image, index) => (
+              <a
+                key={index}
+                data-lg-size="1406-1390"
+                className="gallery-item"
+                data-src={image?.url}
+                onClick={() => {
+                  lightbox.current?.openGallery(index + 2);
+                }}
+              >
+                <Image
+                  src={image?.url}
+                  width={500}
+                  height={500}
+                  alt={`image${index + 1}`}
+                  className="w-full aspect-square object-cover rounded-sm"
+                />
+              </a>
+            ))}
+          </div>
         </div>
-        <div className={cx(`grid gap-1 grid-cols-3`)}>
-          {images.slice(2).map((image, index) => (
-            <div key={index}>
-              <Image src={image?.url} width={500} height={500} alt={`image${index + 1}`} className="w-full aspect-square object-cover rounded-sm" />
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
-}
+      )}
+    </LightGallery>
+  );
+};
