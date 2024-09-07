@@ -126,6 +126,12 @@ export default function PackageCard({
 
     try {
       setHasId(true);
+      setAllPosts((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          likeCount: item.likeCount + 1, // Increment the existing likeCount
+        }))
+      );
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -139,7 +145,7 @@ export default function PackageCard({
       }
 
       const data = await response.json();
-      setlike(!like);
+      // setlike(!like);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -151,6 +157,12 @@ export default function PackageCard({
 
     try {
       setHasId(false);
+      setAllPosts((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          likeCount: item.likeCount - 1, // Increment the existing likeCount
+        }))
+      );
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -162,9 +174,10 @@ export default function PackageCard({
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }
+      // Update follow status in data array
 
       const data = await response.json();
-      setlike(!like);
+      // setlike(!like);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -967,13 +980,13 @@ export default function PackageCard({
               ) : (
                 <p
                   onClick={() => giveLike(item?._id)}
-                  className="  text-[12px] md:text-[14px] -mb-0 mr-[2px]"
+                  className="  text-[12px] md:text-[14px] -mb-0 mr-[2px] cursor-pointer"
                 >
                   {" "}
                   <BiSolidLike />
                 </p>
               )}
-              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0 cursor-pointer">
+              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0 ">
                 {item?.likeCount === 0 ? "00" : item?.likeCount}
               </p>
             </div>
@@ -1041,7 +1054,7 @@ export default function PackageCard({
           <div>
             <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
             <div>
-              <CommentCard _id={_id} />
+              <CommentCard _id={_id} setAllPosts={setAllPosts} />
             </div>
           </div>
         ) : null}

@@ -158,6 +158,7 @@ const BuyerMyAvailablePosts = () => {
                         openDelete={openDelete}
                         saveRerander={saveRerander}
                         setSaveRerander={setSaveRerander}
+                        setAllPosts={setAllPosts}
                       />
                     </div>
                   );

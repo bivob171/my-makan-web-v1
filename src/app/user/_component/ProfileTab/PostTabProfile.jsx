@@ -444,6 +444,7 @@ export const PostTabProfile = ({
                         openDelete={openDelete}
                         saveRerander={saveRerander}
                         setSaveRerander={setSaveRerander}
+                        setAllPosts={setAllPosts}
                       />
                     ) : (
                       <PackageCard

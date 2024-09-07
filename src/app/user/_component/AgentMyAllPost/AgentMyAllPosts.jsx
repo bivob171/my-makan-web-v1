@@ -167,6 +167,7 @@ const AgentMyAllPosts = () => {
                         openDelete={openDelete}
                         saveRerander={saveRerander}
                         setSaveRerander={setSaveRerander}
+                        setAllPosts={setAllPosts}
                       />
                     </div>
                   );

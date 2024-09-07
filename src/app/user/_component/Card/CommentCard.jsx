@@ -18,7 +18,7 @@ const socket = io("https://api.mymakan.ae", {
   transports: ["websocket"],
 });
 
-const CommentCard = ({ _id }) => {
+const CommentCard = ({ _id, setAllPosts }) => {
   const { user } = PrivateRouteContext();
   const [commentDa, setComments] = useState([]);
   const [commentRerander, setCommentRerander] = useState(false);
@@ -270,6 +270,14 @@ const CommentCard = ({ _id }) => {
       }
       playNotificationSound();
       setComment("");
+
+      setAllPosts((prevData) =>
+        prevData.map((item) =>
+          item._id === _id
+            ? { ...item, commentCount: item.commentCount + 1 }
+            : item
+        )
+      );
       let commentData;
       if (mentionRole.length > 0) {
         commentData = {
@@ -309,7 +317,6 @@ const CommentCard = ({ _id }) => {
       } else {
         const responseData = await response.json();
         // setComments((prevPost) => [responseData, ...prevPost]);
-
         setMentionAgentId([]);
         setMentionName([]);
         setMentionUserId([]);

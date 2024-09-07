@@ -166,6 +166,7 @@ const BuyerMyRequiredPosts = () => {
                         openDelete={openDelete}
                         saveRerander={saveRerander}
                         setSaveRerander={setSaveRerander}
+                        setAllPosts={setAllPosts}
                       />
                     </div>
                   );

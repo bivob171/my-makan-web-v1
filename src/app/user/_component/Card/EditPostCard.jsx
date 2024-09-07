@@ -33,6 +33,7 @@ export default function EditPostCard({
   like,
   setSaveRerander,
   saveRerander,
+  setAllPosts,
 }) {
   const {
     role,
@@ -96,12 +97,18 @@ export default function EditPostCard({
   };
 
   const giveLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/like`;
+    const url = `http://localhost:4000/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
     try {
       setHasId(true);
+      setAllPosts((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          likeCount: item.likeCount + 1, // Increment the existing likeCount
+        }))
+      );
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -122,13 +129,19 @@ export default function EditPostCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `http://localhost:4000/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     console.log(url, token);
 
     try {
       setHasId(false);
+      setAllPosts((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          likeCount: item.likeCount - 1, // Increment the existing likeCount
+        }))
+      );
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -159,7 +172,7 @@ export default function EditPostCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `http://localhost:4000/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -184,7 +197,7 @@ export default function EditPostCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `http://localhost:4000/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -629,7 +642,7 @@ export default function EditPostCard({
           <div>
             <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
             <div>
-              <CommentCard _id={_id} />
+              <CommentCard _id={_id} setAllPosts={setAllPosts} />
             </div>
           </div>
         ) : null}
