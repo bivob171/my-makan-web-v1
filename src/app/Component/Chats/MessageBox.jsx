@@ -584,7 +584,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       </div>
       <div
         ref={messageContainerRef}
-        className="overflow-y-auto h-[480px] bg-[#F7FAFD] pb-[100px]"
+        className="overflow-y-auto h-[70vh] bg-[#F7FAFD] pb-[100px]"
       >
         {messages.length > 0 ? (
           messages.map((msg, index) => {
