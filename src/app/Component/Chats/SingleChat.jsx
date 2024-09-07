@@ -112,7 +112,7 @@ export const SingleChat = ({
       console.error("Error deleting message for everyone: ", error);
     }
   }
-  console.log(msg);
+  // console.log(msg);
   return (
     <div>
       {showDateHeader && (
@@ -322,8 +322,8 @@ const ImageGrid = ({ images: mediaList = [] }) => {
         }
       }}
       dynamic
-      dynamicEl={mediaList.map((media) => {
-        if (media.type === "video") {
+      dynamicEl={mediaList?.map((media) => {
+        if (media?.type === "video") {
           return {
             src: "",
             thumb: media?.poster || media?.url,
@@ -353,7 +353,7 @@ const ImageGrid = ({ images: mediaList = [] }) => {
           )}
         >
           {mediaList.map((media, index) => {
-            const isVideo = media.type === "video";
+            const isVideo = media?.type === "video";
             return (
               <a
                 key={index}
@@ -370,14 +370,14 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                     : ""
                 }
                 onClick={() => {
-                  if (media.type === "vide") return;
+                  if (media?.type === "vide") return;
                   lightbox.current?.openGallery(index);
                 }}
               >
                 {isVideo ? (
                   <video
-                    src={media.url}
-                    poster={media.poster}
+                    src={media?.url}
+                    poster={media?.poster}
                     className={cx(
                       "w-full rounded-md",
                       imageCount === 1
@@ -388,7 +388,7 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                   ></video>
                 ) : (
                   <Image
-                    src={media.url}
+                    src={media?.url}
                     width={500}
                     height={500}
                     alt={`media${index + 1}`}
@@ -411,13 +411,13 @@ const ImageGrid = ({ images: mediaList = [] }) => {
               <a
                 key={index}
                 className="gallery-item"
-                data-src={media.url}
-                data-poster={media.poster || ""}
+                data-src={media?.url}
+                data-poster={media?.poster || ""}
                 data-html={
-                  media.type === "video"
+                  media?.type === "video"
                     ? `
                   <video class="lg-video-object lg-html5" controls>
-                    <source src="${media.url}" type="video/mp4">
+                    <source src="${media?.url}" type="video/mp4">
                     Your browser does not support HTML5 video.
                   </video>`
                     : ""
@@ -427,7 +427,7 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                 }}
               >
                 <Image
-                  src={media.url}
+                  src={media?.url}
                   width={500}
                   height={500}
                   alt={`media${index + 1}`}
@@ -446,13 +446,13 @@ const ImageGrid = ({ images: mediaList = [] }) => {
               <a
                 key={index}
                 className="gallery-item"
-                data-src={media.url}
-                data-poster={media.poster || ""}
+                data-src={media?.url}
+                data-poster={media?.poster || ""}
                 data-html={
-                  media.type === "video"
+                  media?.type === "video"
                     ? `
                   <video class="lg-video-object lg-html5" controls>
-                    <source src="${media.url}" type="video/mp4">
+                    <source src="${media?.url}" type="video/mp4">
                     Your browser does not support HTML5 video.
                   </video>`
                     : ""
@@ -462,7 +462,7 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                 }}
               >
                 <Image
-                  src={media.url}
+                  src={media?.url}
                   width={500}
                   height={500}
                   alt={`media${index + 1}`}

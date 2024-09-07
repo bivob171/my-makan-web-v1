@@ -1,11 +1,21 @@
 "use client";
-
-import React, { useState } from "react";
+import { cx } from "class-variance-authority";
 import Image from "next/image";
-import { BsInfoCircle } from "react-icons/bs";
+import React, { useEffect, useRef, useState } from "react";
+import LightGallery from "lightgallery/react";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgFullscreen from "lightgallery/plugins/fullscreen";
+import lgVideo from "lightgallery/plugins/video";
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-video.css";
+import "lightgallery/css/lg-fullscreen.css";
+import clsx from "clsx";
 import { IoCloseOutline } from "react-icons/io5";
 import Link from "next/link";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
+import { db, collection, query, orderBy, onSnapshot } from "../../../firebase";
+import ImageGrid from "./ImageGrid";
 
 const ProfileDetails = ({ selectedChat, profileSideBar }) => {
   const [isMuted, setIsMuted] = useState(false);
@@ -27,6 +37,34 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
   const participantRole = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.role)[0];
+
+  const [messages, setMessages] = useState([]);
+  const chatId = selectedChat?.id;
+  // Subscribe to real-time updates of messages
+  useEffect(() => {
+    if (chatId) {
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+      const q = query(messagesRef, orderBy("createdAt", "asc"));
+
+      const unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
+        const fetchedMessages = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMessages(fetchedMessages);
+      });
+
+      return () => {
+        unsubscribeMessages();
+      };
+    }
+  }, [chatId]);
+
+  // Step 1: Filter out the objects with null media
+  const filteredMassage = messages.filter((item) => item.media !== null);
+
+  // Step 2: Flatten the media arrays into one combined array
+  const combinedMedia = filteredMassage.flatMap((item) => item.media);
 
   return (
     <div className="p-3 relative">
@@ -112,25 +150,22 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
           )}
         </div>
       </div>
-      <div className="flex justify-between items-center my-4">
-        <h3 className="text-[22px] font-bold text-[#666] leading-none m-0">
-          User Information
-        </h3>
-        <button>
-          <BsInfoCircle className="text-[#615DFA] w-4 h-3" />
-        </button>
-      </div>
-      <div>
-        <p className="text-[12px] text-[#666] leading-3 m-0">User ID</p>
-        <span className="text-[16px] font-bold text-[#333] leading-none px-2">
-          @musfiehfiue
-        </span>
-      </div>
-      <div className="my-3">
+
+      <div className="mt-3">
         <p className="text-[12px] text-[#666] leading-3 m-0">Email</p>
         <span className="text-[16px] font-bold text-[#333] leading-none px-2">
           abc123@gmail.com
         </span>
+      </div>
+      <div className="mt-">
+        <span className="text-[16px] font-bold text-[#333] leading-none px-2">
+          Media
+        </span>
+      </div>
+      <div className="my-1 h-[240px] overflow-y-auto">
+        <div>
+          <ImageGrid images={combinedMedia} />{" "}
+        </div>
       </div>
     </div>
   );
