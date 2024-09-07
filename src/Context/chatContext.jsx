@@ -110,6 +110,31 @@ const ChatValueProvider = ({ children }) => {
     });
   };
 
+  const handleOpenInChats = async (chatId, chat) => {
+    setSelectedChatId(chatId);
+    setActiveChatId(chatId);
+    setSelectedChat(chat);
+    router.push("/user/chats");
+    // Reset the unseen messages count when a chat is selected
+    const chatRef = doc(db, "chats", chatId);
+    const chatDoc = await getDoc(chatRef);
+    if (!chatDoc.exists()) {
+      console.error("Chat document not found.");
+      return;
+    }
+
+    // Get the current unseenMessages
+    const chatData = chatDoc.data();
+    const currentUnseenMessages = chatData?.unseenMessages || {};
+    // Update the unseen messages count
+    await updateDoc(chatRef, {
+      unseenMessages: {
+        ...currentUnseenMessages,
+        [user?._id]: 0, // Reset unseen messages count for the current user
+      },
+    });
+  };
+
   // create chat
   const router = useRouter();
   const handleNewChatSelection = async (chatId, chat) => {
@@ -166,7 +191,7 @@ const ChatValueProvider = ({ children }) => {
       const chatId = result.matchingData.id;
       const chatData = result.matchingData;
       handleNewChatSelection(chatId, chatData);
-      router.push("/user/chats");
+      // router.push("/user/chats");
     }
 
     return result;
@@ -258,7 +283,7 @@ const ChatValueProvider = ({ children }) => {
       };
 
       handleNewChatSelection(chatId, chatData);
-      router.push("/user/chats");
+      // router.push("/user/chats");
     } catch (error) {
       toast.error("Failed to create chat.");
     }
@@ -282,6 +307,7 @@ const ChatValueProvider = ({ children }) => {
         setSelectedChat,
         createNewChat,
         handelChatSelectedFromChatNotifyDropdown,
+        handleOpenInChats,
       }}
     >
       {children}

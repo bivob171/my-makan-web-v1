@@ -22,6 +22,7 @@ export const HeaderRight = () => {
     setSearchQuery,
     selectedChat,
     setSelectedChat,
+    handleOpenInChats,
   } = useContext(ChatValueContext);
   const [chatOpen, setChatOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -158,6 +159,7 @@ export const HeaderRight = () => {
           selectedChat={selectedChat}
           setActiveChatId={setActiveChatId}
           activeChatId={activeChatId}
+          handleOpenInChats={handleOpenInChats}
         />
       </div>
     </div>

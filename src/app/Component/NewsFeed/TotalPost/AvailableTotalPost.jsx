@@ -305,6 +305,7 @@ export const AvailableTotalPost = () => {
                         setSaveRerander={setSaveRerander}
                         followRerander={followRerander}
                         setFollowRerander={setFollowRerander}
+                        setAllPosts={setAllPosts}
                       />
                     </div>
                   );

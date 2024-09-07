@@ -277,6 +277,7 @@ export default function BuyerPosts() {
                       setSaveRerander={setSaveRerander}
                       followRerander={followRerander}
                       setFollowRerander={setFollowRerander}
+                      setAllPosts={setAllPosts}
                     />
                   </div>
                 );
@@ -292,6 +293,7 @@ export default function BuyerPosts() {
                     setSaveRerander={setSaveRerander}
                     followRerander={followRerander}
                     setFollowRerander={setFollowRerander}
+                    setAllPosts={setAllPosts}
                   />
                 );
               }
