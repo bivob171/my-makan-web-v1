@@ -279,6 +279,7 @@ export default function AgentPosts() {
                       setSaveRerander={setSaveRerander}
                       followRerander={followRerander}
                       setFollowRerander={setFollowRerander}
+                      setAllPosts={setAllPosts}
                     />
                   </div>
                 );
@@ -294,6 +295,7 @@ export default function AgentPosts() {
                     setSaveRerander={setSaveRerander}
                     followRerander={followRerander}
                     setFollowRerander={setFollowRerander}
+                    setAllPosts={setAllPosts}
                   />
                 );
               }

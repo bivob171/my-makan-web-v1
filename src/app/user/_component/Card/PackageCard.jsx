@@ -26,6 +26,7 @@ export default function PackageCard({
   saveRerander,
   followRerander,
   setFollowRerander,
+  setAllPosts,
 }) {
   const {
     role,
@@ -218,6 +219,7 @@ export default function PackageCard({
         toast.error(`HTTP error! Status: ${response.status}`);
       } else {
         toast.success("Post UnSave successfully!");
+
         // setSaveRerander(!saveRerander);
       }
     } catch (error) {
@@ -247,7 +249,6 @@ export default function PackageCard({
         token = localStorage.getItem("buyerAccessToken");
       }
       const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}/${type}`;
-
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -256,11 +257,34 @@ export default function PackageCard({
         },
       });
 
-      if (!response.ok) {
-        toast.error(`${response.status}`);
-      } else {
+      if (response.ok) {
         toast.success(`Successful following ${fullName}`);
-        // setFollowRerander(!followRerander);
+        // Update follow status in data array
+        if (type === "follow") {
+          setAllPosts((prevData) =>
+            prevData.map((item) => {
+              const itemId = item[role === "agent" ? "agentId" : "userId"]?._id;
+              if (itemId === _id) {
+                return { ...item, following: true };
+              }
+              return item;
+            })
+          );
+        } else {
+          setAllPosts((prevData) =>
+            prevData.map((item) => {
+              const itemId = item[role === "agent" ? "agentId" : "userId"]?._id;
+              if (itemId === _id) {
+                return { ...item, following: true, friend: true };
+              }
+              return item;
+            })
+          );
+        }
+
+        setFollowRerander((prev) => !prev);
+      } else {
+        toast.error(`${response.status}`);
       }
     } catch (error) {
       toast.error(` ${error.message}`);
@@ -271,6 +295,7 @@ export default function PackageCard({
       const _id = userinfo?._id;
       const role = userinfo?.role;
       const fullName = userinfo?.fullName;
+
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
@@ -284,11 +309,21 @@ export default function PackageCard({
         },
       });
 
-      if (!response.ok) {
-        toast.error(`${response.status}`);
-      } else {
+      if (response.ok) {
+        // Update follow status in data array
+        setAllPosts((prevData) =>
+          prevData.map((item) => {
+            const itemId = item[role === "agent" ? "agentId" : "userId"]?._id;
+            if (itemId === _id) {
+              return { ...item, following: false };
+            }
+            return item;
+          })
+        );
+        setFollowRerander((prev) => !prev);
         toast.success(`Successful Unfollowing ${fullName}`);
-        // setFollowRerander(!followRerander);
+      } else {
+        toast.error(`${response.status}`);
       }
     } catch (error) {
       toast.error(`${error.message}`);

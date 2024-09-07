@@ -1,6 +1,8 @@
+"use client";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { MdAddAPhoto, MdVideoCall } from "react-icons/md";
 import {
   db,
   collection,
@@ -18,7 +20,40 @@ import {
   getDoc,
   Timestamp,
   storage,
+  arrayUnion,
+  arrayRemove,
 } from "../../../../firebase";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+
+import Link from "next/link";
+import { CheckIcon } from "lucide-react";
+import { AiOutlineCheck } from "react-icons/ai";
+import { LuCheckCheck } from "react-icons/lu";
+
+// Extend dayjs with the plugins
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { FaPlusCircle, FaPlusSquare } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
+import { CgClose } from "react-icons/cg";
+import axios from "axios";
+import { useClickOutside } from "react-haiku";
+import clsx from "clsx";
+import { SingleChat } from "@/app/Component/Chats/SingleChat";
+
+dayjs.extend(relativeTime);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(customParseFormat);
+
+const formatDateHeader = (date) => {
+  if (dayjs(date).isToday()) return "Today";
+  if (dayjs(date).isYesterday()) return "Yesterday";
+  return dayjs(date).format("DD, MM, YYYY");
+};
 
 export const NewsFeedChatCard = ({
   chatId,
@@ -27,13 +62,14 @@ export const NewsFeedChatCard = ({
   selectedChat,
   setActiveChatId,
   activeChatId,
+  handleOpenInChats,
 }) => {
   if (chatId === null && selectedChat === null && activeChatId === null) {
     return null;
   }
-  console.log(selectedChat);
 
-  const { user, activeUsers } = PrivateRouteContext();
+  const sendWithMediaRef = useRef(null);
+  const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -44,6 +80,7 @@ export const NewsFeedChatCard = ({
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
+
   const participantId = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.id)[0];
@@ -53,8 +90,9 @@ export const NewsFeedChatCard = ({
   const participantName = selectedChat?.participants
     .filter((p) => p.id !== user?._id) // Exclude the current user
     .map((p) => p.name)[0];
-
-  const isActive = activeUsers.includes(participantId);
+  const participantRole = selectedChat?.participants
+    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .map((p) => p.role)[0];
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
@@ -96,6 +134,8 @@ export const NewsFeedChatCard = ({
       createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
       tempId,
       seen: null,
+      reactions: [],
+      deletedFor: [],
     };
     playNotificationSound();
     scrollToBottom();
@@ -195,14 +235,22 @@ export const NewsFeedChatCard = ({
     return code;
   };
   const [filePreview, setFilePreview] = useState(false);
+  useClickOutside(sendWithMediaRef, () => {
+    setFilePreview(false);
+    setFile([]);
+    setRawFile([]);
+  });
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
 
-    const fileDetails = files.map((file) => ({
-      _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
-      type: "image",
-      url: URL.createObjectURL(file),
-    }));
+    const fileDetails = files.map((file) => {
+      console.log(String(file.type || "").split("/")?.[0] || file?.type, file);
+      return {
+        _id: generateRandomCode(), // Generate a random code for each file and use it as the ID
+        type: String(file.type || "").split("/")?.[0] || file?.type,
+        url: URL.createObjectURL(file),
+      };
+    });
 
     setFile((prevFiles) => [...prevFiles, ...fileDetails]);
     setRawFile((prevFiles) => [...prevFiles, ...files]);
@@ -273,9 +321,7 @@ export const NewsFeedChatCard = ({
       );
     }
   };
-
   // file disply
-
   const [selectedImage, setSelectedImage] = useState({});
   useEffect(() => {
     if (file) {
@@ -413,29 +459,67 @@ export const NewsFeedChatCard = ({
 
   let lastDate = "";
 
+  const isActive = activeUsers.includes(participantId);
+  const lastActive = lastActiveTime[participantId]
+    ? timeAgo(lastActiveTime[participantId])
+    : "No recent activity";
+
   return (
     <div>
       <div className="bg-white  rounded-lg max-w-lg w-full">
         <div className="px-3 py-[10px] border-b bg-[#615DFA] text-white rounded-t-lg flex justify-between items-center">
-          <div className="flex items-center">
-            <Image
-              alt=""
-              width={1000}
-              height={100}
-              className="rounded-full w-[30px] h-[30px]"
-              src={participantImage}
-            />
-            <div className="pl-2 flex gap-x-[6px] items-center">
-              <p className="text-[14px] text-white font-semibold -mb-0">
-                {participantName}
-              </p>
-              {isActive ? (
-                <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[2px] rounded-full"></div>
-              ) : (
-                <div className="bg-red-500 h-[6px] w-[6px] mt-[2px] rounded-full"></div>
-              )}
+          <Menu as="div" className="relative inline-block text-left">
+            <div className="flex items-center">
+              <MenuButton className="">
+                {" "}
+                <Image
+                  alt=""
+                  width={1000}
+                  height={100}
+                  className="rounded-full w-[30px] h-[30px]"
+                  src={participantImage}
+                />
+              </MenuButton>
+
+              <div className="pl-2 flex gap-x-[6px] items-center">
+                <p className="text-[14px] text-white font-semibold -mb-0">
+                  {participantName}
+                </p>
+                {isActive ? (
+                  <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[2px] rounded-full"></div>
+                ) : (
+                  <div className="bg-red-500 h-[6px] w-[6px] mt-[2px] rounded-full"></div>
+                )}
+              </div>
             </div>
-          </div>
+            <MenuItems
+              transition
+              className="absolute right-0 z-10 mt-2 w-[150px]  origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            >
+              <div className="pt-2">
+                <MenuItem>
+                  <Link
+                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                    href={
+                      participantRole === "buyer"
+                        ? `/user/buyer-profile/${participantId}`
+                        : `/user/agent-profile/${participantId}`
+                    }
+                  >
+                    View Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <p
+                    onClick={() => handleOpenInChats(chatId, selectedChat)}
+                    className="block cursor-pointer px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                  >
+                    Open in chats
+                  </p>
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </Menu>
           <button
             onClick={() => {
               setActiveChatId(null);
@@ -460,136 +544,208 @@ export const NewsFeedChatCard = ({
             </svg>
           </button>
         </div>
-        <div className="p-4 h-80 overflow-y-auto">
+        <div ref={messageContainerRef} className="p-[2px] h-80 overflow-y-auto">
           {/* Chat messages will be displayed here */}
+          {messages.length > 0 ? (
+            messages.map((msg, index) => {
+              const isSent = msg.senderId === userId;
+              // Ensure msg.createdAt is not null or undefined and is a Firestore Timestamp
+              const createdAt = msg.createdAt
+                ? msg.createdAt.toDate
+                  ? msg.createdAt.toDate()
+                  : msg.createdAt
+                : new Date();
 
-          <div className="mb-2">
-            <div className="flex items-center flex-row-reverse mb-[12px]">
-              <div className="flex-none flex flex-col items-center space-y-1 ml-4">
-                <Image
-                  width={1000}
-                  height={100}
-                  alt=""
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_3.png"
+              const parsedDate = dayjs(createdAt);
+              const msgDate = parsedDate.format("YYYY-MM-DD");
+              const formattedDate = formatDateHeader(parsedDate);
+              const formattedTime = parsedDate.format("h:mm A");
+
+              // Only show the date header if the date of the current message is different from the last message's date
+              const showDateHeader = lastDate !== msgDate;
+              lastDate = msgDate;
+
+              return (
+                <SingleChat
+                  key={index}
+                  msg={msg}
+                  isSent={isSent}
+                  formattedDate={formattedDate}
+                  formattedTime={formattedTime}
+                  showDateHeader={showDateHeader}
+                  user={user}
+                  status={msg.status}
+                  uploadingProssing={uploadingProssing}
+                  participantImage={participantImage}
                 />
-              </div>
+              );
+            })
+          ) : (
+            <p className="text-center text-gray-500">No messages yet.</p>
+          )}
+        </div>
+        <div className="flex gap-x-3 items-center">
+          <div className="ml-2">
+            <div className="relative">
+              {filePreview === true ? (
+                <div
+                  ref={sendWithMediaRef}
+                  className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md"
+                >
+                  <div className="p-2">
+                    {selectedImage.type === "image" ? (
+                      <div className="w-full relative">
+                        <Image
+                          src={selectedImage?.url}
+                          width={100}
+                          height={100}
+                          alt=""
+                          className="w-full  aspect-video object-contain rounded-md"
+                        />
+                        <CgClose
+                          className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                          onClick={() => handleFileDelete(selectedImage?._id)}
+                        />
+                      </div>
+                    ) : (
+                      <div className=" w-full aspect-video relative">
+                        <video
+                          src={selectedImage?.url}
+                          controls
+                          className="w-full aspect-video object-contain bg-black rounded-md"
+                        />
+                        <CgClose
+                          className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                          onClick={() => handleFileDelete(selectedImage?._id)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <textarea
+                      className="w-full max-w-[100%] border-[0.5px]  border-gray-100 max-h-12 resize-none outline-none px-3 py-1 scroll-pb-1.5 leading-5"
+                      value={newMessage}
+                      rows={2}
+                      placeholder="Type your message..."
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center gap-2 px-2 pl-4 pb-1">
+                    <button
+                      className="text-[30px] text-blue-500 aspect-squere"
+                      onClick={() =>
+                        document.getElementById("image-input").click()
+                      }
+                    >
+                      <MdAddAPhoto className="size-5" />
+                    </button>
+                    <div className="flex gap-x-1 flex-grow overflow-auto p-2">
+                      {file.map((f, i) => {
+                        return (
+                          <div key={i}>
+                            {f?.type === "image" && (
+                              <Image
+                                onClick={() => handelselectedImage(f)}
+                                src={f.url}
+                                alt=""
+                                width={50}
+                                height={50}
+                                className={clsx(
+                                  "flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10",
+                                  selectedImage?._id === f._id
+                                    ? "ring-2 ring-offset-1 ring-blue-600"
+                                    : ""
+                                )}
+                              />
+                            )}
+                            {f?.type === "video" && (
+                              <video
+                                width="50"
+                                onClick={() => handelselectedImage(f)}
+                                src={f.url}
+                                alt=""
+                                className={clsx(
+                                  "flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm",
+                                  selectedImage?._id === f._id
+                                    ? "ring-2 ring-offset-1 ring-blue-600"
+                                    : ""
+                                )}
+                              />
+                            )}
+                            {console.log(selectedImage, f)}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div
+                      onClick={sendMessage}
+                      className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm cursor-pointer"
+                    >
+                      <p className=" ml-[5px] text-[20px] text-white mt-[5px]">
+                        <IoMdSend />
+                      </p>
 
-              <div className="    relative ">
-                <p class="bg-blue-500  leading-[18px] text-[13px] text-white rounded-lg py-2  px-3 inline-block">
-                  hello
-                </p>
-                <div className="absolute right-[1px] top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-blue-500" />
-              </div>
+                      <div className="absolute top-[25px] w-[10px] h-[10px] right-0 bg-white flex justify-center rounded-full">
+                        <p className=" text-[7px]  leading-[10px] ">
+                          {file.length}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
-            <div className="flex items-center mb-[20px]">
-              <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                <Image
-                  alt=""
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_1.png"
+            <button
+              type="button"
+              onClick={() => document.getElementById("image-input").click()}
+              className="mt-[10px]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-[#615DFA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                 />
-              </div>
-              <div className="    relative">
-                <p class="bg-[#E0E7FF]  leading-[18px] -mb-0 text-[13px] text-black rounded-lg py-2  px-3 inline-block">
-                  Hi
-                </p>
-
-                <div className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-[#E0E7FF]" />
-              </div>
-            </div>
-            <div className="flex items-center flex-row-reverse mb-[12px]">
-              <div className="flex-none flex flex-col items-center space-y-1 ml-4">
-                <Image
-                  alt=""
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_3.png"
-                />
-              </div>
-
-              <div className="     relative">
-                <p class="bg-blue-500   leading-[18px] text-[13px] text-white rounded-lg py-2  px-3 inline-block">
-                  How are You
-                </p>
-                <div className="absolute right-[1px] top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-blue-500" />
-              </div>
-            </div>
-            <div className="flex items-center mb-[20px]">
-              <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                <Image
-                  alt=""
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_1.png"
-                />
-              </div>
-              <div className="    relative">
-                <p class="bg-[#E0E7FF]  leading-[18px] -mb-0 text-[13px] text-black rounded-lg py-2  px-3 inline-block">
-                  I am Fine, what about you?
-                </p>
-
-                <div className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-[#E0E7FF]" />
-              </div>
-            </div>
-            <div className="flex items-center flex-row-reverse mb-[12px]">
-              <div className="flex-none flex flex-col items-center space-y-1 ml-4">
-                <Image
-                  alt=""
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_3.png"
-                />
-              </div>
-
-              <div className="    relative">
-                <p class="bg-blue-500  leading-[18px] text-[13px] text-white rounded-lg py-2  px-3 inline-block">
-                  I Have A job for Your.
-                </p>
-                <div className="absolute right-[1px] top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-blue-500" />
-              </div>
-            </div>
-            <div className="flex items-center mb-[20px]">
-              <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                <Image
-                  alt=""
-                  width={1000}
-                  height={100}
-                  className="rounded-full w-[30px] h-[30px]"
-                  src="/media/figure/notifiy_1.png"
-                />
-              </div>
-              <div className="relative">
-                <p class="bg-[#E0E7FF]  leading-[18px] -mb-0 text-[13px] text-black rounded-lg py-2  px-3 inline-block">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                </p>
-
-                <div className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-[#E0E7FF]" />
-              </div>
-            </div>
+              </svg>
+            </button>
+          </div>
+          <div className="py-3 border-t flex">
+            <input
+              id="user-input"
+              type="text"
+              value={newMessage}
+              placeholder="Type your message..."
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="w-full px-3 py-[5px] border rounded-l-[20px]  outline-none"
+            />
+            <button
+              id="send-button"
+              type="button"
+              onClick={sendMessage}
+              className="bg-blue-500 text-white px-4 py-[5px] rounded-r-md hover:bg-blue-600 transition duration-300"
+            >
+              Send
+            </button>
           </div>
         </div>
-        <div className="p-3 border-t flex">
-          <input
-            id="user-input"
-            type="text"
-            placeholder="Type a message"
-            className="w-full px-3 py-[5px] border rounded-l-[20px]  outline-none"
-          />
-          <button
-            id="send-button"
-            className="bg-blue-500 text-white px-4 py-[5px] rounded-r-md hover:bg-blue-600 transition duration-300"
-          >
-            Send
-          </button>
-        </div>
       </div>
+      <input
+        id="image-input"
+        type="file"
+        accept="image/*,video/*"
+        multiple
+        onChange={handleImageChange}
+        style={{ display: "none" }}
+      />
     </div>
   );
 };

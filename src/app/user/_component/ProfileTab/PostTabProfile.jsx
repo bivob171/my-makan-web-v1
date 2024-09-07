@@ -171,7 +171,7 @@ export const PostTabProfile = ({
       setSaveRerander(!saveRerander);
   }
 
-  const isActive = activeUsers.includes(profileId);
+  const isActive = activeUsers?.includes(profileId);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-11 gap-y-10 lg:gap-10 ">

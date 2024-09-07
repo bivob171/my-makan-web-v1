@@ -32,7 +32,10 @@ const firebaseConfig = {
   appId: "1:23972987185:web:d9c6faf3323f29571cb010",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firestore and Storage
 const db = getFirestore(app);
 const storage = getStorage(app);
 
@@ -54,7 +57,7 @@ export {
   getDoc,
   Timestamp,
   startAfter,
-  storage, // Export the storage object
+  storage,
   ref,
   uploadBytes,
   getDownloadURL,
