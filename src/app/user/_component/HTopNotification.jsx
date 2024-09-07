@@ -559,13 +559,13 @@ const HTopNotification = ({
                           <div className="mr-3 mt-[9px]">
                             {notifyFor === "successVerify" ||
                             notifyFor === "reject" ? (
-                              <div className="w-[40px] h-[40px] rounded-full mr-2 bg-blue-500">
+                              <div className="w-[40px] h-[40px] rounded-full mr-2 bg-blue-500 flex justify-center items-center">
                                 <Image
                                   width={27}
                                   height={27}
-                                  src="/favicon.ico"
+                                  src="/faviconn.jpg"
                                   alt="User"
-                                  className="w-[35px] h-[35px] rounded-full "
+                                  className="w-[25px] h-[25px] rounded-full "
                                 />
                               </div>
                             ) : (
@@ -582,9 +582,17 @@ const HTopNotification = ({
                             )}
                           </div>
                           <div className="relative flex-1 mt-[4px]">
-                            <h6 className=" mt-[5px] font-bold text-[14px] text-black">
-                              <a href="#">{commonUser?.fullName}</a>
-                            </h6>
+                            {notifyFor === "successVerify" ||
+                            notifyFor === "reject" ? (
+                              <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                                My-Makan
+                              </h6>
+                            ) : (
+                              <h6 className=" mt-[5px] font-bold text-[14px] text-black">
+                                <a href="#">{commonUser?.fullName}</a>
+                              </h6>
+                            )}
+
                             <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
                               {notifyText}
                             </p>

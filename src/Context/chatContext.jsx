@@ -308,6 +308,7 @@ const ChatValueProvider = ({ children }) => {
         createNewChat,
         handelChatSelectedFromChatNotifyDropdown,
         handleOpenInChats,
+        fetchChatExist,
       }}
     >
       {children}

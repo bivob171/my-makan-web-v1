@@ -12,12 +12,14 @@ import { AvailableTotalPost } from "./TotalPost/AvailableTotalPost";
 import { RequiredTotalPost } from "./TotalPost/RequiredTotalPost";
 import NewsFeedLeftSection from "./NewsFeedLeftSection";
 import PostSearch from "./PostSearch/PostSearch";
+import { PremiumPopup } from "@/app/user/_component/PremiumPopup";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
   const [verifyPopup, setVerifyPopup] = useState(false);
+  const [premiumPopup, setPremiumPopup] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   function open() {
     setIsOpen(true);
@@ -83,7 +85,11 @@ export const NewsFeedPage = () => {
             </ul>
           </div>
           <div>
-            <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
+            <PostSection
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              setPremiumPopup={setPremiumPopup}
+            />
           </div>
           <div className="grid lg:grid-cols-12 gap-[24px]">
             <div className="lg:col-span-3 hidden lg:block w-[300px]">
@@ -179,6 +185,7 @@ export const NewsFeedPage = () => {
       {/* Chat Modal Here */}
       <ChatModal />
       <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
+      <PremiumPopup visible={premiumPopup} closePopUp={setPremiumPopup} />
     </>
   );
 };

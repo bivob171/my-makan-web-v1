@@ -305,13 +305,13 @@ export const HeaderTop = () => {
           <div className="relative">
             <div className="flex items-center ">
               {notifyFor === "successVerify" || notifyFor === "reject" ? (
-                <div className="w-[32px] h-[32px] rounded-full mr-2 bg-blue-500">
+                <div className="w-[50px] h-[25px] rounded-full mr-2 bg-blue-500 justify-center items-center flex">
                   <Image
                     width={27}
                     height={27}
-                    src="/favicon.ico"
+                    src="/faviconn.jpg"
                     alt="User"
-                    className="w-[26px] h-[26px] rounded-full "
+                    className="w-[15px] h-[15px] rounded-full "
                   />
                 </div>
               ) : (

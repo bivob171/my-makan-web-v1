@@ -291,10 +291,14 @@ export const SingleChat = ({
                 isSent ? "left-4 -translate-x-1/2" : "right-4 translate-x-1/2"
               )}
             >
-              <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
+              {/* <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
                 <MdDeleteOutline className="size-4" />
-              </button>
-              <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
+              </button> */}
+              <button
+                type="button"
+                onClick={deleteMessageForEveryone}
+                className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center"
+              >
                 <MdDeleteOutline className="size-4" />
               </button>
             </div>
@@ -304,7 +308,6 @@ export const SingleChat = ({
     </div>
   );
 };
-
 
 const ImageGrid = ({ images: mediaList = [] }) => {
   const lightbox = useRef(null);
@@ -344,22 +347,30 @@ const ImageGrid = ({ images: mediaList = [] }) => {
       plugins={[lgThumbnail, lgFullscreen, lgVideo]}
     >
       {imageCount <= 4 ? (
-        <div className={cx(`grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`)}>
+        <div
+          className={cx(
+            `grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`
+          )}
+        >
           {mediaList.map((media, index) => {
             const isVideo = media.type === "video";
             return (
               <a
                 key={index}
-                className={clsx("gallery-item",isVideo?'':'')}
+                className={clsx("gallery-item", isVideo ? "" : "")}
                 data-src={isVideo ? "" : media.url}
                 data-poster={isVideo ? media.poster : ""}
-                data-html={isVideo ? `
+                data-html={
+                  isVideo
+                    ? `
                   <video class="lg-video-object lg-html5" controls>
                     <source src="${media.url}" type="video/mp4">
                     Your browser does not support HTML5 video.
-                  </video>` : ""}
+                  </video>`
+                    : ""
+                }
                 onClick={() => {
-                  if(media.type==='vide') return;
+                  if (media.type === "vide") return;
                   lightbox.current?.openGallery(index);
                 }}
               >
@@ -402,11 +413,15 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                 className="gallery-item"
                 data-src={media.url}
                 data-poster={media.poster || ""}
-                data-html={media.type === "video" ? `
+                data-html={
+                  media.type === "video"
+                    ? `
                   <video class="lg-video-object lg-html5" controls>
                     <source src="${media.url}" type="video/mp4">
                     Your browser does not support HTML5 video.
-                  </video>` : ""}
+                  </video>`
+                    : ""
+                }
                 onClick={() => {
                   lightbox.current?.openGallery(index);
                 }}
@@ -433,11 +448,15 @@ const ImageGrid = ({ images: mediaList = [] }) => {
                 className="gallery-item"
                 data-src={media.url}
                 data-poster={media.poster || ""}
-                data-html={media.type === "video" ? `
+                data-html={
+                  media.type === "video"
+                    ? `
                   <video class="lg-video-object lg-html5" controls>
                     <source src="${media.url}" type="video/mp4">
                     Your browser does not support HTML5 video.
-                  </video>` : ""}
+                  </video>`
+                    : ""
+                }
                 onClick={() => {
                   lightbox.current?.openGallery(index + 2);
                 }}

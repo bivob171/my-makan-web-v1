@@ -371,7 +371,7 @@ export default function PackageCard({
   const isActive = activeUsers.includes(userinfo?._id);
   console.log();
 
-  const { createNewChat } = useContext(ChatValueContext);
+  const { fetchChatExist } = useContext(ChatValueContext);
 
   const matchPercentage = item?.matchPercentage && item?.matchPercentage;
   activeUsers;
@@ -636,7 +636,7 @@ export default function PackageCard({
 
                           <button
                             type="button"
-                            onClick={() => createNewChat(user, userinfo)}
+                            onClick={() => fetchChatExist(user, userinfo)}
                             className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
                           >
                             {" "}

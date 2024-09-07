@@ -204,6 +204,103 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       );
     }
   };
+  const sendMessageForLike = async (data) => {
+    const tempId = Date.now(); // Temporary ID for the message
+    const messageData = {
+      chatId,
+      senderId: userId,
+      content: data,
+      status: "sending", // Set initial status to "sending"
+      media: file || null, // Ensure media is defined or set to null
+      createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
+      tempId,
+      seen: null,
+      reactions: [],
+      deletedFor: [],
+    };
+    playNotificationSound();
+    scrollToBottom();
+    // Update the local messages state with "sending" status
+    setMessages((prevMessages) => [...prevMessages, messageData]);
+    // Clear the input field
+    setNewMessage("");
+    setFilePreview(false);
+
+    try {
+      let uploadedMedia = [];
+
+      if (file.length > 0) {
+        uploadedMedia = await handleUpload(rawFile, file);
+      }
+
+      // Add the message to Firestore with uploaded media URLs
+      const messagesRef = collection(db, `chats/${chatId}/messages`);
+      const docRef = await addDoc(messagesRef, {
+        ...messageData,
+        media: uploadedMedia.length > 0 ? uploadedMedia : null,
+        createdAt: serverTimestamp(), // Overwrite createdAt with Firestore's server timestamp
+        status: "sent", // Set status to "sent" after successful send
+        seen: null,
+      });
+      // Update the message status to "sent" in the local state
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.tempId === tempId
+            ? { ...msg, status: "sent", id: docRef.id }
+            : msg
+        )
+      );
+
+      // Clear files and media state
+      setFile([]);
+      setRawFile([]);
+
+      // Get the timestamp of the new message
+      const messageSnapshot = await getDoc(docRef);
+      const messageDataFromFirestore = messageSnapshot.data();
+      const messageTimestamp = messageDataFromFirestore?.createdAt?.toMillis();
+
+      // Reference to the chat document
+      const chatDocRef = doc(db, `chats/${chatId}`);
+      const chatDocSnapshot = await getDoc(chatDocRef);
+
+      if (!chatDocSnapshot.exists()) {
+        throw new Error("Chat document not found.");
+      }
+
+      // Get chat data and participants
+      const chatData = chatDocSnapshot.data();
+      const participants = chatData.participants || [];
+
+      // Prepare the unseen messages update object
+      const unseenMessagesUpdate = {};
+      participants.forEach((participant) => {
+        if (participant.id !== userId) {
+          unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
+            increment(1);
+        }
+      });
+
+      if (typeof messageTimestamp === "number") {
+        // Update the chat document with the latest message info
+        await updateDoc(chatDocRef, {
+          latestMessage: newMessage === "" ? "image" : newMessage,
+          latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
+          ...unseenMessagesUpdate, // Increment unseen messages count for other participants
+        });
+      } else {
+        console.error("Error: Message timestamp is invalid or undefined.");
+      }
+    } catch (error) {
+      console.error("Error sending message: ", error);
+      // Optionally update the message status to "failed" in the local state
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.tempId === tempId ? { ...msg, status: "failed" } : msg
+        )
+      );
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -656,6 +753,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
         <button
           type="button"
           onClick={() => document.getElementById("image-input").click()}
+          className="mb-[10px]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -698,7 +796,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             </svg>
           </button>
         ) : (
-          <button type="button">
+          <button type="button" onClick={() => sendMessageForLike("👍")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

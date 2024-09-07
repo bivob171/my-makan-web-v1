@@ -22,7 +22,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const PostSection = ({ isOpen, setIsOpen }) => {
+const PostSection = ({ isOpen, setIsOpen, setPremiumPopup }) => {
   const { user } = PrivateRouteContext();
   const {
     lata,
@@ -336,20 +336,42 @@ const PostSection = ({ isOpen, setIsOpen }) => {
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button
-                            className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
-                            onClick={() => setSelectedType("Urgent")}
-                          >
-                            Urgent
-                          </button>
+                          {user?.premium === false ? (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => {
+                                setPremiumPopup(true), setIsOpen(false);
+                              }}
+                            >
+                              Urgent
+                            </button>
+                          ) : (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => setSelectedType("Urgent")}
+                            >
+                              Urgent
+                            </button>
+                          )}
                         </MenuItem>
                         <MenuItem>
-                          <button
-                            className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
-                            onClick={() => setSelectedType("Sponsored")}
-                          >
-                            Sponsored
-                          </button>
+                          {user?.premium === false ? (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => {
+                                setPremiumPopup(true), setIsOpen(false);
+                              }}
+                            >
+                              Sponsored
+                            </button>
+                          ) : (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => setSelectedType("Sponsored")}
+                            >
+                              Sponsored
+                            </button>
+                          )}
                         </MenuItem>
                       </MenuItems>
                     </Menu>

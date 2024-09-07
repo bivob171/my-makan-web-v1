@@ -64,10 +64,6 @@ export const NewsFeedChatCard = ({
   activeChatId,
   handleOpenInChats,
 }) => {
-  if (chatId === null && selectedChat === null && activeChatId === null) {
-    return null;
-  }
-
   const sendWithMediaRef = useRef(null);
   const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
@@ -463,7 +459,9 @@ export const NewsFeedChatCard = ({
   const lastActive = lastActiveTime[participantId]
     ? timeAgo(lastActiveTime[participantId])
     : "No recent activity";
-
+  if (chatId === null && selectedChat === null && activeChatId === null) {
+    return null;
+  }
   return (
     <div>
       <div className="bg-white  rounded-lg max-w-lg w-full">

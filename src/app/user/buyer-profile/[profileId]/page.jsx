@@ -321,7 +321,7 @@ export default function BuyerProfile() {
   };
 
   // chat
-  const { createNewChat } = useContext(ChatValueContext);
+  const { fetchChatExist } = useContext(ChatValueContext);
 
   return (
     <div className="bg-[#EFF4FB]">
@@ -499,7 +499,7 @@ export default function BuyerProfile() {
 
                         <button
                           type="button"
-                          onClick={() => createNewChat(user, profile)}
+                          onClick={() => fetchChatExist(user, profile)}
                           className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
                         >
                           {" "}
