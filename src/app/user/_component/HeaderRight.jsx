@@ -104,7 +104,7 @@ export const HeaderRight = () => {
                           const isActive = activeUsers.includes(participantId);
                           return (
                             <li
-                              key={chai?.id}
+                              key={chat?.id}
                               onClick={() => {
                                 handleChatSelection(chat?.id, chat);
                                 setChatOpen(!chatOpen);
