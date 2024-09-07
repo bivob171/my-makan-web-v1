@@ -5,11 +5,13 @@ import { LuCheck, LuCheckCheck } from "react-icons/lu";
 import LightGallery from "lightgallery/react";
 
 import lgThumbnail from "lightgallery/plugins/thumbnail";
-import lgZoom from "lightgallery/plugins/zoom";
+import lgFullscreen from "lightgallery/plugins/fullscreen";
+import lgVideo from "lightgallery/plugins/video";
 
 import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-video.css";
+import "lightgallery/css/lg-fullscreen.css";
 import { MdDeleteOutline, MdOutlineEmojiEmotions } from "react-icons/md";
 import clsx from "clsx";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -110,7 +112,7 @@ export const SingleChat = ({
       console.error("Error deleting message for everyone: ", error);
     }
   }
-
+  console.log(msg);
   return (
     <div>
       {showDateHeader && (
@@ -230,10 +232,17 @@ export const SingleChat = ({
               )}
             >
               <button
-                className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+                className={clsx(
+                  "size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600",
+                  isSent && !msg?.reactions?.[msg.senderId] ? "hidden" : ""
+                )}
                 onClick={toggleEmojiMenu}
               >
-                <MdOutlineEmojiEmotions className="size-4" />
+                {msg?.reactions?.[isSent ? msg.senderId : userId] ? (
+                  <span>{msg?.reactions?.[userId]}</span>
+                ) : (
+                  <MdOutlineEmojiEmotions className="size-4" />
+                )}
               </button>
               <button
                 className="size-7 inline-flex justify-center items-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
@@ -247,7 +256,9 @@ export const SingleChat = ({
               className={clsx(
                 "absolute mb-1 bottom-full flex p-1 bg-white shadow-md rounded-full",
                 isEmojiOpen ? "flex" : "hidden",
-                isSent ? "right-4 translate-x-1/2" : "left-3 -translate-x-1/2"
+                isSent
+                  ? "right-4 translate-x-1/2 hidden"
+                  : "left-3 -translate-x-1/2"
               )}
             >
               <button
@@ -283,6 +294,9 @@ export const SingleChat = ({
               <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
                 <MdDeleteOutline className="size-4" />
               </button>
+              <button className="hover:bg-gray-100 size-8 rounded-full inline-flex justify-center items-center">
+                <MdDeleteOutline className="size-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -291,10 +305,12 @@ export const SingleChat = ({
   );
 };
 
-const ImageGrid = ({ images = [] }) => {
+
+const ImageGrid = ({ images: mediaList = [] }) => {
   const lightbox = useRef(null);
-  const imageCount = images?.length || 0;
+  const imageCount = mediaList?.length || 0;
   if (!imageCount) return null;
+
   return (
     <LightGallery
       onInit={(ref) => {
@@ -303,65 +319,103 @@ const ImageGrid = ({ images = [] }) => {
         }
       }}
       dynamic
-      dynamicEl={images.map((image) => ({
-        src: image?.url,
-        thumb: image?.url,
-        width: "1406-1390",
-        alt: "images",
-      }))}
+      dynamicEl={mediaList.map((media) => {
+        if (media.type === "video") {
+          return {
+            src: "",
+            thumb: media?.poster || media?.url,
+            html: `
+              <video class="lg-video-object lg-html5" controls>
+                <source src="${media?.url}" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+            `,
+          };
+        } else {
+          return {
+            src: media?.url,
+            thumb: media?.url,
+            alt: `image-${media?.id}`,
+          };
+        }
+      })}
       mode="lg-fade"
       speed={500}
-      plugins={[lgThumbnail]}
+      plugins={[lgThumbnail, lgFullscreen, lgVideo]}
     >
       {imageCount <= 4 ? (
-        <div
-          className={cx(
-            `grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`
-          )}
-        >
-          {images.map((image, index) => (
-            <a
-              key={index}
-              data-lg-size="1406-1390"
-              className="gallery-item"
-              data-src={image?.url}
-              onClick={() => {
-                lightbox.current?.openGallery(index);
-              }}
-            >
-              <Image
-                src={image?.url}
-                width={500}
-                height={500}
-                alt={`image${index + 1}`}
-                className={cx(
-                  "w-full rounded-sm",
-                  imageCount === 1
-                    ? "object-cover aspect-auto"
-                    : "aspect-square object-cover"
+        <div className={cx(`grid gap-1 grid-cols-${imageCount === 4 ? 2 : imageCount}`)}>
+          {mediaList.map((media, index) => {
+            const isVideo = media.type === "video";
+            return (
+              <a
+                key={index}
+                className={clsx("gallery-item",isVideo?'':'')}
+                data-src={isVideo ? "" : media.url}
+                data-poster={isVideo ? media.poster : ""}
+                data-html={isVideo ? `
+                  <video class="lg-video-object lg-html5" controls>
+                    <source src="${media.url}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                  </video>` : ""}
+                onClick={() => {
+                  if(media.type==='vide') return;
+                  lightbox.current?.openGallery(index);
+                }}
+              >
+                {isVideo ? (
+                  <video
+                    src={media.url}
+                    poster={media.poster}
+                    className={cx(
+                      "w-full rounded-md",
+                      imageCount === 1
+                        ? "object-cover aspect-auto"
+                        : "aspect-square object-cover"
+                    )}
+                    controls
+                  ></video>
+                ) : (
+                  <Image
+                    src={media.url}
+                    width={500}
+                    height={500}
+                    alt={`media${index + 1}`}
+                    className={cx(
+                      "w-full rounded-sm",
+                      imageCount === 1
+                        ? "object-cover aspect-auto"
+                        : "aspect-square object-cover"
+                    )}
+                  />
                 )}
-              />
-            </a>
-          ))}
+              </a>
+            );
+          })}
         </div>
       ) : (
         <div>
           <div className={cx(`grid gap-1 mb-1 grid-cols-2`)}>
-            {images.slice(0, 2).map((image, index) => (
+            {mediaList.slice(0, 2).map((media, index) => (
               <a
                 key={index}
-                data-lg-size="1406-1390"
                 className="gallery-item"
-                data-src={image?.url}
+                data-src={media.url}
+                data-poster={media.poster || ""}
+                data-html={media.type === "video" ? `
+                  <video class="lg-video-object lg-html5" controls>
+                    <source src="${media.url}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                  </video>` : ""}
                 onClick={() => {
                   lightbox.current?.openGallery(index);
                 }}
               >
                 <Image
-                  src={image?.url}
+                  src={media.url}
                   width={500}
                   height={500}
-                  alt={`image${index + 1}`}
+                  alt={`media${index + 1}`}
                   className={cx(
                     "w-full rounded-sm",
                     imageCount === 1
@@ -373,21 +427,26 @@ const ImageGrid = ({ images = [] }) => {
             ))}
           </div>
           <div className={cx(`grid gap-1 grid-cols-3`)}>
-            {images.slice(2).map((image, index) => (
+            {mediaList.slice(2).map((media, index) => (
               <a
                 key={index}
-                data-lg-size="1406-1390"
                 className="gallery-item"
-                data-src={image?.url}
+                data-src={media.url}
+                data-poster={media.poster || ""}
+                data-html={media.type === "video" ? `
+                  <video class="lg-video-object lg-html5" controls>
+                    <source src="${media.url}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                  </video>` : ""}
                 onClick={() => {
                   lightbox.current?.openGallery(index + 2);
                 }}
               >
                 <Image
-                  src={image?.url}
+                  src={media.url}
                   width={500}
                   height={500}
-                  alt={`image${index + 1}`}
+                  alt={`media${index + 1}`}
                   className="w-full aspect-square object-cover rounded-sm"
                 />
               </a>
