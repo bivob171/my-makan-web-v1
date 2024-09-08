@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
-import { MdAddAPhoto, MdVideoCall } from "react-icons/md";
+import {
+  MdAddAPhoto,
+  MdKeyboardVoice,
+  MdOutlineEmojiEmotions,
+  MdVideoCall,
+} from "react-icons/md";
 import {
   db,
   collection,
@@ -28,6 +33,8 @@ import { CheckIcon } from "lucide-react";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import { AiOutlineCheck } from "react-icons/ai";
 import { LuCheckCheck } from "react-icons/lu";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 // Extend dayjs with the plugins
 import dayjs from "dayjs";
@@ -113,103 +120,6 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       chatId,
       senderId: userId,
       content: newMessage || "",
-      status: "sending", // Set initial status to "sending"
-      media: file || null, // Ensure media is defined or set to null
-      createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
-      tempId,
-      seen: null,
-      reactions: [],
-      deletedFor: [],
-    };
-    playNotificationSound();
-    scrollToBottom();
-    // Update the local messages state with "sending" status
-    setMessages((prevMessages) => [...prevMessages, messageData]);
-    // Clear the input field
-    setNewMessage("");
-    setFilePreview(false);
-
-    try {
-      let uploadedMedia = [];
-
-      if (file.length > 0) {
-        uploadedMedia = await handleUpload(rawFile, file);
-      }
-
-      // Add the message to Firestore with uploaded media URLs
-      const messagesRef = collection(db, `chats/${chatId}/messages`);
-      const docRef = await addDoc(messagesRef, {
-        ...messageData,
-        media: uploadedMedia.length > 0 ? uploadedMedia : null,
-        createdAt: serverTimestamp(), // Overwrite createdAt with Firestore's server timestamp
-        status: "sent", // Set status to "sent" after successful send
-        seen: null,
-      });
-      // Update the message status to "sent" in the local state
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg.tempId === tempId
-            ? { ...msg, status: "sent", id: docRef.id }
-            : msg
-        )
-      );
-
-      // Clear files and media state
-      setFile([]);
-      setRawFile([]);
-
-      // Get the timestamp of the new message
-      const messageSnapshot = await getDoc(docRef);
-      const messageDataFromFirestore = messageSnapshot.data();
-      const messageTimestamp = messageDataFromFirestore?.createdAt?.toMillis();
-
-      // Reference to the chat document
-      const chatDocRef = doc(db, `chats/${chatId}`);
-      const chatDocSnapshot = await getDoc(chatDocRef);
-
-      if (!chatDocSnapshot.exists()) {
-        throw new Error("Chat document not found.");
-      }
-
-      // Get chat data and participants
-      const chatData = chatDocSnapshot.data();
-      const participants = chatData.participants || [];
-
-      // Prepare the unseen messages update object
-      const unseenMessagesUpdate = {};
-      participants.forEach((participant) => {
-        if (participant.id !== userId) {
-          unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
-            increment(1);
-        }
-      });
-
-      if (typeof messageTimestamp === "number") {
-        // Update the chat document with the latest message info
-        await updateDoc(chatDocRef, {
-          latestMessage: newMessage === "" ? "image" : newMessage,
-          latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
-          ...unseenMessagesUpdate, // Increment unseen messages count for other participants
-        });
-      } else {
-        console.error("Error: Message timestamp is invalid or undefined.");
-      }
-    } catch (error) {
-      console.error("Error sending message: ", error);
-      // Optionally update the message status to "failed" in the local state
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg.tempId === tempId ? { ...msg, status: "failed" } : msg
-        )
-      );
-    }
-  };
-  const sendMessageForLike = async (data) => {
-    const tempId = Date.now(); // Temporary ID for the message
-    const messageData = {
-      chatId,
-      senderId: userId,
-      content: data,
       status: "sending", // Set initial status to "sending"
       media: file || null, // Ensure media is defined or set to null
       createdAt: new Date(), // Temporarily set createdAt to current date/time for local state
@@ -545,6 +455,22 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     ? timeAgo(lastActiveTime[participantId])
     : "No recent activity";
 
+  const [emojOpen, setEmojOpen] = useState(false);
+
+  const emojiRef = useRef(null);
+  useClickOutside(emojiRef, () => {
+    if (emojOpen) {
+      setEmojOpen(false);
+    }
+  });
+  function openEmoj() {
+    setEmojOpen(!emojOpen);
+  }
+
+  const handleEmojiSelect = (emoji) => {
+    setNewMessage(emoji.native); // Use emoji.native to get the emoji character
+  };
+
   return (
     <div className="" ref={filePreviewRef}>
       <div className="sticky top-0 h-[65px] bg-white border-b flex items-center justify-between px-3">
@@ -627,22 +553,16 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       {/* bottom */}
       <div className="absolute bottom-0 h-auto min-h-[55px] max-h-[150px] bg-white border-t-[0.5px] w-full flex justify-around items-center gap-1 py-2 px-2">
         <div className="relative">
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-[#615DFA]"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12.75 8.25v7.5m6-7.5h-3V12m0 0v3.75m0-3.75H18M9.75 9.348c-1.03-1.464-2.698-1.464-3.728 0-1.03 1.465-1.03 3.84 0 5.304 1.03 1.464 2.699 1.464 3.728 0V12h-1.5M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-              />
-            </svg>
-          </button>
+          <div className="relative">
+            {emojOpen === true && (
+              <div ref={emojiRef} className="absolute bottom-0">
+                <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+              </div>
+            )}
+            <button className="text-[23px] text-blue-500" onClick={openEmoj}>
+              <MdOutlineEmojiEmotions />
+            </button>
+          </div>
           {filePreview === true ? (
             <div
               ref={sendWithMediaRef}
@@ -796,21 +716,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
             </svg>
           </button>
         ) : (
-          <button type="button" onClick={() => sendMessageForLike("👍")}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-[#615DFA]"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z"
-              />
-            </svg>
+          <button type="button" className="text-[23px] text-blue-500">
+            <MdKeyboardVoice />
           </button>
         )}
       </div>

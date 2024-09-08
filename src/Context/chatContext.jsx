@@ -157,7 +157,7 @@ const ChatValueProvider = ({ children }) => {
     await updateDoc(chatRef, {
       unseenMessages: {
         ...currentUnseenMessages,
-        [user._id]: 0, // Reset unseen messages count for the current user
+        [user?._id]: 0, // Reset unseen messages count for the current user
       },
     });
   };

@@ -496,33 +496,13 @@ export default function AgentProfile() {
                       </button>
                     )}
 
-                    {user?.role === "buyer" ? (
-                      user?.premium === false ? (
-                        <button
-                          type="button"
-                          onClick={() => setPremiumPopup(true)}
-                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
-                        >
-                          <SiImessage className="w-5 h-5" /> Message
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => fetchChatExist(user, profile)}
-                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
-                        >
-                          <SiImessage className="w-5 h-5" /> Message
-                        </button>
-                      )
-                    ) : user?.role === "agent" ? (
-                      <button
-                        type="button"
-                        onClick={() => fetchChatExist(user, profile)}
-                        className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
-                      >
-                        <SiImessage className="w-5 h-5" /> Message
-                      </button>
-                    ) : null}
+                    <button
+                      type="button"
+                      onClick={() => fetchChatExist(user, profile)}
+                      className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                    >
+                      <SiImessage className="w-5 h-5" /> Message
+                    </button>
                   </div>
                 )}
               </div>

@@ -20,11 +20,13 @@ import {
   getDocs,
 } from "../../../../firebase";
 import { ChatValueContext } from "@/Context/chatContext";
+import { PremiumValueContext } from "@/Context/premiumContext";
 export default function BuyerProfile() {
   const { user, setRender, render } = PrivateRouteContext();
   const { setNewsFeedRender, newsFeedRender } = useContext(
     PostLocationValueContext
   );
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
   const myId = user?._id;
   const params = useParams();
   const [activeTab, setActiveTab] = useState("Posts");
@@ -496,15 +498,24 @@ export default function BuyerProfile() {
                             <BsJournalBookmarkFill className="w-5 h-5" /> Follow
                           </button>
                         )}
-
-                        <button
-                          type="button"
-                          onClick={() => fetchChatExist(user, profile)}
-                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
-                        >
-                          {" "}
-                          <SiImessage className="w-5 h-5" /> Massage
-                        </button>
+                        {user?.role === "agent" && user?.premium === false ? (
+                          <button
+                            type="button"
+                            onClick={() => setPremiumPopup(true)}
+                            className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                          >
+                            <SiImessage className="w-5 h-5" /> Message
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => fetchChatExist(user, profile)}
+                            className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                          >
+                            {" "}
+                            <SiImessage className="w-5 h-5" /> Massage
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>

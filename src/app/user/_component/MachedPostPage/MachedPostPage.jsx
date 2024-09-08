@@ -181,7 +181,7 @@ export const MachedPostPage = ({
   return (
     <div className="grid grid-cols-12 gap-3">
       <div className="col-span-9">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid items-start grid-cols-2 gap-3">
           {matchingPosts?.map((item, i) => {
             if (matchingPosts.length === i + 1) {
               return (

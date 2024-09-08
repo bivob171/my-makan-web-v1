@@ -661,8 +661,9 @@ export default function PackageCard({
                               Follow
                             </button>
                           )}
-                          {user?.role === "buyer" ? (
-                            user?.premium === false ? (
+                          {user?.role === "agent" ? (
+                            user?.premium === false &&
+                            userinfo?.role === "buyer" ? (
                               <button
                                 type="button"
                                 onClick={() => setPremiumPopup(true)}
@@ -679,7 +680,7 @@ export default function PackageCard({
                                 <SiImessage className="w-5 h-5" /> Message
                               </button>
                             )
-                          ) : user?.role === "agent" ? (
+                          ) : user?.role === "buyer" ? (
                             <button
                               type="button"
                               onClick={() => fetchChatExist(user, userinfo)}
