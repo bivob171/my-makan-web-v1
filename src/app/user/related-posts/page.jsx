@@ -69,9 +69,34 @@ export default function RelatedPost() {
   const [state, setState] = useState("");
   const [cityq, setCity] = useState(city);
   const [compan, setcompany] = useState(company);
-  console.log(cityq, countryq);
 
   const [filterRender, setfilterRender] = useState(false);
+  useEffect(() => {
+    setSelectedType(type);
+    setPostType(postTypeq);
+    setForPost(forPos);
+    setPropertyCategory(propertyCategoryq);
+    setPropertyType(propertyTypeq);
+    setParking(parkingq);
+    setSellType([saleTypeq]);
+    setTags([tag]);
+    setCountry(country);
+    setCity(city);
+    setcompany(company);
+  }, [
+    filterRender,
+    type,
+    postTypeq,
+    forPos,
+    propertyCategoryq,
+    propertyTypeq,
+    parkingq,
+    saleTypeq,
+    tag,
+    country,
+    city,
+    company,
+  ]);
   const { filterRenderRelatedPost, setfilterRenderRelatedPost } =
     useContext(FilterRenderContext);
 
@@ -81,24 +106,30 @@ export default function RelatedPost() {
       "relatedPostFilterValue"
     );
     setCity(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).city : ""
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).city : cityq
     );
     setState(
       relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).state : ""
     );
     setCountry(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).country : ""
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).country
+        : countryq
     );
     setSelectedType(
       relatedPostFilterValue
         ? JSON.parse(relatedPostFilterValue).selectedType
-        : ""
+        : selectedType
     );
     setPostType(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).postType : ""
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).postType
+        : postType
     );
     setForPost(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).forPost : ""
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).forPost
+        : forPost
     );
     setTowersorBuildingName(
       relatedPostFilterValue
@@ -108,21 +139,25 @@ export default function RelatedPost() {
     setPropertyCategory(
       relatedPostFilterValue
         ? JSON.parse(relatedPostFilterValue).propertyCategoryName
-        : ""
+        : propertyCategoryName
     );
     setPropertyType(
       relatedPostFilterValue
         ? JSON.parse(relatedPostFilterValue).propertyTypeName
-        : ""
+        : propertyTypeName
     );
     setParking(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).parking : ""
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).parking
+        : parking
     );
     setSellType(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).sellType : ""
+      relatedPostFilterValue
+        ? JSON.parse(relatedPostFilterValue).sellType
+        : sellType
     );
     setTags(
-      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).tags : ""
+      relatedPostFilterValue ? JSON.parse(relatedPostFilterValue).tags : tags
     );
     setfilterRender(
       relatedPostFilterValue
@@ -131,14 +166,14 @@ export default function RelatedPost() {
     );
   }, [filterRenderRelatedPost]);
 
-  const getAllPosts = async (token, reset = false) => {
+  const getAllPosts = async (token) => {
     try {
       setIsFetching(true);
-
       // Reset loading and pagination if necessary
-      if (filterRender || reset) {
+      if (filterRender) {
         setLoading(true);
         setPage(1);
+        setAllPosts([]);
       }
 
       // Base URL for API call
@@ -225,7 +260,7 @@ export default function RelatedPost() {
     tags,
     cityq,
   ]);
-
+  console.log(tags);
   const lastPostElementRef = useCallback(
     (node) => {
       if (isFetching) return;
