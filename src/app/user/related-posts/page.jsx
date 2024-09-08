@@ -351,7 +351,7 @@ export default function RelatedPost() {
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-9">
             {/* all post  */}
-            <div className="grid md:grid-cols-2 2xl:grid-cols-2 gap-3">
+            <div className="grid items-start md:grid-cols-2 2xl:grid-cols-2 gap-3">
               {allPosts?.map((item, i) => {
                 if (allPosts.length === i + 1) {
                   return (
