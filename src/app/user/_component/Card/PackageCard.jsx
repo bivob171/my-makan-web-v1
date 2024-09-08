@@ -429,7 +429,7 @@ export default function PackageCard({
                 </Link>
                 {/* hover dropdown  */}
                 {isHovered && (
-                  <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
+                  <div className="absolute left-0  bg-white border-[1px] shadow-sm rounded-md p-3 z-10">
                     <div className="!w-80 md:!w-96">
                       <div className="flex gap-2">
                         <Link
@@ -991,7 +991,11 @@ export default function PackageCard({
               </p>
             </div>
             <div
-              onClick={() => setCommentDropdown(_id)}
+              onClick={() =>
+                commentDropdown === null
+                  ? setCommentDropdown(_id)
+                  : setCommentDropdown(null)
+              }
               className="flex items-center cursor-pointer"
             >
               <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
