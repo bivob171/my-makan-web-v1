@@ -10,7 +10,7 @@ import { FollowerAgentPage } from "../../_component/FollowComponent/FollowerAgen
 import { FollowerUserPage } from "../../_component/FollowComponent/FollowerUserPage";
 
 export default function Followers() {
-  const [activeTab, setActiveTab] = useState("Buyer");
+  const [activeTab, setActiveTab] = useState("Agent");
   return (
     <>
       {/* Page Content */}
@@ -18,25 +18,6 @@ export default function Followers() {
         <div className="container">
           <div className="block-box post-input-tab">
             <ul className="nav nav-tabs" role="tablist">
-              <li
-                className="nav-item"
-                role="presentation"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="STATUS"
-              >
-                <a
-                  className={`nav-link ${
-                    activeTab === "Buyer" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("Buyer")}
-                  role="tab"
-                  aria-selected={activeTab === "Buyer"}
-                >
-                  <i className="icofont-copy" />
-                  All Follower Buyer
-                </a>
-              </li>
               <li
                 className="nav-item"
                 role="presentation"
@@ -54,6 +35,25 @@ export default function Followers() {
                 >
                   <i className="icofont-image" />
                   All Follower Agent
+                </a>
+              </li>
+              <li
+                className="nav-item"
+                role="presentation"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="STATUS"
+              >
+                <a
+                  className={`nav-link ${
+                    activeTab === "Buyer" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab("Buyer")}
+                  role="tab"
+                  aria-selected={activeTab === "Buyer"}
+                >
+                  <i className="icofont-copy" />
+                  All Follower Buyer
                 </a>
               </li>
             </ul>

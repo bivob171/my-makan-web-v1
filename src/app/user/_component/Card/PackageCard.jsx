@@ -389,7 +389,7 @@ export default function PackageCard({
   const matchPercentage = item?.matchPercentage && item?.matchPercentage;
   activeUsers;
 
-  const [commentDropdown, setCommentDropdown] = useState("");
+  const [commentDropdown, setCommentDropdown] = useState(null);
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">
@@ -1050,7 +1050,7 @@ export default function PackageCard({
           </div>
         </footer>
         {/* comment  */}
-        {commentDropdown === _id ? (
+        {commentDropdown !== null && commentDropdown === _id ? (
           <div>
             <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
             <div>

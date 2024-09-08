@@ -63,6 +63,49 @@ export const ProfileCard = () => {
   }, []);
   const totalAdsPost = totalPoset?.sponsoredPosts + totalPoset?.urgentPosts;
 
+  const [friendCount, setFriendCount] = useState(0);
+
+  const getAllFriendsCount = async (token) => {
+    try {
+      // Correct URL format with protocol
+      const url = `https://api.mymakan.ae/follow/friend-list?sortBy=createdAt&sortOrder=asc&page=1&limit=50`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Check if total is available and is a number
+      const total = data?.total;
+      if (typeof total === "number") {
+        setFriendCount(total);
+      } else {
+        console.error("Unexpected response structure:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching friend count:", error);
+    }
+  };
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+
+    if (token) {
+      getAllFriendsCount(token);
+    } else {
+      console.error("No token found for the user role.");
+    }
+  }, []);
   return (
     <div className="mb-[20px]">
       <div className="widget widget-author !pb-2 !pl-2 !pr-2">
@@ -181,9 +224,9 @@ export const ProfileCard = () => {
               </div>
             ) : (
               <div className="author-location leading-3">
-                <a href="#">
+                <p className="leading-[21px]">
                   <b>{user?.companyName}</b>
-                </a>
+                </p>
               </div>
             )}
           </div>
@@ -243,7 +286,7 @@ export const ProfileCard = () => {
           <li>
             <a href="#">
               <span className="text-[12px] text-[#525252] font-bold">
-                1,125
+                {friendCount}
               </span>
               <br />
               <span className="whitespace-nowrap text-[#9e9faf] font-semibold text-[10px]">

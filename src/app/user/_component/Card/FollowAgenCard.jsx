@@ -31,7 +31,15 @@ export const FollowAgentCard = ({ item }) => {
           </div>
           <div className="profile-name">
             <h4 className="author-name">
-              <Link href="user-timeline.html">{common?.fullName}</Link>
+              <Link
+                href={
+                  common?.role === "agent"
+                    ? `/user/agent-profile/${common?._id}`
+                    : `/user/buyer-profile/${common?._id}`
+                }
+              >
+                {common?.fullName}
+              </Link>
             </h4>
             <div className="author-location mb-0">
               {common?.companyName === null ? "..." : common?.companyName}

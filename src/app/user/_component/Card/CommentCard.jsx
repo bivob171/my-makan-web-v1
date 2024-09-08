@@ -471,7 +471,8 @@ const CommentCard = ({ _id, setAllPosts }) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const allMentionUser = await response.json();
+      const allMentionUsers = await response.json();
+      const allMentionUser = allMentionUsers?.friends;
       setHasMoreM(allMentionUser.length === limitM);
       setAllMentionUsers((prevPosts) =>
         pageM === 1 ? allMentionUser : [...prevPosts, ...allMentionUser]

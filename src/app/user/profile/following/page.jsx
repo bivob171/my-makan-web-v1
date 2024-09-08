@@ -7,7 +7,7 @@ import { FollowingUserPage } from "../../_component/FollowComponent/FollowingUse
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 export default function Following() {
-  const [activeTab, setActiveTab] = useState("Buyer");
+  const [activeTab, setActiveTab] = useState("Agent");
   return (
     <>
       {/* Page Content */}
@@ -31,7 +31,7 @@ export default function Following() {
                   aria-selected={activeTab === "Agent"}
                 >
                   <i className="icofont-copy" />
-                  All Following Buyer
+                  All Following Agent
                 </a>
               </li>
               <li
@@ -50,7 +50,7 @@ export default function Following() {
                   aria-selected={activeTab === "Buyer"}
                 >
                   <i className="icofont-image" />
-                  All Following Agent
+                  All Following Buyer
                 </a>
               </li>
             </ul>

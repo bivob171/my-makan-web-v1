@@ -72,6 +72,8 @@ const HTopNotification = ({
     router.push("/user/chats");
   }
 
+  const myId = user?._id;
+
   return (
     <>
       <div
@@ -482,6 +484,10 @@ const HTopNotification = ({
                       notifyerType === "agent"
                         ? nitifyerAgentId
                         : nitifyerUserId;
+
+                    if (commonUser?._id === myId) {
+                      return null; // Skip this notification
+                    }
 
                     const mentionMe =
                       user?.role === "agent"
