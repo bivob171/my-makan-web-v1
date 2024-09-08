@@ -112,6 +112,7 @@ export const SaveAbailableAllPostTimeline = () => {
                   setSaveRerander={setSaveRerander}
                   followRerander={followRerander}
                   setFollowRerander={setFollowRerander}
+                  setAllPosts={setAllPosts}
                 />
               </div>
             );
