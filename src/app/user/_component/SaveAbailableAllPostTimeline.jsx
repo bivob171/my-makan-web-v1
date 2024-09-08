@@ -65,7 +65,7 @@ export const SaveAbailableAllPostTimeline = () => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     getAllPosts(token);
-  }, [sortOrder, sortBy, limit, page, like, saveRerander, followReranders]);
+  }, [sortOrder, sortBy, limit, page, like, saveRerander, followRerander]);
 
   const observer = useRef();
   const lastPostElementRef = useCallback(
