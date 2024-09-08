@@ -865,12 +865,12 @@ export default function PackageCard({
         <div className="px-[15px] w-full">
           <Link href={`/user/post-details/${_id}`} className="w-full">
             <div>
-              <p className="font-inter text-[18px] text-[#666] font-bold mb-2 leading-[40px]">
+              <p className="font-inter text-[18px] text-[#666] font-bold mb-2 leading-[22px]">
                 {item?.title.length > 63
                   ? `${item?.title.slice(0, 63)}...`
                   : item?.title}
               </p>
-              <p className="font-inter text-[#333] !text-[14px] font-normal leading-[20px] text-justify h-[80px]">
+              <p className="font-inter text-[#333] !text-[14px] font-normal leading-[20px] text-justify h-auto mb-[7px]">
                 {item?.description.length > 133 ? (
                   <>
                     {item?.description.slice(0, 133)}...

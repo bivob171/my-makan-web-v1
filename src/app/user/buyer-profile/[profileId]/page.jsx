@@ -482,7 +482,7 @@ export default function BuyerProfile() {
                           <button
                             type="button"
                             onClick={() => handleFollowClick("follow", profile)}
-                            className="bg-yellow-500 text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-yellow-500/70 flex justify-center items-center gap-2"
+                            className="bg-yellow-500 text-white !w-[140px] py-[6px] rounded-md text-[14px] font-medium hover:bg-yellow-500/70 flex justify-center items-center gap-2"
                           >
                             <BsJournalBookmarkFill className="w-5 h-5" /> Follow
                             Back

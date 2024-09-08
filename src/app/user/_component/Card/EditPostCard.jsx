@@ -122,7 +122,7 @@ export default function EditPostCard({
       }
 
       const data = await response.json();
-      setlike(!like);
+      // setlike(!like);
       console.log("Like successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
@@ -155,7 +155,7 @@ export default function EditPostCard({
       }
 
       const data = await response.json();
-      setlike(!like);
+      // setlike(!like);
       console.log("unLike successful", data);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);

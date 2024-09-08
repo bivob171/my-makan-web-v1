@@ -169,12 +169,12 @@ const PostSection = ({ isOpen, setIsOpen, setPremiumPopup }) => {
         setPropertyTypeError("");
       }
 
-      const mediaArray = Array.isArray(media) ? media : [];
-      const allImages = mediaArray.filter((file) => file.type === "image");
-      if (allImages.length < 4) {
-        alert("Please select a minimum of 4 images for the post.");
-        hasError = true;
-      }
+      // const mediaArray = Array.isArray(media) ? media : [];
+      // const allImages = mediaArray.filter((file) => file.type === "image");
+      // if (allImages.length < 4) {
+      //   alert("Please select a minimum of 4 images for the post.");
+      //   hasError = true;
+      // }
       if (hasError) {
         return;
       }

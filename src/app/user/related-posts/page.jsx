@@ -21,6 +21,15 @@ export default function RelatedPost() {
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
   const location = searchParams.get("location");
+  // Initialize city and country with default empty values
+  let city = "";
+  let country = "";
+
+  // Check if location exists and split it accordingly
+  if (location) {
+    [city, country] = location.split(",").map((item) => item.trim());
+  }
+
   const tag = searchParams.get("tag");
   const forPos = searchParams.get("for");
   const type = searchParams.get("type");
@@ -46,62 +55,21 @@ export default function RelatedPost() {
   const [followRerander, setFollowRerander] = useState(false);
   const observer = useRef();
 
-  const [selectedType, setSelectedType] = useState("");
-  const [postType, setPostType] = useState("");
-  const [forPost, setForPost] = useState("");
+  const [selectedType, setSelectedType] = useState(type);
+  const [postType, setPostType] = useState(postTypeq);
+  const [forPost, setForPost] = useState(forPos);
   const [towersorBuildingName, setTowersorBuildingName] = useState("");
-  const [propertyCategoryName, setPropertyCategory] = useState("");
-  const [propertyTypeName, setPropertyType] = useState("");
-  const [parking, setParking] = useState("");
-  const [sellType, setSellType] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [country, setCountry] = useState("");
+  const [propertyCategoryName, setPropertyCategory] =
+    useState(propertyCategoryq);
+  const [propertyTypeName, setPropertyType] = useState(propertyTypeq);
+  const [parking, setParking] = useState(parkingq);
+  const [sellType, setSellType] = useState([saleTypeq]);
+  const [tags, setTags] = useState([tag]);
+  const [countryq, setCountry] = useState(country);
   const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-
-  useEffect(() => {
-    if (location) {
-      const [city, country] = location.split(",");
-      setCity(city);
-      setCountry(country);
-    }
-
-    if (tag) {
-      setTags([tag]);
-    }
-
-    if (forPos) {
-      setForPost(forPos);
-    }
-    if (type) {
-      setSelectedType(type);
-    }
-    if (postTypeq) {
-      setPostType(postTypeq);
-    }
-    if (propertyCategoryq) {
-      setPropertyCategory(propertyCategoryq);
-    }
-    if (propertyTypeq) {
-      setPropertyType(propertyTypeq);
-    }
-    if (parkingq) {
-      setParking(parkingq);
-    }
-    if (saleTypeq) {
-      setSellType([saleTypeq]);
-    }
-  }, [
-    location,
-    tag,
-    forPos,
-    type,
-    postTypeq,
-    propertyCategoryq,
-    propertyTypeq,
-    parkingq,
-    saleTypeq,
-  ]);
+  const [cityq, setCity] = useState(city);
+  const [compan, setcompany] = useState(company);
+  console.log(cityq, countryq);
 
   const [filterRender, setfilterRender] = useState(false);
   const { filterRenderRelatedPost, setfilterRenderRelatedPost } =
@@ -166,37 +134,43 @@ export default function RelatedPost() {
   const getAllPosts = async (token, reset = false) => {
     try {
       setIsFetching(true);
+
+      // Reset loading and pagination if necessary
       if (filterRender || reset) {
         setLoading(true);
         setPage(1);
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
-      url += `sortBy=${sortBy}&`;
-      url += `sortOrder=${sortOrder}&`;
-      url += `page=${page}&`;
-      url += `limit=${limit}`;
 
-      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
-      if (state !== "") url += `&state=${encodeURIComponent(state)}`;
-      if (city !== "") url += `&city=${encodeURIComponent(city)}`;
-      if (country !== "") url += `&country=${encodeURIComponent(country)}`;
-      if (selectedType !== "")
-        url += `&postType=${encodeURIComponent(selectedType)}`;
-      if (postType !== "") url += `&type=${encodeURIComponent(postType)}`;
-      if (propertyCategoryName !== "")
-        url += `&propertyCategory=${encodeURIComponent(propertyCategoryName)}`;
-      if (propertyTypeName !== "")
-        url += `&propertyType=${encodeURIComponent(propertyTypeName)}`;
-      if (towersorBuildingName !== "")
-        url += `&towersorBuildingName=${encodeURIComponent(
-          towersorBuildingName
-        )}`;
-      if (parking !== "") url += `&parking=${encodeURIComponent(parking)}`;
-      if (tags.length !== 0)
-        url += `&tags=${encodeURIComponent(tags.join(","))}`;
-      if (sellType.length !== 0)
+      // Base URL for API call
+      let url = `https://api.mymakan.ae/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+
+      // Helper function to add query parameters
+      const addQueryParam = (key, value) => {
+        if (value && value !== "")
+          url += `&${key}=${encodeURIComponent(value)}`;
+      };
+
+      // Add optional parameters if they are defined and not empty
+      addQueryParam("for", forPost);
+      addQueryParam("companyName", compan);
+      addQueryParam("state", state);
+      addQueryParam("city", cityq);
+      addQueryParam("country", countryq);
+      addQueryParam("postType", selectedType);
+      addQueryParam("type", postType);
+      addQueryParam("propertyCategory", propertyCategoryName);
+      addQueryParam("propertyType", propertyTypeName);
+      addQueryParam("towersorBuildingName", towersorBuildingName);
+      addQueryParam("parking", parking);
+
+      // Handle arrays for tags and sellType
+      if (tags.length > 0) url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      if (sellType.length > 0)
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
 
+      console.log(url); // For debugging purposes
+
+      // Fetch data from the API
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -205,10 +179,14 @@ export default function RelatedPost() {
         },
       });
 
+      // Handle non-OK responses
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const allPostsList = await response.json();
+
+      // Update the post list and pagination
       setHasMore(allPostsList.length === limit);
       setAllPosts((prevPost) =>
         page === 1 ? allPostsList : [...prevPost, ...allPostsList]
@@ -237,7 +215,7 @@ export default function RelatedPost() {
     selectedType,
     forPost,
     state,
-    country,
+    countryq,
     postType,
     propertyCategoryName,
     propertyTypeName,
@@ -245,6 +223,7 @@ export default function RelatedPost() {
     parking,
     sellType,
     tags,
+    cityq,
   ]);
 
   const lastPostElementRef = useCallback(
@@ -266,7 +245,6 @@ export default function RelatedPost() {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
   const filterRef = useRef(null);
-  console.log(tag);
 
   return (
     <div className="page-content mt-6 lg:mt-0">

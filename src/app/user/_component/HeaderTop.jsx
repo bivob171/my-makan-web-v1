@@ -505,9 +505,9 @@ export const HeaderTop = () => {
                 </li>
 
                 <li className="header-nav-item">
-                  <a href="#" className="menu-link">
+                  <Link href="/user/properties" className="menu-link">
                     Properties
-                  </a>
+                  </Link>
                 </li>
 
                 <li className="header-nav-item">

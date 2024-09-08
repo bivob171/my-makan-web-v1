@@ -459,6 +459,47 @@ export const NewsFeedChatCard = ({
   const lastActive = lastActiveTime[participantId]
     ? timeAgo(lastActiveTime[participantId])
     : "No recent activity";
+
+  const [profile, setProfile] = useState();
+  const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const fetchUserProfile = async (participantId, participantRole) => {
+    if (!participantId) return;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    const endpoint =
+      participantRole === "buyer"
+        ? `https://api.mymakan.ae/user/${participantId}`
+        : `https://api.mymakan.ae/agent/${participantId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      } else {
+        const profile = await response.json();
+        setProfile(profile);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfile(participantId, participantRole);
+  }, [participantId, participantRole]);
+  useEffect(() => {
+    setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
+  }, [profile]);
   if (chatId === null && selectedChat === null && activeChatId === null) {
     return null;
   }
@@ -480,9 +521,23 @@ export const NewsFeedChatCard = ({
               </MenuButton>
 
               <div className="pl-2 flex gap-x-[6px] items-center">
-                <p className="text-[14px] text-white font-semibold -mb-0">
-                  {participantName}
-                </p>
+                {isFriend ? (
+                  <p className="text-[14px] text-white font-semibold -mb-0">
+                    {participantName}
+                  </p>
+                ) : isFollow ? (
+                  <p className="text-[14px] text-white font-semibold -mb-0">
+                    {participantName}
+                  </p>
+                ) : isFollowEr ? (
+                  <p className="text-[14px] text-white font-semibold -mb-0">
+                    {participantName}
+                  </p>
+                ) : (
+                  <p className="text-[14px] text-white font-semibold -mb-0">
+                    Hidden Name
+                  </p>
+                )}
                 {isActive ? (
                   <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[2px] rounded-full"></div>
                 ) : (
