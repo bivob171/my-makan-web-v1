@@ -188,6 +188,9 @@ export default function RelatedPost() {
       // Add optional parameters if they are defined and not empty
       addQueryParam("for", forPost);
       addQueryParam("companyName", compan);
+      if (compan && compan !== "") {
+        addQueryParam("role", "agent");
+      }
       addQueryParam("state", state);
       addQueryParam("city", cityq);
       addQueryParam("country", countryq);
