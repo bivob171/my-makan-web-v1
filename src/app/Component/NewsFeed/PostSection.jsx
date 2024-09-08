@@ -21,9 +21,11 @@ import { PostLocationValueContext } from "@/Context/postValueContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { PremiumValueContext } from "@/Context/premiumContext";
 
-const PostSection = ({ isOpen, setIsOpen, setPremiumPopup }) => {
+const PostSection = ({ isOpen, setIsOpen }) => {
   const { user } = PrivateRouteContext();
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
   const {
     lata,
     setLata,

@@ -59,6 +59,7 @@ export default function Layout({ children }) {
           >
             <Navbar />
           </div>
+
           <div>{children}</div>
           <Footer />
         </div>

@@ -23,7 +23,7 @@ const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
-export const AvailableTotalPost = () => {
+export const BuyerAvailableTotalPost = ({ setPremiumPopup }) => {
   const { user } = PrivateRouteContext();
   const myRole = user?.role;
   const [allPosts, setAllPosts] = useState([]);
@@ -99,7 +99,7 @@ export const AvailableTotalPost = () => {
     );
   }, [filterRenderAllPost]);
 
-  const getAllPosts = async (token, reset = false) => {
+  const getAllPosts = async (token, myRole, reset = false) => {
     try {
       setIsFetching(true);
       if (filterRender || reset) {
@@ -112,9 +112,9 @@ export const AvailableTotalPost = () => {
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
-      url += `limit=${limit}`;
+      url += `limit=${limit}&`;
+      url += `role=${"agent"}`;
 
-      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
@@ -307,6 +307,7 @@ export const AvailableTotalPost = () => {
                         followRerander={followRerander}
                         setFollowRerander={setFollowRerander}
                         setAllPosts={setAllPosts}
+                        setPremiumPopup={setPremiumPopup}
                       />
                     </div>
                   );

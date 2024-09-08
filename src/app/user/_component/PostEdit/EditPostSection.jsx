@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { EditPost } from "./EditPost";
 import EditMapPost from "./EditPostMap";
 import { PostLocationValueContext } from "@/Context/postValueContext";
+import { PremiumValueContext } from "@/Context/premiumContext";
 
 export default function EditPostSection({ isOpen, setIsOpen }) {
   const { isAuthenticated, user, setRender, render, logOut } =
@@ -30,6 +31,8 @@ export default function EditPostSection({ isOpen, setIsOpen }) {
   const { newsFeedRender, setNewsFeedRender } = useContext(
     PostLocationValueContext
   );
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
+
   const {
     lata,
     setLata,
@@ -332,20 +335,42 @@ export default function EditPostSection({ isOpen, setIsOpen }) {
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button
-                            className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
-                            onClick={() => setSelectedType("Urgent")}
-                          >
-                            Urgent
-                          </button>
+                          {user?.premium === false ? (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => {
+                                setPremiumPopup(true), setIsOpen(false);
+                              }}
+                            >
+                              Urgent
+                            </button>
+                          ) : (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => setSelectedType("Urgent")}
+                            >
+                              Urgent
+                            </button>
+                          )}
                         </MenuItem>
                         <MenuItem>
-                          <button
-                            className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
-                            onClick={() => setSelectedType("Sponsored")}
-                          >
-                            Sponsored
-                          </button>
+                          {user?.premium === false ? (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => {
+                                setPremiumPopup(true), setIsOpen(false);
+                              }}
+                            >
+                              Sponsored
+                            </button>
+                          ) : (
+                            <button
+                              className="group flex w-full items-center gap-2 rounded-md py-[3px] px-2 leading-4 data-[focus]:bg-white/10"
+                              onClick={() => setSelectedType("Sponsored")}
+                            >
+                              Sponsored
+                            </button>
+                          )}
                         </MenuItem>
                       </MenuItems>
                     </Menu>

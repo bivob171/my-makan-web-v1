@@ -9,6 +9,9 @@ import EditPostLocationValueProvider from "@/Context/EditpostValueContext";
 import { HeaderLeft } from "./_component/HeaderLeft";
 import { HeaderRight } from "./_component/HeaderRight";
 import FilterRenderProvider from "@/Context/filterRenderContext";
+import { PremiumPopup } from "./_component/PremiumPopup";
+import { useContext } from "react";
+import { PremiumValueContext } from "@/Context/premiumContext";
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
   subsets: ["latin"],
@@ -17,6 +20,7 @@ const nunito = Nunito({
 
 export default function Layout({ children }) {
   const { isAuthenticated, loading } = PrivateRouteContext();
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
   const pathname = usePathname();
 
   if (loading === true) {
@@ -44,6 +48,8 @@ export default function Layout({ children }) {
         </FilterRenderProvider>
 
         {pathname !== "/user/chats" && <HeaderRight />}
+
+        <PremiumPopup visible={premiumPopup} closePopUp={setPremiumPopup} />
       </div>
     );
   } else {

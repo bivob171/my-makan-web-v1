@@ -147,6 +147,10 @@ const AgentComment = ({ _id }) => {
     setShowEmojiPicker(false);
     console.log(emoji);
   };
+  const onEmojiClicks = (event, emojiObject) => {
+    console.log(emojiObject); // Check the structure of the emojiObject
+    console.log(emojiObject.emoji); // Should log the emoji character
+  };
 
   const handleEmojiButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -195,7 +199,7 @@ const AgentComment = ({ _id }) => {
 
   useEffect(() => {
     const handleNewComment = (newComment) => {
-      if (newComment.postId._id === _id) {
+      if (newComment.postId?._id === _id) {
         setComments((prevComments) => [newComment, ...prevComments]);
       }
     };
@@ -918,9 +922,13 @@ const AgentComment = ({ _id }) => {
 
               {showEmojiPicker && (
                 <div className="absolute z-10 mt-2">
-                  <EmojiPicker
-                    onEmojiClick={(event, emoji) => onEmojiClick(emoji)}
-                  />
+                  {/* <EmojiPicker
+                    onEmojiClick={(event, emojiObject) => {
+                      console.log(emojiObject.emoji); // Logs the emoji character
+                      onEmojiClick(emojiObject);
+                    }}
+                  /> */}{" "}
+                  <EmojiPicker onEmojiClick={onEmojiClicks} />
                 </div>
               )}
 

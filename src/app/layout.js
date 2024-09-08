@@ -12,6 +12,7 @@ import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ChatValueProvider from "@/Context/chatContext";
+import PremiumValueProvider from "@/Context/premiumContext";
 
 const nunito = Nunito({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
@@ -36,11 +37,13 @@ export default function RootLayout({ children }) {
       <body className={nunito.className}>
         <div>
           <div>
-            <ChatValueProvider>
-              <GoogleRegisterAuthProvider>
-                <PopupProvider>{children}</PopupProvider>
-              </GoogleRegisterAuthProvider>
-            </ChatValueProvider>
+            <PremiumValueProvider>
+              <ChatValueProvider>
+                <GoogleRegisterAuthProvider>
+                  <PopupProvider>{children}</PopupProvider>
+                </GoogleRegisterAuthProvider>
+              </ChatValueProvider>
+            </PremiumValueProvider>
           </div>
         </div>
         <Toaster

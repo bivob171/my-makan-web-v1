@@ -22,6 +22,7 @@ import {
   onSnapshot,
 } from "../../../../firebase"; // Assuming you have firebase setup
 import { ChatValueContext } from "@/Context/chatContext";
+import { PremiumValueContext } from "@/Context/premiumContext";
 export default function AgentProfile() {
   const { user, setRender, render, isConnected, activeUsers } =
     PrivateRouteContext();
@@ -328,6 +329,7 @@ export default function AgentProfile() {
 
   // chat
   const { fetchChatExist } = useContext(ChatValueContext);
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
 
   return (
     <div className="bg-[#EFF4FB]">
@@ -494,14 +496,33 @@ export default function AgentProfile() {
                       </button>
                     )}
 
-                    <button
-                      type="button"
-                      onClick={() => fetchChatExist(user, profile)}
-                      className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
-                    >
-                      {" "}
-                      <SiImessage className="w-5 h-5" /> Massage
-                    </button>
+                    {user?.role === "buyer" ? (
+                      user?.premium === false ? (
+                        <button
+                          type="button"
+                          onClick={() => setPremiumPopup(true)}
+                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                        >
+                          <SiImessage className="w-5 h-5" /> Message
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => fetchChatExist(user, profile)}
+                          className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                        >
+                          <SiImessage className="w-5 h-5" /> Message
+                        </button>
+                      )
+                    ) : user?.role === "agent" ? (
+                      <button
+                        type="button"
+                        onClick={() => fetchChatExist(user, profile)}
+                        className="bg-[#615DFA] text-white !w-[100px] py-[6px] rounded-md text-[14px] font-medium hover:bg-[#615DFA]/70 flex justify-center items-center gap-2"
+                      >
+                        <SiImessage className="w-5 h-5" /> Message
+                      </button>
+                    ) : null}
                   </div>
                 )}
               </div>

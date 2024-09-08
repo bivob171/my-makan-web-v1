@@ -13,13 +13,13 @@ import { RequiredTotalPost } from "./TotalPost/RequiredTotalPost";
 import NewsFeedLeftSection from "./NewsFeedLeftSection";
 import PostSearch from "./PostSearch/PostSearch";
 import { PremiumPopup } from "@/app/user/_component/PremiumPopup";
+import { BuyerAvailableTotalPost } from "./TotalPost/BuyerAvailableTotalPost";
 
 export const NewsFeedPage = () => {
   const { isAuthenticated, loading, user, setRender, render, logOut } =
     PrivateRouteContext();
   const userName = user?.fullName?.split(" ")[0];
   const [verifyPopup, setVerifyPopup] = useState(false);
-  const [premiumPopup, setPremiumPopup] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   function open() {
     setIsOpen(true);
@@ -85,11 +85,7 @@ export const NewsFeedPage = () => {
             </ul>
           </div>
           <div>
-            <PostSection
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              setPremiumPopup={setPremiumPopup}
-            />
+            <PostSection isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <div className="grid lg:grid-cols-12 gap-[24px]">
             <div className="lg:col-span-3 hidden lg:block w-[300px]">
@@ -107,72 +103,81 @@ export const NewsFeedPage = () => {
                   setVerifyPopup={setVerifyPopup}
                   userName={userName}
                 />
-
-                <div className="block-box post-input-tab !rounded-none border-t">
-                  <ul className="nav nav-tabs" role="tablist">
-                    <li
-                      className="nav-item"
-                      role="presentation"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="STATUS"
-                    >
-                      <a
-                        className={`nav-link ${
-                          activeTab === "allPosts" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("allPosts")}
-                        role="tab"
-                        aria-selected={activeTab === "allPosts"}
+                {user?.role === "agent" && (
+                  <div className="block-box post-input-tab !rounded-none border-t">
+                    <ul className="nav nav-tabs" role="tablist">
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="STATUS"
                       >
-                        <i className="icofont-copy" />
-                        All Posts
-                      </a>
-                    </li>
-                    <li
-                      className="nav-item"
-                      role="presentation"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="MEDIA"
-                    >
-                      <a
-                        className={`nav-link ${
-                          activeTab === "availablePosts" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("availablePosts")}
-                        role="tab"
-                        aria-selected={activeTab === "availablePosts"}
+                        <a
+                          className={`nav-link ${
+                            activeTab === "allPosts" ? "active" : ""
+                          }`}
+                          onClick={() => setActiveTab("allPosts")}
+                          role="tab"
+                          aria-selected={activeTab === "allPosts"}
+                        >
+                          <i className="icofont-copy" />
+                          All Posts
+                        </a>
+                      </li>
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="MEDIA"
                       >
-                        <i className="icofont-image" />
-                        Available Posts
-                      </a>
-                    </li>
-                    <li
-                      className="nav-item"
-                      role="presentation"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="BLOG"
-                    >
-                      <a
-                        className={`nav-link ${
-                          activeTab === "required" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("required")}
-                        role="tab"
-                        aria-selected={activeTab === "required"}
+                        <a
+                          className={`nav-link ${
+                            activeTab === "availablePosts" ? "active" : ""
+                          }`}
+                          onClick={() => setActiveTab("availablePosts")}
+                          role="tab"
+                          aria-selected={activeTab === "availablePosts"}
+                        >
+                          <i className="icofont-image" />
+                          Available Posts
+                        </a>
+                      </li>
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="BLOG"
                       >
-                        <i className="icofont-list" />
-                        Required Posts
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                        <a
+                          className={`nav-link ${
+                            activeTab === "required" ? "active" : ""
+                          }`}
+                          onClick={() => setActiveTab("required")}
+                          role="tab"
+                          aria-selected={activeTab === "required"}
+                        >
+                          <i className="icofont-list" />
+                          Required Posts
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
-              {activeTab === "allPosts" && <AllTotalPost />}
-              {activeTab === "availablePosts" && <AvailableTotalPost />}
-              {activeTab === "required" && <RequiredTotalPost />}
+              {user?.role === "agent" ? (
+                <>
+                  {activeTab === "allPosts" && <AllTotalPost />}
+                  {activeTab === "availablePosts" && <AvailableTotalPost />}
+                  {activeTab === "required" && <RequiredTotalPost />}
+                </>
+              ) : (
+                <div className="pt-4">
+                  <BuyerAvailableTotalPost />
+                </div>
+              )}
             </div>
             <div className="lg:col-span-3 hidden lg:flex justify-end w-full">
               <div className="!w-[300px]">
@@ -185,7 +190,6 @@ export const NewsFeedPage = () => {
       {/* Chat Modal Here */}
       <ChatModal />
       <AccountVerifyModal visible={verifyPopup} closePopUp={setVerifyPopup} />
-      <PremiumPopup visible={premiumPopup} closePopUp={setPremiumPopup} />
     </>
   );
 };

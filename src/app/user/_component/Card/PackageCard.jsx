@@ -17,6 +17,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChatValueContext } from "@/Context/chatContext";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import CommentCard from "./CommentCard";
+import { PremiumValueContext } from "@/Context/premiumContext";
+import isValid from "date-fns/isValid"; // Correctly import isValid
+
 export default function PackageCard({
   item,
   myId,
@@ -44,7 +47,8 @@ export default function PackageCard({
     follower,
     friend,
   } = item;
-
+  const { user, activeUsers } = PrivateRouteContext();
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
   const [isHovered, setIsHovered] = useState(false);
   const [isHeartRed, setIsHeartRed] = useState(false);
   const [isFollow, setIsFollow] = useState(false);
@@ -87,10 +91,18 @@ export default function PackageCard({
   }, [likedBy, myId]);
 
   const formatDate = (isoString) => {
+    // Convert the ISO string to a Date object
     const date = new Date(isoString);
+
+    // Ensure the date is valid
+    if (!isValid(date)) {
+      return "Invalid date";
+    }
+
     const now = new Date();
     const timeDifference = now - date;
 
+    // Options for formatting dates
     const options = {
       day: "numeric",
       month: "long",
@@ -100,9 +112,12 @@ export default function PackageCard({
       hour12: true,
     };
 
+    // If the date is within the last 24 hours, use formatDistanceToNow
     if (timeDifference < 24 * 60 * 60 * 1000) {
       return formatDistanceToNow(date, { addSuffix: true });
     }
+
+    // Otherwise, format the date with a specific format
     return format(date, "d MMMM yyyy h:mm a");
   };
 
@@ -380,7 +395,7 @@ export default function PackageCard({
   }
 
   // chat
-  const { user, activeUsers } = PrivateRouteContext();
+
   const isActive = activeUsers.includes(userinfo?._id);
   console.log();
 
@@ -646,15 +661,33 @@ export default function PackageCard({
                               Follow
                             </button>
                           )}
-
-                          <button
-                            type="button"
-                            onClick={() => fetchChatExist(user, userinfo)}
-                            className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
-                          >
-                            {" "}
-                            <SiImessage className="w-5 h-5" /> Massage
-                          </button>
+                          {user?.role === "buyer" ? (
+                            user?.premium === false ? (
+                              <button
+                                type="button"
+                                onClick={() => setPremiumPopup(true)}
+                                className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                              >
+                                <SiImessage className="w-5 h-5" /> Message
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => fetchChatExist(user, userinfo)}
+                                className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                              >
+                                <SiImessage className="w-5 h-5" /> Message
+                              </button>
+                            )
+                          ) : user?.role === "agent" ? (
+                            <button
+                              type="button"
+                              onClick={() => fetchChatExist(user, userinfo)}
+                              className="bg-[#0066ff] text-white w-full py-2 rounded-md text-[18px] font-bold hover:bg-[#0066ff]/70 flex justify-center items-center gap-2"
+                            >
+                              <SiImessage className="w-5 h-5" /> Message
+                            </button>
+                          ) : null}
                         </div>
                       )}
                     </div>
@@ -866,12 +899,12 @@ export default function PackageCard({
           <Link href={`/user/post-details/${_id}`} className="w-full">
             <div>
               <p className="font-inter text-[18px] text-[#666] font-bold mb-2 leading-[22px]">
-                {item?.title.length > 63
-                  ? `${item?.title.slice(0, 63)}...`
+                {item?.title?.length > 63
+                  ? `${item?.title?.slice(0, 63)}...`
                   : item?.title}
               </p>
               <p className="font-inter text-[#333] !text-[14px] font-normal leading-[20px] text-justify h-auto mb-[7px]">
-                {item?.description.length > 133 ? (
+                {item?.description?.length > 133 ? (
                   <>
                     {item?.description.slice(0, 133)}...
                     <Link href={`/user/post-details/${_id}`}>
@@ -890,7 +923,7 @@ export default function PackageCard({
 
         <div className="px-[15px] flex items-start justify-between !mt-4">
           <div className="flex flex-wrap gap-[8px]">
-            {item.tags?.map((tag, index) => {
+            {item?.tags?.map((tag, index) => {
               const { bgColor, textColor } = getTagStyles(index);
               return (
                 <button

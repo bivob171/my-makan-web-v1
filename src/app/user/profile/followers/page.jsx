@@ -8,60 +8,72 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { FollowerAgentPage } from "../../_component/FollowComponent/FollowerAgentPage";
 import { FollowerUserPage } from "../../_component/FollowComponent/FollowerUserPage";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
 export default function Followers() {
   const [activeTab, setActiveTab] = useState("Agent");
+  const { user } = PrivateRouteContext;
+
   return (
     <>
       {/* Page Content */}
       <div className="page-conten">
         <div className="container">
-          <div className="block-box post-input-tab">
-            <ul className="nav nav-tabs" role="tablist">
-              <li
-                className="nav-item"
-                role="presentation"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="MEDIA"
-              >
-                <a
-                  className={`nav-link ${
-                    activeTab === "Agent" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("Agent")}
-                  role="tab"
-                  aria-selected={activeTab === "Agent"}
+          {user?.role === "agent" ? (
+            <div className="block-box post-input-tab">
+              <ul className="nav nav-tabs" role="tablist">
+                <li
+                  className="nav-item"
+                  role="presentation"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="MEDIA"
                 >
-                  <i className="icofont-image" />
-                  All Follower Agent
-                </a>
-              </li>
-              <li
-                className="nav-item"
-                role="presentation"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="STATUS"
-              >
-                <a
-                  className={`nav-link ${
-                    activeTab === "Buyer" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("Buyer")}
-                  role="tab"
-                  aria-selected={activeTab === "Buyer"}
+                  <a
+                    className={`nav-link ${
+                      activeTab === "Agent" ? "active" : ""
+                    }`}
+                    onClick={() => setActiveTab("Agent")}
+                    role="tab"
+                    aria-selected={activeTab === "Agent"}
+                  >
+                    <i className="icofont-image" />
+                    All Follower Agent
+                  </a>
+                </li>
+                <li
+                  className="nav-item"
+                  role="presentation"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="STATUS"
                 >
-                  <i className="icofont-copy" />
-                  All Follower Buyer
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            {activeTab === "Agent" && <FollowerAgentPage />}
-            {activeTab === "Buyer" && <FollowerUserPage />}
-          </div>
+                  <a
+                    className={`nav-link ${
+                      activeTab === "Buyer" ? "active" : ""
+                    }`}
+                    onClick={() => setActiveTab("Buyer")}
+                    role="tab"
+                    aria-selected={activeTab === "Buyer"}
+                  >
+                    <i className="icofont-copy" />
+                    All Follower Buyer
+                  </a>
+                </li>
+              </ul>
+            </div>
+          ) : null}
+
+          {user?.role === "agent" ? (
+            <div>
+              {activeTab === "Agent" && <FollowerAgentPage />}
+              {activeTab === "Buyer" && <FollowerUserPage />}
+            </div>
+          ) : (
+            <div>
+              <FollowerAgentPage />
+            </div>
+          )}
         </div>
       </div>
     </>
