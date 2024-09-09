@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 
 export const MatchCardData = ({ item }) => {
   // match posts

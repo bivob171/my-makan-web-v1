@@ -191,7 +191,10 @@ export default function RelatedPost() {
       // Add optional parameters if they are defined and not empty
       addQueryParam("for", forPost);
       addQueryParam("companyName", compan);
-      if ((compan && compan !== "") || user?.role === "buyer") {
+      if (compan && compan !== "") {
+        addQueryParam("role", "agent");
+      }
+      if (user?.role === "buyer") {
         addQueryParam("role", "agent");
       }
       addQueryParam("state", state);
