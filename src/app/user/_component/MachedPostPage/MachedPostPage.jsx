@@ -60,6 +60,7 @@ export const MachedPostPage = ({
       url += `page=${page}&`;
       url += `limit=${limit}`;
       if (postType !== "") url += `&postType=${postType}`;
+      if (user?.role === "buyer") url += `&role=${"agent"}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;

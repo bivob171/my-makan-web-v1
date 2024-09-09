@@ -18,6 +18,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import PackageCard from "../_component/Card/PackageCard";
 
 export default function RelatedPost() {
+  const { user } = PrivateRouteContext;
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
   const location = searchParams.get("location");
@@ -40,7 +41,6 @@ export default function RelatedPost() {
   const saleTypeq = searchParams.get("saleType");
   const company = searchParams.get("company");
 
-  const { user } = PrivateRouteContext();
   // state
   const [allPosts, setAllPosts] = useState([]);
   console.log(allPosts);
@@ -191,7 +191,7 @@ export default function RelatedPost() {
       // Add optional parameters if they are defined and not empty
       addQueryParam("for", forPost);
       addQueryParam("companyName", compan);
-      if (compan && compan !== "") {
+      if ((compan && compan !== "") || user?.role === "buyer") {
         addQueryParam("role", "agent");
       }
       addQueryParam("state", state);

@@ -8,7 +8,7 @@ export const MatchCardData = ({ item }) => {
 
   const [allPosts, setAllPosts] = useState();
   const [matchingPosts, setmatchingPosts] = useState([]);
-  console.log(allPosts);
+  const { user } = PrivateRouteContext();
 
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -40,6 +40,7 @@ export const MatchCardData = ({ item }) => {
       url += `limit=${limit}`;
 
       if (postType !== "") url += `&postType=${postType}`;
+      if (user?.role === "buyer") url += `&role=${"agent"}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
