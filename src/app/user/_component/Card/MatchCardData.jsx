@@ -10,11 +10,12 @@ export const MatchCardData = ({ item }) => {
   const [allPosts, setAllPosts] = useState();
   const [matchingPosts, setmatchingPosts] = useState([]);
   const { user } = PrivateRouteContext();
+  console.log(allPosts);
 
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(100);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -219,7 +220,7 @@ export const MatchCardData = ({ item }) => {
             <div className="flex flex-wrap items-center gap-x-[10px]">
               {matchingPosts?.length > 0 ? (
                 <div className="flex">
-                  {matchingPosts?.map((data, i) => {
+                  {matchingPosts?.slice(0, 3).map((data, i) => {
                     const { role, _id } = data;
 
                     const userMatchinfo =
@@ -242,7 +243,7 @@ export const MatchCardData = ({ item }) => {
                     );
                   })}
                   {allPosts?.total <= 4 ? null : (
-                    <div className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-50 hover:-mt-[2.5px] flex items-center justify-center">
+                    <div className="w-[18px] md:w-[28px] md:h-[28px] h-[18px] rounded-full bg-[#845ADF]  -ml-[6px] hover:z-10 hover:-mt-[2.5px] flex items-center justify-center">
                       <Link href={`${"/user/matched-post"}/${matchpostId}`}>
                         <p className="text-[8px] -mb-[1px] text-white font-normal">
                           +{matchPlusMore}
