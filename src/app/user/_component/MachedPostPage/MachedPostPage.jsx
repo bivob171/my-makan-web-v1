@@ -41,7 +41,7 @@ export const MachedPostPage = ({
   const [towersorBuildingName, setTowersorBuildingName] = useState("");
   const [propertyCategoryName, setPropertyCategory] = useState("");
   const [propertyTypeName, setPropertyType] = useState("");
-  const [parking, setParking] = useState(item.parking);
+  const [parking, setParking] = useState("");
   const [sellType, setSellType] = useState([]);
   const [tags, setTags] = useState([]);
   const [country, setCountry] = useState("");
@@ -87,19 +87,18 @@ export const MachedPostPage = ({
         },
       });
 
+      console.log(url);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const postData = await response.json();
       setAllPosts(postData);
       const allPostsList = postData.posts;
-      // Filter posts by matchPercentage
-      const filteredPosts = allPostsList.filter(
-        (post) => Number(post.matchPercentage) >= minMatchPercentage
-      );
-      setHasMore(filteredPosts.length === limit);
+
+      setHasMore(allPostsList.length === limit);
       setmatchingPosts((prevPost) =>
-        page === 1 ? filteredPosts : [...prevPost, ...filteredPosts]
+        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
       );
       setLoading(false);
     } catch (error) {
@@ -132,7 +131,6 @@ export const MachedPostPage = ({
     propertyTypeName,
     sellType,
     tags,
-    minMatchPercentage,
   ]);
 
   useEffect(() => {

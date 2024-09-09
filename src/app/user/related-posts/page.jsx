@@ -43,10 +43,12 @@ export default function RelatedPost() {
   const { user } = PrivateRouteContext();
   // state
   const [allPosts, setAllPosts] = useState([]);
+  console.log(allPosts);
+
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -69,6 +71,7 @@ export default function RelatedPost() {
   const [state, setState] = useState("");
   const [cityq, setCity] = useState(city);
   const [compan, setcompany] = useState(company);
+  console.log(cityq);
 
   const [filterRender, setfilterRender] = useState(false);
   useEffect(() => {
@@ -177,7 +180,7 @@ export default function RelatedPost() {
       }
 
       // Base URL for API call
-      let url = `https://api.mymakan.ae/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `http://localhost:4000/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
 
       // Helper function to add query parameters
       const addQueryParam = (key, value) => {
@@ -263,7 +266,6 @@ export default function RelatedPost() {
     tags,
     cityq,
   ]);
-  console.log(tags);
   const lastPostElementRef = useCallback(
     (node) => {
       if (isFetching) return;

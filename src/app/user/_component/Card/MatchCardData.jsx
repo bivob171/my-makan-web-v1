@@ -8,6 +8,7 @@ export const MatchCardData = ({ item }) => {
 
   const [allPosts, setAllPosts] = useState();
   const [matchingPosts, setmatchingPosts] = useState([]);
+  console.log(allPosts);
 
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -23,13 +24,12 @@ export const MatchCardData = ({ item }) => {
   const [towersorBuildingName, setTowersorBuildingName] = useState("");
   const [propertyCategoryName, setPropertyCategory] = useState("");
   const [propertyTypeName, setPropertyType] = useState("");
-  const [parking, setParking] = useState(item.parking);
+  const [parking, setParking] = useState("");
   const [sellType, setSellType] = useState([]);
   const [tags, setTags] = useState([]);
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [minMatchPercentage, setMinMatchPercentage] = useState(0);
   const getAllMatchPosts = async (token) => {
     try {
       setIsFetching(true);
@@ -59,6 +59,7 @@ export const MatchCardData = ({ item }) => {
         url += `&tags=${encodeURIComponent(tags.join(","))}`;
       if (sellType.length !== 0)
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
+      console.log(url);
 
       const response = await fetch(url, {
         method: "GET",
@@ -74,12 +75,9 @@ export const MatchCardData = ({ item }) => {
       const postData = await response.json();
       setAllPosts(postData);
       const allPostsList = postData.posts;
-      const filteredPosts = allPostsList.filter(
-        (post) => Number(post.matchPercentage) >= minMatchPercentage
-      );
-      setHasMore(filteredPosts.length === limit);
+      setHasMore(allPostsList.length === limit);
       setmatchingPosts((prevPost) =>
-        page === 1 ? filteredPosts : [...prevPost, ...filteredPosts]
+        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
       );
       setLoading(false);
     } catch (error) {
@@ -108,7 +106,6 @@ export const MatchCardData = ({ item }) => {
     propertyTypeName,
     sellType,
     tags,
-    minMatchPercentage,
   ]);
 
   useEffect(() => {
@@ -218,7 +215,7 @@ export const MatchCardData = ({ item }) => {
             </div>
           ) : (
             <div className="flex flex-wrap items-center gap-x-[10px]">
-              {matchingPosts?.length >= 4 ? (
+              {matchingPosts?.length > 0 ? (
                 <div className="flex">
                   {matchingPosts?.map((data, i) => {
                     const { role, _id } = data;
@@ -263,7 +260,7 @@ export const MatchCardData = ({ item }) => {
                   ) : (
                     <Link href={`${"/user/matched-post"}/${matchpostId}`}>
                       <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-                        +{matchPlusMore} Matched
+                        +{allPosts?.total} Matched
                       </p>
                     </Link>
                   )}
