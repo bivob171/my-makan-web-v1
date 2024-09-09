@@ -34,6 +34,12 @@ export const NewsFeedPage = () => {
   const options = { year: "numeric", month: "short" };
   const formattedDate = dateObj.toLocaleDateString("en-US", options);
 
+  const [newsFeedRole, setnewsFeedRole] = useState("");
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    setnewsFeedRole(userRole);
+  }, []);
+
   return (
     <>
       <div className="page-content mt-6 lg:mt-0">
@@ -103,7 +109,7 @@ export const NewsFeedPage = () => {
                   setVerifyPopup={setVerifyPopup}
                   userName={userName}
                 />
-                {user?.role === "agent" && (
+                {newsFeedRole === "agent" && (
                   <div className="block-box post-input-tab !rounded-none border-t">
                     <ul className="nav nav-tabs" role="tablist">
                       <li
@@ -167,7 +173,7 @@ export const NewsFeedPage = () => {
                   </div>
                 )}
               </div>
-              {user?.role === "agent" ? (
+              {newsFeedRole === "agent" ? (
                 <>
                   {activeTab === "allPosts" && <AllTotalPost />}
                   {activeTab === "availablePosts" && <AvailableTotalPost />}

@@ -31,7 +31,7 @@ export const MatchCardData = ({ item }) => {
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const getAllMatchPosts = async (token) => {
+  const getAllMatchPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
       let url = `https://api.mymakan.ae/allposts/match-post?`;
@@ -41,7 +41,7 @@ export const MatchCardData = ({ item }) => {
       url += `limit=${limit}`;
 
       if (postType !== "") url += `&postType=${postType}`;
-      if (user?.role === "buyer") url += `&role=${"agent"}`;
+      if (userRole === "buyer") url += `&role=${"agent"}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
@@ -92,7 +92,7 @@ export const MatchCardData = ({ item }) => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllMatchPosts(token);
+    getAllMatchPosts(token, userRole);
   }, [
     sortOrder,
     sortBy,

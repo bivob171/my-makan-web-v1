@@ -50,7 +50,7 @@ export const MachedPostPage = ({
 
   const [matchingPosts, setmatchingPosts] = useState([]);
 
-  const getAllPosts = async (token) => {
+  const getAllPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
       let url = `https://api.mymakan.ae/allposts/match-post?`;
@@ -60,7 +60,7 @@ export const MachedPostPage = ({
       url += `page=${page}&`;
       url += `limit=${limit}`;
       if (postType !== "") url += `&postType=${postType}`;
-      if (user?.role === "buyer") url += `&role=${"agent"}`;
+      if (userRole === "buyer") url += `&role=${"agent"}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
@@ -112,7 +112,7 @@ export const MachedPostPage = ({
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllPosts(token);
+    getAllPosts(token, userRole);
   }, [
     sortOrder,
     sortBy,

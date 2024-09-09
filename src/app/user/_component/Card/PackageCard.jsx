@@ -405,6 +405,7 @@ export default function PackageCard({
   activeUsers;
 
   const [commentDropdown, setCommentDropdown] = useState(null);
+
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
       <div className="pt-1">

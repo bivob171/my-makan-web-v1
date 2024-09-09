@@ -18,7 +18,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import PackageCard from "../_component/Card/PackageCard";
 
 export default function RelatedPost() {
-  const { user } = PrivateRouteContext;
+  const { user } = PrivateRouteContext();
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
   const location = searchParams.get("location");
@@ -43,7 +43,6 @@ export default function RelatedPost() {
 
   // state
   const [allPosts, setAllPosts] = useState([]);
-  console.log(allPosts);
 
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
@@ -71,7 +70,6 @@ export default function RelatedPost() {
   const [state, setState] = useState("");
   const [cityq, setCity] = useState(city);
   const [compan, setcompany] = useState(company);
-  console.log(cityq);
 
   const [filterRender, setfilterRender] = useState(false);
   useEffect(() => {
@@ -169,7 +167,7 @@ export default function RelatedPost() {
     );
   }, [filterRenderRelatedPost]);
 
-  const getAllPosts = async (token) => {
+  const getAllPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
       // Reset loading and pagination if necessary
@@ -191,10 +189,7 @@ export default function RelatedPost() {
       // Add optional parameters if they are defined and not empty
       addQueryParam("for", forPost);
       addQueryParam("companyName", compan);
-      if (compan && compan !== "") {
-        addQueryParam("role", "agent");
-      }
-      if (user?.role === "buyer") {
+      if ((compan && compan !== "") || userRole === "buyer") {
         addQueryParam("role", "agent");
       }
       addQueryParam("state", state);
@@ -246,7 +241,7 @@ export default function RelatedPost() {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllPosts(token);
+    getAllPosts(token, userRole);
   }, [
     filterRender,
     sortOrder,
