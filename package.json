@@ -106,7 +106,8 @@
     "styled-components": "^6.1.11",
     "swiper": "^11.1.4",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "wavesurfer.js": "^7.8.5"
   },
   "devDependencies": {
     "eslint": "^8",

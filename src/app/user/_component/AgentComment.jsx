@@ -12,7 +12,8 @@ import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import { MentionsInput, Mention } from "react-mentions";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 const socket = io("https://api.mymakan.ae", {
   path: "/socket.io",
   transports: ["websocket"],
@@ -143,13 +144,8 @@ const AgentComment = ({ _id }) => {
   };
 
   const onEmojiClick = (emoji) => {
-    setComment((prevComment) => prevComment + emoji.emoji);
+    setComment((prevComment) => prevComment + emoji.native);
     setShowEmojiPicker(false);
-    console.log(emoji);
-  };
-  const onEmojiClicks = (event, emojiObject) => {
-    console.log(emojiObject); // Check the structure of the emojiObject
-    console.log(emojiObject.emoji); // Should log the emoji character
   };
 
   const handleEmojiButtonClick = () => {
@@ -909,7 +905,7 @@ const AgentComment = ({ _id }) => {
             )}
           </div>
           <div className="flex justify-between items-center w-full px-6 pb-2 bg-[#EDF2F9] rounded-b-2xl">
-            <div className="flex">
+            <div className="relative ">
               <Tooltip title="Emoji" arrow placement="top-start">
                 <button
                   type="button"
@@ -921,22 +917,16 @@ const AgentComment = ({ _id }) => {
               </Tooltip>
 
               {showEmojiPicker && (
-                <div className="absolute z-10 mt-2">
-                  {/* <EmojiPicker
-                    onEmojiClick={(event, emojiObject) => {
-                      console.log(emojiObject.emoji); // Logs the emoji character
-                      onEmojiClick(emojiObject);
-                    }}
-                  /> */}{" "}
-                  <EmojiPicker onEmojiClick={onEmojiClicks} />
+                <div className="absolute bottom-0 z-10">
+                  <Picker data={data} onEmojiSelect={onEmojiClick} />
                 </div>
               )}
 
-              <Tooltip title="Photo and video" arrow placement="top-start">
+              {/* <Tooltip title="Photo and video" arrow placement="top-start">
                 <button className="hover:bg-[#fff] p-2 rounded-full">
                   <TbPhotoHexagon className="w-8 h-8" />
                 </button>
-              </Tooltip>
+              </Tooltip> */}
             </div>
             <Tooltip title="Send" arrow placement="top-start">
               <button

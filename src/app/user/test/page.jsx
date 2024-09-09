@@ -1,90 +1,58 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { LiveAudioVisualizer } from "react-audio-visualize";
+import React, { useRef, useState } from "react";
+import { AudioRecorder as ReactAudioRecorder } from "react-audio-voice-recorder";
 
-export default function AudioRecorder() {
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [stream, setStream] = useState(null);
-  const [audioURL, setAudioURL] = useState(null);
+export default function AudioRecorderComponent() {
+  const audioContainerRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
 
-  const audioRef = useRef(null);
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    const audio = document.createElement("audio");
+    audio.src = url;
+    audio.controls = true;
 
-  useEffect(() => {
-    const setupMediaRecorder = async () => {
-      try {
-        const audioStream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        setStream(audioStream);
-
-        const recorder = new MediaRecorder(audioStream);
-        setMediaRecorder(recorder);
-
-        recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            const audioURL = URL.createObjectURL(event.data);
-            setAudioURL(audioURL);
-          }
-        };
-
-        recorder.onstart = () => setIsRecording(true);
-        recorder.onstop = () => setIsRecording(false);
-      } catch (error) {
-        console.error("Error accessing the microphone", error);
-      }
-    };
-
-    setupMediaRecorder();
-
-    return () => {
-      if (mediaRecorder) {
-        mediaRecorder.stop();
-      }
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [mediaRecorder, stream]);
-
-  const startRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.start();
+    if (audioContainerRef.current) {
+      audioContainerRef.current.appendChild(audio);
     }
+    setIsRecording(false); // Stop recording when the recording is complete
   };
 
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-    }
+  // We handle recording start manually
+  const handleStartRecording = () => {
+    setIsRecording(true); // Set recording state to true
   };
 
   return (
-    <div className="m-[200px]">
-      <button onClick={startRecording} disabled={isRecording}>
-        Start Recording
-      </button>
-      <button onClick={stopRecording} disabled={!isRecording}>
-        Stop Recording
-      </button>
+    <div className="flex flex-col items-center justify-center m-[100px]">
+      <div className="p-4 bg-gray-100 rounded-lg shadow-lg">
+        <ReactAudioRecorder
+          onRecordingComplete={addAudioElement}
+          audioTrackConstraints={{
+            noiseSuppression: true,
+            echoCancellation: true,
+          }}
+          downloadOnSavePress={true}
+          downloadFileExtension="webm"
+          onStart={handleStartRecording} // Triggered when recording starts
+        />
+      </div>
 
-      {mediaRecorder && (
-        <div style={{ marginTop: "20px" }}>
-          <LiveAudioVisualizer
-            mediaRecorder={mediaRecorder}
-            width={200}
-            height={75}
-          />
-        </div>
-      )}
+      {/* Show recording state */}
+      <div className="mt-4">
+        {isRecording ? (
+          <p className="text-red-500 font-bold">Recording in progress...</p>
+        ) : (
+          <p className="text-green-500 font-bold">Not recording</p>
+        )}
+      </div>
 
-      {audioURL && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Playback</h3>
-          <audio ref={audioRef} src={audioURL} controls />
-        </div>
-      )}
+      {/* Container for recorded audio */}
+      <div
+        ref={audioContainerRef}
+        className="mt-4 w-full max-w-lg bg-white p-4 rounded-lg shadow-md"
+      ></div>
     </div>
   );
 }

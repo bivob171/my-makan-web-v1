@@ -66,6 +66,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const { user, activeUsers, lastActiveTime, timeAgo } = PrivateRouteContext();
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
+  const [newVoice, setNewVoice] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [chatOpened, setChatOpened] = useState(false);
   const textareaRef = useRef(1);
@@ -119,6 +120,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     const messageData = {
       chatId,
       senderId: userId,
+      voice: newVoice,
       content: newMessage || "",
       status: "sending", // Set initial status to "sending"
       media: file || null, // Ensure media is defined or set to null
@@ -468,7 +470,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   }
 
   const handleEmojiSelect = (emoji) => {
-    setNewMessage(emoji.native); // Use emoji.native to get the emoji character
+    setNewMessage((prevMessage) => prevMessage + emoji.native); // Use emoji.native to get the emoji character
   };
 
   return (
