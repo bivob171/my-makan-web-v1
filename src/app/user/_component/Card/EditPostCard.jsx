@@ -243,7 +243,7 @@ export default function EditPostCard({
         queryParam = `type=${value}`;
         break;
       case "company":
-        queryParam = `company=${value}`;
+        queryParam = `company=${value.company}`;
         break;
 
         return;
