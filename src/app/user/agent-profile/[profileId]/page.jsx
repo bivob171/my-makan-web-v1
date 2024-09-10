@@ -23,6 +23,7 @@ import {
 } from "../../../../firebase"; // Assuming you have firebase setup
 import { ChatValueContext } from "@/Context/chatContext";
 import { PremiumValueContext } from "@/Context/premiumContext";
+import { useRouter } from "next/router";
 export default function AgentProfile() {
   const { user, setRender, render, isConnected, activeUsers } =
     PrivateRouteContext();
@@ -331,6 +332,32 @@ export default function AgentProfile() {
   const { fetchChatExist } = useContext(ChatValueContext);
   const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
 
+  const router = useRouter();
+  function handleRelatedPosts({ type, value }) {
+    let queryParam = "";
+    switch (type) {
+      case "location":
+        queryParam = `location=` + value.city + `,` + value.country;
+        break;
+      case "tag":
+        queryParam = `tag=${value}`;
+        break;
+      case "for":
+        queryParam = `for=${value}`;
+        break;
+      case "type":
+        queryParam = `type=${value}`;
+        break;
+      case "company":
+        queryParam = `company=${value.company}`;
+        break;
+
+        return;
+    }
+
+    router.push(`/user/related-posts?${queryParam}`);
+  }
+
   return (
     <div className="bg-[#EFF4FB]">
       <div className="bg-[white] shadow-sm !pt-[100px]">
@@ -456,7 +483,17 @@ export default function AgentProfile() {
                   </p>
                 </div>
                 {profile?.role === "agent" && (
-                  <h1 className="text-[26px] font-semibold leading-none hover:underline underline-offset-4 text-[#8920AD] uppercase">
+                  <h1
+                    onClick={() =>
+                      handleRelatedPosts({
+                        type: "company",
+                        value: {
+                          company: profile?.companyName,
+                        },
+                      })
+                    }
+                    className="cursor-pointer text-[26px] font-semibold leading-none hover:underline underline-offset-4 text-[#8920AD] uppercase"
+                  >
                     {profile?.companyName}
                   </h1>
                 )}

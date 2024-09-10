@@ -56,7 +56,7 @@ const RelatedBlogs = ({ item }) => {
     setPropertyCategory(item?.propertyCategory);
   }, [item]);
 
-  const getAllPosts = async (token) => {
+  const getAllPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
       let url = `https://api.mymakan.ae/allposts/match-post?`;
@@ -65,6 +65,7 @@ const RelatedBlogs = ({ item }) => {
       url += `page=${page}&`;
       url += `limit=${limit}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
+      if (userRole === "buyer") url += `&role=${encodeURIComponent("agent")}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
       if (country !== "") url += `&country=${encodeURIComponent(country)}`;
@@ -116,7 +117,7 @@ const RelatedBlogs = ({ item }) => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    getAllPosts(token);
+    getAllPosts(token, userRole);
   }, [
     sortOrder,
     sortBy,
