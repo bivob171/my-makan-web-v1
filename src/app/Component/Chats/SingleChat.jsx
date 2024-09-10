@@ -176,7 +176,11 @@ export const SingleChat = ({
                 >
                   {msg?.content}
                 </div>
-              ) : null}
+              ) : (
+                <audio controls className=" w-[250px] h-[35px]">
+                  <source src={msg?.voice} type="audio/webm" />
+                </audio>
+              )}
               <div className="flex justify-end gap-x-[3px] items-center">
                 <p
                   className={cx(

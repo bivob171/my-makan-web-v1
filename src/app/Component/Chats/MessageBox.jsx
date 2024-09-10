@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import {
   MdAddAPhoto,
+  MdDelete,
   MdKeyboardVoice,
   MdOutlineEmojiEmotions,
   MdVideoCall,
@@ -49,6 +50,7 @@ import axios from "axios";
 import { SingleChat } from "./SingleChat";
 import { useClickOutside } from "react-haiku";
 import clsx from "clsx";
+import Test from "@/app/user/test/page";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isToday);
@@ -69,6 +71,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [newVoice, setNewVoice] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [chatOpened, setChatOpened] = useState(false);
+  const [voiceRecord, setVoiceRecord] = useState(false);
   const textareaRef = useRef(1);
   const messageContainerRef = useRef(null);
   const userId = user?._id;
@@ -114,7 +117,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   };
 
   const sendMessage = async () => {
-    if (newMessage.trim() === "" && file.length === 0) return;
+    if (newMessage.trim() === "" && file.length === 0 && newVoice === null)
+      return;
 
     const tempId = Date.now(); // Temporary ID for the message
     const messageData = {
@@ -130,6 +134,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       reactions: [],
       deletedFor: [],
     };
+
     playNotificationSound();
     scrollToBottom();
     // Update the local messages state with "sending" status
@@ -196,7 +201,12 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       if (typeof messageTimestamp === "number") {
         // Update the chat document with the latest message info
         await updateDoc(chatDocRef, {
-          latestMessage: newMessage === "" ? "image" : newMessage,
+          latestMessage:
+            newVoice !== null
+              ? "voice"
+              : newMessage === ""
+              ? "image"
+              : newMessage,
           latestMessageTimestamp: Timestamp.fromMillis(messageTimestamp),
           ...unseenMessagesUpdate, // Increment unseen messages count for other participants
         });
@@ -554,173 +564,220 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       </div>
       {/* bottom */}
       <div className="absolute bottom-0 h-auto min-h-[55px] max-h-[150px] bg-white border-t-[0.5px] w-full flex justify-around items-center gap-1 py-2 px-2">
-        <div className="relative">
-          <div className="relative">
-            {emojOpen === true && (
-              <div ref={emojiRef} className="absolute bottom-0">
-                <Picker data={data} onEmojiSelect={handleEmojiSelect} />
-              </div>
-            )}
-            <button className="text-[23px] text-blue-500" onClick={openEmoj}>
-              <MdOutlineEmojiEmotions />
-            </button>
-          </div>
-          {filePreview === true ? (
-            <div
-              ref={sendWithMediaRef}
-              className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md"
-            >
-              <div className="p-2">
-                {selectedImage.type === "image" ? (
-                  <div className="w-full relative">
-                    <Image
-                      src={selectedImage?.url}
-                      width={100}
-                      height={100}
-                      alt=""
-                      className="w-full  aspect-video object-contain rounded-md"
+        <div className="flex gap-x-2 items-center mb-[10px]">
+          <Test setNewVoice={setNewVoice} setVoiceRecord={setVoiceRecord} />
+          {newVoice !== null && voiceRecord === false && (
+            <div className="flex gap-x-2 items-center">
+              <audio controls className=" w-[250px] h-[35px]">
+                <source src={newVoice} type="audio/webm" />
+              </audio>
+              <button
+                type="button"
+                onClick={() => setNewVoice(null)}
+                className="text-[23px] text-blue-500"
+              >
+                <MdDelete />
+              </button>
+              {newVoice !== null ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sendMessage();
+                    setNewVoice(null);
+                    setVoiceRecord(false);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-[#615DFA]"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
                     />
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
-                      onClick={() => handleFileDelete(selectedImage?._id)}
-                    />
-                  </div>
-                ) : (
-                  <div className=" w-full aspect-video relative">
-                    <video
-                      src={selectedImage?.url}
-                      controls
-                      className="w-full aspect-video object-contain bg-black rounded-md"
-                    />
-                    <CgClose
-                      className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
-                      onClick={() => handleFileDelete(selectedImage?._id)}
-                    />
+                  </svg>
+                </button>
+              ) : null}
+            </div>
+          )}
+        </div>
+        {voiceRecord === false && newVoice === null && (
+          <>
+            <div className="relative">
+              <div className="relative">
+                {emojOpen === true && (
+                  <div ref={emojiRef} className="absolute bottom-0">
+                    <Picker data={data} onEmojiSelect={handleEmojiSelect} />
                   </div>
                 )}
-              </div>
-              <div>
-                <textarea
-                  className="w-full max-w-[100%] border-[0.5px]  border-gray-100 max-h-12 resize-none outline-none px-3 py-1 scroll-pb-1.5 leading-5"
-                  value={newMessage}
-                  rows={2}
-                  placeholder="Type your message..."
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-              </div>
-              <div className="flex justify-between items-center gap-2 px-2 pl-4 pb-1">
                 <button
-                  className="text-[30px] text-blue-500 aspect-squere"
-                  onClick={() => document.getElementById("image-input").click()}
+                  className="text-[23px] text-blue-500"
+                  onClick={openEmoj}
                 >
-                  <MdAddAPhoto className="size-5" />
+                  <MdOutlineEmojiEmotions />
                 </button>
-                <div className="flex gap-x-1 flex-grow overflow-auto p-2">
-                  {file.map((f, i) => {
-                    return (
-                      <div key={i}>
-                        {f?.type === "image" && (
-                          <Image
-                            onClick={() => handelselectedImage(f)}
-                            src={f.url}
-                            alt=""
-                            width={50}
-                            height={50}
-                            className={clsx(
-                              "flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10",
-                              selectedImage?._id === f._id
-                                ? "ring-2 ring-offset-1 ring-blue-600"
-                                : ""
-                            )}
-                          />
-                        )}
-                        {f?.type === "video" && (
-                          <video
-                            width="50"
-                            onClick={() => handelselectedImage(f)}
-                            src={f.url}
-                            alt=""
-                            className={clsx(
-                              "flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm",
-                              selectedImage?._id === f._id
-                                ? "ring-2 ring-offset-1 ring-blue-600"
-                                : ""
-                            )}
-                          />
-                        )}
-                        {console.log(selectedImage, f)}
-                      </div>
-                    );
-                  })}
-                </div>
+              </div>
+              {filePreview === true ? (
                 <div
-                  onClick={sendMessage}
-                  className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm cursor-pointer"
+                  ref={sendWithMediaRef}
+                  className="absolute bottom-full mb-2 bg-white shadow-lg shadow-gray-700/60 w-[400px] h-auto rounded-md"
                 >
-                  <p className=" ml-[5px] text-[20px] text-white mt-[5px]">
-                    <IoMdSend />
-                  </p>
+                  <div className="p-2">
+                    {selectedImage.type === "image" ? (
+                      <div className="w-full relative">
+                        <Image
+                          src={selectedImage?.url}
+                          width={100}
+                          height={100}
+                          alt=""
+                          className="w-full  aspect-video object-contain rounded-md"
+                        />
+                        <CgClose
+                          className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                          onClick={() => handleFileDelete(selectedImage?._id)}
+                        />
+                      </div>
+                    ) : (
+                      <div className=" w-full aspect-video relative">
+                        <video
+                          src={selectedImage?.url}
+                          controls
+                          className="w-full aspect-video object-contain bg-black rounded-md"
+                        />
+                        <CgClose
+                          className="bg-red-500 text-white p-[2px] rounded-full absolute top-1 right-1 cursor-pointer"
+                          onClick={() => handleFileDelete(selectedImage?._id)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <textarea
+                      className="w-full max-w-[100%] border-[0.5px]  border-gray-100 max-h-12 resize-none outline-none px-3 py-1 scroll-pb-1.5 leading-5"
+                      value={newMessage}
+                      rows={2}
+                      placeholder="Type your message..."
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center gap-2 px-2 pl-4 pb-1">
+                    <button
+                      className="text-[30px] text-blue-500 aspect-squere"
+                      onClick={() =>
+                        document.getElementById("image-input").click()
+                      }
+                    >
+                      <MdAddAPhoto className="size-5" />
+                    </button>
+                    <div className="flex gap-x-1 flex-grow overflow-auto p-2">
+                      {file.map((f, i) => {
+                        return (
+                          <div key={i}>
+                            {f?.type === "image" && (
+                              <Image
+                                onClick={() => handelselectedImage(f)}
+                                src={f.url}
+                                alt=""
+                                width={50}
+                                height={50}
+                                className={clsx(
+                                  "flex-shrink-0 object-cover bg-white cursor-pointer rounded-sm size-10",
+                                  selectedImage?._id === f._id
+                                    ? "ring-2 ring-offset-1 ring-blue-600"
+                                    : ""
+                                )}
+                              />
+                            )}
+                            {f?.type === "video" && (
+                              <video
+                                width="50"
+                                onClick={() => handelselectedImage(f)}
+                                src={f.url}
+                                alt=""
+                                className={clsx(
+                                  "flex-shrink-0 object-cover size-10 cursor-pointer rounded-sm",
+                                  selectedImage?._id === f._id
+                                    ? "ring-2 ring-offset-1 ring-blue-600"
+                                    : ""
+                                )}
+                              />
+                            )}
+                            {console.log(selectedImage, f)}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div
+                      onClick={sendMessage}
+                      className="pt-[0px] relative bg-blue-500 w-[30px] h-[30px] rounded-sm cursor-pointer"
+                    >
+                      <p className=" ml-[5px] text-[20px] text-white mt-[5px]">
+                        <IoMdSend />
+                      </p>
 
-                  <div className="absolute top-[25px] w-[10px] h-[10px] right-0 bg-white flex justify-center rounded-full">
-                    <p className=" text-[7px]  leading-[10px] ">
-                      {file.length}
-                    </p>
+                      <div className="absolute top-[25px] w-[10px] h-[10px] right-0 bg-white flex justify-center rounded-full">
+                        <p className=" text-[7px]  leading-[10px] ">
+                          {file.length}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
             </div>
-          ) : null}
-        </div>
-        <button
-          type="button"
-          onClick={() => document.getElementById("image-input").click()}
-          className="mb-[10px]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6 text-[#615DFA]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-            />
-          </svg>
-        </button>
-        <textarea
-          className="w-full max-w-[80%] border-[0.5px] rounded-2xl bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[12px] leading-5"
-          value={newMessage}
-          placeholder="Type your message..."
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        {/* Conditionally render Send or Like button */}
-        {newMessage.trim().length > 0 ? (
-          <button type="button" onClick={sendMessage}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-[#615DFA]"
+            <button
+              type="button"
+              onClick={() => document.getElementById("image-input").click()}
+              className="mb-[10px]"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-              />
-            </svg>
-          </button>
-        ) : (
-          <button type="button" className="text-[23px] text-blue-500">
-            <MdKeyboardVoice />
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-[#615DFA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+            </button>
+            <textarea
+              className="w-full max-w-[80%] border-[0.5px] rounded-2xl bg-[#EFF4FB] h-auto resize-none outline-none px-3 py-[12px] leading-5"
+              value={newMessage}
+              placeholder="Type your message..."
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            {/* Conditionally render Send or Like button */}
+            {newMessage.trim().length > 0 ? (
+              <button type="button" onClick={sendMessage}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-[#615DFA]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                  />
+                </svg>
+              </button>
+            ) : null}
+          </>
         )}
       </div>
       <input
