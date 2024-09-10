@@ -316,7 +316,7 @@ const HTopNotification = ({
               </a>
             </div>
           </div>
-          <div>
+          <div className="h-[290px] overflow-y-auto">
             {chats.length > 0 &&
               chats?.map((chat) => {
                 const formatTimestamp = (timestamp) => {
@@ -389,7 +389,7 @@ const HTopNotification = ({
                 );
               })}
           </div>
-          <div className=" mt-[15px]">
+          <div className=" mt-[1px]">
             <button
               type="button"
               onClick={chatPage}

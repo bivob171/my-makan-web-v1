@@ -9,7 +9,7 @@ import { LuCheckCheck } from "react-icons/lu";
 const AllMessages = ({ chats, handleChatSelection }) => {
   const { user, activeUsers } = PrivateRouteContext();
   return (
-    <div className="px-3 py-2">
+    <div className="px-3 py-2 ">
       {chats.map((chat) => {
         const formatTimestamp = (timestamp) => {
           if (!timestamp) return "No Date";
@@ -40,7 +40,7 @@ const AllMessages = ({ chats, handleChatSelection }) => {
           <div
             key={chat.id}
             onClick={() => handleChatSelection(chat?.id, chat)}
-            className="flex justify-start items-start gap-2 py-[6px] px-[2px] border-b-[1px] hover:bg-[#eff4fbc0] hover:rounded-md"
+            className=" cursor-pointer flex justify-start items-start gap-2 py-[6px] px-[2px] border-b-[1px] hover:bg-[#eff4fbc0] hover:rounded-md"
           >
             <Image
               src={participantImage}

@@ -68,7 +68,7 @@ const Chats = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="h-[70vh] overflow-y-auto">
             <AllMessages
               chats={chats}
               handleChatSelection={handleChatSelection}
