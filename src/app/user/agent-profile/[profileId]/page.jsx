@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { MdAddAPhoto } from "react-icons/md";
 import { GoStarFill } from "react-icons/go";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -23,7 +23,6 @@ import {
 } from "../../../../firebase"; // Assuming you have firebase setup
 import { ChatValueContext } from "@/Context/chatContext";
 import { PremiumValueContext } from "@/Context/premiumContext";
-import { useRouter } from "next/router";
 export default function AgentProfile() {
   const { user, setRender, render, isConnected, activeUsers } =
     PrivateRouteContext();
