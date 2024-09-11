@@ -95,6 +95,9 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const participantName = selectedChat?.participants
     .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.name)[0];
+  const participantRole = selectedChat?.participants
+    .filter((p) => p.id !== userID) // Exclude the current user
+    .map((p) => p.role)[0];
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
@@ -522,6 +525,47 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     setNewMessage((prevMessage) => prevMessage + emoji.native); // Use emoji.native to get the emoji character
   };
 
+  const [profile, setProfile] = useState();
+  const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const fetchUserProfile = async (participantId, participantRole) => {
+    if (!participantId && !participantRole) return;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      } else {
+        const profile = await response.json();
+        setProfile(profile);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (participantRole === "buyer") {
+      fetchUserProfile(participantId, participantRole);
+    }
+  }, [participantId, participantRole]);
+
+  useEffect(() => {
+    setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
+  }, [profile]);
+
   return (
     <div className="" ref={filePreviewRef}>
       <div className="sticky top-0 h-[65px] bg-white border-b flex items-center justify-between px-3">
@@ -540,14 +584,18 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
           />
 
           <div className="flex flex-col items-start">
-            <h3 className="text-[16px] font-bold leading-4">
+            <h3 className="text-[16px] font-bold leading-3">
               {" "}
-              {participantName}
+              {participantRole === "buyer"
+                ? isFriend || isFollow || isFollowEr
+                  ? participantName
+                  : "Hidden Name"
+                : participantName}
             </h3>
             {isActive ? (
-              <p className="text-center leading-3 text-[12px] m-0">{} Active</p>
+              <p className="text-center leading-3 text-[12px] ">{} Active</p>
             ) : (
-              <divp className="text-center leading-3 text-[12px] m-0">
+              <divp className="text-center leading-3 text-[12px]  ">
                 {lastActive === "No recent activity"
                   ? lastActive
                   : ` Last seen ${lastActive}`}

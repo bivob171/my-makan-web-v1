@@ -66,6 +66,47 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
   // Step 2: Flatten the media arrays into one combined array
   const combinedMedia = filteredMassage.flatMap((item) => item.media);
 
+  const [profile, setProfile] = useState();
+  const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const fetchUserProfile = async (participantId, participantRole) => {
+    if (!participantId && !participantRole) return;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      } else {
+        const profile = await response.json();
+        setProfile(profile);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (participantRole === "buyer") {
+      fetchUserProfile(participantId, participantRole);
+    }
+  }, [participantId, participantRole]);
+
+  useEffect(() => {
+    setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
+  }, [profile]);
+
   return (
     <div className="p-3 relative">
       <button
@@ -86,7 +127,11 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
       </center>
 
       <h3 className="text-center leading-6 text-[22px] m-0 font-bold mt-2">
-        {participantName}
+        {participantRole === "buyer"
+          ? isFriend || isFollow || isFollowEr
+            ? participantName
+            : "Hidden Name"
+          : participantName}
       </h3>
 
       <p className="text-center leading-6 text-[12px] m-0">Active 46m ago</p>
