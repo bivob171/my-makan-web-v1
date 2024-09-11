@@ -1,12 +1,17 @@
 "use client";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
-export default function Test({ setNewVoice, setVoiceRecord }) {
+export default function Test({
+  setNewVoice,
+  setVoiceRecord,
+  setNewUploadVoice,
+}) {
   const recorderControls = useAudioRecorder();
 
   const addAudioElement = (blob) => {
     const url = URL.createObjectURL(blob);
     setNewVoice(url);
+    setNewUploadVoice(blob);
   };
 
   const handleStartRecording = () => {

@@ -69,6 +69,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [rows, setRows] = useState(1);
   const [messages, setMessages] = useState([]);
   const [newVoice, setNewVoice] = useState(null);
+  const [newUploadVoice, setNewUploadVoice] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [chatOpened, setChatOpened] = useState(false);
   const [voiceRecord, setVoiceRecord] = useState(false);
@@ -151,9 +152,13 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
     try {
       let uploadedMedia = [];
+      let audio = null;
 
       if (file.length > 0) {
         uploadedMedia = await handleUpload(rawFile, file);
+      }
+      if (newUploadVoice) {
+        audio = await uploadAudio(newUploadVoice);
       }
 
       // Add the message to Firestore with uploaded media URLs
@@ -161,6 +166,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       const docRef = await addDoc(messagesRef, {
         ...messageData,
         media: uploadedMedia.length > 0 ? uploadedMedia : null,
+        voice: audio,
         createdAt: serverTimestamp(), // Overwrite createdAt with Firestore's server timestamp
         status: "sent", // Set status to "sent" after successful send
         seen: null,
@@ -177,6 +183,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       // Clear files and media state
       setFile([]);
       setRawFile([]);
+      setNewUploadVoice(null);
+      setNewVoice(null);
 
       // Get the timestamp of the new message
       const messageSnapshot = await getDoc(docRef);
@@ -319,7 +327,6 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
       return links; // Return the uploaded media links
     } catch (error) {
-      console.error("Upload failed:", error);
       return []; // Return an empty array on failure
     } finally {
       // Clear upload progress for files after upload completes
@@ -328,6 +335,32 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
           fileDetails.some((file) => file._id !== item._id)
         )
       );
+    }
+  };
+
+  const uploadAudio = async (blob) => {
+    const formData = new FormData();
+    formData.append("files", blob, "recording.wav"); // Adjust the filename and extension as needed
+
+    try {
+      const response = await fetch(
+        "https://api.mymakan.ae/file-upload/upload",
+        {
+          // Adjust the endpoint URL as needed
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload audio");
+      }
+
+      const result = await response.json();
+      const audio = result[0].Location;
+      return audio;
+    } catch (error) {
+      console.error("Error uploading audio:", error);
     }
   };
   // file disply
@@ -571,7 +604,11 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       {/* bottom */}
       <div className="absolute bottom-0 h-auto min-h-[55px] max-h-[150px] bg-white border-t-[0.5px] w-full flex justify-around items-center gap-1 py-2 px-2">
         <div className="flex gap-x-2 items-center mb-[10px]">
-          <Test setNewVoice={setNewVoice} setVoiceRecord={setVoiceRecord} />
+          <Test
+            setNewVoice={setNewVoice}
+            setVoiceRecord={setVoiceRecord}
+            setNewUploadVoice={setNewUploadVoice}
+          />
           {newVoice !== null && voiceRecord === false && (
             <div className="flex gap-x-2 items-center">
               <audio controls className=" w-[250px] h-[35px]">

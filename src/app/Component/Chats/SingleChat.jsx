@@ -51,6 +51,8 @@ export const SingleChat = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const emojiRef = useRef(null);
   const menuRef = useRef(null);
+  console.log(msg);
+
   useClickOutside(emojiRef, () => {
     if (isEmojiOpen) {
       setIsEmojiOpen(false);
@@ -177,9 +179,11 @@ export const SingleChat = ({
                   {msg?.content}
                 </div>
               ) : (
-                <audio controls className=" w-[250px] h-[35px]">
-                  <source src={msg?.voice} type="audio/webm" />
-                </audio>
+                msg?.voice !== null && (
+                  <audio controls className="w-[250px] h-[35px]">
+                    <source src={msg?.voice} type="audio/wav" />
+                  </audio>
+                )
               )}
               <div className="flex justify-end gap-x-[3px] items-center">
                 <p
