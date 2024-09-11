@@ -10,7 +10,6 @@ export const MatchCardData = ({ item }) => {
   const [allPosts, setAllPosts] = useState();
   const [matchingPosts, setmatchingPosts] = useState([]);
   const { user } = PrivateRouteContext();
-  console.log(allPosts);
 
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");

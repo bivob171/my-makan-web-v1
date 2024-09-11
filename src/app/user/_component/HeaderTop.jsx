@@ -448,6 +448,65 @@ export const HeaderTop = () => {
 
   // Rest of your component logic here
 
+  const [userRole, setUserFeedRole] = useState("");
+  const [userID, setUserID] = useState("");
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem(`${role}Id`);
+    setUserFeedRole(role);
+    setUserID(id);
+  }, []);
+  useEffect(() => {
+    // Function to check unseen messages and show a notification
+    const checkUnseenMessages = () => {
+      chats.forEach((chat) => {
+        const unseenCount = chat.unseenMessages[userID];
+
+        // If unseenMessages count is more than 0, trigger a notification
+        if (unseenCount > 0) {
+          toast(
+            (t) => (
+              <div className="relative">
+                <div className="flex items-start mt-[10px]">
+                  <Image
+                    width={50}
+                    height={50}
+                    src={chat.participants.find((p) => p.id !== userID)?.image}
+                    alt="User"
+                    className="w-[32px] h-[32px] rounded-full mr-2"
+                  />
+
+                  <div>
+                    <p className="text-[14px] font-medium leading-[18px] mb-1">
+                      You have new messages from
+                    </p>
+                    <p className="text-[15px] font-semibold leading-[18px]">
+                      {/* {chat?.latestMessage} */}
+                      {chat.participants.find((p) => p.id !== userID)?.name}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => toast.dismiss(t.id)} // Close the toast
+                  className="ml-2 p-1 text-gray-500 hover:text-gray-700 absolute -top-[12px] -right-[15px]"
+                >
+                  <IoClose className="w-5 h-5" />
+                </button>
+              </div>
+            ),
+            {
+              duration: 5000, // Optional: Auto-dismiss after 5 seconds
+            }
+          );
+        }
+      });
+    };
+
+    if (chats.length > 0) {
+      checkUnseenMessages();
+    }
+  }, [chats, userID]);
+
   return (
     <header ref={dropdownRef} className="fixed-header !z-40 ">
       <div className="header-menu relative">

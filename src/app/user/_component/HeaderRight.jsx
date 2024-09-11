@@ -47,6 +47,15 @@ export const HeaderRight = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [chatOpen]);
+
+  const [userRole, setUserFeedRole] = useState("");
+  const [userID, setUserID] = useState("");
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem(`${role}Id`);
+    setUserFeedRole(role);
+    setUserID(id);
+  }, []);
   return (
     <div>
       <div className="fixed-sidebar !z-40 right">
@@ -88,18 +97,17 @@ export const HeaderRight = () => {
                           };
 
                           const participantId = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
+                            .filter((p) => p.id !== userID) // Exclude the current user
                             .map((p) => p.id)[0];
                           const participantImage = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
+                            .filter((p) => p.id !== userID) // Exclude the current user
                             .map((p) => p.image)[0];
                           const participantName = chat?.participants
-                            .filter((p) => p.id !== user?._id) // Exclude the current user
+                            .filter((p) => p.id !== userID) // Exclude the current user
                             .map((p) => p.name)[0];
                           const unseenCountparticipan =
                             chat.unseenMessages[participantId] || 0;
-                          const unseenCount =
-                            chat.unseenMessages[user?._id] || 0;
+                          const unseenCount = chat.unseenMessages[userID] || 0;
 
                           const isActive = activeUsers.includes(participantId);
                           return (

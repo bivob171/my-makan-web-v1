@@ -72,22 +72,29 @@ export const NewsFeedChatCard = ({
   const [chatOpened, setChatOpened] = useState(false);
   const textareaRef = useRef(1);
   const messageContainerRef = useRef(null);
-  const userId = user?._id;
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
+  const [userRole, setUserFeedRole] = useState("");
+  const [userID, setUserID] = useState("");
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem(`${role}Id`);
+    setUserFeedRole(role);
+    setUserID(id);
+  }, []);
 
   const participantId = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.id)[0];
   const participantImage = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.image)[0];
   const participantName = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.name)[0];
   const participantRole = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.role)[0];
 
   const scrollToBottom = () => {
@@ -123,7 +130,7 @@ export const NewsFeedChatCard = ({
     const tempId = Date.now(); // Temporary ID for the message
     const messageData = {
       chatId,
-      senderId: userId,
+      senderId: userID,
       content: newMessage || "",
       status: "sending", // Set initial status to "sending"
       media: file || null, // Ensure media is defined or set to null
@@ -190,7 +197,7 @@ export const NewsFeedChatCard = ({
       // Prepare the unseen messages update object
       const unseenMessagesUpdate = {};
       participants.forEach((participant) => {
-        if (participant.id !== userId) {
+        if (participant.id !== userID) {
           unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
             increment(1);
         }
@@ -365,8 +372,8 @@ export const NewsFeedChatCard = ({
 
   // massage seen and get
   // Function to mark unseen messages as seen when opening the chat
-  const markMessagesAsSeen = async (chatId, userId) => {
-    if (!chatId || !userId) return; // Ensure chatId and userId are provided
+  const markMessagesAsSeen = async (chatId, userID) => {
+    if (!chatId || !userID) return; // Ensure chatId and userID are provided
 
     try {
       // Reference to the messages collection in the chat
@@ -381,7 +388,7 @@ export const NewsFeedChatCard = ({
 
       // Iterate over unseen messages and update their seen status
       querySnapshot.forEach((doc) => {
-        if (doc.data().senderId !== userId) {
+        if (doc.data().senderId !== userID) {
           batch.update(doc.ref, { seen: serverTimestamp() });
         }
       });
@@ -403,7 +410,7 @@ export const NewsFeedChatCard = ({
       await updateDoc(chatRef, {
         unseenMessages: {
           ...currentUnseenMessages,
-          [userId]: 0, // Reset unseen messages count for the current user
+          [userID]: 0, // Reset unseen messages count for the current user
         },
       });
     } catch (error) {
@@ -445,7 +452,7 @@ export const NewsFeedChatCard = ({
   useEffect(() => {
     if (chatId) {
       setChatOpened(true); // Mark chat as opened
-      markMessagesAsSeen(chatId, userId); // Mark messages as seen when chat is opened
+      markMessagesAsSeen(chatId, userID); // Mark messages as seen when chat is opened
     }
 
     return () => {
@@ -578,6 +585,7 @@ export const NewsFeedChatCard = ({
               setActiveChatId(null);
               setSelectedChatId(null);
               setSelectedChat(null);
+              setChatOpened(false);
             }}
             className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
           >
@@ -601,7 +609,7 @@ export const NewsFeedChatCard = ({
           {/* Chat messages will be displayed here */}
           {messages.length > 0 ? (
             messages.map((msg, index) => {
-              const isSent = msg.senderId === userId;
+              const isSent = msg.senderId === userID;
               // Ensure msg.createdAt is not null or undefined and is a Firestore Timestamp
               const createdAt = msg.createdAt
                 ? msg.createdAt.toDate

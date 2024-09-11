@@ -74,19 +74,25 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   const [voiceRecord, setVoiceRecord] = useState(false);
   const textareaRef = useRef(1);
   const messageContainerRef = useRef(null);
-  const userId = user?._id;
   const [rawFile, setRawFile] = useState([]);
   const [file, setFile] = useState([]);
   const [uploadingProssing, setUploadingProssing] = useState([]);
-
+  const [userRole, setUserFeedRole] = useState("");
+  const [userID, setUserID] = useState("");
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem(`${role}Id`);
+    setUserFeedRole(role);
+    setUserID(id);
+  }, []);
   const participantId = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.id)[0];
   const participantImage = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.image)[0];
   const participantName = selectedChat?.participants
-    .filter((p) => p.id !== user?._id) // Exclude the current user
+    .filter((p) => p.id !== userID) // Exclude the current user
     .map((p) => p.name)[0];
 
   const scrollToBottom = () => {
@@ -123,7 +129,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     const tempId = Date.now(); // Temporary ID for the message
     const messageData = {
       chatId,
-      senderId: userId,
+      senderId: userID,
       voice: newVoice,
       content: newMessage || "",
       status: "sending", // Set initial status to "sending"
@@ -192,7 +198,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       // Prepare the unseen messages update object
       const unseenMessagesUpdate = {};
       participants.forEach((participant) => {
-        if (participant.id !== userId) {
+        if (participant.id !== userID) {
           unseenMessagesUpdate[`unseenMessages.${participant.id}`] =
             increment(1);
         }
@@ -372,8 +378,8 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
   // massage seen and get
   // Function to mark unseen messages as seen when opening the chat
-  const markMessagesAsSeen = async (chatId, userId) => {
-    if (!chatId || !userId) return; // Ensure chatId and userId are provided
+  const markMessagesAsSeen = async (chatId, userID) => {
+    if (!chatId || !userID) return; // Ensure chatId and userID are provided
 
     try {
       // Reference to the messages collection in the chat
@@ -388,7 +394,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
       // Iterate over unseen messages and update their seen status
       querySnapshot.forEach((doc) => {
-        if (doc.data().senderId !== userId) {
+        if (doc.data().senderId !== userID) {
           batch.update(doc.ref, { seen: serverTimestamp() });
         }
       });
@@ -410,7 +416,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       await updateDoc(chatRef, {
         unseenMessages: {
           ...currentUnseenMessages,
-          [userId]: 0, // Reset unseen messages count for the current user
+          [userID]: 0, // Reset unseen messages count for the current user
         },
       });
     } catch (error) {
@@ -452,7 +458,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
   useEffect(() => {
     if (chatId) {
       setChatOpened(true); // Mark chat as opened
-      markMessagesAsSeen(chatId, userId); // Mark messages as seen when chat is opened
+      markMessagesAsSeen(chatId, userID); // Mark messages as seen when chat is opened
     }
 
     return () => {
@@ -526,7 +532,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
       >
         {messages.length > 0 ? (
           messages.map((msg, index) => {
-            const isSent = msg.senderId === userId;
+            const isSent = msg.senderId === userID;
             // Ensure msg.createdAt is not null or undefined and is a Firestore Timestamp
             const createdAt = msg.createdAt
               ? msg.createdAt.toDate
