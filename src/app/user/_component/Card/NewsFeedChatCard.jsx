@@ -1,7 +1,7 @@
 "use client";
 import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import Image from "next/image";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { MdAddAPhoto, MdVideoCall } from "react-icons/md";
 import {
   db,
@@ -43,6 +43,8 @@ import axios from "axios";
 import { useClickOutside } from "react-haiku";
 import clsx from "clsx";
 import { SingleChat } from "@/app/Component/Chats/SingleChat";
+import { SingleChatForFreeAgent } from "@/app/Component/Chats/SingleChatForFreeAgent";
+import { PremiumValueContext } from "@/Context/premiumContext";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isToday);
@@ -123,8 +125,16 @@ export const NewsFeedChatCard = ({
       notificationSound.play();
     });
   };
+  const { premiumPopup, setPremiumPopup } = useContext(PremiumValueContext);
 
   const sendMessage = async () => {
+    if (
+      userRole === "agent" &&
+      user?.premium === false &&
+      participantRole === "buyer"
+    ) {
+      return setPremiumPopup(true);
+    }
     if (newMessage.trim() === "" && file.length === 0) return;
 
     const tempId = Date.now(); // Temporary ID for the message
@@ -627,18 +637,53 @@ export const NewsFeedChatCard = ({
               lastDate = msgDate;
 
               return (
-                <SingleChat
-                  key={index}
-                  msg={msg}
-                  isSent={isSent}
-                  formattedDate={formattedDate}
-                  formattedTime={formattedTime}
-                  showDateHeader={showDateHeader}
-                  user={user}
-                  status={msg.status}
-                  uploadingProssing={uploadingProssing}
-                  participantImage={participantImage}
-                />
+                <div key={index}>
+                  {userRole === "buyer" ? (
+                    <SingleChat
+                      key={index}
+                      msg={msg}
+                      isSent={isSent}
+                      formattedDate={formattedDate}
+                      formattedTime={formattedTime}
+                      showDateHeader={showDateHeader}
+                      user={user}
+                      status={msg.status}
+                      uploadingProssing={uploadingProssing}
+                      participantImage={participantImage}
+                    />
+                  ) : (
+                    <>
+                      {user?.premium === false &&
+                      participantRole === "buyer" ? (
+                        <SingleChatForFreeAgent
+                          key={index}
+                          msg={msg}
+                          isSent={isSent}
+                          formattedDate={formattedDate}
+                          formattedTime={formattedTime}
+                          showDateHeader={showDateHeader}
+                          user={user}
+                          status={msg.status}
+                          uploadingProssing={uploadingProssing}
+                          participantImage={participantImage}
+                        />
+                      ) : (
+                        <SingleChat
+                          key={index}
+                          msg={msg}
+                          isSent={isSent}
+                          formattedDate={formattedDate}
+                          formattedTime={formattedTime}
+                          showDateHeader={showDateHeader}
+                          user={user}
+                          status={msg.status}
+                          uploadingProssing={uploadingProssing}
+                          participantImage={participantImage}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
               );
             })
           ) : (

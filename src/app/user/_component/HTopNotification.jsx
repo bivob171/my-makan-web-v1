@@ -334,6 +334,8 @@ const HTopNotification = ({
                     chat={chat}
                     activeUsers={activeUsers}
                     userID={userID}
+                    userRole={userRole}
+                    user={user}
                     handelChatSelectedFromChatNotifyDropdown={
                       handelChatSelectedFromChatNotifyDropdown
                     }

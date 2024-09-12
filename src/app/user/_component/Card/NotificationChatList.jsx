@@ -7,7 +7,10 @@ export const NotificationChatList = ({
   activeUsers,
   userID,
   handelChatSelectedFromChatNotifyDropdown,
+  userRole,
+  user,
 }) => {
+  const premium = user?.premium;
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "No Date";
     const date = timestamp.toDate(); // Convert Timestamp to Date object
@@ -97,11 +100,29 @@ export const NotificationChatList = ({
               : "Hidden Name"
             : participantName}
         </h6>
-        <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
-          {chat.latestMessage.length > 30
-            ? chat.latestMessage.slice(0, 30) + "..."
-            : chat.latestMessage}
-        </p>
+        {userRole === "agent" ? (
+          <>
+            {premium === false && participantRole === "buyer" ? (
+              <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                For see the massage buy a package
+              </p>
+            ) : (
+              <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+                {chat.latestMessage.length > 30
+                  ? chat.latestMessage.slice(0, 30) + "..."
+                  : chat.latestMessage}
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="-mt-[13px]  text-[11px] font-semibold text-gray-500 leading-4">
+              {chat.latestMessage.length > 30
+                ? chat.latestMessage.slice(0, 30) + "..."
+                : chat.latestMessage}
+            </p>
+          </>
+        )}
 
         <div className="absolute top-[5px] right-0 flex gap-x-2.5">
           <p className="text-[11px] font-semibold text-gray-500 leading-4">

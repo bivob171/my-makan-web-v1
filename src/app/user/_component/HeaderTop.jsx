@@ -447,21 +447,68 @@ export const HeaderTop = () => {
   }, [totalUnseenCount]);
 
   // Rest of your component logic here
-
+  const [profile, setProfile] = useState(null);
+  const [isFollow, setIsFollow] = useState(false);
+  const [isFollowEr, setIsFollowEr] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
   const [userRole, setUserFeedRole] = useState("");
   const [userID, setUserID] = useState("");
+
   useEffect(() => {
     const role = localStorage.getItem("role");
     const id = localStorage.getItem(`${role}Id`);
     setUserFeedRole(role);
     setUserID(id);
   }, []);
+
+  const fetchUserProfile = async (participantId, participantRole) => {
+    if (!participantId && !participantRole) return;
+    const userRole = localStorage.getItem("role");
+    const token = localStorage.getItem(`${userRole}AccessToken`);
+    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      } else {
+        const profile = await response.json();
+        setProfile(profile);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    setIsFollow(profile?.following);
+    setIsFollowEr(profile?.follower);
+    setIsFriend(profile?.friend);
+  }, [profile]);
+
   useEffect(() => {
     // Function to check unseen messages and show a notification
     const checkUnseenMessages = () => {
       chats.forEach((chat) => {
         const unseenCount = chat.unseenMessages[userID];
-
+        const participantId = chat?.participants
+          .filter((p) => p.id !== userID) // Exclude the current user
+          .map((p) => p.id)[0];
+        const participantRole = chat?.participants
+          .filter((p) => p.id !== userID) // Exclude the current user
+          .map((p) => p.role)[0];
+        const participantName = chat?.participants
+          .filter((p) => p.id !== userID) // Exclude the current user
+          .map((p) => p.name)[0];
+        if (participantRole === "buyer") {
+          fetchUserProfile(participantId, participantRole);
+        }
         // If unseenMessages count is more than 0, trigger a notification
         if (unseenCount > 0) {
           toast(
@@ -481,8 +528,11 @@ export const HeaderTop = () => {
                       You have new messages from
                     </p>
                     <p className="text-[15px] font-semibold leading-[18px]">
-                      {/* {chat?.latestMessage} */}
-                      {chat.participants.find((p) => p.id !== userID)?.name}
+                      {participantRole === "buyer"
+                        ? isFriend || isFollow || isFollowEr
+                          ? participantName
+                          : "Hidden Name"
+                        : participantName}
                     </p>
                   </div>
                 </div>

@@ -4,12 +4,16 @@ import Image from "next/image";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { LuCheckCheck } from "react-icons/lu";
+import PrivateRouteContext from "@/Context/PrivetRouteContext";
 export const AllChatSingleList = ({
   chat,
   activeUsers,
   userID,
   handleChatSelection,
+  userRole,
+  user,
 }) => {
+  const premium = user?.premium;
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "No Date";
     const date = timestamp.toDate(); // Convert Timestamp to Date object
@@ -108,15 +112,40 @@ export const AllChatSingleList = ({
           </span>
         </div>
         <div className="flex justify-between items-center -mt-1">
-          {chat.latestMessage.length > 0 ? (
-            <span className="text-[12px] leading-5">
-              {" "}
-              {chat.latestMessage.length > 30
-                ? chat.latestMessage.slice(0, 30) + "..."
-                : chat.latestMessage}{" "}
-            </span>
+          {userRole === "agent" ? (
+            <>
+              {chat.latestMessage.length > 0 ? (
+                <>
+                  {premium === false && participantRole === "buyer" ? (
+                    <span className="text-[12px] leading-5">
+                      For see the massage buy a package
+                    </span>
+                  ) : (
+                    <span className="text-[12px] leading-5">
+                      {" "}
+                      {chat.latestMessage.length > 30
+                        ? chat.latestMessage.slice(0, 30) + "..."
+                        : chat.latestMessage}{" "}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="text-[12px] leading-5"> No messages yet.</span>
+              )}
+            </>
           ) : (
-            <span className="text-[12px] leading-5"> No messages yet.</span>
+            <>
+              {chat.latestMessage.length > 0 ? (
+                <span className="text-[12px] leading-5">
+                  {" "}
+                  {chat.latestMessage.length > 30
+                    ? chat.latestMessage.slice(0, 30) + "..."
+                    : chat.latestMessage}{" "}
+                </span>
+              ) : (
+                <span className="text-[12px] leading-5"> No messages yet.</span>
+              )}
+            </>
           )}
 
           <div className="flex gap-x-[5px] items-center">

@@ -27,6 +27,8 @@ const AllMessages = ({ chats, handleChatSelection }) => {
             activeUsers={activeUsers}
             userID={userID}
             handleChatSelection={handleChatSelection}
+            userRole={userRole}
+            user={user}
           />
         );
       })}
