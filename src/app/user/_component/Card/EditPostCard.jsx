@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { BiCommentDetail, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa6";
+import { BiCommentDetail, BiLike, BiSolidLike } from "react-icons/bi";
+import clsx from "clsx";
 import { GoStarFill } from "react-icons/go";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import {
@@ -491,31 +491,55 @@ export default function EditPostCard({
           </div>
         </div>
         <div className="h-[0.5px] w-full bg-[#F0F1F7] mt-[20px]"></div>
-        <div className="px-[15px] mt-[7px]">
-          <div>
-            <p className="font-inter text-[0.875rem] md:text-[1.5rem] text-[#333335] font-semibold mb-2 leading-[40px]">
-              {item?.title}
-            </p>
-            {item?.description?.length > 132 ? (
-              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal leading-[20px]">
-                {item?.description.slice(0, 133)}...
-                <Link href={`${"/user/post-details"}/${_id}`}>
-                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
-                    see more
-                  </span>
-                </Link>
+        <div className="px-[15px] w-full">
+          <Link href={`/user/post-details/${_id}`} className="w-full">
+            <div>
+              <p className="font-inter text-[18px] text-[#666] font-bold mb-2 leading-[22px]">
+                {item?.title?.length > 63
+                  ? `${item?.title?.slice(0, 63)}...`
+                  : item?.title}
               </p>
-            ) : (
-              <p className="font-inter text-[#333335] text-[14px] md:!text-[17px] font-normal  leading-[20px]">
-                {item?.description}...
-                <Link href={`${"/user/post-details"}/${_id}`}>
-                  <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
-                    see more
-                  </span>
-                </Link>
+              <p className="font-inter text-[#333] !text-[14px] font-normal leading-[20px] text-justify h-auto mb-[7px]">
+                {item?.description?.length > 133 ? (
+                  <>
+                    {item?.description.slice(0, 133)}...
+                    <Link href={`/user/post-details/${_id}`}>
+                      <span className="hover:underline underline-offset-1 text-[#49B6F5] text-[14px] md:!text-[17px] font-medium cursor-pointer font-inter">
+                        see more
+                      </span>
+                    </Link>
+                  </>
+                ) : (
+                  item?.description
+                )}
               </p>
-            )}
-          </div>
+              {Array.isArray(item?.media) ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5">
+                  {item.media.slice(0, 3).map((item, key) => (
+                    <div key={`POST_${key}`}>
+                      <Image
+                        src={item?.url}
+                        width={300}
+                        height={300}
+                        alt=""
+                        className="aspect-square w-full rounded-md"
+                      />
+                    </div>
+                  ))}
+                  {item?.media?.length >= 4 ? (
+                    <div
+                      className="aspect-square bg-gray-300/50 rounded-md text-gray-600/30 flex justify-center items-center text-lg bg-blend-multiply"
+                      style={{
+                        backgroundImage: `url(${item?.media?.[3]?.url})`,
+                      }}
+                    >
+                      {String(item?.media?.length - 3 || 0).padStart(2, 0)}+
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          </Link>
         </div>
         <div className="px-[15px] flex items-center justify-between">
           <div className="flex flex-wrap gap-x-[8px] mt-2">
@@ -545,50 +569,61 @@ export default function EditPostCard({
           </div>
         </div>
         <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
-        <div className=" flex items-center justify-between px-[15px]">
-          {basePath === "/user/matched-post/" ? (
-            <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-              Matched Post
-            </p>
-          ) : (
-            <MatchCardData item={item} />
-          )}
-          <div className="flex gap-x-[7px] items-center flex-wrap">
-            <div className="flex items-center">
-              {hasId === true ? (
-                <p
-                  onClick={() => giveUnLike(item._id)}
-                  className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
-                >
-                  {" "}
-                  <BiSolidLike />
-                </p>
-              ) : (
-                <p
-                  onClick={() => giveLike(item._id)}
-                  className=" cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
-                >
-                  {" "}
-                  <BiSolidLike />
-                </p>
+        <footer className=" flex items-center justify-between px-[15px] gap-2">
+          {/* match post */}
+          <div className="flex-shrink-0">
+            {basePath === "/user/matched-post/" ? (
+              <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+                <span className="text-blue-500">{item?.matchPercentage}%</span>{" "}
+                Matched on the selected Post
+              </p>
+            ) : (
+              <MatchCardData item={item} />
+            )}
+          </div>
+
+          <div className="flex gap-x-[7px] items-center flex-wrap flex-grow">
+            <button
+              onClick={hasId ? giveUnLike : giveLike}
+              className={clsx(
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                {
+                  "text-blue-500": hasId === true,
+                }
               )}
-              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0">
-                {item.likeCount === 0 ? "00" : item.likeCount}
-              </p>
-            </div>
-            <div
-              onClick={() => setCommentDropdown(_id)}
-              className="flex items-center cursor-pointer"
             >
-              <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
-                {" "}
-                <BiCommentDetail />
-              </p>
-              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px] ">
-                {item.commentCount ? item.commentCount : "00"}{" "}
-              </p>
-            </div>
-            <div>
+              {hasId ? (
+                <BiSolidLike className="size-5" />
+              ) : (
+                <BiLike className="size-5" />
+              )}
+              <span className="hidden md:inline">
+                {hasId === true ? "Liked" : "Like"}
+              </span>
+              <span className={clsx({ hidden: !item?.likeCount })}>
+                ({String(item?.likeCount || "0").padStart(2, "0")})
+              </span>
+            </button>
+            <button
+              onClick={() =>
+                !commentDropdown
+                  ? setCommentDropdown(_id)
+                  : setCommentDropdown(null)
+              }
+              className={clsx(
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                {
+                  "text-blue-500": commentDropdown,
+                }
+              )}
+            >
+              <BiCommentDetail className="size-5" />
+              <span className="hidden md:inline">Comment</span>
+              <span className={clsx({ hidden: !item?.commentCount })}>
+                ({String(item?.commentCount || "0").padStart(2, "0")})
+              </span>
+            </button>
+            <div className="flex-shrink-0">
               {item.type === "Urgent" ? (
                 <button
                   type="button"
@@ -600,9 +635,9 @@ export default function EditPostCard({
                   }
                   className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#E6533C] bg-[#FCEDEB] flex justify-center gap-x-[2px] items-center !text-[#E6533C] hover:!text-white text-[12px] font-semibold"
                 >
-                  {item.type}
+                  {item?.type}
                 </button>
-              ) : item.type === "Sponsored" ? (
+              ) : item?.type === "Sponsored" ? (
                 <button
                   type="button"
                   onClick={() =>
@@ -613,7 +648,7 @@ export default function EditPostCard({
                   }
                   className="rounded-[5px] !w-[90px] h-[30px] px-2 hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] items-center text-[#845ADF] hover:text-white text-[12px] font-semibold"
                 >
-                  <span>{item.type}</span>
+                  <span>{item?.type}</span>
                   <GoStarFill className="text-[#F5B849] text-[12px] md:text-[12px] font-semibold" />
                 </button>
               ) : (
@@ -625,17 +660,14 @@ export default function EditPostCard({
                       value: item?.type,
                     })
                   }
-                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center"
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] hover:text-white flex justify-center gap-x-[2px] text-[12px] md:text-[12px] items-center -mb-[1px] font-semibold"
                 >
-                  <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[12px] font-semibold">
-                    {item.type}
-                  </p>
+                  {item?.type}
                 </button>
               )}
             </div>
           </div>
-          {/* comment  */}
-        </div>
+        </footer>
         {commentDropdown === _id ? (
           <div>
             <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
