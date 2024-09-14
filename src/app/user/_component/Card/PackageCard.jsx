@@ -4,7 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { BookmarkSlashIcon } from "@heroicons/react/20/solid";
 import { BsJournalBookmarkFill } from "react-icons/bs";
-import { BiCommentDetail, BiMessageDetail, BiSolidLike } from "react-icons/bi";
+import {
+  BiCommentDetail,
+  BiLike,
+  BiMessageDetail,
+  BiSolidLike,
+} from "react-icons/bi";
 import { GoStarFill } from "react-icons/go";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
@@ -19,6 +24,7 @@ import PrivateRouteContext from "@/Context/PrivetRouteContext";
 import CommentCard from "./CommentCard";
 import { PremiumValueContext } from "@/Context/premiumContext";
 import isValid from "date-fns/isValid"; // Correctly import isValid
+import clsx from "clsx";
 
 export default function PackageCard({
   item,
@@ -31,6 +37,7 @@ export default function PackageCard({
   setFollowRerander,
   setAllPosts,
 }) {
+  console.log(item);
   const {
     role,
     userId,
@@ -134,7 +141,8 @@ export default function PackageCard({
 
     return styles[styleIndex];
   };
-  const giveLike = async (id) => {
+  const giveLike = async () => {
+    const id = _id;
     const url = `https://api.mymakan.ae/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
@@ -165,7 +173,8 @@ export default function PackageCard({
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-  const giveUnLike = async (id) => {
+  const giveUnLike = async () => {
+    const id = _id;
     const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
@@ -407,9 +416,9 @@ export default function PackageCard({
   const [commentDropdown, setCommentDropdown] = useState(null);
 
   return (
-    <div className="w-full h-auto bg-white rounded-[15px] !pt-[10px] pb-[25px] relative">
+    <div className="w-full h-auto bg-white rounded-[15px] !py-[12px] relative">
       <div className="pt-1">
-        <div className="flex justify-between items-start px-[12px] md:px-[15px] !h-full !min-h-[90px]">
+        <div className="flex justify-between items-start px-[12px] md:px-[15px] !h-full">
           <div className="flex gap-x-[15px] items-start w-full">
             <div className="">
               <div
@@ -852,7 +861,7 @@ export default function PackageCard({
                       value: item?.for,
                     })
                   }
-                  className="cursor-pointer leading-3 text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end font-medium -mt-[10px]"
+                  className="cursor-pointer leading-3 text-[0.755rem] md:text-[0.8rem] sm:block align-right text-end font-medium -mt-[10px] hover:text-blue-600 hover:underline hover:underline-offset-1"
                 >
                   For {""}
                   {item?.for}
@@ -919,6 +928,26 @@ export default function PackageCard({
                   item?.description
                 )}
               </p>
+              {Array.isArray(item?.media) ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5">
+                  {item.media.slice(0, 3).map((item, key) => (
+                    <div key={`POST_${key}`}>
+                      <Image
+                        src={item?.url}
+                        width={300}
+                        height={300}
+                        alt=""
+                        className="aspect-square w-full rounded-md"
+                      />
+                    </div>
+                  ))}
+                  {item?.media?.length>=4?(
+                    <div className="aspect-square bg-gray-300/50 rounded-md text-gray-600/30 flex justify-center items-center text-lg bg-blend-multiply" style={{backgroundImage:`url(${item?.media?.[3]?.url})`}}>
+                      {String((item?.media?.length-3)||0).padStart(2,0)}+
+                    </div>
+                  ):null}
+                </div>
+              ) : null}
             </div>
           </Link>
         </div>
@@ -991,57 +1020,61 @@ export default function PackageCard({
         </div>
         {/* footer  */}
         <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
-        <footer className=" flex items-center justify-between px-[15px]">
+        <footer className=" flex items-center justify-between px-[15px] gap-2">
           {/* match post */}
-          {basePath === "/user/matched-post/" ? (
-            <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-              <span className="text-blue-500">{item?.matchPercentage}%</span>{" "}
-              Matched on the selected Post
-            </p>
-          ) : (
-            <MatchCardData item={item} />
-          )}
-
-          <div className="flex gap-x-[7px] items-center flex-wrap">
-            <div className="flex items-center">
-              {hasId === true ? (
-                <p
-                  onClick={() => giveUnLike(item?._id)}
-                  className="text-[#845ADF] cursor-pointer text-[12px] md:text-[14px] -mb-0 mr-[2px]"
-                >
-                  {" "}
-                  <BiSolidLike />
-                </p>
-              ) : (
-                <p
-                  onClick={() => giveLike(item?._id)}
-                  className="  text-[12px] md:text-[14px] -mb-0 mr-[2px] cursor-pointer"
-                >
-                  {" "}
-                  <BiSolidLike />
-                </p>
-              )}
-              <p className="text-[#845ADF] font-medium text-[12px] md:text-[14px] -mb-0 ">
-                {item?.likeCount === 0 ? "00" : item?.likeCount}
+          <div className="flex-shrink-0">
+            {basePath === "/user/matched-post/" ? (
+              <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
+                <span className="text-blue-500">{item?.matchPercentage}%</span>{" "}
+                Matched on the selected Post
               </p>
-            </div>
-            <div
+            ) : (
+              <MatchCardData item={item} />
+            )}
+          </div>
+
+          <div className="flex gap-x-[7px] items-center flex-wrap flex-grow">
+            <button
+              onClick={hasId ? giveUnLike : giveLike}
+              className={clsx(
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                {
+                  "text-blue-500": hasId === true,
+                }
+              )}
+            >
+              {hasId ? (
+                <BiSolidLike className="size-5" />
+              ) : (
+                <BiLike className="size-5" />
+              )}
+              <span className="hidden md:inline">
+                {hasId === true ? "Liked" : "Like"}
+              </span>
+              <span className={clsx({ hidden: !item?.likeCount })}>
+                ({String(item?.likeCount || "0").padStart(2, "0")})
+              </span>
+            </button>
+            <button
               onClick={() =>
-                commentDropdown === null
+                !commentDropdown
                   ? setCommentDropdown(_id)
                   : setCommentDropdown(null)
               }
-              className="flex items-center cursor-pointer"
+              className={clsx(
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                {
+                  "text-blue-500": commentDropdown,
+                }
+              )}
             >
-              <p className="text-[#AFB2B7] text-[12px] md:text-[14px] -mb-0 mr-[2px]">
-                {" "}
-                <BiCommentDetail />
-              </p>
-              <p className="text-[#AFB2B7] font-medium text-[12px] md:text-[14px] mb-[1px] ">
-                {item.commentCount ? item.commentCount : "00"}{" "}
-              </p>
-            </div>
-            <div>
+              <BiCommentDetail className="size-5" />
+              <span className="hidden md:inline">Comment</span>
+              <span className={clsx({ hidden: !item?.commentCount })}>
+                ({String(item?.commentCount || "0").padStart(2, "0")})
+              </span>
+            </button>
+            <div className="flex-shrink-0">
               {item.type === "Urgent" ? (
                 <button
                   type="button"
@@ -1078,11 +1111,9 @@ export default function PackageCard({
                       value: item?.type,
                     })
                   }
-                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] flex justify-center gap-x-[2px] text-[10px] md:text-[12px] items-center"
+                  className="rounded-[5px] w-[70px] h-[30px] hover:bg-[#845ADF] bg-[#EEEBF8] hover:text-white flex justify-center gap-x-[2px] text-[12px] md:text-[12px] items-center -mb-[1px] font-semibold"
                 >
-                  <p className="-mb-[1px] text-[#845ADF] hover:text-white text-[12px] font-semibold">
-                    {item?.type}
-                  </p>
+                  {item?.type}
                 </button>
               )}
             </div>
