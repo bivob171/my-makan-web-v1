@@ -104,10 +104,9 @@ export default function EditPostCard({
     try {
       setHasId(true);
       setAllPosts((prevData) =>
-        prevData.map((item) => ({
-          ...item,
-          likeCount: item.likeCount + 1, // Increment the existing likeCount
-        }))
+        prevData.map((item) =>
+          item._id === _id ? { ...item, likeCount: item.likeCount + 1 } : item
+        )
       );
       const response = await fetch(url, {
         method: "POST",
@@ -137,10 +136,9 @@ export default function EditPostCard({
     try {
       setHasId(false);
       setAllPosts((prevData) =>
-        prevData.map((item) => ({
-          ...item,
-          likeCount: item.likeCount - 1, // Increment the existing likeCount
-        }))
+        prevData.map((item) =>
+          item._id === _id ? { ...item, likeCount: item.likeCount - 1 } : item
+        )
       );
       const response = await fetch(url, {
         method: "POST",
