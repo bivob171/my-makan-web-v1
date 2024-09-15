@@ -21,6 +21,12 @@ const socket = io("https://api.mymakan.ae", {
 
 const AgentComment = ({ _id, setAllPosts }) => {
   const { user } = PrivateRouteContext();
+  const [commentRole, setCommentRole] = useState("");
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const myId = localStorage.getItem(`${userRole}Id`);
+    setCommentRole(myId);
+  }, []);
   const [commentDa, setComments] = useState([]);
   const [commentRerander, setCommentRerander] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
@@ -660,14 +666,14 @@ const AgentComment = ({ _id, setAllPosts }) => {
                         key={comment?._id}
                         id={comment?._id}
                         className={`flex ${
-                          reply?._id === user?._id
+                          reply?._id === commentRole
                             ? "justify-end"
                             : "justify-start"
                         } text-start mb-1 w-full`}
                       >
                         <div
                           className={`flex ${
-                            reply?._id === user?._id
+                            reply?._id === commentRole
                               ? "justify-end"
                               : "justify-start"
                           } gap-[8px]`}
