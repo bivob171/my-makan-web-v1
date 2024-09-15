@@ -940,11 +940,16 @@ export default function PackageCard({
                       />
                     </div>
                   ))}
-                  {item?.media?.length>=4?(
-                    <div className="aspect-square bg-gray-300/50 rounded-md text-gray-600/30 flex justify-center items-center text-lg bg-blend-multiply" style={{backgroundImage:`url(${item?.media?.[3]?.url})`}}>
-                      {String((item?.media?.length-3)||0).padStart(2,0)}+
+                  {item?.media?.length >= 4 ? (
+                    <div
+                      className="aspect-square bg-gray-300/50 rounded-md text-gray-600/30 flex justify-center items-center text-lg bg-blend-multiply"
+                      style={{
+                        backgroundImage: `url(${item?.media?.[3]?.url})`,
+                      }}
+                    >
+                      {String(item?.media?.length - 3 || 0).padStart(2, 0)}+
                     </div>
-                  ):null}
+                  ) : null}
                 </div>
               ) : null}
             </div>
@@ -1069,8 +1074,8 @@ export default function PackageCard({
             >
               <BiCommentDetail className="size-5" />
               <span className="hidden md:inline">Comment</span>
-              <span className={clsx({ hidden: !item?.commentCount })}>
-                ({String(item?.commentCount || "0").padStart(2, "0")})
+              <span className={clsx({ hidden: !item?.commentTotalLength })}>
+                ({String(item?.commentTotalLength || "0").padStart(2, "0")})
               </span>
             </button>
             <div className="flex-shrink-0">

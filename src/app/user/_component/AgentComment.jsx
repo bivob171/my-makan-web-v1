@@ -19,7 +19,7 @@ const socket = io("https://api.mymakan.ae", {
   transports: ["websocket"],
 });
 
-const AgentComment = ({ _id }) => {
+const AgentComment = ({ _id, setAllPosts }) => {
   const { user } = PrivateRouteContext();
   const [commentDa, setComments] = useState([]);
   const [commentRerander, setCommentRerander] = useState(false);
@@ -172,8 +172,7 @@ const AgentComment = ({ _id }) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const allCommentsList = await response.json();
-
-      setHasMore(allCommentsList.length === limit);
+      setHasMore(allCommentsList?.length === limit);
       setComments((prevPost) =>
         page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
       );
@@ -270,6 +269,14 @@ const AgentComment = ({ _id }) => {
       }
       playNotificationSound();
       setComment("");
+
+      setAllPosts((prevData) =>
+        prevData.map((item) =>
+          item._id === _id
+            ? { ...item, commentTotalLength: item.commentTotalLength + 1 }
+            : item
+        )
+      );
       let commentData;
       if (mentionRole.length > 0) {
         commentData = {

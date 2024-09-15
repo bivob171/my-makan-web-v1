@@ -619,8 +619,8 @@ export default function EditPostCard({
             >
               <BiCommentDetail className="size-5" />
               <span className="hidden md:inline">Comment</span>
-              <span className={clsx({ hidden: !item?.commentCount })}>
-                ({String(item?.commentCount || "0").padStart(2, "0")})
+              <span className={clsx({ hidden: !item?.commentTotalLength })}>
+                ({String(item?.commentTotalLength || "0").padStart(2, "0")})
               </span>
             </button>
             <div className="flex-shrink-0">

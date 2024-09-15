@@ -274,7 +274,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
       setAllPosts((prevData) =>
         prevData.map((item) =>
           item._id === _id
-            ? { ...item, commentCount: item.commentCount + 1 }
+            ? { ...item, commentTotalLength: item.commentTotalLength + 1 }
             : item
         )
       );

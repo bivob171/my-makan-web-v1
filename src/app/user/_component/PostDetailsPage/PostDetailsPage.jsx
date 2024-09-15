@@ -555,9 +555,9 @@ export const PostDetailsPage = ({ postid }) => {
                             </li>
                             <li>
                               <i className="icofont-comment" /> Comments:{" "}
-                              {item.comment?.length === 0
+                              {item?.commentTotalLength === 0
                                 ? "00"
-                                : item.comment?.length}{" "}
+                                : item?.commentTotalLength}{" "}
                             </li>
                           </ul>
                         </div>
@@ -664,7 +664,7 @@ export const PostDetailsPage = ({ postid }) => {
             </div> */}
                   <div className="mt-[45px]">
                     <hr className="mb-[20px]" />
-                    <AgentComment _id={_id} />
+                    <AgentComment _id={_id} setAllPosts={setAllPosts} />
                   </div>
                 </div>
               </div>
