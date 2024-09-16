@@ -180,6 +180,7 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       if (hasError) {
         return;
       }
+      setIsOpen(false);
       const postData = {
         title: title,
         description: description,
@@ -232,7 +233,6 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       } else {
         router.push("/user/profile/posts");
         toast.success("Post submitted successfully!");
-        setIsOpen(false);
         setNewsFeedRender(!newsFeedRender);
       }
     } catch (error) {
