@@ -512,8 +512,8 @@ const HTopNotification = ({
                           onClick={() => handleNotificationClick(item)}
                           className={`${
                             read === false
-                              ? "flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out bg-[#F6F9FD] cursor-pointer"
-                              : "flex items-start px-[15px] py-[12px] h-[80px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD] cursor-pointer"
+                              ? "flex items-start px-[15px] py-[12px] h-[88px] transition-all duration-300 ease-in-out bg-[#F6F9FD] cursor-pointer"
+                              : "flex items-start px-[15px] py-[12px] h-[88px] transition-all duration-300 ease-in-out hover:bg-[#F6F9FD] cursor-pointer"
                           }`}
                         >
                           <div className="mr-3 mt-[9px]">
