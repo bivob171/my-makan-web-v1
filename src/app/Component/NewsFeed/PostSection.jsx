@@ -234,6 +234,23 @@ const PostSection = ({ isOpen, setIsOpen }) => {
         router.push("/user/profile/posts");
         toast.success("Post submitted successfully!");
         setNewsFeedRender(!newsFeedRender);
+        setmedia([]);
+        setFiles([]);
+        setTags([]);
+        setSellType([]);
+        setCity("");
+        setCountry("");
+        setState("");
+        setFormatted_address("");
+        setPostType("");
+        setPropertyCategory("");
+        setPropertyType("");
+        setParking("");
+        setPrice("");
+        setSqft("");
+        setTitle("");
+        setDescription("");
+        setTowersorBuildingName("");
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
