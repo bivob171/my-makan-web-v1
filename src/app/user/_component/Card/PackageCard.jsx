@@ -37,7 +37,6 @@ export default function PackageCard({
   setFollowRerander,
   setAllPosts,
 }) {
-  console.log(item);
   const {
     role,
     userId,

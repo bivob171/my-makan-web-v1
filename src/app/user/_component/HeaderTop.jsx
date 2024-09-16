@@ -434,7 +434,7 @@ export const HeaderTop = () => {
   };
 
   // Calculate total unseen count across all chats
-  const totalUnseenCount = chats.reduce((total, chat) => {
+  const totalUnseenCount = chats?.reduce((total, chat) => {
     const unseenCount = chat?.unseenMessages[user?._id] || 0;
     return total + unseenCount;
   }, 0);
@@ -445,6 +445,7 @@ export const HeaderTop = () => {
       playNotificationSoundMassageCome();
     }
   }, [totalUnseenCount]);
+  console.log(totalUnseenCount, chats);
 
   // Rest of your component logic here
   const [profile, setProfile] = useState(null);
