@@ -208,11 +208,6 @@ export const MatchCardData = ({ item }) => {
                   );
                 })}
               </div>
-              <div>
-                <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
-                  No Matched
-                </p>
-              </div>
             </div>
           ) : (
             <div className="flex flex-wrap items-center gap-x-[10px]">
