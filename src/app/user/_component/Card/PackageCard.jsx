@@ -588,7 +588,7 @@ export default function PackageCard({
                                   },
                                 })
                               }
-                              className="hover:underline cursor-pointer underline-offset-4 text-[#8920AD] text-[13px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
+                              className="hover:underline cursor-pointer underline-offset-4 text-[#8920AD] text-[13px] leading-[20px] md:text-[16px] font-medium -mb-[10px] md:-mb-1"
                             >
                               {userinfo?.companyName}
                             </p>

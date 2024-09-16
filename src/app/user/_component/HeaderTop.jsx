@@ -782,13 +782,11 @@ export const HeaderTop = () => {
                   data-toggle="dropdown"
                   aria-expanded="false"
                 >
+                  <i className="icofont-notification" />
                   {allNotificationNumber === 0 ? null : (
-                    <>
-                      <i className="icofont-notification" />
-                      <span className="notify-count">
-                        {allNotificationNumber}
-                      </span>
-                    </>
+                    <span className="notify-count">
+                      {allNotificationNumber}
+                    </span>
                   )}
                 </button>
               </div>
