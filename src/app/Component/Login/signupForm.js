@@ -198,7 +198,7 @@ export const SignupForm = () => {
         localStorage.setItem("buyerId", data.userId);
         localStorage.setItem("role", data.role);
         // setloginSuccessPopUp(true);
-        toast.success("Successfully login your account");
+        toast.success("Successfully create your account");
         router.push("/user/newsfeed");
         setRender((prev) => !prev);
       }
@@ -303,7 +303,7 @@ export const SignupForm = () => {
         localStorage.setItem("agentId", data.userId);
         localStorage.setItem("role", data.role);
         // setloginSuccessPopUp(true);
-        toast.success("Successfully login your account");
+        toast.success("Successfully create your account");
         router.push("/user/newsfeed");
         setRender((prev) => !prev);
       }
