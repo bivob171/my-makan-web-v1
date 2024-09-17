@@ -276,13 +276,10 @@ const AgentComment = ({ _id, setAllPosts }) => {
       playNotificationSound();
       setComment("");
 
-      setAllPosts((prevData) =>
-        prevData.map((item) =>
-          item._id === _id
-            ? { ...item, commentTotalLength: item.commentTotalLength + 1 }
-            : item
-        )
-      );
+      setAllPosts((prevState) => ({
+        ...prevState,
+        commentTotalLength: prevState.commentTotalLength + 1,
+      }));
       let commentData;
       if (mentionRole.length > 0) {
         commentData = {

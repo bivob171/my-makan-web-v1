@@ -53,6 +53,8 @@ export const PostDetailsPage = ({ postid }) => {
   }
 
   const [item, setAllPosts] = useState([]);
+  console.log(item);
+
   const [loading, setLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [like, setlike] = useState(true);
