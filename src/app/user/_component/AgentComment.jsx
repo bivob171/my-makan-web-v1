@@ -595,18 +595,20 @@ const AgentComment = ({ _id, setAllPosts }) => {
         <div className="w-full">
           <div className="flex justify-between items-end">
             <h3 className="w-full !mb-0">Leave a Comment</h3>
-            <button
-              className="w-full text-end !mb-0"
-              onClick={() => setShowAllComments(!showAllComments)}
-            >
-              {commentDa.length > 0 && (
-                <p className="text-[14px] font-medium hover:underline mb-0">
-                  {showAllComments
-                    ? "View less comments"
-                    : "View more comments"}
-                </p>
-              )}
-            </button>
+            {commentDa?.length > 1 ? (
+              <button
+                className="w-full text-end !mb-0"
+                onClick={() => setShowAllComments(!showAllComments)}
+              >
+                {commentDa.length > 0 && (
+                  <p className="text-[14px] font-medium hover:underline mb-0">
+                    {showAllComments
+                      ? "View less comments"
+                      : "View more comments"}
+                  </p>
+                )}
+              </button>
+            ) : null}
           </div>
           <div
             className={`${

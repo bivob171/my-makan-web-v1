@@ -538,23 +538,34 @@ export const NewsFeedChatCard = ({
               </MenuButton>
 
               <div className="pl-2 flex gap-x-[6px] items-center">
-                {isFriend ? (
-                  <p className="text-[14px] text-white font-semibold -mb-0">
-                    {participantName}
-                  </p>
-                ) : isFollow ? (
-                  <p className="text-[14px] text-white font-semibold -mb-0">
-                    {participantName}
-                  </p>
-                ) : isFollowEr ? (
-                  <p className="text-[14px] text-white font-semibold -mb-0">
-                    {participantName}
-                  </p>
+                {participantRole === "buyer" ? (
+                  <>
+                    {isFriend ? (
+                      <p className="text-[14px] text-white font-semibold -mb-0">
+                        {participantName}
+                      </p>
+                    ) : isFollow ? (
+                      <p className="text-[14px] text-white font-semibold -mb-0">
+                        {participantName}
+                      </p>
+                    ) : isFollowEr ? (
+                      <p className="text-[14px] text-white font-semibold -mb-0">
+                        {participantName}
+                      </p>
+                    ) : (
+                      <p className="text-[14px] text-white font-semibold -mb-0">
+                        Hidden Name
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p className="text-[14px] text-white font-semibold -mb-0">
-                    Hidden Name
-                  </p>
+                  <>
+                    <p className="text-[14px] text-white font-semibold -mb-0">
+                      {participantName}
+                    </p>
+                  </>
                 )}
+
                 {isActive ? (
                   <div className="bg-[#17DD17] h-[6px] w-[6px] mt-[2px] rounded-full"></div>
                 ) : (

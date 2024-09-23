@@ -1046,17 +1046,18 @@ export default function PackageCard({
                 }
               )}
             >
+              <span className={clsx({ hidden: !item?.likeCount })}>
+                {String(item?.likeCount || "0").padStart(2, "0")}
+              </span>
+
+              <span className="hidden md:inline">
+                {hasId === true ? "Liked" : "Like"}
+              </span>
               {hasId ? (
                 <BiSolidLike className="size-5" />
               ) : (
                 <BiLike className="size-5" />
               )}
-              <span className="hidden md:inline">
-                {hasId === true ? "Liked" : "Like"}
-              </span>
-              <span className={clsx({ hidden: !item?.likeCount })}>
-                ({String(item?.likeCount || "0").padStart(2, "0")})
-              </span>
             </button>
             <button
               onClick={() =>
@@ -1071,11 +1072,11 @@ export default function PackageCard({
                 }
               )}
             >
-              <BiCommentDetail className="size-5" />
-              <span className="hidden md:inline">Comment</span>
               <span className={clsx({ hidden: !item?.commentTotalLength })}>
-                ({String(item?.commentTotalLength || "0").padStart(2, "0")})
+                {String(item?.commentTotalLength || "0").padStart(2, "0")}
               </span>
+              <span className="hidden md:inline">Comment</span>
+              <BiCommentDetail className="size-5" />
             </button>
             <div className="flex-shrink-0">
               {item.type === "Urgent" ? (
