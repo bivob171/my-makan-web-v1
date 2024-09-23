@@ -175,6 +175,7 @@ export const MachedPostPage = ({
     [isFetching, hasMore]
   );
 
+  const matchpostId = item?._id;
   const myId = user?._id;
 
   return (
@@ -183,6 +184,9 @@ export const MachedPostPage = ({
         <div className="grid items-start grid-cols-2 gap-3">
           {matchingPosts?.map((item, i) => {
             if (matchingPosts.length === i + 1) {
+              if (item?._id === matchpostId) {
+                return null; // Skip this notification
+              }
               return (
                 <div ref={lastPostElementRef} key={i}>
                   <PackageCard
@@ -198,6 +202,9 @@ export const MachedPostPage = ({
                 </div>
               );
             } else {
+              if (item?._id === matchpostId) {
+                return null; // Skip this notification
+              }
               return (
                 <PackageCard
                   item={item}

@@ -207,10 +207,10 @@ export default function RelatedPost() {
       addQueryParam("parking", parking);
 
       // Handle arrays for tags and sellType
-      if (tags === null) {
+      if (tags?.length === 0 || tags === null) {
         url += `&tags=${encodeURIComponent(tags.join(","))}`;
       }
-      if (sellType === null) {
+      if (sellType?.length === 0 || sellType === null) {
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
       }
 
