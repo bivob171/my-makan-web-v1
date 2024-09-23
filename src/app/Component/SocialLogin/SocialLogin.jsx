@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
+import { signOut } from "next-auth/react";
 export const SocialLogin = ({ setError }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -78,19 +78,21 @@ export const SocialLogin = ({ setError }) => {
 
       if (!response.ok) {
         throw new Error("Failed to fetch user profile");
-      }
-      const profile = await response.json();
-      if (role === "agent") {
-        if (profile.companyName === null) {
-          router.push("/user/profile/add-company-name");
-          toast.success("Successfully logged in to your account");
+      } else {
+        const profile = await response.json();
+        if (role === "agent") {
+          if (profile.companyName === null) {
+            router.push("/user/profile/add-company-name");
+            toast.success("Successfully logged in to your account");
+          } else {
+            router.push("/user/newsfeed");
+            toast.success("Successfully logged in to your account");
+          }
         } else {
           router.push("/user/newsfeed");
           toast.success("Successfully logged in to your account");
         }
-      } else {
-        router.push("/user/newsfeed");
-        toast.success("Successfully logged in to your account");
+        signOut();
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
