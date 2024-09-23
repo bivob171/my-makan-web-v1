@@ -195,8 +195,8 @@ export default function RelatedPost() {
       addQueryParam("state", state);
       addQueryParam("city", cityq);
       addQueryParam("country", countryq);
-      addQueryParam("postType", selectedType);
-      addQueryParam("type", postType);
+      addQueryParam("postType", postType);
+      addQueryParam("type", selectedType);
       addQueryParam("propertyCategory", propertyCategoryName);
       addQueryParam("propertyType", propertyTypeName);
       addQueryParam("towersorBuildingName", towersorBuildingName);
