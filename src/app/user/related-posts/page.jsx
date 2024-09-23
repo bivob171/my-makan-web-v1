@@ -34,7 +34,6 @@ export default function RelatedPost() {
   const tag = searchParams.get("tag");
   const forPos = searchParams.get("for");
   const type = searchParams.get("type");
-  console.log(type);
 
   const postTypeq = searchParams.get("postType");
   const propertyCategoryq = searchParams.get("propertyCategory");
@@ -72,7 +71,6 @@ export default function RelatedPost() {
   const [state, setState] = useState("");
   const [cityq, setCity] = useState(city);
   const [compan, setcompany] = useState(company);
-  console.log(postType);
 
   const [filterRender, setfilterRender] = useState(false);
   useEffect(() => {
@@ -169,7 +167,6 @@ export default function RelatedPost() {
         : false
     );
   }, [filterRenderRelatedPost]);
-  console.log(tags, sellType);
 
   const getAllPosts = async (token, userRole) => {
     try {
@@ -228,16 +225,17 @@ export default function RelatedPost() {
       // Handle non-OK responses
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const allPostsList = await response.json();
+
+        // Update the post list and pagination
+        setHasMore(allPostsList.length === limit);
+        setAllPosts((prevPost) =>
+          page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+        );
+        setLoading(false);
+        console.log(new Date().toLocaleString());
       }
-
-      const allPostsList = await response.json();
-
-      // Update the post list and pagination
-      setHasMore(allPostsList.length === limit);
-      setAllPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
-      );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
