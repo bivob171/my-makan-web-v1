@@ -163,10 +163,10 @@ export default function PackageCard({
 
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
+      } else {
+        const data = await response.json();
+        // setlike(!like);
       }
-
-      const data = await response.json();
-      // setlike(!like);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -195,11 +195,10 @@ export default function PackageCard({
 
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
+      } else {
+        const data = await response.json();
+        // setlike(!like);
       }
-      // Update follow status in data array
-
-      const data = await response.json();
-      // setlike(!like);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -1025,7 +1024,7 @@ export default function PackageCard({
         <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
         <footer className=" flex items-center justify-between px-[15px] gap-2">
           {/* match post */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 w-1/4">
             {basePath === "/user/matched-post/" ? (
               <p className="-mb-0 text-[12px] md:text-[14px] font-medium">
                 <span className="text-blue-500">{item?.matchPercentage}%</span>{" "}
@@ -1036,11 +1035,11 @@ export default function PackageCard({
             )}
           </div>
 
-          <div className="flex gap-x-[7px] items-center flex-wrap flex-grow">
+          <div className="flex gap-x-[7px] items-center flex-wrap flex-grow ">
             <button
               onClick={hasId ? giveUnLike : giveLike}
               className={clsx(
-                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-[3px] rounded-md w-auto",
                 {
                   "text-blue-500": hasId === true,
                 }
@@ -1066,7 +1065,7 @@ export default function PackageCard({
                   : setCommentDropdown(null)
               }
               className={clsx(
-                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-2.5 rounded-md",
+                "flex justify-center items-center gap-1.5 font-bold flex-grow hover:bg-gray-100 py-1 px-[3px]  rounded-md w-auto",
                 {
                   "text-blue-500": commentDropdown,
                 }
