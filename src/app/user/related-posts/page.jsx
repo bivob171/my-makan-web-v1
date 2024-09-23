@@ -34,6 +34,8 @@ export default function RelatedPost() {
   const tag = searchParams.get("tag");
   const forPos = searchParams.get("for");
   const type = searchParams.get("type");
+  console.log(type);
+
   const postTypeq = searchParams.get("postType");
   const propertyCategoryq = searchParams.get("propertyCategory");
   const propertyTypeq = searchParams.get("propertyType");
@@ -56,8 +58,8 @@ export default function RelatedPost() {
   const [followRerander, setFollowRerander] = useState(false);
   const observer = useRef();
 
-  const [selectedType, setSelectedType] = useState(type);
-  const [postType, setPostType] = useState(postTypeq);
+  const [selectedType, setSelectedType] = useState(postTypeq);
+  const [postType, setPostType] = useState(type);
   const [forPost, setForPost] = useState(forPos);
   const [towersorBuildingName, setTowersorBuildingName] = useState("");
   const [propertyCategoryName, setPropertyCategory] =
@@ -70,6 +72,7 @@ export default function RelatedPost() {
   const [state, setState] = useState("");
   const [cityq, setCity] = useState(city);
   const [compan, setcompany] = useState(company);
+  console.log(postType);
 
   const [filterRender, setfilterRender] = useState(false);
   useEffect(() => {
@@ -166,6 +169,7 @@ export default function RelatedPost() {
         : false
     );
   }, [filterRenderRelatedPost]);
+  console.log(tags, sellType);
 
   const getAllPosts = async (token, userRole) => {
     try {
@@ -195,17 +199,20 @@ export default function RelatedPost() {
       addQueryParam("state", state);
       addQueryParam("city", cityq);
       addQueryParam("country", countryq);
-      addQueryParam("postType", postType);
-      addQueryParam("type", selectedType);
+      addQueryParam("postType", selectedType);
+      addQueryParam("type", postType);
       addQueryParam("propertyCategory", propertyCategoryName);
       addQueryParam("propertyType", propertyTypeName);
       addQueryParam("towersorBuildingName", towersorBuildingName);
       addQueryParam("parking", parking);
 
       // Handle arrays for tags and sellType
-      if (tags.length > 0) url += `&tags=${encodeURIComponent(tags.join(","))}`;
-      if (sellType.length > 0)
+      if (tags === null) {
+        url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      }
+      if (sellType === null) {
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
+      }
 
       console.log(url); // For debugging purposes
 

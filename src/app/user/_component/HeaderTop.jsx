@@ -445,7 +445,6 @@ export const HeaderTop = () => {
       playNotificationSoundMassageCome();
     }
   }, [totalUnseenCount]);
-  console.log(totalUnseenCount, chats);
 
   // Rest of your component logic here
   const [profile, setProfile] = useState(null);
