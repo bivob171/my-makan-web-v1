@@ -15,7 +15,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,31 +104,28 @@ export const AllTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
-      url += `sortBy=${sortBy}&`;
-      url += `sortOrder=${sortOrder}&`;
-      url += `page=${page}&`;
-      url += `limit=${limit}`;
 
-      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
-      if (state !== "") url += `&state=${encodeURIComponent(state)}`;
-      if (city !== "") url += `&city=${encodeURIComponent(city)}`;
-      if (country !== "") url += `&country=${encodeURIComponent(country)}`;
-      if (selectedType !== "")
-        url += `&postType=${encodeURIComponent(selectedType)}`;
-      if (postType !== "") url += `&type=${encodeURIComponent(postType)}`;
-      if (propertyCategoryName !== "")
+      let url = `https://api.mymakan.ae/allposts/get?`;
+      url += `sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+
+      // Add filters if they exist
+      if (forPost) url += `&for=${encodeURIComponent(forPost)}`;
+      if (state) url += `&state=${encodeURIComponent(state)}`;
+      if (city) url += `&city=${encodeURIComponent(city)}`;
+      if (country) url += `&country=${encodeURIComponent(country)}`;
+      if (selectedType) url += `&postType=${encodeURIComponent(selectedType)}`;
+      if (postType) url += `&type=${encodeURIComponent(postType)}`;
+      if (propertyCategoryName)
         url += `&propertyCategory=${encodeURIComponent(propertyCategoryName)}`;
-      if (propertyTypeName !== "")
+      if (propertyTypeName)
         url += `&propertyType=${encodeURIComponent(propertyTypeName)}`;
-      if (towersorBuildingName !== "")
+      if (towersorBuildingName)
         url += `&towersorBuildingName=${encodeURIComponent(
           towersorBuildingName
         )}`;
-      if (parking !== "") url += `&parking=${encodeURIComponent(parking)}`;
-      if (tags.length !== 0)
-        url += `&tags=${encodeURIComponent(tags.join(","))}`;
-      if (sellType.length !== 0)
+      if (parking) url += `&parking=${encodeURIComponent(parking)}`;
+      if (tags.length > 0) url += `&tags=${encodeURIComponent(tags.join(","))}`;
+      if (sellType.length > 0)
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
 
       const response = await fetch(url, {
@@ -145,14 +142,14 @@ export const AllTotalPost = () => {
         setAllPosts((prevPost) =>
           page === 1 ? allPostsList : [...prevPost, ...allPostsList]
         );
-        setLoading(false);
       } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
     } catch (error) {
-      console.error("Error fetching:", error);
+      console.error("Error fetching posts:", error);
     } finally {
       setIsFetching(false);
+      setLoading(false);
     }
   };
 

@@ -36,8 +36,8 @@ export const SettingsPage = () => {
   const handleEmailVerifyCodeSent = async () => {
     const endpoint =
       role === "agent"
-        ? `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/email-verify`
-        : `https://q2p08zg4-4000.asse.devtunnels.ms/auth/buyer/email-verify`;
+        ? `https://api.mymakan.ae/auth/agent/email-verify`
+        : `https://api.mymakan.ae/auth/buyer/email-verify`;
 
     try {
       const response = await axios.post(endpoint, {
@@ -156,7 +156,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/change-password`,
+        `https://api.mymakan.ae/auth/change-password`,
         data
       );
       console.log(response);
@@ -211,7 +211,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/password-change`,
+        `https://api.mymakan.ae/auth/agent/password-change`,
         data
       );
       if (response.status === 200) {
@@ -247,7 +247,7 @@ export const SettingsPage = () => {
 
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/agent/update-profile`,
+        `https://api.mymakan.ae/agent/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -291,7 +291,7 @@ export const SettingsPage = () => {
 
     try {
       const response = await axios.post(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload`,
+        `https://api.mymakan.ae/file-upload/upload`,
         formData,
         {
           headers: {

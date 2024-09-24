@@ -13,7 +13,7 @@ import PackageCard from "@/app/user/_component/Card/PackageCard";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
 import { IoIosRefresh } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
+const socket = io("https://api.mymakan.ae", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,7 +104,7 @@ const AvailablePostsAgent = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${role}&`;
       url += `postType=${postType}&`;

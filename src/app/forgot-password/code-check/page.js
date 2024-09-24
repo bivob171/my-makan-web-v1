@@ -79,7 +79,7 @@ export default function CodeCheck() {
 
     try {
       const response = await axios.post(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/reset-password-code-check`,
+        `https://api.mymakan.ae/auth/reset-password-code-check`,
         data
       );
       setResponseMessage("Code Match Successfully");
@@ -116,7 +116,7 @@ export default function CodeCheck() {
 
     try {
       const response = await axios.post(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/reset-password-code-check`,
+        `https://api.mymakan.ae/auth/agent/reset-password-code-check`,
         data
       );
       setResponseMessage("Code Match Successfully");
@@ -139,7 +139,7 @@ export default function CodeCheck() {
     // Your email post logic here
     try {
       const response = await fetch(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/forgot-password`,
+        `https://api.mymakan.ae/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -182,7 +182,7 @@ export default function CodeCheck() {
       }
 
       const response = await fetch(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/forgot-password`,
+        `https://api.mymakan.ae/auth/agent/forgot-password`,
         {
           method: "POST",
           headers: {

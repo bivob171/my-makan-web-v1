@@ -28,7 +28,7 @@ export const AgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetchingAgent(true);
     try {
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `https://api.mymakan.ae/agent/all-get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
       if (countryFind) url += `&country=${countryFind}`;
       if (stateNameFind) url += `&state=${stateNameFind}`;
       if (companyNameFind) url += `&companyName=${companyNameFind}`;
@@ -124,16 +124,13 @@ export const AgentPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/company`,
-        {
-          params: {
-            search,
-            page: pageco,
-            limit: limitco,
-          },
-        }
-      );
+      const response = await axios.get(`https://api.mymakan.ae/company`, {
+        params: {
+          search,
+          page: pageco,
+          limit: limitco,
+        },
+      });
       const newCompanies = response.data;
       setHasMoreco(newCompanies.length === limitco);
       setCompanies((prevCompanies) =>
@@ -193,16 +190,13 @@ export const AgentPage = () => {
   const fetchCountries = async () => {
     setIsFetchingCountry(true);
     try {
-      const response = await axios.get(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/country`,
-        {
-          params: {
-            search: searchCountry,
-            page: pageCountry,
-            limit: limitCountry,
-          },
-        }
-      );
+      const response = await axios.get(`https://api.mymakan.ae/country`, {
+        params: {
+          search: searchCountry,
+          page: pageCountry,
+          limit: limitCountry,
+        },
+      });
       const newCountries = response.data;
       setHasMoreCountry(newCountries.length === limitCountry);
       setData((prevCountries) =>

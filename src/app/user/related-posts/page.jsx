@@ -48,7 +48,7 @@ export default function RelatedPost() {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(100);
+  const [limit, setLimit] = useState(30);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -179,7 +179,7 @@ export default function RelatedPost() {
       }
 
       // Base URL for API call
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `https://api.mymakan.ae/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
 
       // Helper function to add query parameters
       const addQueryParam = (key, value) => {
@@ -269,6 +269,8 @@ export default function RelatedPost() {
     tags,
     cityq,
   ]);
+  console.log(cityq, state);
+
   const lastPostElementRef = useCallback(
     (node) => {
       if (isFetching) return;

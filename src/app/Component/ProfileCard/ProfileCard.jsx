@@ -37,7 +37,7 @@ export const ProfileCard = () => {
 
   const getAllPosts = async (token) => {
     try {
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/my-post-length`;
+      let url = `https://api.mymakan.ae/allposts/my-post-length`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -68,7 +68,7 @@ export const ProfileCard = () => {
   const getAllFriendsCount = async (token) => {
     try {
       // Correct URL format with protocol
-      const url = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/friend-list?sortBy=createdAt&sortOrder=asc&page=1&limit=50`;
+      const url = `https://api.mymakan.ae/follow/friend-list?sortBy=createdAt&sortOrder=asc&page=1&limit=50`;
 
       const response = await fetch(url, {
         method: "GET",

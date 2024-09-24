@@ -26,7 +26,7 @@ export const PostHiddenModal = ({ visible, closePopUp }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/update/${id}`;
+      const apiUrl = `https://api.mymakan.ae/allposts/update/${id}`;
       console.log(apiUrl);
       const response = await fetch(apiUrl, {
         method: "PATCH",
