@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [https://api.mymakan.ae](https://api.mymakan.ae) with your browser to see the result.
+Open [https://q2p08zg4-4000.asse.devtunnels.ms](https://q2p08zg4-4000.asse.devtunnels.ms) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 

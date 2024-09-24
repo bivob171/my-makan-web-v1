@@ -179,7 +179,7 @@ export default function RelatedPost() {
       }
 
       // Base URL for API call
-      let url = `https://api.mymakan.ae/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=${limit}`;
 
       // Helper function to add query parameters
       const addQueryParam = (key, value) => {

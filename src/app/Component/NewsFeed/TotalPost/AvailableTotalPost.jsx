@@ -18,8 +18,9 @@ import PackageCard from "@/app/user/_component/Card/PackageCard";
 import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
+import axios from "axios";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -30,7 +31,7 @@ export const AvailableTotalPost = () => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -104,9 +105,11 @@ export const AvailableTotalPost = () => {
       setIsFetching(true);
       if (filterRender || reset) {
         setLoading(true);
-        setPage(1); // Reset to first page
+        setPage(1); // Reset to the first page
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
+
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
+
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
@@ -114,7 +117,6 @@ export const AvailableTotalPost = () => {
       url += `page=${page}&`;
       url += `limit=${limit}`;
 
-      if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (forPost !== "") url += `&for=${encodeURIComponent(forPost)}`;
       if (state !== "") url += `&state=${encodeURIComponent(state)}`;
       if (city !== "") url += `&city=${encodeURIComponent(city)}`;
@@ -134,24 +136,28 @@ export const AvailableTotalPost = () => {
         url += `&tags=${encodeURIComponent(tags.join(","))}`;
       if (sellType.length !== 0)
         url += `&sellType=${encodeURIComponent(sellType.join(","))}`;
+      console.log("1", new Date().toLocaleString());
 
-      const response = await fetch(url, {
-        method: "GET",
+      // Axios GET request
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
+      console.log("2", new Date().toLocaleString());
 
-      if (!response.ok) {
+      if (response.status === 200) {
+        const allPostsList = response.data;
+        setHasMore(allPostsList.length === limit);
+        setAllPosts((prevPost) =>
+          page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+        );
+        setLoading(false);
+        console.log("3", new Date().toLocaleString());
+      } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const allPostsList = await response.json();
-      setHasMore(allPostsList.length === limit);
-      setAllPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
-      );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -162,6 +168,7 @@ export const AvailableTotalPost = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
+    console.log(token);
     getAllPosts(token);
   }, [
     filterRender,
@@ -292,7 +299,7 @@ export const AvailableTotalPost = () => {
                 No posts available.
               </div>
             )}
-            {!loading && allPosts.length > 0 && (
+            {!loading && allPosts?.length > 0 && (
               <div className="grid grid-cols-1 gap-4 ">
                 {allPosts?.map((item, i) => {
                   return (

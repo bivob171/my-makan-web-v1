@@ -115,7 +115,7 @@ export default function PasswordReset() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/auth/reset-password`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/reset-password`,
         data
       );
       console.log(response);
@@ -165,7 +165,7 @@ export default function PasswordReset() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/auth/agent/reset-password`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/reset-password`,
         data
       );
       if (response.status === 200) {

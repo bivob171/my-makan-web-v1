@@ -34,7 +34,7 @@ export const MatchCardData = ({ item }) => {
   const getAllMatchPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/match-post?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/match-post?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;

@@ -22,7 +22,7 @@ export const FriendList = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `https://api.mymakan.ae/follow/friend-list?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/friend-list?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

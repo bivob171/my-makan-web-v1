@@ -19,7 +19,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -106,7 +106,7 @@ export const RequiredTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `postType=${postType}&`;
       url += `sortBy=${sortBy}&`;
@@ -144,13 +144,14 @@ export const RequiredTotalPost = () => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const allPostsList = await response.json();
+        setHasMore(allPostsList.length === limit);
+        setAllPosts((prevPost) =>
+          page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+        );
+        setLoading(false);
       }
-      const allPostsList = await response.json();
-      setHasMore(allPostsList.length === limit);
-      setAllPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
-      );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {

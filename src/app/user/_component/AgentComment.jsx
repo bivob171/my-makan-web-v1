@@ -14,7 +14,7 @@ import { MentionsInput, Mention } from "react-mentions";
 import { useRouter, useSearchParams } from "next/navigation";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-const socket = io("https://api.mymakan.ae", {
+const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
   path: "/socket.io",
   transports: ["websocket"],
 });
@@ -63,7 +63,7 @@ const AgentComment = ({ _id, setAllPosts }) => {
         : commentId;
     if (id) {
       try {
-        let url = `https://api.mymakan.ae/all-post-comment-reply/${id}`;
+        let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment-reply/${id}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -159,7 +159,7 @@ const AgentComment = ({ _id, setAllPosts }) => {
   };
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment/${_id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -304,7 +304,8 @@ const AgentComment = ({ _id, setAllPosts }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
+      const apiUrl =
+        "https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -389,7 +390,8 @@ const AgentComment = ({ _id, setAllPosts }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
+      const apiUrl =
+        "https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -453,7 +455,7 @@ const AgentComment = ({ _id, setAllPosts }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://api.mymakan.ae/follow/friend-list?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/friend-list?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

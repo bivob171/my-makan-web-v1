@@ -24,13 +24,16 @@ export const AddCompanyPage = () => {
   const fetchCompanies = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`https://api.mymakan.ae/company`, {
-        params: {
-          search,
-          page,
-          limit,
-        },
-      });
+      const response = await axios.get(
+        `https://q2p08zg4-4000.asse.devtunnels.ms/company`,
+        {
+          params: {
+            search,
+            page,
+            limit,
+          },
+        }
+      );
       const newCompanies = response.data;
       console.log("Fetched companies:", newCompanies);
       setHasMore(newCompanies.length === limit);
@@ -79,7 +82,7 @@ export const AddCompanyPage = () => {
       };
       const token = localStorage.getItem("agentAccessToken");
       const response = await fetch(
-        `https://api.mymakan.ae/agent/update-profile`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/agent/update-profile`,
         {
           method: "PATCH",
           headers: {

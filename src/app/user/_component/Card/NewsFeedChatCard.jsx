@@ -277,7 +277,7 @@ export const NewsFeedChatCard = ({
 
     try {
       const response = await axios.post(
-        "https://api.mymakan.ae/file-upload/upload",
+        "https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -487,8 +487,8 @@ export const NewsFeedChatCard = ({
     const token = localStorage.getItem(`${userRole}AccessToken`);
     const endpoint =
       participantRole === "buyer"
-        ? `https://api.mymakan.ae/user/${participantId}`
-        : `https://api.mymakan.ae/agent/${participantId}`;
+        ? `https://q2p08zg4-4000.asse.devtunnels.ms/user/${participantId}`
+        : `https://q2p08zg4-4000.asse.devtunnels.ms/agent/${participantId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",

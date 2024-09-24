@@ -15,7 +15,7 @@ import { FilterRenderContext } from "@/Context/filterRenderContext";
 import io from "socket.io-client";
 import { IoIosRefresh } from "react-icons/io";
 
-const socket = io("https://api.mymakan.ae", {
+const socket = io("https://q2p08zg4-4000.asse.devtunnels.ms", {
   path: "/socket.io", // Ensure this matches the path set in rewrites
   transports: ["websocket"], // Use WebSocket transport
 });
@@ -104,7 +104,7 @@ export const AllTotalPost = () => {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
@@ -139,15 +139,16 @@ export const AllTotalPost = () => {
         },
       });
 
-      if (!response.ok) {
+      if (response.ok) {
+        const allPostsList = await response.json();
+        setHasMore(allPostsList.length === limit);
+        setAllPosts((prevPost) =>
+          page === 1 ? allPostsList : [...prevPost, ...allPostsList]
+        );
+        setLoading(false);
+      } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const allPostsList = await response.json();
-      setHasMore(allPostsList.length === limit);
-      setAllPosts((prevPost) =>
-        page === 1 ? allPostsList : [...prevPost, ...allPostsList]
-      );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -258,6 +259,7 @@ export const AllTotalPost = () => {
     loadNewPost();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  console.log(allPosts);
 
   return (
     <div className="pb-[50px] ">
@@ -287,30 +289,13 @@ export const AllTotalPost = () => {
                 No posts available.
               </div>
             )}
-            {!loading && allPosts.length > 0 && (
+            {!loading && allPosts?.length > 0 && (
               <div className="grid grid-cols-1 gap-4 ">
                 {allPosts?.map((item, i) => {
-                  if (allPosts.length === i + 1) {
-                    return (
-                      <div ref={lastPostElementRef} key={i}>
-                        <PackageCard
-                          item={item}
-                          myId={myId}
-                          setlike={setlike}
-                          like={like}
-                          saveRerander={saveRerander}
-                          setSaveRerander={setSaveRerander}
-                          followRerander={followRerander}
-                          setFollowRerander={setFollowRerander}
-                          setAllPosts={setAllPosts}
-                        />
-                      </div>
-                    );
-                  } else {
-                    return (
+                  return (
+                    <div ref={lastPostElementRef} key={i}>
                       <PackageCard
                         item={item}
-                        key={i}
                         myId={myId}
                         setlike={setlike}
                         like={like}
@@ -320,8 +305,8 @@ export const AllTotalPost = () => {
                         setFollowRerander={setFollowRerander}
                         setAllPosts={setAllPosts}
                       />
-                    );
-                  }
+                    </div>
+                  );
                 })}
               </div>
             )}

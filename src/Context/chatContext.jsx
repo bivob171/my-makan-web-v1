@@ -34,8 +34,6 @@ const ChatValueProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchChatList = (id) => {
-    console.log(new Date().toLocaleString());
-
     setLoading(true);
     try {
       const chatRef = collection(db, "chats");

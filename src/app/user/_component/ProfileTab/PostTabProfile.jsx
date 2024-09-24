@@ -53,7 +53,7 @@ export const PostTabProfile = ({
   const getAllPosts = async (token, profileId, profileRole) => {
     try {
       setIsFetching(true);
-      let url = `https://api.mymakan.ae/allposts/get?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
       if (profileRole === "agent") {
         url += `agentId=${profileId}&`;
       } else {
