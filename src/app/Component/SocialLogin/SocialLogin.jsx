@@ -92,6 +92,7 @@ export const SocialLogin = ({ setError }) => {
           router.push("/user/newsfeed");
           toast.success("Successfully logged in to your account");
         }
+        signOut();
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);

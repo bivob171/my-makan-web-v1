@@ -411,7 +411,11 @@ export default function PackageCard({
   activeUsers;
 
   const [commentDropdown, setCommentDropdown] = useState(null);
-
+  const [newsFeedRole, setnewsFeedRole] = useState("");
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    setnewsFeedRole(userRole);
+  }, []);
   return (
     <div className="w-full h-auto bg-white rounded-[15px] !py-[12px] relative">
       <div className="pt-1">
@@ -668,7 +672,7 @@ export default function PackageCard({
                               Follow
                             </button>
                           )}
-                          {user?.role === "agent" ? (
+                          {newsFeedRole === "agent" ? (
                             user?.premium === false &&
                             userinfo?.role === "buyer" ? (
                               <button
