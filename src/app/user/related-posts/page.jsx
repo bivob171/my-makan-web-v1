@@ -48,7 +48,7 @@ export default function RelatedPost() {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(30);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -171,6 +171,7 @@ export default function RelatedPost() {
   const getAllPosts = async (token, userRole) => {
     try {
       setIsFetching(true);
+
       // Reset loading and pagination if necessary
       if (filterRender) {
         setLoading(true);
@@ -242,7 +243,26 @@ export default function RelatedPost() {
       setIsFetching(false);
     }
   };
-
+  // useEffect for resetting the list when dependencies change
+  useEffect(() => {
+    // When dependencies change, reset the pagination and loading
+    setLoading(true);
+    setPage(1);
+    setAllPosts([]);
+  }, [
+    selectedType,
+    forPost,
+    state,
+    countryq,
+    postType,
+    propertyCategoryName,
+    propertyTypeName,
+    towersorBuildingName,
+    parking,
+    sellType,
+    tags,
+    cityq,
+  ]);
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
@@ -269,7 +289,6 @@ export default function RelatedPost() {
     tags,
     cityq,
   ]);
-  console.log(cityq, state);
 
   const lastPostElementRef = useCallback(
     (node) => {
