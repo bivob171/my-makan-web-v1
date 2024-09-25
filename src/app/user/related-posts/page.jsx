@@ -74,8 +74,8 @@ export default function RelatedPost() {
 
   const [filterRender, setfilterRender] = useState(false);
   useEffect(() => {
-    setSelectedType(type);
-    setPostType(postTypeq);
+    setSelectedType(postTypeq);
+    setPostType(type);
     setForPost(forPos);
     setPropertyCategory(propertyCategoryq);
     setPropertyType(propertyTypeq);
@@ -167,6 +167,9 @@ export default function RelatedPost() {
         : false
     );
   }, [filterRenderRelatedPost]);
+  console.log("postType", postType);
+  console.log("type", type);
+  console.log("postTypeq", postTypeq);
 
   const getAllPosts = async (token, userRole) => {
     try {
