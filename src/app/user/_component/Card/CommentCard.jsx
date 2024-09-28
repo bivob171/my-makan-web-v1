@@ -710,7 +710,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
                               <h4 className="text-[12px] font-bold text-[#222] m-0 leading-4">
                                 {reply?.fullName}
                               </h4>
-                              <p className="text-[#444] m-0 leading-4 !text-[17px]">
+                              <p className="text-[#444] m-0 leading-4 !text-[17px] break-words">
                                 {comment?.comment}
                               </p>
                             </div>

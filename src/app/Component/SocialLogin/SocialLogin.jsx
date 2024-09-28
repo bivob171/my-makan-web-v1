@@ -84,16 +84,13 @@ export const SocialLogin = ({ setError }) => {
           if (profile.companyName === null) {
             router.push("/user/profile/add-company-name");
             toast.success("Successfully logged in to your account");
-            signOut();
           } else {
             router.push("/user/newsfeed");
             toast.success("Successfully logged in to your account");
-            signOut();
           }
         } else {
           router.push("/user/newsfeed");
           toast.success("Successfully logged in to your account");
-          signOut();
         }
       }
     } catch (error) {
