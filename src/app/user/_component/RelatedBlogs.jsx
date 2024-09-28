@@ -142,6 +142,8 @@ const RelatedBlogs = ({ item }) => {
   ]);
 
   const myId = user?._id;
+  //   match post page
+  const matchpostId = item?._id;
   return (
     <div className="realated-blog bg-[#EFF4FB] py-4  rounded-md">
       <div className="">
@@ -182,26 +184,13 @@ const RelatedBlogs = ({ item }) => {
                 {!loading && allPosts.length > 0 && (
                   <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-4 ">
                     {allPosts?.map((item, i) => {
-                      if (allPosts.length === i + 1) {
-                        return (
-                          <div key={i}>
-                            <PackageCard
-                              item={item}
-                              myId={myId}
-                              setlike={setlike}
-                              like={like}
-                              saveRerander={saveRerander}
-                              setSaveRerander={setSaveRerander}
-                              followRerander={followRerander}
-                              setFollowRerander={setFollowRerander}
-                            />
-                          </div>
-                        );
-                      } else {
-                        return (
+                      if (item?._id === matchpostId) {
+                        return null;
+                      }
+                      return (
+                        <div key={i}>
                           <PackageCard
                             item={item}
-                            key={i}
                             myId={myId}
                             setlike={setlike}
                             like={like}
@@ -210,8 +199,8 @@ const RelatedBlogs = ({ item }) => {
                             followRerander={followRerander}
                             setFollowRerander={setFollowRerander}
                           />
-                        );
-                      }
+                        </div>
+                      );
                     })}
                   </div>
                 )}
