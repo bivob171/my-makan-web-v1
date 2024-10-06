@@ -157,15 +157,16 @@ const CommentCard = ({ _id, setAllPosts }) => {
   const handleEmojiButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
   };
-  const getAllComment = async (token) => {
+  const getAllComment = async (id) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment/${_id}?`;
+      const userRole = localStorage.getItem("role");
+      const token = localStorage.getItem(`${userRole}AccessToken`);
+      let url = `https://api.mymakan.ae/all-post-comment/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
-      console.log(url);
 
       const response = await fetch(url, {
         method: "GET",
@@ -193,10 +194,8 @@ const CommentCard = ({ _id, setAllPosts }) => {
   };
 
   useEffect(() => {
-    const userRole = localStorage.getItem("role");
-    const token = localStorage.getItem(`${userRole}AccessToken`);
     if (_id) {
-      getAllComment(token);
+      getAllComment(_id);
     }
   }, [commentRerander, sortOrder, sortBy, limit, page, _id]);
 
