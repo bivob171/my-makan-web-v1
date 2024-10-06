@@ -161,7 +161,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
     try {
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      let url = `https://api.mymakan.ae/all-post-comment/${id}?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
