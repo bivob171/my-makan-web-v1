@@ -165,6 +165,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
       url += `sortOrder=${sortOrder}&`;
       url += `page=${page}&`;
       url += `limit=${limit}`;
+      console.log(url);
 
       const response = await fetch(url, {
         method: "GET",
@@ -176,14 +177,14 @@ const CommentCard = ({ _id, setAllPosts }) => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const allCommentsList = await response.json();
+        setHasMore(allCommentsList.length === limit);
+        setComments((prevPost) =>
+          page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
+        );
+        setLoading(false);
       }
-      const allCommentsList = await response.json();
-
-      setHasMore(allCommentsList.length === limit);
-      setComments((prevPost) =>
-        page === 1 ? allCommentsList : [...prevPost, ...allCommentsList]
-      );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {

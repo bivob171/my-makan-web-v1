@@ -1131,7 +1131,7 @@ export default function PackageCard({
           <div>
             <div className="h-[0.5px] w-full bg-[#F0F1F7] my-[15px]"></div>
             <div>
-              <CommentCard _id={_id} setAllPosts={setAllPosts} />
+              <CommentCard _id={commentDropdown} setAllPosts={setAllPosts} />
             </div>
           </div>
         ) : null}

@@ -256,7 +256,6 @@ export const AllTotalPost = () => {
     loadNewPost();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  console.log(allPosts);
 
   return (
     <div className="pb-[50px] ">
