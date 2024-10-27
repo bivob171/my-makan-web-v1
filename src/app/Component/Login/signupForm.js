@@ -35,6 +35,8 @@ export const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
+  console.log(companyName);
+
   const [selectedImage, setSelectedImage] = useState("");
   const [fullNameError, setFullNameError] = useState("");
   const [companyNameError, setCompanyNameError] = useState("");
@@ -239,7 +241,7 @@ export const SignupForm = () => {
       } else {
         setPasswordError("");
       }
-      if (!companyName) {
+      if (!selectedCompany) {
         setCompanyNameError("Company Name is required.");
         hasError = true;
       } else {
@@ -284,6 +286,7 @@ export const SignupForm = () => {
         state: selectedState,
         device: "web",
       };
+      console.log(agentCreateData);
 
       const response = await fetch(`https://api.mymakan.ae/auth/agent/signUp`, {
         method: "POST",
