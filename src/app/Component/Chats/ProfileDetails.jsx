@@ -74,7 +74,7 @@ const ProfileDetails = ({ selectedChat, profileSideBar }) => {
     if (!participantId && !participantRole) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
+    const endpoint = `https://q2p08zg4-4000.asse.devtunnels.ms/user/${participantId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",

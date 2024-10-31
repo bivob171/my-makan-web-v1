@@ -61,7 +61,7 @@ export default function BuyerProfile() {
     if (!userId) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/user/${userId}`;
+    const endpoint = `https://q2p08zg4-4000.asse.devtunnels.ms/user/${userId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
@@ -116,7 +116,7 @@ export default function BuyerProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload`,
         formData,
         {
           headers: {
@@ -143,7 +143,7 @@ export default function BuyerProfile() {
 
     try {
       const response = await axios.post(
-        `https://api.mymakan.ae/file-upload/upload`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload`,
         formData,
         {
           headers: {
@@ -171,8 +171,8 @@ export default function BuyerProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `https://q2p08zg4-4000.asse.devtunnels.ms/user/update-profile`
+          : `https://q2p08zg4-4000.asse.devtunnels.ms/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -211,8 +211,8 @@ export default function BuyerProfile() {
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const endpoint =
         userRole === "buyer"
-          ? `https://api.mymakan.ae/user/update-profile`
-          : `https://api.mymakan.ae/agent/update-profile`;
+          ? `https://q2p08zg4-4000.asse.devtunnels.ms/user/update-profile`
+          : `https://q2p08zg4-4000.asse.devtunnels.ms/agent/update-profile`;
 
       const response = await fetch(endpoint, {
         method: "PATCH",
@@ -274,7 +274,7 @@ export default function BuyerProfile() {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}/${type}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}/${type}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -301,7 +301,7 @@ export default function BuyerProfile() {
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

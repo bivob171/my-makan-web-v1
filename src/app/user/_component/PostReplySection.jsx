@@ -24,7 +24,7 @@ export const PostReplySection = ({
 
   const getAllComment = async (token) => {
     try {
-      let url = `https://api.mymakan.ae/all-post-comment-reply/${id}?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment-reply/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`; // Sorting in ascending order

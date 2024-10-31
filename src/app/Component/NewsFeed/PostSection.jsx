@@ -212,11 +212,11 @@ const PostSection = ({ isOpen, setIsOpen }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = "https://api.mymakan.ae/allposts/post";
+      const apiUrl = "https://q2p08zg4-4000.asse.devtunnels.ms/allposts/post";
       // if (user.role === "agent") {
-      //   apiUrl = "https://api.mymakan.ae/post-agent/post";
+      //   apiUrl = "https://q2p08zg4-4000.asse.devtunnels.ms/post-agent/post";
       // } else {
-      //   apiUrl = "https://api.mymakan.ae/post-user/post";
+      //   apiUrl = "https://q2p08zg4-4000.asse.devtunnels.ms/post-user/post";
       // }
 
       const response = await fetch(apiUrl, {

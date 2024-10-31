@@ -47,8 +47,8 @@ const PrivateRouteContext = () => {
     const userRole = localStorage.getItem("role");
     const endpoint =
       userRole === "agent"
-        ? "https://api.mymakan.ae/agent/myProfile"
-        : "https://api.mymakan.ae/user/myProfile";
+        ? "https://q2p08zg4-4000.asse.devtunnels.ms/agent/myProfile"
+        : "https://q2p08zg4-4000.asse.devtunnels.ms/user/myProfile";
 
     const token = getStoredToken(userRole);
     if (token) {

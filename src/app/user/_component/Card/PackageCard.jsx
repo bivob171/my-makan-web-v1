@@ -142,7 +142,7 @@ export default function PackageCard({
   };
   const giveLike = async () => {
     const id = _id;
-    const url = `https://api.mymakan.ae/allposts/${id}/like`;
+    const url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -173,7 +173,7 @@ export default function PackageCard({
   };
   const giveUnLike = async () => {
     const id = _id;
-    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
+    const url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -214,7 +214,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -239,7 +239,7 @@ export default function PackageCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -282,7 +282,7 @@ export default function PackageCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://api.mymakan.ae/follow/follow/${role}/${_id}/${type}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/follow/${role}/${_id}/${type}`;
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -333,7 +333,7 @@ export default function PackageCard({
       setIsFollow(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://api.mymakan.ae/follow/unfollow/${role}/${_id}`;
+      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/unfollow/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

@@ -107,7 +107,7 @@ export const HeaderTop = () => {
   const getAllNotification = async (token) => {
     setIsFetchingNotify(true);
     try {
-      let url = `https://api.mymakan.ae/notification/my-all-com-notification?`;
+      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/notification/my-all-com-notification?`;
 
       url += `sortBy=${sortByNotify}&`;
       url += `sortOrder=${sortOrderNotify}&`;
@@ -164,7 +164,7 @@ export const HeaderTop = () => {
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
       const response = await axios.patch(
-        `https://api.mymakan.ae/notification/multiple-update`,
+        `https://q2p08zg4-4000.asse.devtunnels.ms/notification/multiple-update`,
         { ids },
         {
           headers: {
@@ -369,8 +369,8 @@ export const HeaderTop = () => {
 
       const endpoint =
         userRole === "agent"
-          ? "https://api.mymakan.ae/agent/update-notification"
-          : "https://api.mymakan.ae/user/update-notification";
+          ? "https://q2p08zg4-4000.asse.devtunnels.ms/agent/update-notification"
+          : "https://q2p08zg4-4000.asse.devtunnels.ms/user/update-notification";
       const response = await fetch(endpoint, {
         method: "PATCH",
         headers: {
@@ -465,7 +465,7 @@ export const HeaderTop = () => {
     if (!participantId && !participantRole) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
+    const endpoint = `https://q2p08zg4-4000.asse.devtunnels.ms/user/${participantId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",
