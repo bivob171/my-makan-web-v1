@@ -294,7 +294,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
     try {
       const response = await axios.post(
-        "https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload",
+        "https://api.mymakan.ae/file-upload/upload",
         formData,
         {
           onUploadProgress: (data) => {
@@ -357,7 +357,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
 
     try {
       const response = await fetch(
-        "https://q2p08zg4-4000.asse.devtunnels.ms/file-upload/upload",
+        "https://api.mymakan.ae/file-upload/upload",
         {
           // Adjust the endpoint URL as needed
           method: "POST",
@@ -543,7 +543,7 @@ const MessageBox = ({ chatId, selectedChat, profileSideBar }) => {
     if (!participantId && !participantRole) return;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
-    const endpoint = `https://q2p08zg4-4000.asse.devtunnels.ms/user/${participantId}`;
+    const endpoint = `https://api.mymakan.ae/user/${participantId}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",

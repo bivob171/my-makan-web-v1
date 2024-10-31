@@ -211,11 +211,11 @@ export default function EditPostSection({ isOpen, setIsOpen }) {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/update/${postId?._id}`;
+      const apiUrl = `https://api.mymakan.ae/allposts/update/${postId?._id}`;
       // if (user.role === "agent") {
-      //   apiUrl = "https://q2p08zg4-4000.asse.devtunnels.ms/post-agent/post";
+      //   apiUrl = "https://api.mymakan.ae/post-agent/post";
       // } else {
-      //   apiUrl = "https://q2p08zg4-4000.asse.devtunnels.ms/post-user/post";
+      //   apiUrl = "https://api.mymakan.ae/post-user/post";
       // }
 
       const response = await fetch(apiUrl, {

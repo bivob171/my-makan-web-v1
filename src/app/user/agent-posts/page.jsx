@@ -103,7 +103,7 @@ export default function AgentPosts() {
         setLoading(true);
         setPage(1); // Reset to first page
       }
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/get?`;
+      let url = `https://api.mymakan.ae/allposts/get?`;
       // Constructing the URL with query parameters based on state variables
       url += `role=${encodeURIComponent(role)}&`;
       url += `sortBy=${encodeURIComponent(sortBy)}&`;

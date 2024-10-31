@@ -52,7 +52,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/forgot-password`,
+        `https://api.mymakan.ae/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
       }
 
       const response = await fetch(
-        `https://q2p08zg4-4000.asse.devtunnels.ms/auth/agent/forgot-password`,
+        `https://api.mymakan.ae/auth/agent/forgot-password`,
         {
           method: "POST",
           headers: {

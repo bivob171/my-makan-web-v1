@@ -23,7 +23,7 @@ export const FollowerAgentPage = () => {
   const getAllPosts = async (token) => {
     setIsFetching(true);
     try {
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/follower-agent?`;
+      let url = `https://api.mymakan.ae/follow/follower-agent?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;

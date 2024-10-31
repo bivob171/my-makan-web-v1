@@ -97,7 +97,7 @@ export default function EditPostCard({
   };
 
   const giveLike = async (id) => {
-    const url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/${id}/like`;
+    const url = `https://api.mymakan.ae/allposts/${id}/like`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
 
@@ -128,7 +128,7 @@ export default function EditPostCard({
     }
   };
   const giveUnLike = async (id) => {
-    const url = `https://q2p08zg4-4000.asse.devtunnels.ms/allposts/${id}/unlike`;
+    const url = `https://api.mymakan.ae/allposts/${id}/unlike`;
     const userRole = localStorage.getItem("role");
     const token = localStorage.getItem(`${userRole}AccessToken`);
     console.log(url, token);
@@ -170,7 +170,7 @@ export default function EditPostCard({
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/save-post/${role}/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/${role}/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -195,7 +195,7 @@ export default function EditPostCard({
       setIsHeartRed(false);
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      const apiUrl = `https://q2p08zg4-4000.asse.devtunnels.ms/save-post/delete-post-exist/${_id}`;
+      const apiUrl = `https://api.mymakan.ae/save-post/delete-post-exist/${_id}`;
 
       const response = await fetch(apiUrl, {
         method: "DELETE",

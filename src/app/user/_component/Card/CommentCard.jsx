@@ -62,7 +62,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
         : commentId;
     if (id) {
       try {
-        let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment-reply/${id}`;
+        let url = `https://api.mymakan.ae/all-post-comment-reply/${id}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -161,7 +161,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
     try {
       const userRole = localStorage.getItem("role");
       const token = localStorage.getItem(`${userRole}AccessToken`);
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment/${id}?`;
+      let url = `https://api.mymakan.ae/all-post-comment/${id}?`;
 
       url += `sortBy=${sortBy}&`;
       url += `sortOrder=${sortOrder}&`;
@@ -308,8 +308,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl =
-        "https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment/post";
+      const apiUrl = "https://api.mymakan.ae/all-post-comment/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -393,8 +392,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
       } else {
         token = localStorage.getItem("buyerAccessToken");
       }
-      const apiUrl =
-        "https://q2p08zg4-4000.asse.devtunnels.ms/all-post-comment-reply/post";
+      const apiUrl = "https://api.mymakan.ae/all-post-comment-reply/post";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -458,7 +456,7 @@ const CommentCard = ({ _id, setAllPosts }) => {
   const getAllMentionUser = async (token) => {
     setIsFetchingM(true);
     try {
-      let url = `https://q2p08zg4-4000.asse.devtunnels.ms/follow/friend-list?`;
+      let url = `https://api.mymakan.ae/follow/friend-list?`;
 
       url += `sortBy=${sortByM}&`;
       url += `sortOrder=${sortOrderM}&`;

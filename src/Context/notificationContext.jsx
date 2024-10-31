@@ -13,8 +13,8 @@ const NotificationValueContext = () => {
 
     const endpoint =
       userRole === "agent"
-        ? "https://q2p08zg4-4000.asse.devtunnels.ms/agent/myProfile"
-        : "https://q2p08zg4-4000.asse.devtunnels.ms/user/myProfile";
+        ? "https://api.mymakan.ae/agent/myProfile"
+        : "https://api.mymakan.ae/user/myProfile";
     try {
       const response = await fetch(endpoint, {
         method: "GET",
