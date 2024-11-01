@@ -31,7 +31,7 @@ export const AvailableTotalPost = () => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("createdAt");
-  const [limit, setLimit] = useState(15);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
